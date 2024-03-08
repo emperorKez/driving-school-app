@@ -5,7 +5,7 @@ import 'package:korbil_mobile/repos/api_service/models/data_state.dart';
 
 class ApiService {
   // static const String baseUrl = 'http://138.68.91.25:8080';
-  static const String baseUrl = 'http://64.226.114.43:8080';
+  static const String baseUrl = 'http://64.226.114.43:8080/api/v1';
 
   final baseOptions = BaseOptions(
     validateStatus: (status) => status! < 400,
@@ -36,7 +36,7 @@ class ApiService {
 
   Future<DataState<Response<dynamic>?>> postReq(
     String path, {
-    Map<String, dynamic>? bodyJson,
+    Map<String, dynamic>? payload,
     String? token,
   }) async {
     try {
@@ -45,7 +45,7 @@ class ApiService {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
       final response =
-          await dio.post<dynamic>('$baseUrl/$path', data: bodyJson);
+          await dio.post<dynamic>('$baseUrl/$path', data: payload);
       return DataSuccess(response);
     } on DioException catch (e) {
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));

@@ -11,13 +11,13 @@ final lc = GetIt.instance;
 Future<void> initializeDependencies() async {
   final prefs = await SharedPreferences.getInstance();
   // navigation service
-  lc.registerLazySingleton(() => NavigationService());
+  lc..registerLazySingleton(NavigationService.new)
   // api service
-  lc.registerLazySingleton(() => ApiService());
+  ..registerLazySingleton(ApiService.new)
   // pref storage service
-  lc.registerLazySingleton(() => PrefStorageRepo(prefs));
+  ..registerLazySingleton(() => PrefStorageRepo(prefs))
   //manage school repo
-  lc.registerLazySingleton(() => ManageSchoolRepo(lc(), lc()));
+  ..registerLazySingleton(() => ManageSchoolRepo())
   //package repo
-  lc.registerLazySingleton(() => PackageRepo(lc(), lc()));
+  ..registerLazySingleton(() => PackageRepo(lc(), lc()));
 }

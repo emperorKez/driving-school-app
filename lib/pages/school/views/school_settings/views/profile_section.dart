@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/auth/view/login/bloc/login_cubit/login_cubit_cubit.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ProfileSection extends StatelessWidget {
@@ -24,40 +28,44 @@ class ProfileSection extends StatelessWidget {
         Expanded(
           child: Container(
             padding: const EdgeInsets.only(left: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Jack Martines',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  '+462139556953',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  'jackmartines@gmail.com',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                )
-              ],
+            child: BlocBuilder<ProfileBloc, ProfileState>(
+              builder: (context, state) {
+                return state is LoginSuccess ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${state.profile!.firstName!} ${state.profile!.lastName!}',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      state.profile!.phoneNumber!,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      state.profile!.email!,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ) : kLoadingWidget(context);
+              },
             ),
           ),
-        )
+        ),
       ],
     );
   }

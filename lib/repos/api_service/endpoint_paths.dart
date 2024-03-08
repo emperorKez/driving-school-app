@@ -84,8 +84,8 @@ class ApiPaths {
       'subscriptionLevel/$levelId/item';
 
   //school
-  static const getAllSchools = 'school';
-  static const createNewSchool = 'school';
+  static const getAllSchools = '/school';
+  static const createNewSchool = '/school';
   static String getSchoolById(String id) => 'school/$id';
   static String updateSchoolById(String id) => 'school/$id';
   static String deleteSchoolById(String id) => 'school/$id';
@@ -200,7 +200,7 @@ class ApiPaths {
   static String deleteReviewById(String schoolId, String aId) =>
       'school/$schoolId/review/$aId';
   static String getReviewsOfSchool(String schoolId) =>
-      'school/$schoolId/review';
+      '/school/$schoolId/review';
   static String addReviewForSchool(String schoolId) =>
       'school/$schoolId/review';
 

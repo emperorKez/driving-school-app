@@ -23,6 +23,7 @@ class _JoinDrivingSchoolViewState extends State<JoinDrivingSchoolView> {
   ListView _renderMobileBody(BuildContext context) {
     final s = MediaQuery.of(context).size;
     return ListView(
+      shrinkWrap: true,
       children: [
         SizedBox(
           height: s.height * 0.1,
@@ -72,7 +73,7 @@ class _JoinDrivingSchoolViewState extends State<JoinDrivingSchoolView> {
           height: 50,
         ),
         Center(
-          child: _renderSchoolCard(),
+          child: _renderSchoolCard(), 
         ),
         const SizedBox(
           height: 30,

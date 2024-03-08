@@ -2,12 +2,14 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
+import 'package:korbil_mobile/pages/auth/view/create_acc/cubit/create_account_cubit/create_account_cubit.dart';
 import 'package:korbil_mobile/pages/auth/view/login/login.dart';
 import 'package:korbil_mobile/theme/colors.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
@@ -20,6 +22,14 @@ class CreateAccountView extends StatefulWidget {
 }
 
 class _CreateAccountViewState extends State<CreateAccountView> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController firstnameController = TextEditingController();
+  TextEditingController lastnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
   Future<void> _showCreateDrivingSchoolAlert() {
     return showDialog<void>(
       context: context,
@@ -190,6 +200,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
             const SizedBox(height: 30),
             Center(
               child: Form(
+                key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
@@ -199,8 +210,11 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           Expanded(
                             child: _renderFormField(
                               hint: 'First Name',
-                              ctrl: TextEditingController(),
+                              ctrl: firstnameController,
                               validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter Your First Name';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/profile_icon.png',
@@ -209,8 +223,11 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           Expanded(
                             child: _renderFormField(
                               hint: 'Last Name',
-                              ctrl: TextEditingController(),
+                              ctrl: lastnameController,
                               validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Last Name';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/profile_icon.png',
@@ -225,8 +242,12 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             Expanded(
                               child: _renderFormField(
                                 hint: 'Enter your phone no',
-                                ctrl: TextEditingController(),
+                                ctrl: phoneController,
+                                inputType: TextInputType.phone,
                                 validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return 'Please enter Your Phone Number';
+                                  }
                                   return null;
                                 },
                                 icon: 'assets/imgs/ins/auth/call_green.png',
@@ -236,8 +257,12 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             Expanded(
                               child: _renderFormField(
                                 hint: 'Enter your email',
-                                ctrl: TextEditingController(),
+                                ctrl: emailController,
+                                inputType: TextInputType.emailAddress,
                                 validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return 'Please enter Your Email Address';
+                                  }
                                   return null;
                                 },
                                 icon: 'assets/imgs/ins/auth/email.png',
@@ -251,8 +276,12 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           children: [
                             _renderFormField(
                               hint: 'Enter your phone no',
-                              ctrl: TextEditingController(),
+                              ctrl: phoneController,
+                              inputType: TextInputType.phone,
                               validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Phone Number';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/call_green.png',
@@ -260,8 +289,12 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             ),
                             _renderFormField(
                               hint: 'Enter your email',
-                              ctrl: TextEditingController(),
+                              ctrl: emailController,
+                              inputType: TextInputType.emailAddress,
                               validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Email Address';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/email.png',
@@ -276,8 +309,11 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             Expanded(
                               child: _renderFormField(
                                 hint: 'Password',
-                                ctrl: TextEditingController(),
+                                ctrl: passwordController,
                                 validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return 'Please enter Your Password';
+                                  }
                                   return null;
                                 },
                                 icon: 'assets/imgs/ins/auth/lock_green.png',
@@ -288,8 +324,13 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             Expanded(
                               child: _renderFormField(
                                 hint: 'Confirm Password',
-                                ctrl: TextEditingController(),
+                                ctrl: confirmPasswordController,
                                 validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return 'Confirm Your Password';
+                                  } else if (val != passwordController.text) {
+                                    return 'Password does not match';
+                                  }
                                   return null;
                                 },
                                 icon: 'assets/imgs/ins/auth/lock_green.png',
@@ -304,8 +345,11 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           children: [
                             _renderFormField(
                               hint: 'Password',
-                              ctrl: TextEditingController(),
+                              ctrl: passwordController,
                               validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Password';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/lock_green.png',
@@ -314,8 +358,13 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             ),
                             _renderFormField(
                               hint: 'Confirm Password',
-                              ctrl: TextEditingController(),
+                              ctrl: confirmPasswordController,
                               validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Confirm Your Password';
+                                } else if (val != passwordController.text) {
+                                  return 'Password does not match';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/lock_green.png',
@@ -367,6 +416,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 children: [
                   GestureDetector(
                     onTap: () => Navigator.push(
+                      //todo
                       context,
                       MaterialPageRoute<dynamic>(
                         builder: (cxt) => const CreateAccountView(),
@@ -422,11 +472,34 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         builder: (cxt) => const CreateAccountView(),
                       ),
                     ),
-                    child: PrimaryBtn(
-                      text: 'Sign Up',
-                      ontap: _showCreateDrivingSchoolAlert,
-                      hm: 23,
-                    ),
+                    child: BlocConsumer<CreateAccountCubit, CreateAccountState>(
+                        listener:
+                            (BuildContext context, CreateAccountState state) {
+                      if (state is CreateAccountSuccess) {
+                        _showCreateDrivingSchoolAlert();
+                      }
+                      
+                      if (state is CreateAccountError) {
+                        //todo call erro displace
+                      }
+                    }, builder: (context, state) {
+                      if (state is CreateAccountLoading) {
+                        //todo return a loading widget
+                        return Container();
+                      } else {
+                        return PrimaryBtn(
+                          text: 'Sign Up',
+                          ontap: () {
+                            if (_formKey.currentState!.validate()) {
+                              context
+                                  .read<CreateAccountCubit>()
+                                  .createAccount(getPayLoadData());
+                            }
+                          },
+                          hm: 23,
+                        );
+                      }
+                    }),
                   ),
                   Center(
                     child: RichText(
@@ -513,8 +586,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   Widget _renderUploadButton(Function ontap) {
     return GestureDetector(
       onTap: () {
-        // ignore: avoid_dynamic_calls
-        ontap();
+        //todo pick a file
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -548,20 +620,21 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     );
   }
 
-  Container _renderFormField({
-    required String hint,
-    required TextEditingController ctrl,
-    required ValidatorFunctionType validator,
-    required String icon,
-    bool obscure = false,
-    double iconSize = 24,
-    Widget? suffixIcon,
-  }) {
+  Container _renderFormField(
+      {required String hint,
+      required TextEditingController ctrl,
+      required ValidatorFunctionType validator,
+      required String icon,
+      bool obscure = false,
+      double iconSize = 24,
+      Widget? suffixIcon,
+      TextInputType inputType = TextInputType.text}) {
     return Container(
       margin: const EdgeInsets.all(8),
       child: TextFormField(
         obscureText: obscure,
         controller: ctrl,
+        keyboardType: inputType,
         validator: (val) => validator(val),
         style: const TextStyle(
           fontFamily: 'Poppins',
@@ -613,5 +686,16 @@ class _CreateAccountViewState extends State<CreateAccountView> {
         ),
       ),
     );
+  }
+
+  Map<String, Object> getPayLoadData() {
+    return {
+      'firstName': firstnameController.text,
+      'lastName': lastnameController.text,
+      'phoneNumber': phoneController.text,
+      'email': emailController.value,
+      'createdAt': DateTime.now(),
+      'updatedAt': DateTime.now()
+    };
   }
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/school_settings/cubit/tab_menu/tab_menu_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/bloc/tab_menu/tab_menu_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/views/main_widget.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/views/selected_tab.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'main_widget.dart';
-import 'selected_tab.dart';
 
 class SchoolSettingsView extends StatelessWidget {
   const SchoolSettingsView({super.key});

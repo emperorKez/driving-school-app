@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/views/manage_course/views/profile_section.dart';
+import 'package:korbil_mobile/pages/school/views/manage_course/views/student_card.dart';
+import 'package:korbil_mobile/pages/school/views/manage_course/views/total_lessons.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'profile_section.dart';
-import 'student_card.dart';
-import 'total_lessons.dart';
 
 class InstManageCourseView extends StatefulWidget {
   const InstManageCourseView({super.key});
@@ -37,75 +40,88 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                 _AppBarMenu(),
               ],
             ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: ListView(
-          children: const [
-            SizedBox(
-              height: 10,
-            ),
-            ProfileSection(),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+        builder: (context, state) {
+          int totalDuration = 0;
+          int totalActive = 0;
+          int totalFutureAssigned = 0;
+
+          for (final element in state.schoolInfo!.courses!) {
+            totalDuration += element.timeDuration!;
+            if (element.isActive!) totalActive++;
+            if (element.courseTypeId == 1) totalFutureAssigned++;
+          }
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: ListView(
               children: [
-                TotalLessons(
-                  text: 'Total lessons',
-                  val: '109',
-                  icon: 'assets/imgs/ins/school/lesson_vid.png',
+                const SizedBox(
+                  height: 10,
                 ),
-                TotalLessons(
-                  text: 'Working hours',
-                  val: '1k Hrs',
-                  icon: 'assets/imgs/ins/school/clock.png',
+                const ProfileSection(),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TotalLessons(
+                      text: 'Total lessons',
+                      val: state.schoolInfo!.courses!.length.toString(),
+                      icon: 'assets/imgs/ins/school/lesson_vid.png',
+                    ),
+                    TotalLessons(
+                      text: 'Working hours',
+                      val: totalDuration.toString(),
+                      icon: 'assets/imgs/ins/school/clock.png',
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TotalLessons(
+                      text: 'Ongoing lessons',
+                      val: totalActive.toString(),
+                    ),
+                    TotalLessons(
+                      text: 'Future assigned',
+                      val: totalFutureAssigned.toString(),
+                    ),
+                    const TotalLessons(
+                      text: 'Total KMs',
+                      val: '22',
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Text(
+                  'Top 3 Students',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const StudentCard(),
+                const StudentCard(),
+                const StudentCard(),
+                const StudentCard(),
+                const StudentCard(),
+                const SizedBox(
+                  height: 50,
                 ),
               ],
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TotalLessons(
-                  text: 'Ongoing lessons',
-                  val: '22',
-                ),
-                TotalLessons(
-                  text: 'Future assigned',
-                  val: '39',
-                ),
-                TotalLessons(
-                  text: 'Total KMs',
-                  val: '22',
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              'Top 3 Students',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.white,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            StudentCard(),
-            StudentCard(),
-            StudentCard(),
-            StudentCard(),
-            StudentCard(),
-            SizedBox(
-              height: 50,
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -120,6 +136,16 @@ class _AppBarMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       splashRadius: 8,
+      onSelected: (value) {
+        switch (value) {
+          case 'Change user type':
+          context.read<ProfileBloc>().add(ChangeUserType());
+          case 'Deactivate user':
+          context.read<ProfileBloc>().add(DeactivateUser());
+          default: 
+          
+        }
+      },
       itemBuilder: (ctx) => const [
         PopupMenuItem<String>(
           value: 'Change user type',

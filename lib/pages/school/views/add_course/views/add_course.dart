@@ -78,12 +78,16 @@ class _AddCourseState extends State<InstAddCourse> {
                 const SizedBox(
                   width: 10,
                 ),
-                const Expanded(
+                 Expanded(
                   child: PrimaryBtn(
                     text: 'Add',
                     vm: 0,
                     hm: 0,
                     fontSize: 14,
+                    ontap: (){
+                      //todo add a course
+
+                    },
                   ),
                 ),
               ],
@@ -116,7 +120,7 @@ class InstLessonCard extends StatelessWidget {
               color: KorbilTheme.of(context).alternate2,
               spreadRadius: 1,
               blurRadius: 1,
-              offset: Offset(1, 1),
+              offset: const Offset(1, 1),
             ),
           ]),
       child: Row(

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/auth/view/create_driving_school/cubit/create_driving_school_cubit.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class CreateDrivingSchoolView extends StatefulWidget {
@@ -16,6 +19,10 @@ class CreateDrivingSchoolView extends StatefulWidget {
 }
 
 class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // final s = MediaQuery.of(context).size;
@@ -101,6 +108,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
             const SizedBox(height: 30),
             Center(
               child: Form(
+                key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
@@ -112,9 +120,13 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             Expanded(
                               child: _renderFormField(
                                 hint: 'Enter your phone no',
-                                ctrl: TextEditingController(),
+                                ctrl: phoneController,
+                                inputType: TextInputType.phone,
                                 validator: (val) {
-                                  return null;
+                                  if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Phone Number';
+                                }
+                                return null;
                                 },
                                 icon: 'assets/imgs/ins/auth/school.png',
                               ),
@@ -122,9 +134,13 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             Expanded(
                               child: _renderFormField(
                                 hint: 'Enter your email',
-                                ctrl: TextEditingController(),
+                                ctrl: emailController,
+                                inputType: TextInputType.emailAddress,
                                 validator: (val) {
-                                  return null;
+                                 if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Email';
+                                }
+                                return null;
                                 },
                                 icon: 'assets/imgs/ins/auth/email.png',
                                 iconSize: 18,
@@ -137,16 +153,24 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                           children: [
                             _renderFormField(
                               hint: 'Enter your phone no',
-                              ctrl: TextEditingController(),
+                              ctrl: phoneController,
+                              inputType: TextInputType.phone,
                               validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Phone Number';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/school.png',
                             ),
                             _renderFormField(
                               hint: 'Enter your email',
-                              ctrl: TextEditingController(),
+                              ctrl: emailController,
+                              inputType: TextInputType.emailAddress,
                               validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Email';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/email.png',
@@ -161,9 +185,13 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             Expanded(
                               child: _renderFormField(
                                 hint: 'Enter your phone no',
-                                ctrl: TextEditingController(),
+                                ctrl: phoneController,
+                              inputType: TextInputType.phone,
                                 validator: (val) {
-                                  return null;
+                                  if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Phone Number';
+                                }
+                                return null;
                                 },
                                 icon: 'assets/imgs/ins/auth/call_green.png',
                                 iconSize: 18,
@@ -172,9 +200,13 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             Expanded(
                               child: _renderFormField(
                                 hint: 'Enter your email',
-                                ctrl: TextEditingController(),
+                                ctrl: emailController,
+                              inputType: TextInputType.emailAddress,
                                 validator: (val) {
-                                  return null;
+                                  if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Email';
+                                }
+                                return null;
                                 },
                                 icon: 'assets/imgs/ins/auth/email.png',
                                 iconSize: 18,
@@ -187,8 +219,12 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                           children: [
                             _renderFormField(
                               hint: 'Enter your phone no',
-                              ctrl: TextEditingController(),
+                              ctrl: phoneController,
+                              inputType: TextInputType.phone,
                               validator: (val) {
+                                 if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Phone Number';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/call_green.png',
@@ -196,8 +232,12 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             ),
                             _renderFormField(
                               hint: 'Enter your email',
-                              ctrl: TextEditingController(),
+                              ctrl: emailController,
+                              inputType: TextInputType.emailAddress,
                               validator: (val) {
+                                 if (val == null || val.isEmpty) {
+                                  return 'Please enter Your Email';
+                                }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/email.png',
@@ -223,7 +263,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w600,
                                             fontSize: getPreferedOrientation(
-                                                        context) ==
+                                                        context,) ==
                                                     PreferedOrientation
                                                         .landscape
                                                 ? 12
@@ -252,7 +292,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w600,
                                               fontSize: getPreferedOrientation(
-                                                          context) ==
+                                                          context,) ==
                                                       PreferedOrientation
                                                           .landscape
                                                   ? 12
@@ -267,7 +307,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                   _renderUploadBtn(),
                                 ],
                               ),
-                            )
+                            ),
                           ],
                         )
                       else
@@ -314,7 +354,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                 ),
                                 _renderUploadBtn(),
                               ],
-                            )
+                            ),
                           ],
                         ),
                     ],
@@ -325,13 +365,29 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
             const SizedBox(
               height: 30,
             ),
-            PrimaryBtn(
-              text: 'Create',
-              ontap: () {
-                lc<NavigationService>()
-                    .navigateTo(rootNavKey, AppRouter.appHome);
+            BlocConsumer<CreateDrivingSchoolCubit, CreateDrivingSchoolState>(
+              listener: (context, state) {
+                if (state is SuccessState) {
+                  lc<NavigationService>()
+                                .navigateTo(rootNavKey, AppRouter.appHome);
+                }
               },
-              hm: 23,
+              builder: (context, state) {
+                if (state is LoadingState) {
+                  return kLoadingWidget(context);
+                  
+                } else{
+                return PrimaryBtn(
+                          text: 'Create',
+                          ontap: () {
+                            if (_formKey.currentState!.validate()) {
+                             
+                            context.read<CreateDrivingSchoolCubit>().createDrivingSchool(getPayload());
+                            }
+                          },
+                          hm: 23,
+                        );}
+              },
             ),
             const SizedBox(
               height: 50,
@@ -371,7 +427,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                   color: AppColors.green,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                )),
+                ),),
           ],
         ),
       ),
@@ -384,6 +440,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
     required ValidatorFunctionType validator,
     required String icon,
     double iconSize = 24,
+    TextInputType inputType = TextInputType.text,
     Widget? suffixIcon,
   }) {
     return Container(
@@ -391,6 +448,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
       child: TextFormField(
         controller: ctrl,
         validator: (val) => validator(val),
+        keyboardType: inputType,
         style: const TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w400,
@@ -441,5 +499,42 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
         ),
       ),
     );
+  }
+  
+  Map<String, dynamic> getPayload() {
+    return {
+  'schoolName': 'string',
+  'address': 'string',
+  'city': 'string',
+  'phoneNo': 'string',
+  'languageId': 0,
+  'logoKey': 'string',
+  'registrationDocumentKey': 'string',
+  'staff': {
+    'profile': {
+      'id': 0,
+      'firstName': 'string',
+      'lastName': 'string',
+      'phoneNumber': 'string',
+      'email': 'string',
+      'avatar': 'string',
+      'userStatus': 0,
+      'userType': 0,
+      'createdAt': '2024-03-07T11:07:54.759Z',
+      'updatedAt': '2024-03-07T11:07:54.759Z',
+    },
+    'staffData': {
+      'userProfileId': 0,
+      'documents': [
+        {
+          'key': 'string',
+          'type': 0,
+        }
+      ],
+      'staffRole': 0,
+      'schoolId': 0,
+    },
+  },
+};
   }
 }

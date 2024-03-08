@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:korbil_mobile/localization/app_localization.dart';
+import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/router.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/views/school_setting_view.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -16,24 +20,34 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        AppLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SchoolInfoBloc>(
+          create: (context) =>
+              SchoolInfoBloc(lc())..add(GetSchoolInfo(schoolId: 1)),
+          lazy: false,
+        ),
       ],
-      locale: _locale,
-      supportedLocales: const [
-        Locale('en'),
-        Locale('sv'),
-      ],
-      theme: ThemeData(brightness: Brightness.light),
-      themeMode: _themeMode,
-      navigatorKey: rootNavKey,
-      initialRoute: AppRouter.getStarted,
-      onGenerateRoute: AppRouter.onGenerateRoute,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          AppLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        locale: _locale,
+        supportedLocales: const [
+          Locale('en'),
+          Locale('sv'),
+        ],
+        theme: ThemeData(brightness: Brightness.light),
+        themeMode: _themeMode,
+        navigatorKey: rootNavKey,
+        home: const SchoolSettingsView(),
+        // initialRoute: AppRouter.getStarted,
+        // onGenerateRoute: AppRouter.onGenerateRoute,
+      ),
     );
   }
 }

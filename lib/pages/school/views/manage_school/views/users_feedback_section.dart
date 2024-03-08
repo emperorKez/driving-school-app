@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/snackBar/top_snack_bar.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/cubit/school_feedback/school_feedback_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_feedback/school_feedback_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/feedback_card.dart';
 import 'package:korbil_mobile/pages/school/views/users_feedback/views/users_feedback.dart';
 import 'package:korbil_mobile/theme/theme.dart';

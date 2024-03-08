@@ -30,9 +30,9 @@ class AllFeedbacksBloc extends Bloc<AllFeedbacksEvent, AllFeedbacksState> {
     } else {
       final list = resState.data!;
       //get reviews for page
-      final updatedList = _getItemsPerPage(list, page);
+      final updatedList = _getItemsPerPage(list.cast<Review>(), page);
       //get page count
-      final pageCount = _pageCount(list, reviewsPerPage);
+      final pageCount = _pageCount(list.cast<Review>(), reviewsPerPage);
       return emit(AllFeedbacksFetched(page, updatedList, pageCount));
     }
   }
@@ -49,9 +49,9 @@ class AllFeedbacksBloc extends Bloc<AllFeedbacksEvent, AllFeedbacksState> {
     } else {
       final list = resState.data!;
       //get reviews for page
-      final updatedList = _getItemsPerPage(list, page);
+      final updatedList = _getItemsPerPage(list.cast<Review>(), page);
       //get page count
-      final pageCount = _pageCount(list, reviewsPerPage);
+      final pageCount = _pageCount(list.cast<Review>(), reviewsPerPage);
       return emit(AllFeedbacksFetched(page, updatedList, pageCount));
     }
   }

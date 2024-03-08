@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/cubit/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/components/snackBar/top_snack_bar.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class SchoolInfoCard extends StatelessWidget {
@@ -10,7 +11,16 @@ class SchoolInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+    return BlocConsumer<SchoolInfoBloc, SchoolInfoState>(
+      listener: (context, state) {
+        if (state is SchoolInfoError) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              buildTopSnackbar(context, state.error),
+            );
+        }
+      },
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -26,7 +36,7 @@ class SchoolInfoCard extends StatelessWidget {
                       Border.all(color: KorbilTheme.of(context).primaryColor),
                 ),
                 child: Center(
-                  child: _buildLogo(state.info?.logo as String?),
+                  child: _buildLogo(state.schoolInfo!.logo),
                 ),
               ),
               Expanded(
@@ -60,7 +70,7 @@ class SchoolInfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (state.info?.description == null)
+          if (state.schoolInfo!.description == null)
             Container()
           else
             Text(
@@ -74,7 +84,7 @@ class SchoolInfoCard extends StatelessWidget {
             ),
           const SizedBox(height: 15),
           Text(
-            state is SchoolInfoFetching ? '...' : state.info?.description ?? '',
+            state is SchoolInfoLoading ? '...' : state.schoolInfo!.description ?? '',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,
@@ -89,7 +99,7 @@ class SchoolInfoCard extends StatelessWidget {
 
   Text _buildSchoolEmail(SchoolInfoState state, BuildContext context) {
     return Text(
-      state is SchoolInfoFetching ? '...' : state.info?.email ?? '',
+      state is SchoolInfoLoading ? '...' : state.schoolInfo!.email ?? '',
       style: TextStyle(
         fontFamily: 'Poppins',
         color: KorbilTheme.of(context).secondaryColor,
@@ -101,9 +111,9 @@ class SchoolInfoCard extends StatelessWidget {
 
   Text _buildSchoolPhone(SchoolInfoState state, BuildContext context) {
     return Text(
-      state is SchoolInfoFetching
+      state is SchoolInfoLoading
           ? '...'
-          : state.info?.phoneNumber ?? '...phone..',
+          : state.schoolInfo!.phoneNumber ?? '...phone..',
       style: TextStyle(
         fontFamily: 'Poppins',
         color: KorbilTheme.of(context).secondaryColor,
@@ -115,7 +125,7 @@ class SchoolInfoCard extends StatelessWidget {
 
   Text _buildSchoolName(SchoolInfoState state, BuildContext context) {
     return Text(
-      state is SchoolInfoFetching ? '...' : state.info?.name ?? 'School name',
+      state is SchoolInfoLoading ? '...' : state.schoolInfo!.name ?? 'School name',
       style: TextStyle(
         fontFamily: 'Poppins',
         color: KorbilTheme.of(context).secondaryColor,

@@ -24,7 +24,7 @@ class SchoolFeedbackBloc
       return emit(SchoolFeedbackFetchError(resState.error?.error.toString()));
     } else {
       final list = resState.data!.take(3).toList();
-      return emit(SchoolFeedbackFetched(list));
+      return emit(SchoolFeedbackFetched(list.cast<Review>()));
     }
   }
 

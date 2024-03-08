@@ -1,17 +1,15 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/repos/package_repo/models/package.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PackageCard extends StatelessWidget {
   const PackageCard({
-    super.key,
-    required this.s,
-    required this.package,
+    required this.size, required this.package, super.key,
   });
 
-  final Size s;
+  final Size size;
   final Package package;
 
   @override
@@ -39,7 +37,7 @@ class PackageCard extends StatelessWidget {
           Column(
             children: [
               SizedBox(
-                height: s.height * 0.3 - 12,
+                height: size.height * 0.3 - 12,
               ),
               Image.asset(
                 'assets/imgs/ins/school/elp_left.png',
@@ -49,7 +47,7 @@ class PackageCard extends StatelessWidget {
           ),
           // middle
           Container(
-            width: s.width * 0.6,
+            width: size.width * 0.6,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               border: Border.symmetric(
@@ -62,7 +60,7 @@ class PackageCard extends StatelessWidget {
               children: [
                 //package 10 hours
                 SizedBox(
-                  height: s.height * 0.3,
+                  height: size.height * 0.3,
                   child: Column(
                     children: [
                       Row(
@@ -122,7 +120,7 @@ class PackageCard extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${package.discount?.toInt().toString()}%',
+                                  '50%',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     color: KorbilTheme.of(context).white,
@@ -144,7 +142,7 @@ class PackageCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              package.syllabuses!.length.toString(),
+                              package.packageCourseSyllabus!.length.toString(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: KorbilTheme.of(context).primaryColor,
@@ -205,7 +203,7 @@ class PackageCard extends StatelessWidget {
           Column(
             children: [
               SizedBox(
-                height: s.height * 0.3 - 12,
+                height: size.height * 0.3 - 12,
               ),
               Image.asset(
                 'assets/imgs/ins/school/elp_right.png',

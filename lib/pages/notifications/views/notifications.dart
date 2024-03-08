@@ -24,31 +24,31 @@ class _InstNotificationsViewState extends State<InstNotificationsView> {
         hasAction: false,
         title: 'Completed',
         subTitle: '',
-        desc: 'Isaiah Richardson Completed 90 Min Traffic Light Drive'),
+        desc: 'Isaiah Richardson Completed 90 Min Traffic Light Drive',),
     NotificationDetails(
         icon: 'assets/imgs/ins/notifications/notification_type2.png',
         hasAction: false,
         title: 'Completed',
         subTitle: '',
-        desc: 'Glenn Musa Completed Safety Courses on Road'),
+        desc: 'Glenn Musa Completed Safety Courses on Road',),
     NotificationDetails(
         icon: 'assets/imgs/ins/notifications/notification_type1.png',
         hasAction: false,
         title: 'Richardson Massage',
         subTitle: '',
-        desc: 'Lorem ipsum dolor sit amet, con...'),
+        desc: 'Lorem ipsum dolor sit amet, con...',),
     NotificationDetails(
         icon: 'assets/imgs/ins/notifications/notification_type1.png',
         hasAction: false,
         title: 'Bella Yasmin Massage',
         subTitle: '',
-        desc: 'Lorem ipsum dolor sit amet, con...'),
+        desc: 'Lorem ipsum dolor sit amet, con...',),
     NotificationDetails(
         icon: 'assets/imgs/ins/notifications/notification_type2.png',
         hasAction: false,
         title: 'Tyler Sienna Massage',
         subTitle: '',
-        desc: 'Lorem ipsum dolor sit amet, con...'),
+        desc: 'Lorem ipsum dolor sit amet, con...',),
   ];
 
   @override
@@ -182,7 +182,7 @@ class NotificationCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                   Row(

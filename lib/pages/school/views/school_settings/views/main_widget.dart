@@ -10,7 +10,7 @@ import 'package:korbil_mobile/pages/school/views/manage_users/views/manage_users
 import 'package:korbil_mobile/pages/school/views/message_view/views/messages_view.dart';
 import 'package:korbil_mobile/pages/school/views/payments_view/views/inst_payments_view.dart';
 import 'package:korbil_mobile/pages/school/views/privacy/views/privacy.dart';
-import 'package:korbil_mobile/pages/school/views/school_settings/cubit/tab_menu/tab_menu_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/bloc/tab_menu/tab_menu_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/settings/views/settings_view.dart';
 import 'package:korbil_mobile/pages/school/views/subscription/views/subscription.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -29,6 +29,7 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      shrinkWrap: true,
       children: [
         const SizedBox(height: 30),
         const ProfileSection(),

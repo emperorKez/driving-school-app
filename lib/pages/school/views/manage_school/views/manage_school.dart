@@ -5,15 +5,13 @@ import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_vehicle/views/add_new_vehicle.dart';
 import 'package:korbil_mobile/pages/school/views/configuration_view/views/configuration_view.dart';
 import 'package:korbil_mobile/pages/school/views/manage_pickup_location/views/manage_pickup_location.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/cubit/package/package_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/cubit/school_feedback/school_feedback_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/cubit/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/package/package_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_feedback/school_feedback_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/package_section.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/views/school_info_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/users_feedback_section.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'school_info_card.dart';
 
 class ManageSchoolView extends StatelessWidget {
   const ManageSchoolView({super.key});
@@ -22,10 +20,6 @@ class ManageSchoolView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider( 
       providers: [
-        BlocProvider<SchoolInfoBloc>(
-          create: (context) => SchoolInfoBloc(lc())..add(GetSchoolInfo()),
-          lazy: false,
-        ),
         BlocProvider<PackageBloc>(
           create: (context) => PackageBloc(lc())..add(GetAllPackages()),
           lazy: false,

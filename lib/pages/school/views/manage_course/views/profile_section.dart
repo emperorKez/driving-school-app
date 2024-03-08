@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ProfileSection extends StatelessWidget {
@@ -23,63 +26,67 @@ class ProfileSection extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Harry Zakaria',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: KorbilTheme.of(context).secondaryColor,
-                ),
-              ),
-              Row(
+          child: BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              return state is ProfileLoaded ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 3),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 2,
+                  Text(
+                    '${state.profile!.firstName} ${state.profile!.lastName}',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: KorbilTheme.of(context).secondaryColor,
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      color: KorbilTheme.of(context).primaryColor,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Admin',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: KorbilTheme.of(context).white,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 3),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: KorbilTheme.of(context).primaryColor,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Admin',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: KorbilTheme.of(context).white,
+                            ),
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                  Text(
+                    state.profile!.phoneNumber!,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: KorbilTheme.of(context).secondaryColor,
+                    ),
+                  ),
+                  Text(
+                    state.profile!.email!,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: KorbilTheme.of(context).secondaryColor,
                     ),
                   ),
                 ],
-              ),
-              Text(
-                '+462139564235',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: KorbilTheme.of(context).secondaryColor,
-                ),
-              ),
-              Text(
-                'harryzakaria@gmail.com',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: KorbilTheme.of(context).secondaryColor,
-                ),
-              ),
-            ],
+              ): kLoadingWidget(context);
+            },
           ),
         ),
       ],

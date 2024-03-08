@@ -91,12 +91,12 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: ScheduleStatusType1Widget(
                         cts: BoxConstraints(maxWidth: 30, maxHeight: 30),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                     Expanded(
@@ -121,12 +121,12 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: ScheduleStatusType2Widget(
                         cts: BoxConstraints(maxWidth: 30, maxHeight: 30),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                     Expanded(
@@ -151,12 +151,12 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: ScheduleStatusType3Widget(
                         cts: BoxConstraints(maxWidth: 30, maxHeight: 30),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                     Expanded(
@@ -168,7 +168,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                             fontSize: 16,
-                            color: th.secondaryColor,
+                            color: th.secondaryColor, 
                           ),
                         ),
                       ),
@@ -181,12 +181,12 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: ScheduleStatusType4Widget(
                         cts: BoxConstraints(maxWidth: 30, maxHeight: 30),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                     Expanded(
