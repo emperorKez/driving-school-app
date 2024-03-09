@@ -1,15 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PackageCard extends StatelessWidget {
   const PackageCard({
-    super.key,
     required this.s,
+    required this.package,
+    super.key,
   });
 
   final Size s;
+  final Package package;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,7 @@ class PackageCard extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: KorbilTheme.of(context).primaryColor,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(6),
                         bottomRight: Radius.circular(6),
                       ),
@@ -62,7 +66,7 @@ class PackageCard extends StatelessWidget {
               ),
             ),
             Text(
-              'Package',
+              package.title!,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -82,6 +86,7 @@ class PackageCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
+            //todo show a tick for recommended
             const SizedBox(
               height: 15,
             ),
@@ -95,7 +100,7 @@ class PackageCard extends StatelessWidget {
               ),
             ),
             Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+              package.details!,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -108,7 +113,7 @@ class PackageCard extends StatelessWidget {
             ),
             Center(
               child: Text(
-                r'$1750.00',
+                '\$${package.price}',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -120,10 +125,13 @@ class PackageCard extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const PrimaryBtn(
+             PrimaryBtn(
               text: 'More Details',
               fontSize: 14,
               pvm: 10,
+              ontap: (){
+                //todo more package info
+              },
             ),
             const Spacer(),
             Center(
@@ -134,7 +142,7 @@ class PackageCard extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: KorbilTheme.of(context).primaryColor,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(6),
                         topRight: Radius.circular(6),
                       ),

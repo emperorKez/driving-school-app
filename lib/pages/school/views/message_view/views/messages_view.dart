@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/pages/school/views/message_view/views/message_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'message_card.dart';
 
 class MessagesView extends StatefulWidget {
   const MessagesView({super.key});

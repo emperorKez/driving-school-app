@@ -44,9 +44,8 @@ class _AppState extends State<App> {
         theme: ThemeData(brightness: Brightness.light),
         themeMode: _themeMode,
         navigatorKey: rootNavKey,
-        home: const SchoolSettingsView(),
-        // initialRoute: AppRouter.getStarted,
-        // onGenerateRoute: AppRouter.onGenerateRoute,
+        initialRoute: AppRouter.getStarted,
+        onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );
   }

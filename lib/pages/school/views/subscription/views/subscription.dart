@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/subscription/views/package_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'package_card.dart';
 
 class SubscriptionView extends StatefulWidget {
   const SubscriptionView({super.key});
@@ -38,71 +40,80 @@ class _SubscriptionViewState extends State<SubscriptionView> {
     );
   }
 
-  ListView _renderMobileBody(Size s) {
-    return ListView(
-      children: [
-        const SizedBox(
-          height: 30,
-        ),
-        CarouselSlider(
-          items: [
-            PackageCard(s: s),
-            PackageCard(s: s),
-            PackageCard(s: s),
+  Widget _renderMobileBody(Size s) {
+    return BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+      builder: (context, state) {
+        return ListView(
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            if (state is SchoolInfoLoaded)
+              CarouselSlider(
+                items: List.generate(
+                  state.schoolInfo!.packages!.length,
+                  (index) => PackageCard(
+                    s: s,
+                    package: state.schoolInfo!.packages![index],
+                  ),
+                ),
+                options: CarouselOptions(
+                  height: s.height * 0.5,
+                  initialPage: 1,
+                  enableInfiniteScroll: false,
+                  enlargeCenterPage: true,
+                  enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                  clipBehavior: Clip.antiAlias,
+                ),
+              )
+            else
+              kLoadingWidget(context),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                  Text(
+                    'If you need for more details',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Email Us',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    'infor@körbil.com',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
-          options: CarouselOptions(
-            height: s.height * 0.5,
-            initialPage: 1,
-            enableInfiniteScroll: false,
-            enlargeCenterPage: true,
-            enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-            clipBehavior: Clip.antiAlias,
-          ),
-        ),
-        const SizedBox(
-          height: 50,
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Column(
-            children: [
-              Text(
-                'If you need for more details',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: KorbilTheme.of(context).secondaryColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Email Us',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: KorbilTheme.of(context).secondaryColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                'infor@körbil.com',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: KorbilTheme.of(context).secondaryColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
