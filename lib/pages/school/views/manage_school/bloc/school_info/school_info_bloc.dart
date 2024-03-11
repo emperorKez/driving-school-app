@@ -7,22 +7,27 @@ part 'school_info_event.dart';
 part 'school_info_state.dart';
 
 class SchoolInfoBloc extends Bloc<SchoolInfoEvent, SchoolInfoState> {
-  SchoolInfoBloc(ManageSchoolRepo? manageSchoolRepo) : _manageSchoolRepo = manageSchoolRepo ?? ManageSchoolRepo(), super(SchoolInfoInitial()) {
-    
-
-     on<GetSchoolInfo>(_getSchoolInfo);
+  SchoolInfoBloc(ManageSchoolRepo? manageSchoolRepo)
+      : _manageSchoolRepo = manageSchoolRepo ?? ManageSchoolRepo(),
+        super(SchoolInfoInitial()) {
+    on<GetSchoolInfo>(_getSchoolInfo);
   }
 
   final ManageSchoolRepo _manageSchoolRepo;
 
   Future<void> _getSchoolInfo(
-      GetSchoolInfo event, Emitter<SchoolInfoState> emit,) async {
-    emit( SchoolInfoLoading());
-    final resState = await _manageSchoolRepo.getSchoolInfo(schoolId: event.schoolId);
+    GetSchoolInfo event,
+    Emitter<SchoolInfoState> emit,
+  ) async {
+    emit(SchoolInfoLoading());
+    final resState =
+        await _manageSchoolRepo.getSchoolInfo(schoolId: event.schoolId);
     if (resState.data == null) {
       return emit(SchoolInfoError(error: resState.error?.error.toString()));
     } else {
-      return emit(SchoolInfoLoaded( schoolInfo: resState.data!,));
+      return emit(SchoolInfoLoaded(
+        schoolInfo: resState.data!,
+      ));
     }
   }
 }

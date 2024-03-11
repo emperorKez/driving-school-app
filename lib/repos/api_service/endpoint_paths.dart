@@ -184,15 +184,18 @@ class ApiPaths {
   static String updatePickupLocationStatus(String schoolId, String aId) =>
       'school/$schoolId/pickupLocation/$aId/status';
 
-  //offer
-  static String getOfferById(String schoolId, String aId) =>
-      'school/$schoolId/offer/$aId';
-  static String updateOfferById(String schoolId, String aId) =>
-      'school/$schoolId/offer/$aId';
-  static String deleteOfferById(String schoolId, String aId) =>
-      'school/$schoolId/offer/$aId';
-  static String getOffersOfSchool(String schoolId) => 'school/$schoolId/offer';
-  static String addOffersForSchool(String schoolId) => 'school/$schoolId/offer';
+  //promotion
+  static String getPromotion(int schoolId, int promotionId) =>
+      '/school/$schoolId/promotion/$promotionId';
+  static String updatePromotion(int schoolId, int promotionId) =>
+      '/school/$schoolId/promotion/$promotionId';
+  static String deletePromotion(int schoolId, int promotionId) =>
+      '/school/$schoolId/promotion/$promotionId';
+  static String getAllPromotion(int schoolId,) =>
+      '/school/$schoolId/promotion';
+  static String addPromotion(int schoolId,) =>
+      '/school/$schoolId/promotion';
+
 
   //review
   static String updateReviewById(String schoolId, String aId) =>
@@ -211,4 +214,25 @@ class ApiPaths {
       'school/$schoolId/vehicle/$aId';
   static String deleteVechileById(String schoolId, String aId) =>
       'school/$schoolId/vehicle/$aId';
+
+      //students
+      static String getStudents = '/student/by-school';
+      static String createStudents = '/student';
+      static String getStudentById(int studentId) => '/sudent/$studentId';
+      static String updateStudent(int studentId) => '/sudent/$studentId';
+      static String archivetudent(int studentId) => '/sudent/$studentId';
+      static String updateStudentAvatar(int studentId) => '/sudent/$studentId/avatar';
+      static String declineStudent(int studentId) => '/sudent/$studentId/decline-to-school';
+      static String approveStudent(int studentId, int schoolId) => '/sudent/$studentId/approve-to-school/$schoolId';
+
+      //promotion
+
+
+
+
+
+
+
+
+
 }

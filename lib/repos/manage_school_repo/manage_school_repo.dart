@@ -29,8 +29,9 @@ class ManageSchoolRepo {
     return ResponseFailed(res.error!);
   }
 
-  Future<ResponseState<SchoolInfo>> getSchoolInfo(
-      {required int schoolId,}) async {
+  Future<ResponseState<SchoolInfo>> getSchoolInfo({
+    required int schoolId,
+  }) async {
     final res = await apiService
         .getreq(ApiPaths.getDrivingSchoolPageInfo(schoolId.toString()));
     if (res.data != null) {
@@ -78,5 +79,19 @@ class ManageSchoolRepo {
       }
     }
     return ResponseFailed(res.error!);
+  }
+
+  Future<ResponseState<dynamic>> addPromo(
+      {required Map<String, dynamic> payload, required int schoolId,}) async {
+    try {
+      final response =
+          await apiService.postReq(ApiPaths.addPromotion(schoolId));
+      if (response.data != null && response.data!.data['code'] == 200) {
+        return ResponseSuccess(response.data!.data['response']);
+      }
+      return ResponseFailed(DataError(null, 'something went wrong'));
+    } catch (e) {
+      return ResponseFailed(DataError(null, e));
+    }
   }
 }

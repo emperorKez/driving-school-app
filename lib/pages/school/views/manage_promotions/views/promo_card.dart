@@ -1,11 +1,14 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PromoCard extends StatelessWidget {
   const PromoCard({
+    required this.promo,
     super.key,
   });
+  final Offer promo;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +27,7 @@ class PromoCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '10 Hour Package',
+              Text( '${promo.details}',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -37,7 +39,7 @@ class PromoCard extends StatelessWidget {
                 height: 5,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: DottedLine(
                   dashColor: KorbilTheme.of(context).alternate1,
                   dashLength: 8,
@@ -51,12 +53,12 @@ class PromoCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(left: 15),
+                        padding: const EdgeInsets.only(left: 15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Start date: 01/12/22',
+                              'Start date: ${promo.startDate}',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: KorbilTheme.of(context).secondaryColor,
@@ -64,11 +66,11 @@ class PromoCard extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 7,
                             ),
                             Text(
-                              'Start date: 01/12/22',
+                              'End date: ${promo.endDate}',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: KorbilTheme.of(context).secondaryColor,
@@ -95,7 +97,7 @@ class PromoCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '15%',
+                            '${promo.offer}%',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: KorbilTheme.of(context).primaryColor,
@@ -112,7 +114,7 @@ class PromoCard extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                         ],

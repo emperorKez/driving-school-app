@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
-import 'package:korbil_mobile/pages/auth/view/login/bloc/login_cubit/login_cubit_cubit.dart';
 import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -30,7 +29,7 @@ class ProfileSection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 12),
             child: BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
-                return state is LoginSuccess ? Column(
+                return state is ProfileLoaded ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(

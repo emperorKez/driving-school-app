@@ -348,7 +348,7 @@ class GroupLesson {
   int? instructorId;
   DateTime? date;
   Time? startTime;
-  Time? endTime;
+  Time? endTime; 
   int? seats;
   int? lessonStatus;
   List<int>? groupLessonStudentRefs;

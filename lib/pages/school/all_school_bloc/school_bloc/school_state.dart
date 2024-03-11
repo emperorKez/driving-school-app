@@ -2,18 +2,18 @@ part of 'school_bloc.dart';
 
 @immutable
 sealed class SchoolState {
-  SchoolState({this.schoolList});
-
+  const SchoolState({this.schoolInfo, this.schoolList});
+  final SchoolInfo? schoolInfo;
   final List<SchoolInfo>? schoolList;
 }
 
 final class SchoolInitial extends SchoolState {}
 final class SchoolLoading extends SchoolState {}
 final class SchoolLoaded extends SchoolState {
-  SchoolLoaded({required super.schoolList});
+  const SchoolLoaded({required super.schoolInfo});
 }
 final class SchoolError extends SchoolState {
-  SchoolError({ this.error = 'Something went wrong'});
+  const SchoolError({ this.error = 'Something went wrong'});
 
   final String error;
 }

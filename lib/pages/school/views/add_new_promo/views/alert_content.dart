@@ -80,7 +80,7 @@ class AlertDialogContent extends StatelessWidget {
           PrimaryBtn(
             text: 'Pay',
             ontap: () {
-              Navigator.pop(context);
+              Navigator.pop(context, true);
               // Navigator.push(
               //   context,
               //   MaterialPageRoute<dynamic>(
@@ -94,7 +94,7 @@ class AlertDialogContent extends StatelessWidget {
           SecondaryBtn(
             text: 'Discard',
             ontap: () {
-              Navigator.pop(context);
+              Navigator.pop(context, false);
             },
             vm: 5,
             hm: 0,

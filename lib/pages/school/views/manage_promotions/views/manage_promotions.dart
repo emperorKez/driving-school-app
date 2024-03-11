@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_promo/views/add_new_promo.dart';
+import 'package:korbil_mobile/pages/school/views/manage_promotions/views/no_promo_widget.dart';
+import 'package:korbil_mobile/pages/school/views/manage_promotions/views/promo_card.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'no_promo_widget.dart';
-import 'promo_card.dart';
 
 class InstManagePromotions extends StatefulWidget {
   const InstManagePromotions({super.key});
@@ -16,7 +18,6 @@ class InstManagePromotions extends StatefulWidget {
 }
 
 class _InstManagePromotionsState extends State<InstManagePromotions> {
-  bool _hasPromos = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,54 +37,63 @@ class _InstManagePromotionsState extends State<InstManagePromotions> {
               ),
               leading: const InstAppBarBackBtn(),
             ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            const Text(
-              'Ongoing promos',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: AppColors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            if (_hasPromos) _buildPromoCards() else const NoPromosWidget(),
-            const SizedBox(
-              height: 30,
-            ),
-            PrimaryBtn(
-              text: 'Create New Promo',
-              ontap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (cxt) => const InstAddNewPromoView(),
+      body: BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+        builder: (context, state) {
+          if (state is SchoolInfoLoaded) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: ListView(
+                children: [
+                  const SizedBox(
+                    height: 15,
                   ),
-                );
-              },
-            )
-          ],
-        ),
+                  const Text(
+                    'Ongoing promos',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  if (state.schoolInfo!.offers!.isEmpty)
+                    const NoPromosWidget()
+                  else
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: List.generate(
+                        state.schoolInfo!.offers!.length,
+                        (index) => PromoCard(
+                          promo: state.schoolInfo!.offers![index],
+                        ),
+                      ),
+                    ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  PrimaryBtn(
+                    text: 'Create New Promo',
+                    ontap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (cxt) => const InstAddNewPromoView(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return kLoadingWidget(context);
+          }
+        },
       ),
-    );
-  }
-
-  Column _buildPromoCards() {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        PromoCard(),
-        PromoCard(),
-        PromoCard(),
-      ],
     );
   }
 }

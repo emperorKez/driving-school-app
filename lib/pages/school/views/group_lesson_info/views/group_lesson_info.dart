@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/school/views/edit_group_lesson/views/edit_group_lesson.dart';
+import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/add_studnet_btn.dart';
+import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/details_card.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'add_studnet_btn.dart';
-import 'details_card.dart';
 
 class GroupLessonInfo extends StatefulWidget {
   const GroupLessonInfo({super.key});
@@ -23,29 +26,44 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
           ? null
           : _buildAppBar(),
       body: CustomScreenPadding(
-        child: ListView(
-          children: const [
-            Row(
-              children: [
-                Text(
-                  'Students',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+        child: BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+          builder: (context, state) {
+            return state is SchoolInfoLoaded ? ListView.builder(
+              shrinkWrap: true,
+              itemCount: state.schoolInfo!.groupLessons!.length,
+              itemBuilder: (context, index) {
+                ListView(
+              children:  [
+                
+                const Row(
+                  children: [
+                    Text(
+                      'Students',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Spacer(),
+                    AddStudentButon(),
+                  ],
                 ),
-                Spacer(),
-                AddStudentButon(),
+                // List.generate(state.schoolInfo!.groupLessons![index].groupLessonStudentRefs!.length, (studentIndex) => Container());
+                for (var element in state.schoolInfo!.groupLessons![index].groupLessonStudentRefs!)
+                
+                 InstUserDetailsCard(studentRef: element,),
+                // const InstUserDetailsCard(),
+                // const InstUserDetailsCard(),
+                // const InstUserDetailsCard(),
+                // const InstUserDetailsCard(),
               ],
-            ),
-            InstUserDetailsCard(),
-            InstUserDetailsCard(),
-            InstUserDetailsCard(),
-            InstUserDetailsCard(),
-            InstUserDetailsCard(),
-          ],
+            )
+                
+              },)
+             : kLoadingWidget(context);
+          },
         ),
       ),
     );

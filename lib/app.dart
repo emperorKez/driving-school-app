@@ -5,6 +5,7 @@ import 'package:korbil_mobile/localization/app_localization.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/school_settings/views/school_setting_view.dart';
 
 class App extends StatefulWidget {
@@ -27,6 +28,9 @@ class _AppState extends State<App> {
               SchoolInfoBloc(lc())..add(GetSchoolInfo(schoolId: 1)),
           lazy: false,
         ),
+        BlocProvider<ProfileBloc>(
+          create: (context) => ProfileBloc()..add(GetProfile()), lazy: false,
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -44,7 +48,8 @@ class _AppState extends State<App> {
         theme: ThemeData(brightness: Brightness.light),
         themeMode: _themeMode,
         navigatorKey: rootNavKey,
-        initialRoute: AppRouter.getStarted,
+        home: const SchoolSettingsView(),
+        // initialRoute: AppRouter.getStarted,
         onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );

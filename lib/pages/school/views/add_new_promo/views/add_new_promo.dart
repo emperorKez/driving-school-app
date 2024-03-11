@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/all_school_bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_promo/views/alert_content.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstAddNewPromoView extends StatefulWidget {
@@ -12,10 +16,18 @@ class InstAddNewPromoView extends StatefulWidget {
 }
 
 class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
-  Future<void> _showConfirmFinishLessonAlert() {
-    return showDialog<void>(
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController packageTitleController = TextEditingController();
+  TextEditingController startDateController = TextEditingController();
+  TextEditingController endDateController = TextEditingController();
+  TextEditingController detailController = TextEditingController();
+
+  int packageId = 0;
+
+  Future<bool?> _showConfirmFinishLessonAlert() {
+    return showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (_) {
         return const AlertDialog(
           // title: Text('Dialog Title'),
           content: AlertDialogContent(),
@@ -51,6 +63,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
               height: 15,
             ),
             Form(
+              key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -63,51 +76,9 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+                  selectPackage(context),
                   const SizedBox(
                     height: 10,
-                  ),
-                  TextFormField(
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: KorbilTheme.of(context).secondaryColor,
-                    ),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                            color: KorbilTheme.of(context).alternate1),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: KorbilTheme.of(context).primaryColor,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: KorbilTheme.of(context).warningColor,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 15,
-                        right: 10,
-                        top: 5,
-                        bottom: 5,
-                      ),
-                      hintText: 'Package Title',
-                      hintStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: KorbilTheme.of(context).alternate1,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
                   ),
                   Text(
                     'Add an Offer',
@@ -118,99 +89,10 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: KorbilTheme.of(context).secondaryColor,
-                    ),
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      // isDense: true,
-                      suffixIconConstraints: const BoxConstraints(
-                        maxHeight: 48,
-                      ),
-                      suffixIcon: Container(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              '%',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: KorbilTheme.of(context).secondaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 2,
-                                ),
-                                GestureDetector(
-                                  child: Image.asset(
-                                    'assets/imgs/ins/school/drop_up.png',
-                                    width: 12,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                GestureDetector(
-                                  child: Image.asset(
-                                    'assets/imgs/ins/school/drop_down.png',
-                                    width: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: KorbilTheme.of(context).alternate1,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: KorbilTheme.of(context).primaryColor,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: KorbilTheme.of(context).warningColor,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        left: 15,
-                        right: 15,
-                        top: 12,
-                        bottom: 12,
-                      ),
-                      hintText: 'Package Title',
-                      hintStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: KorbilTheme.of(context).alternate1,
-                      ),
-                    ),
+                  _entryField(
+                    controller: packageTitleController,
+                    hintText: 'Package Title',
+                    inputType: TextInputType.number,
                   ),
                   const SizedBox(
                     height: 15,
@@ -233,60 +115,10 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                             const SizedBox(
                               height: 10,
                             ),
-                            TextFormField(
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: KorbilTheme.of(context).secondaryColor,
-                              ),
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                // isDense: true,
-                                suffixIconConstraints: const BoxConstraints(
-                                  maxHeight: 48,
-                                ),
-                                suffixIcon: Container(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: GestureDetector(
-                                    child: Image.asset(
-                                      'assets/imgs/ins/school/cal_black.png',
-                                      width: 24,
-                                    ),
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: KorbilTheme.of(context).alternate1,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: KorbilTheme.of(context).primaryColor,
-                                  ),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: KorbilTheme.of(context).warningColor,
-                                  ),
-                                ),
-                                contentPadding: const EdgeInsets.only(
-                                  left: 15,
-                                  right: 15,
-                                  top: 12,
-                                  bottom: 12,
-                                ),
-                                hintText: 'Enter Date',
-                                hintStyle: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: KorbilTheme.of(context).alternate1,
-                                ),
-                              ),
+                            _entryField(
+                              controller: startDateController,
+                              hintText: 'Enter Date',
+                              inputType: TextInputType.datetime,
                             ),
                           ],
                         ),
@@ -310,64 +142,14 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                             const SizedBox(
                               height: 10,
                             ),
-                            TextFormField(
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: KorbilTheme.of(context).secondaryColor,
-                              ),
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                // isDense: true,
-                                suffixIconConstraints: const BoxConstraints(
-                                  maxHeight: 48,
-                                ),
-                                suffixIcon: Container(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: GestureDetector(
-                                    child: Image.asset(
-                                      'assets/imgs/ins/school/cal_black.png',
-                                      width: 24,
-                                    ),
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: KorbilTheme.of(context).alternate1,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: KorbilTheme.of(context).primaryColor,
-                                  ),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: KorbilTheme.of(context).warningColor,
-                                  ),
-                                ),
-                                contentPadding: const EdgeInsets.only(
-                                  left: 15,
-                                  right: 15,
-                                  top: 12,
-                                  bottom: 12,
-                                ),
-                                hintText: 'Enter Date',
-                                hintStyle: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: KorbilTheme.of(context).alternate1,
-                                ),
-                              ),
+                            _entryField(
+                              controller: endDateController,
+                              hintText: 'Enter Date',
+                              inputType: TextInputType.datetime,
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -388,49 +170,9 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
             const SizedBox(
               height: 10,
             ),
-            TextFormField(
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: KorbilTheme.of(context).secondaryColor,
-              ),
-              keyboardType: TextInputType.number,
-              minLines: 6,
-              maxLines: null,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: KorbilTheme.of(context).alternate1,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: KorbilTheme.of(context).primaryColor,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: KorbilTheme.of(context).warningColor,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.only(
-                  left: 15,
-                  right: 15,
-                  top: 12,
-                  bottom: 12,
-                ),
-                hintText: 'Promotion details',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: KorbilTheme.of(context).alternate1,
-                ),
-              ),
+            _entryWideField(
+              controller: detailController,
+              hint: 'Promotion Detail',
             ),
             const SizedBox(
               height: 25,
@@ -470,7 +212,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 7,
                 ),
                 Text(
@@ -491,7 +233,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () => Navigator.pop(context),
                     child: Container(
                       // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                       padding: const EdgeInsets.symmetric(vertical: 13),
@@ -520,12 +262,36 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                   width: 10,
                 ),
                 Expanded(
-                  child: PrimaryBtn(
-                    text: 'Submit',
-                    vm: 0,
-                    hm: 0,
-                    fontSize: 14,
-                    ontap: _showConfirmFinishLessonAlert,
+                  child: BlocBuilder<SchoolBloc, SchoolState>(
+                    builder: (context, state) {
+                      return state is SchoolLoaded
+                          ? PrimaryBtn(
+                              text: 'Submit',
+                              vm: 0,
+                              hm: 0,
+                              fontSize: 14,
+                              ontap: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  final payloadData = <String, dynamic>{
+                                    'schoolPackageId':
+                                        0, //todo school package Id
+                                    'offer': packageTitleController.text,
+                                    'startDate': startDateController.text,
+                                    'endDate': endDateController.text,
+                                    'details': detailController.text,
+                                    'promoteInHome': true,
+                                  };
+                                  if (await _showConfirmFinishLessonAlert() ??
+                                      true) {
+                                    if (!mounted) return;
+                                    context.read<SchoolBloc>().add(AddPromo(
+                                        payload: payloadData,
+                                        schoolId: state.schoolInfo!.id));
+                                  }
+                                }
+                              })
+                          : kLoadingWidget(context);
+                    },
                   ),
                 ),
               ],
@@ -534,6 +300,160 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
               height: 40,
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget selectPackage(BuildContext context) {
+    final packages = context.read<SchoolInfoBloc>().state.schoolInfo!.packages;
+    List items = List.generate(
+      packages!.length,
+      (index) => {'key': packages[index].price, 'value': packages[index].id},
+    );
+
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: ButtonTheme(
+        alignedDropdown: true,
+        child: DropdownButtonFormField<String>(
+          value: packageId.toString(),
+          decoration: InputDecoration(
+            label: const Text('Select the Package'),
+            contentPadding: EdgeInsets.zero,
+            enabledBorder:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+            focusedBorder:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          items: items.map<DropdownMenuItem<String>>((e) {
+            return DropdownMenuItem<String>(
+              value: e['value'].toString(),
+              child: Text(e['key'].toString()),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              packageId = int.parse(value!);
+            });
+          },
+          hint: const Text('Select the Package'),
+          isExpanded: false,
+          menuMaxHeight: 300,
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
+  Widget _entryField({
+    required TextEditingController controller,
+    required String hintText,
+    TextInputType inputType = TextInputType.text,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: inputType,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter $hintText';
+        }
+        return null;
+      },
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: KorbilTheme.of(context).secondaryColor,
+      ),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).alternate1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).primaryColor,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).warningColor,
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(
+          left: 15,
+          right: 10,
+          top: 5,
+          bottom: 5,
+        ),
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: KorbilTheme.of(context).alternate1,
+        ),
+      ),
+    );
+  }
+
+  Widget _entryWideField({
+    required TextEditingController controller,
+    required String hint,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.multiline,
+      minLines: 6,
+      maxLines: null,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Enter Promotion Detail';
+        }
+        return null;
+      },
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: KorbilTheme.of(context).secondaryColor,
+      ),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).alternate1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).primaryColor,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).warningColor,
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(
+          left: 15,
+          right: 15,
+          top: 12,
+          bottom: 12,
+        ),
+        hintText: 'Promotion details',
+        hintStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: KorbilTheme.of(context).alternate1,
         ),
       ),
     );

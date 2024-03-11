@@ -14,7 +14,7 @@ class DataFailed<T> extends DataState<T> {
 }
 
 class DataError {
-  DataError(this.statusCode, this.error);
+  DataError(this.statusCode, this.error); 
   final int? statusCode;
   final dynamic error;
 }
