@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/repos/auth_repo/auth_repo.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
 
 part 'login_cubit_state.dart';
 

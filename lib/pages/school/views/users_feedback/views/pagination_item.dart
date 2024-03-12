@@ -29,7 +29,7 @@ class PaginationItem extends StatelessWidget {
               border: Border.all(
                   color: state.page == page
                       ? KorbilTheme.of(context).primaryColor
-                      : KorbilTheme.of(context).secondaryColor),
+                      : KorbilTheme.of(context).secondaryColor,),
               borderRadius: BorderRadius.circular(3),
             ),
             child: Center(

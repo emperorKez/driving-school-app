@@ -49,9 +49,7 @@ class _ManageLessonAddLessonViewState extends State<ManageLessonAddLessonView> {
 }
 
 class _LessonDataCard extends StatefulWidget {
-  const _LessonDataCard({
-    super.key,
-  });
+  const _LessonDataCard();
 
   @override
   State<_LessonDataCard> createState() => _LessonDataCardState();
@@ -145,7 +143,7 @@ class _LessonDataCardState extends State<_LessonDataCard> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(
-                            color: KorbilTheme.of(context).secondaryColor),
+                            color: KorbilTheme.of(context).secondaryColor,),
                       ),
                       child: Center(
                         child: Text(
@@ -181,7 +179,7 @@ class _LessonDataCardState extends State<_LessonDataCard> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ],

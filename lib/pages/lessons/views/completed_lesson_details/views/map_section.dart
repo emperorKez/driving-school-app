@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 class MapSection extends StatelessWidget {
   const MapSection({
-    super.key,
-    required this.s,
+    required this.s, super.key,
   });
 
   final Size s;

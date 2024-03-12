@@ -16,7 +16,7 @@ class InstHIstoryItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [defaultBoxShadow()],
         color: KorbilTheme.of(context).white,
-        border: Border.all(color: KorbilTheme.of(context).alternate1, width: 1),
+        border: Border.all(color: KorbilTheme.of(context).alternate1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +72,7 @@ class InstHIstoryItemCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(

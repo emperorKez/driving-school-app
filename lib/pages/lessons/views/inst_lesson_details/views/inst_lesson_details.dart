@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/radio_boxes/primary_square_radio_box.dart';
+import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/class_assignment_detail_card.dart';
+import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/history_item_card.dart';
+import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/lesson_feedback_card.dart';
+import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/profile_details.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'class_assignment_detail_card.dart';
-import 'history_item_card.dart';
-import 'lesson_feedback_card.dart';
-import 'profile_details.dart';
 
 class InstLessonDetails extends StatefulWidget {
   const InstLessonDetails({super.key});

@@ -8,7 +8,6 @@ import 'package:korbil_mobile/pages/school/views/edit_group_lesson/views/edit_gr
 import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/add_studnet_btn.dart';
 import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/details_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class GroupLessonInfo extends StatefulWidget {
@@ -28,41 +27,39 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
       body: CustomScreenPadding(
         child: BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
           builder: (context, state) {
-            return state is SchoolInfoLoaded ? ListView.builder(
-              shrinkWrap: true,
-              itemCount: state.schoolInfo!.groupLessons!.length,
-              itemBuilder: (context, index) {
-                ListView(
-              children:  [
-                
-                const Row(
-                  children: [
-                    Text(
-                      'Students',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: AppColors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Spacer(),
-                    AddStudentButon(),
-                  ],
-                ),
-                // List.generate(state.schoolInfo!.groupLessons![index].groupLessonStudentRefs!.length, (studentIndex) => Container());
-                for (var element in state.schoolInfo!.groupLessons![index].groupLessonStudentRefs!)
-                
-                 InstUserDetailsCard(studentRef: element,),
-                // const InstUserDetailsCard(),
-                // const InstUserDetailsCard(),
-                // const InstUserDetailsCard(),
-                // const InstUserDetailsCard(),
-              ],
-            )
-                
-              },)
-             : kLoadingWidget(context);
+            return state is SchoolInfoLoaded
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.schoolInfo!.groupLessons!.length,
+                    itemBuilder: (context, index) {
+                      ListView(
+                        children: [
+                          const Row(
+                            children: [
+                              Text(
+                                'Students',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: AppColors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Spacer(),
+                              AddStudentButon(),
+                            ],
+                          ),
+                          for (final element in state.schoolInfo!
+                              .groupLessons![index].groupLessonStudentRefs!)
+                            InstUserDetailsCard(
+                              studentRef: element,
+                            ),
+                        ],
+                      );
+                      return null;
+                    },
+                  )
+                : kLoadingWidget(context);
           },
         ),
       ),

@@ -3,12 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_bottom_bar.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/app_home/cubit/tab_view/tab_view_bloc.dart';
+import 'package:korbil_mobile/pages/app_home/views/tabs/lesson_tab_view.dart';
+import 'package:korbil_mobile/pages/app_home/views/tabs/notification_tab_view.dart';
+import 'package:korbil_mobile/pages/app_home/views/tabs/school_tab_view.dart';
+import 'package:korbil_mobile/pages/app_home/views/tabs/student_tab_view.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'tabs/lesson_tab_view.dart';
-import 'tabs/notification_tab_view.dart';
-import 'tabs/school_tab_view.dart';
-import 'tabs/student_tab_view.dart';
 
 class AppHomePage extends StatelessWidget {
   const AppHomePage({super.key});
@@ -23,7 +22,7 @@ class AppHomePage extends StatelessWidget {
 }
 
 class _AppHome extends StatefulWidget {
-  const _AppHome({super.key});
+  const _AppHome();
 
   @override
   State<_AppHome> createState() => _AppHomeState();
@@ -35,8 +34,8 @@ class _AppHomeState extends State<_AppHome> {
     return BlocBuilder<TabViewBloc, TabViewState>(
       buildWhen: (previous, current) => previous.index != current.index,
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvoked: (pop) {
             if (state is LessonTabViewState) {
               if (lessonsNavKey.currentState!.canPop()) {
                 lessonsNavKey.currentState!.pop();
@@ -62,7 +61,7 @@ class _AppHomeState extends State<_AppHome> {
                 rootNavKey.currentState!.pop();
               }
             }
-            return Future.value(false);
+            // return Future.value(false);
           },
           child: const _AppHomeBody(),
         );
@@ -72,9 +71,7 @@ class _AppHomeState extends State<_AppHome> {
 }
 
 class _AppHomeBody extends StatelessWidget {
-  const _AppHomeBody({
-    super.key,
-  });
+  const _AppHomeBody();
 
   @override
   Widget build(BuildContext context) {

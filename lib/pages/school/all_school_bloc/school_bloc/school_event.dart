@@ -8,6 +8,7 @@ sealed class SchoolEvent {
 }
 
 class GetAllSchools extends SchoolEvent{}
+
 class GetSchoolInfo extends SchoolEvent {
   const GetSchoolInfo({required super.schoolId});
   // final int schoolId;

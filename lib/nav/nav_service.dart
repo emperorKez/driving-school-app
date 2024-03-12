@@ -8,23 +8,23 @@ class NavigationService {
   }
 
   Future<dynamic> navigateTo(GlobalKey<NavigatorState> navKey, String routeName,
-      {dynamic args}) {
+      {dynamic args,}) {
     return navKey.currentState!.pushNamed(routeName, arguments: args);
   }
 
   Future<dynamic> pushReplacementNamed(
       GlobalKey<NavigatorState> navKey, String routeName,
-      {dynamic args}) {
+      {dynamic args,}) {
     return navKey.currentState!
         .pushReplacementNamed(routeName, arguments: args);
   }
 
   Future<dynamic> pushAndRemoveUntil(
       GlobalKey<NavigatorState> navKey, String routeName,
-      {dynamic args}) {
+      {dynamic args,}) {
     return navKey.currentState!.pushNamedAndRemoveUntil(
         routeName, (Route<dynamic> route) => false,
-        arguments: args);
+        arguments: args,);
   }
 
   void popUntil(GlobalKey<NavigatorState> navKey, String routeName) {

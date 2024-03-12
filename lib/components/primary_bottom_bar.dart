@@ -37,10 +37,10 @@ class _PrimaryBottomAppBarState extends State<PrimaryBottomAppBar> {
               blurRadius: 3,
               spreadRadius: 3,
               offset: Offset(2, 4),
-            )
+            ),
           ],
         ),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _NavItem(
@@ -115,10 +115,10 @@ class PrimarySideBar extends StatelessWidget {
             blurRadius: 3,
             spreadRadius: 3,
             offset: Offset(2, 4),
-          )
+          ),
         ],
       ),
-      child: Column(
+      child: const Column(
         children: [
           _NavItem(
             index: 0,
@@ -179,9 +179,6 @@ class _NavItem extends StatelessWidget {
     required this.index,
     required this.icon,
     required this.selectedIcon,
-    // required this.selected,
-    // required this.ontap,
-    super.key,
   });
 
   final int index;

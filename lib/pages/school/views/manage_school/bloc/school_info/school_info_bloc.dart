@@ -26,8 +26,8 @@ class SchoolInfoBloc extends Bloc<SchoolInfoEvent, SchoolInfoState> {
       return emit(SchoolInfoError(error: resState.error?.error.toString()));
     } else {
       return emit(SchoolInfoLoaded(
-        schoolInfo: resState.data!,
-      ));
+        schoolInfo: resState.data,
+      ),);
     }
   }
 }

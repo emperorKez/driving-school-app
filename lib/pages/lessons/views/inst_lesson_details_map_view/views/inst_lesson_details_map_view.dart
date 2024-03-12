@@ -88,7 +88,6 @@ class _InstLessonDetailMapViewState extends State<InstLessonDetailMapView> {
 class _BottomSheetDetails extends StatelessWidget {
   const _BottomSheetDetails({
     required this.s,
-    super.key,
   });
 
   final Size s;
@@ -184,7 +183,7 @@ class _BottomSheetDetails extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 20),

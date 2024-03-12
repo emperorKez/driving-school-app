@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/views/privacy/views/bulleting_dot.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'bulleting_dot.dart';
 
 class InstPrivacyView extends StatefulWidget {
   const InstPrivacyView({super.key});

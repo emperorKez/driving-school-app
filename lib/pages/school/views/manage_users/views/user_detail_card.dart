@@ -19,9 +19,9 @@ class InstUserDetailsCard extends StatelessWidget {
               color: KorbilTheme.of(context).alternate2,
               spreadRadius: 1,
               blurRadius: 1,
-              offset: Offset(1, 1),
+              offset: const Offset(1, 1),
             ),
-          ]),
+          ],),
       child: Row(
         children: [
           Container(
@@ -31,7 +31,7 @@ class InstUserDetailsCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: KorbilTheme.of(context).primaryColor,
               shape: BoxShape.circle,
-              image: DecorationImage(
+              image: const DecorationImage(
                 image: AssetImage('assets/imgs/ins/lessons/avatar1.png'),
                 fit: BoxFit.cover,
               ),
@@ -50,7 +50,7 @@ class InstUserDetailsCard extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -64,7 +64,7 @@ class InstUserDetailsCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '34 years',
                       style: TextStyle(

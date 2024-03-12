@@ -65,9 +65,7 @@ class _ProfilePackageHistoryState extends State<ProfilePackageHistory> {
 }
 
 class _AddNewUserlertContent extends StatelessWidget {
-  const _AddNewUserlertContent({
-    super.key,
-  });
+  const _AddNewUserlertContent();
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +172,7 @@ class _AddNewUserlertContent extends StatelessWidget {
                     Image.asset(
                       'assets/imgs/ins/profile/verified_tick.png',
                       width: 18,
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -231,7 +229,6 @@ class _AddNewUserlertContent extends StatelessWidget {
 class _PackageHistoryCard extends StatelessWidget {
   const _PackageHistoryCard({
     required this.ontap,
-    super.key,
   });
 
   final Function ontap;
@@ -283,14 +280,12 @@ class _PackageHistoryCard extends StatelessWidget {
             width: 5,
           ),
           GestureDetector(
-            onTap: () {
-              ontap();
-            },
+            onTap: (){},
             child: Image.asset(
               'assets/imgs/ins/profile/tasks.png',
               width: 24,
             ),
-          )
+          ),
         ],
       ),
     );

@@ -64,7 +64,7 @@ class UsersFeedbackSection extends StatelessWidget {
                   children: state.feedbacks
                       .map((r) => InstFeedBackCard(
                             review: r,
-                          ))
+                          ),)
                       .toList(),
                 );
               },
@@ -107,7 +107,7 @@ class UsersFeedbackSection extends StatelessWidget {
   Center _loadingIndicator(BuildContext context) {
     return Center(
       child: CircularProgressIndicator(
-          color: KorbilTheme.of(context).primaryColor),
+          color: KorbilTheme.of(context).primaryColor,),
     );
   }
 }

@@ -98,7 +98,7 @@ class AlertDialogContent extends StatelessWidget {
             },
             vm: 5,
             hm: 0,
-          )
+          ),
         ],
       ),
     );

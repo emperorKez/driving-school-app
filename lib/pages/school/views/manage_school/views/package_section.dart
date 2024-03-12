@@ -31,7 +31,7 @@ class PackageSection extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  for (var element in state.schoolInfo!.packages!)
+                  for (final element in state.schoolInfo!.packages!)
                     Text(element.title!), //todo Package card
 
                   PrimaryBtn(
@@ -49,7 +49,7 @@ class PackageSection extends StatelessWidget {
                         ),
                       );
                     },
-                  )
+                  ),
                 ],
               ),
             ),
@@ -71,7 +71,7 @@ class PackageSection extends StatelessWidget {
   }
 
   Widget _buildPackagesCarousel(
-      Size size, BuildContext context, SchoolInfoState state) {
+      Size size, BuildContext context, SchoolInfoState state,) {
     if (state.schoolInfo!.packages!.isEmpty) {
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 30),

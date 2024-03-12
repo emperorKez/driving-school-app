@@ -7,7 +7,6 @@ import 'package:korbil_mobile/pages/school/views/manage_course/views/student_car
 import 'package:korbil_mobile/pages/school/views/manage_course/views/total_lessons.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstManageCourseView extends StatefulWidget {
@@ -42,9 +41,9 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
             ),
       body: BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
         builder: (context, state) {
-          int totalDuration = 0;
-          int totalActive = 0;
-          int totalFutureAssigned = 0;
+          var totalDuration = 0;
+          var totalActive = 0;
+          var totalFutureAssigned = 0;
 
           for (final element in state.schoolInfo!.courses!) {
             totalDuration += element.timeDuration!;
@@ -128,9 +127,7 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
 }
 
 class _AppBarMenu extends StatelessWidget {
-  const _AppBarMenu({
-    super.key,
-  });
+  const _AppBarMenu();
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +167,7 @@ class _AppBarMenu extends StatelessWidget {
               color: AppColors.black,
             ),
           ),
-        )
+        ),
       ],
     );
   }

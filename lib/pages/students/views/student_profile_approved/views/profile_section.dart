@@ -84,7 +84,7 @@ class ProfileSection extends StatelessWidget {
               ],
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -157,7 +157,7 @@ class ProfileSection extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

@@ -98,7 +98,7 @@ class _HomeSlideUpPanelState extends State<HomeSlideUpPanel> {
                           _selectedCategory = val;
                         });
                       },
-                      selected: _selectedCategory == 'Booked'),
+                      selected: _selectedCategory == 'Booked',),
                   LessonCategoryTab(
                       s: s,
                       title: 'Completed',
@@ -107,7 +107,7 @@ class _HomeSlideUpPanelState extends State<HomeSlideUpPanel> {
                           _selectedCategory = val;
                         });
                       },
-                      selected: _selectedCategory == 'Completed'),
+                      selected: _selectedCategory == 'Completed',),
                   const Spacer(),
                 ],
               ),
@@ -151,11 +151,7 @@ class _HomeSlideUpPanelState extends State<HomeSlideUpPanel> {
 
 class LessonCategoryTab extends StatelessWidget {
   const LessonCategoryTab({
-    super.key,
-    required this.s,
-    required this.title,
-    required this.ontap,
-    required this.selected,
+    required this.s, required this.title, required this.ontap, required this.selected, super.key,
   });
 
   final Size s;

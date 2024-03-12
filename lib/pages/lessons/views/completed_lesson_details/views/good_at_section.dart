@@ -5,8 +5,7 @@ import 'package:korbil_mobile/theme/theme.dart';
 
 class GoodAtSection extends StatelessWidget {
   const GoodAtSection({
-    super.key,
-    required String selectedGoodAssesment,
+    required String selectedGoodAssesment, super.key,
   }) : _selectedGoodAssesment = selectedGoodAssesment;
 
   final String _selectedGoodAssesment;

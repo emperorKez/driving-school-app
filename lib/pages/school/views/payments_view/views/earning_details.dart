@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:korbil_mobile/pages/school/views/payments_view/views/green_dot.dart';
 import 'package:korbil_mobile/theme/theme.dart';
-
-import 'green_dot.dart';
 
 class EarningDetails extends StatelessWidget {
   const EarningDetails({
@@ -19,7 +18,7 @@ class EarningDetails extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  GreenDot(),
+                  const GreenDot(),
                   Text(
                     'This Month',
                     style: TextStyle(
@@ -50,7 +49,7 @@ class EarningDetails extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  GreenDot(),
+                  const GreenDot(),
                   Text(
                     'Total Earnings',
                     style: TextStyle(
@@ -73,7 +72,7 @@ class EarningDetails extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

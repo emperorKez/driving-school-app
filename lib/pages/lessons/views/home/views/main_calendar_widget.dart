@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:korbil_mobile/components/schedule_status_types/default.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type1.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type2.dart';
@@ -7,6 +6,7 @@ import 'package:korbil_mobile/components/schedule_status_types/type3.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
 import 'package:korbil_mobile/global/constants/schedule_status_types.dart';
 import 'package:korbil_mobile/theme/theme.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class MainCalendarWidget extends StatefulWidget {
   const MainCalendarWidget({
@@ -71,8 +71,8 @@ class _MainCalendarWidgetState extends State<MainCalendarWidget> {
             color: th.alternate2,
             blurRadius: 3,
             spreadRadius: 3,
-            offset: Offset(2, 2),
-          )
+            offset: const Offset(2, 2),
+          ),
         ],
       ),
       child: SfDateRangePicker(

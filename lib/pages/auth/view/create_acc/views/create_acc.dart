@@ -97,7 +97,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   },
                   vm: 5,
                   hm: 0,
-                )
+                ),
               ],
             ),
           ),
@@ -499,7 +499,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           hm: 23,
                         );
                       }
-                    }),
+                    },),
                   ),
                   Center(
                     child: RichText(
@@ -613,7 +613,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   color: AppColors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                )),
+                ),),
           ],
         ),
       ),
@@ -628,7 +628,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
       bool obscure = false,
       double iconSize = 24,
       Widget? suffixIcon,
-      TextInputType inputType = TextInputType.text}) {
+      TextInputType inputType = TextInputType.text,}) {
     return Container(
       margin: const EdgeInsets.all(8),
       child: TextFormField(
@@ -695,7 +695,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
       'phoneNumber': phoneController.text,
       'email': emailController.value,
       'createdAt': DateTime.now(),
-      'updatedAt': DateTime.now()
+      'updatedAt': DateTime.now(),
     };
   }
 }

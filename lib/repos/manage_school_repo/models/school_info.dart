@@ -172,15 +172,15 @@ class SchoolInfo {
         'schoolLocations': schoolLocations == null
             ? <SchoolLocation>[]
             : List<SchoolLocation>.from(
-                schoolLocations!.map((x) => x.toJson())),
+                schoolLocations!.map((x) => x.toJson()),),
         'schoolAvailableDates': schoolAvailableDates == null
             ? <SchoolAvailableDate>[]
             : List<SchoolAvailableDate>.from(
-                schoolAvailableDates!.map((x) => x.toJson())),
+                schoolAvailableDates!.map((x) => x.toJson()),),
         'schoolTimeOffDTOS': schoolTimeOffDtos == null
             ? <SchoolTimeOffDto>[]
             : List<SchoolTimeOffDto>.from(
-                schoolTimeOffDtos!.map((x) => x.toJson())),
+                schoolTimeOffDtos!.map((x) => x.toJson()),),
         'documents': documents == null
             ? <Document>[]
             : List<Document>.from(documents!.map((x) => x.toJson())),

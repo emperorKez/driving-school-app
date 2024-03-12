@@ -38,7 +38,7 @@ class AllFeedbacksBloc extends Bloc<AllFeedbacksEvent, AllFeedbacksState> {
   }
 
   Future<void> _changePage(
-      SelectPage event, Emitter<AllFeedbacksState> emit) async {
+      SelectPage event, Emitter<AllFeedbacksState> emit,) async {
     final page = event.page;
     if (page == state.page) return;
     emit(AllFeedbacksFetching());

@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/localization/app_localization.dart';
+import 'package:korbil_mobile/locator.dart';
 
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver();

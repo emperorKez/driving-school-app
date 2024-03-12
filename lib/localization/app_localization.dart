@@ -30,7 +30,7 @@ class AppLocalizations {
   String get languageCode => locale.toString();
   String? get languageShortCode =>
       _languagesWithShortCode.contains(locale.toString())
-          ? '${locale.toString()}_short'
+          ? '${locale}_short'
           : null;
   int get languageIndex => languages().contains(languageCode)
       ? languages().indexOf(languageCode)

@@ -4,10 +4,7 @@ import 'package:korbil_mobile/global/constants/colors.dart';
 
 class LessonStepCard extends StatelessWidget {
   const LessonStepCard({
-    super.key,
-    required this.reached,
-    required this.isNextCompleted,
-    required this.step,
+    required this.reached, required this.isNextCompleted, required this.step, super.key,
     this.isLast = false,
     this.isFirst = false,
   });
@@ -26,7 +23,7 @@ class LessonStepCard extends StatelessWidget {
         flex: 2,
         child: CustomPaint(
             size: const Size(2, double.infinity),
-            painter: DottedVerticalLinePainter()),
+            painter: DottedVerticalLinePainter(),),
       );
     } else if (reached) {
       return const Expanded(
@@ -119,7 +116,10 @@ class StepDetails {
     this.isCompleted = false,
   });
 
-  final String title, time, duration, name;
+  final String title;
+  final String time;
+  final String duration;
+  final String name;
   final String location;
   bool isCompleted;
 }
@@ -127,7 +127,9 @@ class StepDetails {
 class DottedVerticalLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    double dashHeight = 10, dashSpace = 5, startY = 0;
+    const dashHeight = 10;
+    const dashSpace = 5;
+    double startY = 0;
     final paint = Paint()
       ..color = Colors.grey
       ..strokeWidth = 0.5;

@@ -122,7 +122,7 @@ class InstLessonCard extends StatelessWidget {
               blurRadius: 1,
               offset: const Offset(1, 1),
             ),
-          ]),
+          ],),
       child: Row(
         children: [
           Container(
@@ -131,7 +131,7 @@ class InstLessonCard extends StatelessWidget {
             margin: const EdgeInsets.only(right: 12),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                color: KorbilTheme.of(context).primaryColor),
+                color: KorbilTheme.of(context).primaryColor,),
             child: Center(
               child: Image.asset(
                 'assets/imgs/ins/lessons/traffic_lights.png',
@@ -192,9 +192,7 @@ class InstLessonCard extends StatelessWidget {
 }
 
 class _AppBarAction extends StatelessWidget {
-  const _AppBarAction({
-    super.key,
-  });
+  const _AppBarAction();
 
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/students/views/student_profile_approved/views/student_profile_approved.dart';
+import 'package:korbil_mobile/pages/students/views/student_profile_unapproved/views/student_profile_unapproved.dart';
 import 'package:korbil_mobile/theme/theme.dart';
-
-import '../../student_profile_approved/views/student_profile_approved.dart';
-import '../../student_profile_unapproved/views/student_profile_unapproved.dart';
 
 class StudentCard extends StatelessWidget {
   const StudentCard({

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
-import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 typedef ValidatorFunctionType = String? Function(String? val);
@@ -89,7 +89,7 @@ class _CreateAccountViewState extends State<LoginView> {
                   },
                   vm: 5,
                   hm: 0,
-                )
+                ),
               ],
             ),
           ),
@@ -329,7 +329,7 @@ class _CreateAccountViewState extends State<LoginView> {
                   color: AppColors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                )),
+                ),),
           ],
         ),
       ),

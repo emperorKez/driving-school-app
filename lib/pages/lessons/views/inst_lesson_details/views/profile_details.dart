@@ -4,8 +4,7 @@ import 'package:korbil_mobile/theme/theme.dart';
 
 class ProfileDetails extends StatelessWidget {
   const ProfileDetails({
-    super.key,
-    required this.context,
+    required this.context, super.key,
   });
 
   final BuildContext context;
@@ -60,7 +59,7 @@ class ProfileDetails extends StatelessWidget {
             pvm: 5,
             vm: 0,
           ),
-        )
+        ),
       ],
     );
   }

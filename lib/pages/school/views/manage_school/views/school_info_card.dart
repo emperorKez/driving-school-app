@@ -56,7 +56,7 @@ class SchoolInfoCard extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         );

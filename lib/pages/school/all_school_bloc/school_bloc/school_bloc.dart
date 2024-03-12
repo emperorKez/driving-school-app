@@ -42,8 +42,8 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
       return emit(SchoolError(error: response.error?.error.toString() ??'Something went wrong'));
     } else {
       return emit(SchoolLoaded(
-        schoolInfo: response.data!,
-      ));
+        schoolInfo: response.data,
+      ),);
     }
   }
 

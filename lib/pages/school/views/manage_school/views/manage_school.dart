@@ -35,7 +35,7 @@ class ManageSchoolView extends StatelessWidget {
 }
 
 class _ManageSchool extends StatefulWidget {
-  const _ManageSchool({super.key});
+  const _ManageSchool();
 
   @override
   State<_ManageSchool> createState() => _ManageSchoolViewState();

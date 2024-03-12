@@ -10,7 +10,7 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
   Future<void> createAccount(Map<String, dynamic> payload) async {
     emit(CreateAccountLoading());
     try {
-      var response = await _authRepo.registerUser(payload);      
+      final response = await _authRepo.registerUser(payload);      
         emit(CreateAccountSuccess());
         } catch (e) {
       emit(CreateAccountError(error: e.toString()));

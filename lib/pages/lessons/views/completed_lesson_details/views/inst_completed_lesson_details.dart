@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
-
+import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/assignment_detail_section.dart';
+import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/bad_at_section.dart';
+import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/good_at_section.dart';
+import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/map_section.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'assignment_detail_section.dart';
-import 'bad_at_section.dart';
-import 'good_at_section.dart';
-import 'map_section.dart';
 
 class InstCompletedLessonDetails extends StatefulWidget {
   const InstCompletedLessonDetails({super.key});
@@ -19,8 +17,8 @@ class InstCompletedLessonDetails extends StatefulWidget {
 
 class _InstCompletedLessonDetailsState
     extends State<InstCompletedLessonDetails> {
-  String _selectedGoodAssesment = 'Maneuvering';
-  String _needToPracticeAssesment = 'Vehicle knowledge';
+  final String _selectedGoodAssesment = 'Maneuvering';
+  final String _needToPracticeAssesment = 'Vehicle knowledge';
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +46,7 @@ class _InstCompletedLessonDetailsState
                 icon: Icon(
                   Icons.share,
                   color: KorbilTheme.of(context).primaryColor,
-                ))
+                ),),
           ],
         ),
         body: Container(
@@ -93,10 +91,10 @@ class _InstCompletedLessonDetailsState
                 Column(
                   children: [
                     GoodAtSection(
-                        selectedGoodAssesment: _selectedGoodAssesment),
+                        selectedGoodAssesment: _selectedGoodAssesment,),
                     const SizedBox(height: 25),
                     BadAtSection(
-                        needToPracticeAssesment: _needToPracticeAssesment),
+                        needToPracticeAssesment: _needToPracticeAssesment,),
                   ],
                 ),
               const SizedBox(

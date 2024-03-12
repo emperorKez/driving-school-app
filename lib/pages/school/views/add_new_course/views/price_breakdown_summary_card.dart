@@ -43,7 +43,7 @@ class PriceBreakdownSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -69,7 +69,7 @@ class PriceBreakdownSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(

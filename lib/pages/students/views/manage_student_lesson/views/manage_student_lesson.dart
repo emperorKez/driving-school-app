@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/pages/students/students.dart';
-import 'package:korbil_mobile/pages/students/views/add_new_lesson/add_lesson.dart';
-import 'package:korbil_mobile/pages/students/views/add_new_lesson/competed_lessons.dart';
-import 'package:korbil_mobile/pages/students/views/add_new_lesson/upcoming_lessons.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ManageStudentLesson extends StatefulWidget {
@@ -41,7 +38,7 @@ class _ManageStudentLessonState extends State<ManageStudentLesson> {
                 builder: (_) => const ManageLessonAddLessonView(),
               ),
             );
-          }),
+          },),
         ],
       ),
       body: ListView(
@@ -104,7 +101,6 @@ class _ManageStudentLessonState extends State<ManageStudentLesson> {
 class _AppBarAction extends StatelessWidget {
   const _AppBarAction({
     required this.ontap,
-    super.key,
   });
 
   final Function ontap;
@@ -112,9 +108,7 @@ class _AppBarAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        ontap();
-      },
+      onTap: (){},
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),

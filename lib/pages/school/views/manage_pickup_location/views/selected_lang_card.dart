@@ -33,7 +33,7 @@ class SelectedLangCard extends StatelessWidget {
               'assets/imgs/ins/school/bin_green.png',
               width: 20,
             ),
-          )
+          ),
         ],
       ),
     );

@@ -4,11 +4,10 @@ import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/snackBar/top_snack_bar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/locator.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/views/feedback_card.dart';
 import 'package:korbil_mobile/pages/school/views/users_feedback/cubit/all_feedbacks/all_feedbacks_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/users_feedback/views/pagination_item.dart';
 import 'package:korbil_mobile/theme/theme.dart';
-
-import '../../manage_school/views/feedback_card.dart';
-import 'pagination_item.dart';
 
 class InstUsersFeedBackView extends StatelessWidget {
   const InstUsersFeedBackView({super.key});
@@ -24,7 +23,7 @@ class InstUsersFeedBackView extends StatelessWidget {
 }
 
 class _InstUsersFeedBackView extends StatefulWidget {
-  const _InstUsersFeedBackView({super.key});
+  const _InstUsersFeedBackView();
 
   @override
   State<_InstUsersFeedBackView> createState() => _InstUsersFeedBackViewState();
@@ -97,7 +96,7 @@ class _InstUsersFeedBackViewState extends State<_InstUsersFeedBackView> {
                 children: state.reviews
                     .map((r) => InstFeedBackCard(
                           review: r,
-                        ))
+                        ),)
                     .toList(),
               );
             },
@@ -138,7 +137,7 @@ class _InstUsersFeedBackViewState extends State<_InstUsersFeedBackView> {
   Center _loadingIndicator(BuildContext context) {
     return Center(
       child: CircularProgressIndicator(
-          color: KorbilTheme.of(context).primaryColor),
+          color: KorbilTheme.of(context).primaryColor,),
     );
   }
 }

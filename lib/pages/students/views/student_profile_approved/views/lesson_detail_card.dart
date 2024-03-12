@@ -4,7 +4,7 @@ import 'package:korbil_mobile/theme/theme.dart';
 
 class LessonDetailCard extends StatelessWidget {
   const LessonDetailCard(
-      {required this.subTitle, required this.title, super.key});
+      {required this.subTitle, required this.title, super.key,});
 
   final String title;
   final String subTitle;
@@ -20,7 +20,7 @@ class LessonDetailCard extends StatelessWidget {
       decoration: BoxDecoration(
           color: KorbilTheme.of(context).white,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [defaultBoxShadow()]),
+          boxShadow: [defaultBoxShadow()],),
       child: Row(
         children: [
           Container(

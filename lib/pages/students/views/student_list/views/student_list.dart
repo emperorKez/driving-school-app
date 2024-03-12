@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/students/views/student_list/views/add_new_user_alert.dart';
+import 'package:korbil_mobile/pages/students/views/student_list/views/all_student_list.dart';
+import 'package:korbil_mobile/pages/students/views/student_list/views/approve_user_alert.dart';
+import 'package:korbil_mobile/pages/students/views/student_list/views/invited_student_list.dart';
+import 'package:korbil_mobile/pages/students/views/student_list/views/my_student_list.dart';
 import 'package:korbil_mobile/theme/theme.dart';
-
-import 'add_new_user_alert.dart';
-import 'all_student_list.dart';
-import 'approve_user_alert.dart';
-import 'invited_student_list.dart';
-import 'my_student_list.dart';
 
 class InstStudentListView extends StatefulWidget {
   const InstStudentListView({super.key});
@@ -201,7 +199,6 @@ class _InstStudentListViewState extends State<InstStudentListView> {
 class _AppBarAction extends StatelessWidget {
   const _AppBarAction({
     required this.ontap,
-    super.key,
   });
 
   final Function ontap;
@@ -209,9 +206,7 @@ class _AppBarAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        ontap();
-      },
+      onTap: (){},
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),

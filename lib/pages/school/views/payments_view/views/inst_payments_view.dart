@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/views/payments_view/views/current_plan_card.dart';
+import 'package:korbil_mobile/pages/school/views/payments_view/views/earning_details.dart';
+import 'package:korbil_mobile/pages/school/views/payments_view/views/payment_data_table.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'current_plan_card.dart';
-import 'earning_details.dart';
-import 'payment_data_table.dart';
 
 class InstPaymentsView extends StatefulWidget {
   const InstPaymentsView({super.key});

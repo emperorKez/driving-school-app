@@ -24,9 +24,7 @@ class InvitedStudentList extends StatelessWidget {
 }
 
 class _InvitedStudentCard extends StatelessWidget {
-  const _InvitedStudentCard({
-    super.key,
-  });
+  const _InvitedStudentCard();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +51,7 @@ class _InvitedStudentCard extends StatelessWidget {
           Image.asset(
             'assets/imgs/ins/school/delete_bin_red.png',
             width: 20,
-          )
+          ),
         ],
       ),
     );

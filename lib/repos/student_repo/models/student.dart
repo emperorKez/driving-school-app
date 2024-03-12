@@ -95,7 +95,7 @@ class StudentData {
         schoolPackageRefs: json['schoolPackageRefs'] == null
             ? []
             : List<int>.from(
-                json['schoolPackageRefs']!.map((x) => x) as Iterable),
+                json['schoolPackageRefs']!.map((x) => x) as Iterable,),
       );
 
   String? city;

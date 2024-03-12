@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/pages/lessons/views/lesson_detail_add_review/views/bottom_sheet_details.dart';
 import 'package:korbil_mobile/pages/lessons/views/lesson_detail_add_review/views/type_category_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -427,7 +427,6 @@ class _InstLessonDetailAddReviewViewState
 class _SubTypeCard extends StatelessWidget {
   const _SubTypeCard({
     required this.subType,
-    super.key,
   });
 
   final AssesmentSubCategoryDetails subType;

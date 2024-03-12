@@ -18,7 +18,7 @@ class SchoolSettingsView extends StatelessWidget {
 }
 
 class _SchoolSettingsView extends StatefulWidget {
-  const _SchoolSettingsView({super.key});
+  const _SchoolSettingsView();
 
   @override
   State<_SchoolSettingsView> createState() => _SchoolSettingsViewState();

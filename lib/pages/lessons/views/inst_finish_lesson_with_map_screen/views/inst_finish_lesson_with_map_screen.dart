@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/lessons/views/inst_finish_lesson_with_map_screen/views/alert_content.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'alert_content.dart';
 
 class InstFinishLessonWithMapView extends StatefulWidget {
   const InstFinishLessonWithMapView({super.key});
@@ -75,7 +74,6 @@ class _BottomSheetDetails extends StatelessWidget {
   const _BottomSheetDetails({
     required this.s,
     required this.onFinishLessonTap,
-    super.key,
   });
 
   final Size s;
@@ -166,7 +164,7 @@ class _BottomSheetDetails extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 30),
@@ -188,9 +186,7 @@ class _BottomSheetDetails extends StatelessWidget {
             text: 'Finish Lesson',
             pvm: 12,
             fontSize: 14,
-            ontap: () {
-              onFinishLessonTap();
-            },
+            ontap: onFinishLessonTap,
           ),
         ],
       ),

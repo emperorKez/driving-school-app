@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/assesment_type_icon.dart';
+import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/bad_assesment_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
-
-import 'assesment_type_icon.dart';
-import 'bad_assesment_card.dart';
 
 class BadAtSection extends StatelessWidget {
   const BadAtSection({
-    super.key,
-    required String needToPracticeAssesment,
+    required String needToPracticeAssesment, super.key,
   }) : _needToPracticeAssesment = needToPracticeAssesment;
 
   final String _needToPracticeAssesment;

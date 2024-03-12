@@ -194,7 +194,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
                 color: KorbilTheme.of(context).secondaryColor,
               ),
             ),
-          )
+          ),
         ],
         onChanged: (val) {},
       ),
@@ -203,9 +203,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
 }
 
 class _SelectedLangCard extends StatelessWidget {
-  const _SelectedLangCard({
-    super.key,
-  });
+  const _SelectedLangCard();
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +232,7 @@ class _SelectedLangCard extends StatelessWidget {
               'assets/imgs/ins/school/bin_green.png',
               width: 20,
             ),
-          )
+          ),
         ],
       ),
     );

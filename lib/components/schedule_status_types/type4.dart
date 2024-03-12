@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ScheduleStatusType4Widget extends StatelessWidget {
   const ScheduleStatusType4Widget({

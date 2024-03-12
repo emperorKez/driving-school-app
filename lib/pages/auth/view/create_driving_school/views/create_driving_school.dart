@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
-import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/auth/view/create_driving_school/cubit/create_driving_school_cubit.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -254,7 +254,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: 8, top: 12),
+                                    padding: const EdgeInsets.only(left: 8, top: 12),
                                     child: Row(
                                       children: [
                                         Text(
@@ -282,7 +282,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: 8, top: 12),
+                                    padding: const EdgeInsets.only(left: 8, top: 12),
                                     child: Row(
                                       children: [
                                         Expanded(

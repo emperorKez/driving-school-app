@@ -12,6 +12,20 @@ class Package {
     required this.recommended,
   });
 
+  factory Package.fromRawJson(String str) =>
+      Package.fromJson(json.decode(str) as Map<String, dynamic>);
+
+  factory Package.fromJson(Map<String, dynamic> json) => Package(
+        id: json['id'] as int?,
+        title: json['title'] as String?,
+        details: json['details'] as String?,
+        timeDuration: json['timeDuration'] as String?,
+        price: json['price'] as double?,
+        discount: json['discount'] as double?,
+        syllabuses: ((json['syllabuses']) as List).cast<int>(),
+        recommended: json['recommended'] as bool?,
+      );
+
   int? id;
   String? title;
   String? details;
@@ -21,30 +35,16 @@ class Package {
   List<int>? syllabuses;
   bool? recommended;
 
-  factory Package.fromRawJson(String str) =>
-      Package.fromJson(json.decode(str) as Map<String, dynamic>);
-
   String toRawJson() => json.encode(toJson());
 
-  factory Package.fromJson(Map<String, dynamic> json) => Package(
-        id: json["id"] as int?,
-        title: json["title"] as String?,
-        details: json["details"] as String?,
-        timeDuration: json["timeDuration"] as String?,
-        price: json["price"] as double?,
-        discount: json["discount"] as double?,
-        syllabuses: ((json["syllabuses"]) as List).cast<int>(),
-        recommended: json["recommended"] as bool?,
-      );
-
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "details": details,
-        "timeDuration": timeDuration,
-        "price": price,
-        "discount": discount,
-        "syllabuses": List<dynamic>.from(syllabuses!.map((x) => x)),
-        "recommended": recommended,
+        'id': id,
+        'title': title,
+        'details': details,
+        'timeDuration': timeDuration,
+        'price': price,
+        'discount': discount,
+        'syllabuses': List<dynamic>.from(syllabuses!.map((x) => x)),
+        'recommended': recommended,
       };
 }

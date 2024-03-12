@@ -15,7 +15,8 @@ class PrimaryBtn extends StatelessWidget {
   });
   final String text;
   final Function? ontap;
-  final double vm, hm;
+  final double vm;
+  final double hm;
   final double pvm;
   final double phm;
   final double fontSize;

@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type1.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type2.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type3.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class InstWeeklyCalendar extends StatefulWidget {
   const InstWeeklyCalendar({super.key});
@@ -31,7 +31,7 @@ class _InstWeeklyCalendarState extends State<InstWeeklyCalendar> {
               blurRadius: 3,
               spreadRadius: 3,
               offset: Offset(2, 2),
-            )
+            ),
           ],
         ),
         child: Column(
@@ -67,7 +67,7 @@ class _InstWeeklyCalendarState extends State<InstWeeklyCalendar> {
                       size: 15,
                     ),
                   ),
-                )
+                ),
               ],
             ),
             Container(
@@ -159,7 +159,7 @@ class _InstWeeklyCalendarState extends State<InstWeeklyCalendar> {
               ],
             ),
           ],
-        ));
+        ),);
   }
 
   BoxConstraints _dateBoxConstraints() =>
@@ -170,7 +170,6 @@ class _DayWidget extends StatelessWidget {
   const _DayWidget({
     required this.date,
     required this.dateWidget,
-    super.key,
   });
 
   final String date;
@@ -192,7 +191,7 @@ class _DayWidget extends StatelessWidget {
         const SizedBox(
           height: 12,
         ),
-        dateWidget
+        dateWidget,
       ],
     );
   }

@@ -18,7 +18,7 @@ class PackageRepo {
             res.data!.data['response'].cast<Map<String, dynamic>>();
         final data = (jsonList as List).cast<Map<String, dynamic>>();
         final packages = List<Package>.from(
-          data.map((e) => Package.fromJson(e)),
+          data.map(Package.fromJson),
         );
 
         return ResponseSuccess(packages);

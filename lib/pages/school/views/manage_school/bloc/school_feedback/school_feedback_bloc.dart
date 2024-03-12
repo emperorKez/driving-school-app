@@ -17,7 +17,7 @@ class SchoolFeedbackBloc
   final ManageSchoolRepo manageSchoolRepo;
 
   Future<void> _getSchoolFeedbacks(
-      GetAllFeedbacks event, Emitter<SchoolFeedbackState> emit) async {
+      GetAllFeedbacks event, Emitter<SchoolFeedbackState> emit,) async {
     emit(SchoolFeedbackFetching());
     final resState = await manageSchoolRepo.getSchoolFeedbacks();
     if (resState.data == null) {

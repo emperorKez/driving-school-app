@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'student_card.dart';
+import 'package:korbil_mobile/pages/students/views/student_list/views/student_card.dart';
 
 class MyStudentsList extends StatelessWidget {
   const MyStudentsList({

@@ -21,9 +21,9 @@ class InstPendingUserDetailsCard extends StatelessWidget {
               color: KorbilTheme.of(context).alternate2,
               spreadRadius: 1,
               blurRadius: 1,
-              offset: Offset(1, 1),
+              offset: const Offset(1, 1),
             ),
-          ]),
+          ],),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

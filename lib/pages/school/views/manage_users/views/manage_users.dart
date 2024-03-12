@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_course/views/add_new_course.dart';
+import 'package:korbil_mobile/pages/school/views/manage_users/views/pending_user_detail_card.dart';
+import 'package:korbil_mobile/pages/school/views/manage_users/views/user_detail_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'pending_user_detail_card.dart';
-import 'user_detail_card.dart';
 
 class InstManageUsers extends StatefulWidget {
   const InstManageUsers({super.key});
@@ -141,9 +140,7 @@ class _InstManageUsersState extends State<InstManageUsers> {
 }
 
 class _AppBarAction extends StatelessWidget {
-  const _AppBarAction({
-    super.key,
-  });
+  const _AppBarAction();
 
   @override
   Widget build(BuildContext context) {

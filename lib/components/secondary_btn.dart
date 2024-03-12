@@ -14,7 +14,8 @@ class SecondaryBtn extends StatelessWidget {
   });
   final String text;
   final Function? ontap;
-  final double vm, hm;
+  final double vm;
+  final double hm;
   final Color borderColor;
   final double fontSize;
   final Color textColor;

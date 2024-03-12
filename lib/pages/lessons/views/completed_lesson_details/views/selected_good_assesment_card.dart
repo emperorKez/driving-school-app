@@ -61,7 +61,7 @@ class SelectedGoodAssementDetailCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 3),
             child: Row(
               children: [
-                PrimarySelectedSwitch(
+                const PrimarySelectedSwitch(
                   selected: true,
                 ),
                 Text(
@@ -104,7 +104,7 @@ class SelectedGoodAssementDetailCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 3),
             child: Row(
               children: [
-                PrimarySelectedSwitch(
+                const PrimarySelectedSwitch(
                   selected: true,
                 ),
                 Text(

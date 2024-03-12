@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:korbil_mobile/pages/school/views/message_view/views/single_chat_view.dart';
 import 'package:korbil_mobile/theme/theme.dart';
-
-import 'single_chat_view.dart';
 
 class MessageCard extends StatelessWidget {
   const MessageCard({
@@ -29,7 +28,7 @@ class MessageCard extends StatelessWidget {
               color: KorbilTheme.of(context).alternate2,
               blurRadius: 1,
               spreadRadius: 1,
-              offset: Offset(1, 1),
+              offset: const Offset(1, 1),
             ),
           ],
           color: KorbilTheme.of(context).white,

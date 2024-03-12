@@ -28,5 +28,6 @@ final class AllFeedbacksFetched extends AllFeedbacksState {
 
 final class AllFeedbacksFetchError extends AllFeedbacksState {
   AllFeedbacksFetchError(this.errorMsg) : super(1, [], 1, errorMsg: errorMsg);
+  @override
   final String? errorMsg;
 }

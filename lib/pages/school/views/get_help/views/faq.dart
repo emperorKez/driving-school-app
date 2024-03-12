@@ -1,12 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:korbil_mobile/repos/help_topic_repo/models/help_topic.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class FaqCard extends StatefulWidget {
   const FaqCard({
+    required this.helpTopic,
     super.key,
   });
+  final HelpTopic helpTopic;
 
   @override
   State<FaqCard> createState() => _FaqCardState();
@@ -34,8 +37,7 @@ class _FaqCardState extends State<FaqCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Can I choose my meals?',
+                Text(widget.helpTopic.question ?? '',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: KorbilTheme.of(context).secondaryColor,
@@ -67,8 +69,7 @@ class _FaqCardState extends State<FaqCard> {
             else
               Container(),
             if (_isExpanded)
-              Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et pretium pellentesque amet, duis dignissim. Vel, vitae mattis faucibus ut at arcu mauris rutrum. ',
+              Text(widget.helpTopic.answer ?? '',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,

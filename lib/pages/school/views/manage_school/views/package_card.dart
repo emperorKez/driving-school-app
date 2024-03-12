@@ -42,7 +42,7 @@ class PackageCard extends StatelessWidget {
               Image.asset(
                 'assets/imgs/ins/school/elp_left.png',
                 height: 32,
-              )
+              ),
             ],
           ),
           // middle
@@ -178,7 +178,7 @@ class PackageCard extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  r'$' + '${package.price?.toInt().toString()}.00',
+                  r'$' '${package.price}.00',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: KorbilTheme.of(context).secondaryColor,
@@ -208,7 +208,7 @@ class PackageCard extends StatelessWidget {
               Image.asset(
                 'assets/imgs/ins/school/elp_right.png',
                 height: 32,
-              )
+              ),
             ],
           ),
         ],

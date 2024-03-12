@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
@@ -11,6 +10,7 @@ import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/global/constants/schedule_status_types.dart';
 import 'package:korbil_mobile/theme/theme.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class AddExceptionView extends StatefulWidget {
   const AddExceptionView({super.key});
@@ -107,7 +107,7 @@ class _AddExceptionViewState extends State<AddExceptionView> {
             const SizedBox(
               height: 40,
             ),
-            PrimaryBtn(
+            const PrimaryBtn(
               text: 'Save',
               fontSize: 14,
               hm: 0,
@@ -124,7 +124,6 @@ class _AddExceptionViewState extends State<AddExceptionView> {
 
 class _MainCalendarWidget extends StatelessWidget {
   const _MainCalendarWidget({
-    super.key,
     required this.context,
     required this.schedule,
   });
@@ -142,8 +141,8 @@ class _MainCalendarWidget extends StatelessWidget {
             color: th.alternate2,
             blurRadius: 3,
             spreadRadius: 3,
-            offset: Offset(2, 2),
-          )
+            offset: const Offset(2, 2),
+          ),
         ],
       ),
       child: SfDateRangePicker(
@@ -205,9 +204,7 @@ class _MainCalendarWidget extends StatelessWidget {
 }
 
 class _ExceptionTimeSlotCard extends StatefulWidget {
-  const _ExceptionTimeSlotCard({
-    super.key,
-  });
+  const _ExceptionTimeSlotCard();
 
   @override
   State<_ExceptionTimeSlotCard> createState() => _AvailableTimeSlotCardState();

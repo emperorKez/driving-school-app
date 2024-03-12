@@ -30,7 +30,7 @@ class PackageCard extends StatelessWidget {
           //   blurRadius: 1,
           //   offset: Offset(1, 1),
           // ),
-          defaultBoxShadow()
+          defaultBoxShadow(),
         ],
       ),
       child: Container(

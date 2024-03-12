@@ -155,7 +155,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                     _buildDropDown('Select'),
                   ],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(
@@ -232,7 +232,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
           DottedBorder(
             color: KorbilTheme.of(context).alternate1,
             strokeWidth: 2,
-            dashPattern: [8],
+            dashPattern: const [8],
             padding: const EdgeInsets.all(20),
             strokeCap: StrokeCap.round,
             child: Center(
@@ -361,7 +361,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                           fontWeight: FontWeight.w400,
                           color: KorbilTheme.of(context).secondaryColor,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -509,7 +509,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                 color: KorbilTheme.of(context).secondaryColor,
               ),
             ),
-          )
+          ),
         ],
         onChanged: (val) {},
       ),
@@ -518,9 +518,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
 }
 
 class _SelectedLangCard extends StatelessWidget {
-  const _SelectedLangCard({
-    super.key,
-  });
+  const _SelectedLangCard();
 
   @override
   Widget build(BuildContext context) {
@@ -549,7 +547,7 @@ class _SelectedLangCard extends StatelessWidget {
               'assets/imgs/ins/school/bin_green.png',
               width: 20,
             ),
-          )
+          ),
         ],
       ),
     );

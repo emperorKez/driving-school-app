@@ -99,9 +99,7 @@ class _StudentProfileUnApprovedState extends State<StudentProfileUnApproved> {
 }
 
 class _ApproveUserAlertContent extends StatelessWidget {
-  const _ApproveUserAlertContent({
-    super.key,
-  });
+  const _ApproveUserAlertContent();
 
   @override
   Widget build(BuildContext context) {
@@ -198,9 +196,7 @@ class _ApproveUserAlertContent extends StatelessWidget {
 }
 
 class _DeclineAlertContent extends StatelessWidget {
-  const _DeclineAlertContent({
-    super.key,
-  });
+  const _DeclineAlertContent();
 
   @override
   Widget build(BuildContext context) {
@@ -283,7 +279,7 @@ class _DeclineAlertContent extends StatelessWidget {
                       color: AppColors.black,
                     ),
                   ),
-                )
+                ),
               ],
               onChanged: (val) {},
             ),
@@ -313,7 +309,7 @@ class _DeclineAlertContent extends StatelessWidget {
             },
             vm: 5,
             hm: 0,
-          )
+          ),
         ],
       ),
     );
@@ -321,9 +317,7 @@ class _DeclineAlertContent extends StatelessWidget {
 }
 
 class _PaymentDetailsCard extends StatelessWidget {
-  const _PaymentDetailsCard({
-    super.key,
-  });
+  const _PaymentDetailsCard();
 
   @override
   Widget build(BuildContext context) {
@@ -416,7 +410,7 @@ class _PaymentDetailsCard extends StatelessWidget {
                     Image.asset(
                       'assets/imgs/ins/profile/verified_tick.png',
                       width: 18,
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -430,7 +424,7 @@ class _PaymentDetailsCard extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(6),
                   bottomRight: Radius.circular(6),
-                )),
+                ),),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -460,9 +454,7 @@ class _PaymentDetailsCard extends StatelessWidget {
 }
 
 class _ProfileDetails extends StatelessWidget {
-  const _ProfileDetails({
-    super.key,
-  });
+  const _ProfileDetails();
 
   @override
   Widget build(BuildContext context) {
@@ -507,7 +499,7 @@ class _ProfileDetails extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -515,9 +507,7 @@ class _ProfileDetails extends StatelessWidget {
 }
 
 class _AppBarAction extends StatelessWidget {
-  const _AppBarAction({
-    super.key,
-  });
+  const _AppBarAction();
 
   @override
   Widget build(BuildContext context) {

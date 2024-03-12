@@ -215,9 +215,7 @@ class StudentProfileApproved extends StatelessWidget {
 }
 
 class _AppBarAction extends StatelessWidget {
-  const _AppBarAction({
-    super.key,
-  });
+  const _AppBarAction();
 
   @override
   Widget build(BuildContext context) {

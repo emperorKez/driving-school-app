@@ -41,7 +41,7 @@ class SelectedTab extends StatelessWidget {
           case TabMenuState.promote:
             return const InstManagePromotions();
           case TabMenuState.settings:
-            return const InstAppSettingsView();
+            return const InstAppSettingsView(); //todo
           case TabMenuState.getHelp:
             return const GetHelpView();
           case TabMenuState.feedback:

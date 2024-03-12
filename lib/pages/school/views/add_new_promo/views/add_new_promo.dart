@@ -286,10 +286,10 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                     if (!mounted) return;
                                     context.read<SchoolBloc>().add(AddPromo(
                                         payload: payloadData,
-                                        schoolId: state.schoolInfo!.id));
+                                        schoolId: state.schoolInfo!.id,),);
                                   }
                                 }
-                              })
+                              },)
                           : kLoadingWidget(context);
                     },
                   ),
@@ -307,7 +307,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
 
   Widget selectPackage(BuildContext context) {
     final packages = context.read<SchoolInfoBloc>().state.schoolInfo!.packages;
-    List items = List.generate(
+    final items = List.generate(
       packages!.length,
       (index) => {'key': packages[index].price, 'value': packages[index].id},
     );
@@ -338,7 +338,6 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
             });
           },
           hint: const Text('Select the Package'),
-          isExpanded: false,
           menuMaxHeight: 300,
           borderRadius: BorderRadius.circular(10),
         ),

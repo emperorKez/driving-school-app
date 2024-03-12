@@ -94,7 +94,7 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
                         color: AppColors.black,
                       ),
                     ),
-                  )
+                  ),
                 ],
                 onChanged: (val) {},
               ),

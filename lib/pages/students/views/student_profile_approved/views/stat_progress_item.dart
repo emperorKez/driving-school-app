@@ -4,10 +4,7 @@ import 'package:korbil_mobile/theme/theme.dart';
 
 class StatProgressItem extends StatelessWidget {
   const StatProgressItem({
-    super.key,
-    required this.s,
-    required this.progress,
-    required this.title,
+    required this.s, required this.progress, required this.title, super.key,
   });
 
   final Size s;
@@ -35,7 +32,7 @@ class StatProgressItem extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -58,7 +55,7 @@ class StatProgressItem extends StatelessWidget {
                 _ProgressIndicator(progress: progress),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -67,7 +64,6 @@ class StatProgressItem extends StatelessWidget {
 
 class _ProgressIndicator extends StatelessWidget {
   const _ProgressIndicator({
-    super.key,
     required this.progress,
   });
 
@@ -129,7 +125,6 @@ class _ProgressIndicator extends StatelessWidget {
 
 class _SingleProgressBar extends StatelessWidget {
   const _SingleProgressBar({
-    super.key,
     required this.progress,
     required this.index,
   });

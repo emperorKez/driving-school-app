@@ -18,9 +18,7 @@ class UpcomingLessonsListWidget extends StatelessWidget {
 }
 
 class _UpcomingLessonTypeCard extends StatefulWidget {
-  const _UpcomingLessonTypeCard({
-    super.key,
-  });
+  const _UpcomingLessonTypeCard();
 
   @override
   State<_UpcomingLessonTypeCard> createState() =>
@@ -147,7 +145,7 @@ class _UpcomingLessonTypeCardState extends State<_UpcomingLessonTypeCard> {
                       'assets/imgs/ins/profile/add_task_green.png',
                       width: 18,
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(

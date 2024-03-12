@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/views/edit_package/views/price_breakdown_summary_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
-
-import 'price_breakdown_summary_card.dart';
 
 class InstEditNewPackageView extends StatefulWidget {
   const InstEditNewPackageView({super.key});
@@ -324,7 +323,7 @@ class _InstEditNewPackageViewState extends State<InstEditNewPackageView> {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(

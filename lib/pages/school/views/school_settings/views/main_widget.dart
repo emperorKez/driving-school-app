@@ -11,12 +11,11 @@ import 'package:korbil_mobile/pages/school/views/message_view/views/messages_vie
 import 'package:korbil_mobile/pages/school/views/payments_view/views/inst_payments_view.dart';
 import 'package:korbil_mobile/pages/school/views/privacy/views/privacy.dart';
 import 'package:korbil_mobile/pages/school/views/school_settings/bloc/tab_menu/tab_menu_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/school_settings/views/profile_section.dart';
 import 'package:korbil_mobile/pages/school/views/settings/views/settings_view.dart';
 import 'package:korbil_mobile/pages/school/views/subscription/views/subscription.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'profile_section.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});

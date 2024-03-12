@@ -5,8 +5,7 @@ import 'package:korbil_mobile/pages/lessons/lessons.dart';
 
 class SingleLessonStepCard extends StatelessWidget {
   const SingleLessonStepCard({
-    super.key,
-    required this.step,
+    required this.step, super.key,
   });
 
   final StepDetails step;
@@ -34,7 +33,7 @@ class SingleLessonStepCard extends StatelessWidget {
               blurRadius: 3,
               spreadRadius: 3,
               offset: Offset(2, 2),
-            )
+            ),
           ],
         ),
         child: Column(

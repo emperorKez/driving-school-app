@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/bad_at_section.dart';
+import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/good_at_section.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_finish_lesson_with_map_screen/views/inst_finish_lesson_with_map_screen.dart';
-
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
-
-import 'bad_at_section.dart';
-import 'good_at_section.dart';
 
 class InstFinishLessonView extends StatefulWidget {
   const InstFinishLessonView({super.key});
@@ -16,8 +14,8 @@ class InstFinishLessonView extends StatefulWidget {
 }
 
 class _InstFinishLessonViewState extends State<InstFinishLessonView> {
-  String _selectedGoodAssesment = 'Maneuvering';
-  String _needToPracticeAssesment = 'Vehicle knowledge';
+  final String _selectedGoodAssesment = 'Maneuvering';
+  final String _needToPracticeAssesment = 'Vehicle knowledge';
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,7 @@ class _InstFinishLessonViewState extends State<InstFinishLessonView> {
                       vm: 0,
                       fontSize: 14,
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 30),

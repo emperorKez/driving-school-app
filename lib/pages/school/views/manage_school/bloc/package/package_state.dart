@@ -21,5 +21,6 @@ final class PackagesFetched extends PackagesState {
 
 final class PackagesFetchError extends PackagesState {
   PackagesFetchError(this.errorMsg) : super([], errorMsg: errorMsg);
+  @override
   final String? errorMsg;
 }

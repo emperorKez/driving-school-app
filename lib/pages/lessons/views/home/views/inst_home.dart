@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/utils/prefered_orientation.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/inst_home_mainbody.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/slide_up_panel.dart';
+import 'package:korbil_mobile/utils/prefered_orientation.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class LessonsHomeView extends StatefulWidget {
   const LessonsHomeView({super.key});

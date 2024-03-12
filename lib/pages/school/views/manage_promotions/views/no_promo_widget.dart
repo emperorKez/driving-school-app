@@ -21,7 +21,7 @@ class NoPromosWidget extends StatelessWidget {
           height: 25,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Text(
             'You dont have any ongoing promotions at the moment',
             textAlign: TextAlign.center,

@@ -330,7 +330,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(

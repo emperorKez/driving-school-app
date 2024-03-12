@@ -4,8 +4,7 @@ import 'package:korbil_mobile/theme/theme.dart';
 
 class SelectedBadAssementDetailCard extends StatelessWidget {
   const SelectedBadAssementDetailCard({
-    super.key,
-    required this.selectedGoodAssesment,
+    required this.selectedGoodAssesment, super.key,
   });
 
   final String selectedGoodAssesment;

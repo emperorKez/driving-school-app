@@ -119,7 +119,7 @@ class PromoCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

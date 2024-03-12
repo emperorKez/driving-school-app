@@ -13,8 +13,8 @@ class PackageBloc extends Bloc<PackageEvent, PackagesState> {
   }
   final PackageRepo packageRepo;
 
-  void _getAllPackages(
-      GetAllPackages event, Emitter<PackagesState> emit) async {
+  Future<void> _getAllPackages(
+      GetAllPackages event, Emitter<PackagesState> emit,) async {
     emit(PackagesFetching());
     final resState = await packageRepo.getAllPackages();
     if (resState.data == null) {
@@ -24,7 +24,7 @@ class PackageBloc extends Bloc<PackageEvent, PackagesState> {
     }
   }
 
-  void _clearErrorMsg(ClearErrorMsg event, Emitter<PackagesState> emit) async {
+  Future<void> _clearErrorMsg(ClearErrorMsg event, Emitter<PackagesState> emit) async {
     emit(PackagesInitial());
   }
 }

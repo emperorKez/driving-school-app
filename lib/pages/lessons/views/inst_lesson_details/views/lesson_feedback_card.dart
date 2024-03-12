@@ -67,7 +67,7 @@ class InstLessonFeedbackCard extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

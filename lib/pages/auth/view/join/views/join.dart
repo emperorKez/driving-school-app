@@ -139,8 +139,8 @@ class _JoinDrivingSchoolViewState extends State<JoinDrivingSchoolView> {
               color: AppColors.grey1,
               offset: Offset(0.2, 0.2),
               blurRadius: 2,
-            )
-          ]),
+            ),
+          ],),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -297,7 +297,7 @@ class _JoinDrivingSchoolViewState extends State<JoinDrivingSchoolView> {
                   color: AppColors.green,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                )),
+                ),),
           ],
         ),
       ),

@@ -250,7 +250,7 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(
@@ -484,7 +484,7 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
                 color: AppColors.black,
               ),
             ),
-          )
+          ),
         ],
         onChanged: (val) {},
       ),

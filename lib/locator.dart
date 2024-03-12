@@ -17,7 +17,7 @@ Future<void> initializeDependencies() async {
   // pref storage service
   ..registerLazySingleton(() => PrefStorageRepo(prefs))
   //manage school repo
-  ..registerLazySingleton(() => ManageSchoolRepo())
+  ..registerLazySingleton(ManageSchoolRepo.new)
   //package repo
   ..registerLazySingleton(() => PackageRepo(lc(), lc()));
 }

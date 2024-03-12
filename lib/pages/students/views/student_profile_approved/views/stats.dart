@@ -94,7 +94,6 @@ class _StatCard extends StatelessWidget {
     required this.metrics,
     required this.val,
     this.other,
-    super.key,
   });
 
   final String icon;

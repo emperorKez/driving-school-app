@@ -21,8 +21,8 @@ class InstHomeMainBody extends StatefulWidget {
 
 class _InstHomeMainBodyState extends State<InstHomeMainBody> {
   Container _renderScheduleFilterTypeCard(String text,
-      {bool selected = false}) {
-    KorbilTheme th = KorbilTheme.of(context);
+      {bool selected = false,}) {
+    final th = KorbilTheme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
@@ -50,7 +50,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
   }
 
   Future<void> _showScheduleStatusInfo() {
-    KorbilTheme th = KorbilTheme.of(context);
+    final th = KorbilTheme.of(context);
 
     return showDialog<void>(
       context: context,
@@ -112,7 +112,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -142,7 +142,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -172,7 +172,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -202,7 +202,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(

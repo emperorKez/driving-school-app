@@ -52,9 +52,7 @@ class InstructorsList extends StatelessWidget {
 }
 
 class _InstructorCard extends StatelessWidget {
-  const _InstructorCard({
-    super.key,
-  });
+  const _InstructorCard();
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +98,7 @@ class _InstructorCard extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 3,
                   ),
                   Text(
@@ -111,7 +109,7 @@ class _InstructorCard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
-                  )
+                  ),
                 ],
               ),
             ],

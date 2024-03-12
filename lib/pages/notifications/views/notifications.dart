@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstNotificationsView extends StatefulWidget {

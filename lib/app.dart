@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:korbil_mobile/localization/app_localization.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/router.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/pages/school/all_school_bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/school_settings/views/school_setting_view.dart';
 
@@ -23,14 +23,14 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<SchoolInfoBloc>(
+        BlocProvider<SchoolBloc>(
           create: (context) =>
-              SchoolInfoBloc(lc())..add(GetSchoolInfo(schoolId: 1)),
+              SchoolBloc()..add(const GetSchoolInfo(schoolId: 1)),
           lazy: false,
         ),
         BlocProvider<ProfileBloc>(
           create: (context) => ProfileBloc()..add(GetProfile()), lazy: false,
-        )
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

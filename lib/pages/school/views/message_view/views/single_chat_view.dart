@@ -48,7 +48,6 @@ class _InstSingleChatViewState extends State<InstSingleChatView> {
 
 class _InputField extends StatelessWidget {
   const _InputField({
-    super.key,
     required this.s,
   });
 
@@ -68,7 +67,7 @@ class _InputField extends StatelessWidget {
             blurRadius: 1,
             offset: Offset(-1, -1),
             color: AppColors.grey1,
-          )
+          ),
         ],
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),
@@ -134,9 +133,7 @@ class _InputField extends StatelessWidget {
 }
 
 class _ChatView extends StatelessWidget {
-  const _ChatView({
-    super.key,
-  });
+  const _ChatView();
 
   @override
   Widget build(BuildContext context) {
@@ -158,9 +155,7 @@ class _ChatView extends StatelessWidget {
 }
 
 class _MyMsgCard extends StatelessWidget {
-  const _MyMsgCard({
-    super.key,
-  });
+  const _MyMsgCard();
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +204,7 @@ class _MyMsgCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
@@ -221,9 +216,7 @@ class _MyMsgCard extends StatelessWidget {
 }
 
 class _RecievedMsgCard extends StatelessWidget {
-  const _RecievedMsgCard({
-    super.key,
-  });
+  const _RecievedMsgCard();
 
   @override
   Widget build(BuildContext context) {
@@ -254,8 +247,8 @@ class _RecievedMsgCard extends StatelessWidget {
                           spreadRadius: 1,
                           offset: Offset(1, 1),
                           color: AppColors.grey2,
-                        )
-                      ]),
+                        ),
+                      ],),
                   child: const Text(
                     'Hi Professor Smith, I hope this email finds you well. I had a question about the assignment that was due last week',
                     style: TextStyle(
@@ -283,7 +276,7 @@ class _RecievedMsgCard extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -293,7 +286,6 @@ class _RecievedMsgCard extends StatelessWidget {
 class _UserImg extends StatelessWidget {
   const _UserImg({
     required this.img,
-    super.key,
   });
   final String img;
 

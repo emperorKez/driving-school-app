@@ -1,5 +1,5 @@
 class ApiPaths {
-  static const registerUser = '/user/register';
+  static const registerUser = 'user/register';
 
   //schedule flow
   static String getScheduleFlowWithId(String id) => 'scheduleFlow/$id';
@@ -9,11 +9,11 @@ class ApiPaths {
   static const createNewScheduleFlow = 'scheduleFlow';
 
   //language
-  static String getLanguageWithId(String id) => 'language/$id';
-  static String updateLanguageWithId(String id) => 'language/$id';
-  static String deleteLanguageWithId(String id) => 'language/$id';
-  static const getAllLanguages = 'language';
-  static const createNewLanguage = 'language';
+  // static String getLanguageWithId(String id) => 'language/$id';
+  // static String updateLanguageWithId(String id) => 'language/$id';
+  // static String deleteLanguageWithId(String id) => 'language/$id';
+  static const getAllLanguages = 'metadata/language';
+  // static const createNewLanguage = '/metadata/language';
 
   //courseCategory
   static String getCourseCategoryWithId(String id) => 'courseCategory/$id';
@@ -52,10 +52,10 @@ class ApiPaths {
   static const getAllQuestions = 'question';
 
   //helpTopic
-  static const getAllHelpTopics = 'helpTopic';
+  static const getAllHelpTopics = '/metadata/help-topics';
 
   //feedbackCategory
-  static const getAllAppFeedbackCategories = 'feedbackCategory';
+  static const getAllAppFeedbackCategories = 'metadata/feedback-categories';
 
   //subscriptionItem
   static String getSubscriptionItemWithId(String id) => 'subscriptionItem/$id';
@@ -84,8 +84,8 @@ class ApiPaths {
       'subscriptionLevel/$levelId/item';
 
   //school
-  static const getAllSchools = '/school';
-  static const createNewSchool = '/school';
+  static const getAllSchools = 'school';
+  static const createNewSchool = 'school';
   static String getSchoolById(String id) => 'school/$id';
   static String updateSchoolById(String id) => 'school/$id';
   static String deleteSchoolById(String id) => 'school/$id';
@@ -106,7 +106,7 @@ class ApiPaths {
   static String addPackageForSchool(String schoolId) =>
       'school/$schoolId/package';
   static String updatePackageById(String schoolId, String packageId) =>
-      '/school/$schoolId/package/$packageId';
+      'school/$schoolId/package/$packageId';
   static String deletePackageById(String schoolId, String aId) =>
       'school/$schoolId/package/$aId';
 
@@ -186,16 +186,19 @@ class ApiPaths {
 
   //promotion
   static String getPromotion(int schoolId, int promotionId) =>
-      '/school/$schoolId/promotion/$promotionId';
+      'school/$schoolId/promotion/$promotionId';
   static String updatePromotion(int schoolId, int promotionId) =>
-      '/school/$schoolId/promotion/$promotionId';
+      'school/$schoolId/promotion/$promotionId';
   static String deletePromotion(int schoolId, int promotionId) =>
-      '/school/$schoolId/promotion/$promotionId';
-  static String getAllPromotion(int schoolId,) =>
-      '/school/$schoolId/promotion';
-  static String addPromotion(int schoolId,) =>
-      '/school/$schoolId/promotion';
-
+      'school/$schoolId/promotion/$promotionId';
+  static String getAllPromotion(
+    int schoolId,
+  ) =>
+      'school/$schoolId/promotion';
+  static String addPromotion(
+    int schoolId,
+  ) =>
+      'school/$schoolId/promotion';
 
   //review
   static String updateReviewById(String schoolId, String aId) =>
@@ -203,7 +206,7 @@ class ApiPaths {
   static String deleteReviewById(String schoolId, String aId) =>
       'school/$schoolId/review/$aId';
   static String getReviewsOfSchool(String schoolId) =>
-      '/school/$schoolId/review';
+      'school/$schoolId/review';
   static String addReviewForSchool(String schoolId) =>
       'school/$schoolId/review';
 
@@ -215,24 +218,18 @@ class ApiPaths {
   static String deleteVechileById(String schoolId, String aId) =>
       'school/$schoolId/vehicle/$aId';
 
-      //students
-      static String getStudents = '/student/by-school';
-      static String createStudents = '/student';
-      static String getStudentById(int studentId) => '/sudent/$studentId';
-      static String updateStudent(int studentId) => '/sudent/$studentId';
-      static String archivetudent(int studentId) => '/sudent/$studentId';
-      static String updateStudentAvatar(int studentId) => '/sudent/$studentId/avatar';
-      static String declineStudent(int studentId) => '/sudent/$studentId/decline-to-school';
-      static String approveStudent(int studentId, int schoolId) => '/sudent/$studentId/approve-to-school/$schoolId';
+  //students
+  static String getStudents = '/student/by-school';
+  static String createStudents = '/student';
+  static String getStudentById(int studentId) => '/sudent/$studentId';
+  static String updateStudent(int studentId) => '/sudent/$studentId';
+  static String archivetudent(int studentId) => '/sudent/$studentId';
+  static String updateStudentAvatar(int studentId) =>
+      'sudent/$studentId/avatar';
+  static String declineStudent(int studentId) =>
+      'sudent/$studentId/decline-to-school';
+  static String approveStudent(int studentId, int schoolId) =>
+      'sudent/$studentId/approve-to-school/$schoolId';
 
-      //promotion
-
-
-
-
-
-
-
-
-
+  //promotion
 }

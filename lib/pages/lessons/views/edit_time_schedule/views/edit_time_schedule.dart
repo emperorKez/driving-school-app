@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/schedule_status_types/default.dart';
@@ -10,6 +9,7 @@ import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
 import 'package:korbil_mobile/global/constants/schedule_status_types.dart';
 import 'package:korbil_mobile/pages/lessons/views/add_exception/views/add_exception.dart';
 import 'package:korbil_mobile/theme/theme.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class EditTimeSchedule extends StatefulWidget {
   const EditTimeSchedule({super.key});
@@ -165,7 +165,6 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
 
 class _Calendar extends StatelessWidget {
   const _Calendar({
-    super.key,
     required this.context,
     required this.schedule,
   });
@@ -182,8 +181,8 @@ class _Calendar extends StatelessWidget {
             color: KorbilTheme.of(context).alternate2,
             blurRadius: 3,
             spreadRadius: 3,
-            offset: Offset(2, 2),
-          )
+            offset: const Offset(2, 2),
+          ),
         ],
       ),
       child: SfDateRangePicker(
@@ -247,7 +246,6 @@ class _Calendar extends StatelessWidget {
 class _AvailableTimeSlotCard extends StatefulWidget {
   const _AvailableTimeSlotCard({
     required this.day,
-    super.key,
   });
   final String day;
 
