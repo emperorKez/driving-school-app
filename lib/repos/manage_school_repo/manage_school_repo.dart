@@ -2,7 +2,9 @@ import 'package:korbil_mobile/repos/api_service/api_service.dart';
 import 'package:korbil_mobile/repos/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repos/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repos/api_service/models/res_state.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/course.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/driving_school.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/promotion.dart';
 
 class ManageSchoolRepo {
   ManageSchoolRepo();
@@ -11,7 +13,7 @@ class ManageSchoolRepo {
   // final PrefStorageRepo prefStorageRepo = PrefStorageRepo();
 
   Future<ResponseState<List<SchoolInfo>>> getAllSchools() async {
-    final res = await apiService.getreq(ApiPaths.getAllSchools);
+    final res = await apiService.getReq(ApiPaths.getAllSchools);
     if (res.data != null) {
       try {
         final jsonList = res.data!.data['response'];
@@ -28,17 +30,17 @@ class ManageSchoolRepo {
     return ResponseFailed(res.error!);
   }
 
-  Future<ResponseState<SchoolInfo>> getSchoolInfo({
+  Future<ResponseState<DrivingSchool>> getSchool({
     required int schoolId,
   }) async {
     final res = await apiService
-        .getreq(ApiPaths.getDrivingSchoolPageInfo(schoolId.toString()));
+        .getReq(ApiPaths.getDrivingSchoolPageInfo(schoolId.toString())); 
     if (res.data != null) {
       try {
-        final info = SchoolInfo.fromJson(
+        final drivingSchool = DrivingSchool.fromJson(
           res.data!.data['response'] as Map<String, dynamic>,
         );
-        return ResponseSuccess(info);
+        return ResponseSuccess(drivingSchool);
       } catch (e) {
         return ResponseFailed(DataError(null, e));
       }
@@ -47,7 +49,7 @@ class ManageSchoolRepo {
   }
 
   Future<ResponseState<List<Review>>> getSchoolFeedbacks() async {
-    final res = await apiService.getreq(ApiPaths.getReviewsOfSchool('1'));
+    final res = await apiService.getReq(ApiPaths.getReviewsOfSchool('1'));
     if (res.data != null) {
       try {
         final jsonList = res.data!.data['response'];
@@ -64,6 +66,43 @@ class ManageSchoolRepo {
     }
     return ResponseFailed(res.error!);
   }
+
+
+  Future<ResponseState<List<Course>>> getCourses(int schoolId) async {
+    final res = await apiService.getReq(ApiPaths.getCourses(schoolId));
+    if (res.data != null) {
+      try {
+        final jsonList = res.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final courses = List<Course>.from(
+          data.map(Course.fromJson),
+        );
+        return ResponseSuccess(courses);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(res.error!);
+  }
+
+
+  Future<ResponseState<List<Promotion>>> getPromotions(int schoolId) async {
+    final res = await apiService.getReq(ApiPaths.getAllPromotion(schoolId));
+    if (res.data != null) {
+      try {
+        final jsonList = res.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final promotions = List<Promotion>.from(
+          data.map(Promotion.fromJson),
+        );
+        return ResponseSuccess(promotions);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(res.error!);
+  }
+
 
   Future<ResponseState<GroupLesson>> addGroupLesson(String schoolId) async {
     final res =

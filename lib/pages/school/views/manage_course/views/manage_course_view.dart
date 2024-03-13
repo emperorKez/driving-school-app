@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/views/manage_course/bloc/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/profile_section.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/student_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/total_lessons.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -39,16 +39,16 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                 _AppBarMenu(),
               ],
             ),
-      body: BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+      body: BlocBuilder<CourseBloc, CourseState>(
         builder: (context, state) {
           var totalDuration = 0;
           var totalActive = 0;
           var totalFutureAssigned = 0;
 
-          for (final element in state.schoolInfo!.courses!) {
-            totalDuration += element.timeDuration!;
-            if (element.isActive!) totalActive++;
-            if (element.courseTypeId == 1) totalFutureAssigned++;
+          for (final element in state.courses!) {
+            totalDuration += element.course.timeDuration;
+            if (element.course.isActive) totalActive++;
+            if (element.courseCategory.id == 1) totalFutureAssigned++;
           }
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -66,7 +66,7 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                   children: [
                     TotalLessons(
                       text: 'Total lessons',
-                      val: state.schoolInfo!.courses!.length.toString(),
+                      val: state.courses!.length.toString(),
                       icon: 'assets/imgs/ins/school/lesson_vid.png',
                     ),
                     TotalLessons(
@@ -136,11 +136,10 @@ class _AppBarMenu extends StatelessWidget {
       onSelected: (value) {
         switch (value) {
           case 'Change user type':
-          context.read<ProfileBloc>().add(ChangeUserType());
+            context.read<ProfileBloc>().add(ChangeUserType());
           case 'Deactivate user':
-          context.read<ProfileBloc>().add(DeactivateUser());
-          default: 
-          
+            context.read<ProfileBloc>().add(DeactivateUser());
+          default:
         }
       },
       itemBuilder: (ctx) => const [

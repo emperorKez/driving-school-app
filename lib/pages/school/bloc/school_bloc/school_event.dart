@@ -9,8 +9,8 @@ sealed class SchoolEvent {
 
 class GetAllSchools extends SchoolEvent{}
 
-class GetSchoolInfo extends SchoolEvent {
-  const GetSchoolInfo({required super.schoolId});
+class GetDrivingSchool extends SchoolEvent {
+  const GetDrivingSchool({required super.schoolId});
   // final int schoolId;
 }
 
@@ -19,7 +19,4 @@ class GetSchoolInfo extends SchoolEvent {
 
 
 
-class AddPromo extends SchoolEvent{
-  const AddPromo({required super.payload, required super.schoolId});
- 
-}
+

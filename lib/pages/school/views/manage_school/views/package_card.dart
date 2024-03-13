@@ -1,7 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/driving_school.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PackageCard extends StatelessWidget {
@@ -86,7 +86,7 @@ class PackageCard extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${package.timeDuration} Hours',
+                                  '${package.schoolPackage.timeDuration} Hours',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     color:
@@ -142,7 +142,7 @@ class PackageCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              package.packageCourseSyllabus!.length.toString(),
+                              package.schoolPackage.packageCourseSyllabus!.length.toString(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: KorbilTheme.of(context).primaryColor,
@@ -178,7 +178,7 @@ class PackageCard extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  r'$' '${package.price}.00',
+                  r'$' '${package.schoolPackage.price}.00',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: KorbilTheme.of(context).secondaryColor,

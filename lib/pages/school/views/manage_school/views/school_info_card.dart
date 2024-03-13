@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/snackBar/top_snack_bar.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class SchoolInfoCard extends StatelessWidget {
@@ -11,9 +11,9 @@ class SchoolInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SchoolInfoBloc, SchoolInfoState>(
+    return BlocConsumer<SchoolBloc, SchoolState>(
       listener: (context, state) {
-        if (state is SchoolInfoError) {
+        if (state is SchoolError) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -36,7 +36,7 @@ class SchoolInfoCard extends StatelessWidget {
                       Border.all(color: KorbilTheme.of(context).primaryColor),
                 ),
                 child: Center(
-                  child: _buildLogo(state.schoolInfo!.logo),
+                  child: _buildLogo(state.school!.schoolInfo!.logo),
                 ),
               ),
               Expanded(
@@ -64,27 +64,26 @@ class SchoolInfoCard extends StatelessWidget {
     );
   }
 
-  Container _buildAboutUs(SchoolInfoState state, BuildContext context) {
+  Container _buildAboutUs(SchoolState state, BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (state.schoolInfo!.description == null)
-            Container()
-          else
-            Text(
-              'About Us',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: KorbilTheme.of(context).secondaryColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+          Text(
+            'About Us',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: KorbilTheme.of(context).secondaryColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
+          ),
           const SizedBox(height: 15),
           Text(
-            state is SchoolInfoLoading ? '...' : state.schoolInfo!.description ?? '',
+            state is SchoolLoading
+                ? '...'
+                : state.school!.schoolInfo!.description,
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,
@@ -97,9 +96,9 @@ class SchoolInfoCard extends StatelessWidget {
     );
   }
 
-  Text _buildSchoolEmail(SchoolInfoState state, BuildContext context) {
+  Text _buildSchoolEmail(SchoolState state, BuildContext context) {
     return Text(
-      state is SchoolInfoLoading ? '...' : state.schoolInfo!.email ?? '',
+      state is SchoolLoading ? '...' : state.school!.schoolInfo!.email,
       style: TextStyle(
         fontFamily: 'Poppins',
         color: KorbilTheme.of(context).secondaryColor,
@@ -109,11 +108,9 @@ class SchoolInfoCard extends StatelessWidget {
     );
   }
 
-  Text _buildSchoolPhone(SchoolInfoState state, BuildContext context) {
+  Text _buildSchoolPhone(SchoolState state, BuildContext context) {
     return Text(
-      state is SchoolInfoLoading
-          ? '...'
-          : state.schoolInfo!.phoneNumber ?? '...phone..',
+      state is SchoolLoading ? '...' : state.school!.schoolInfo!.phoneNumber,
       style: TextStyle(
         fontFamily: 'Poppins',
         color: KorbilTheme.of(context).secondaryColor,
@@ -123,9 +120,9 @@ class SchoolInfoCard extends StatelessWidget {
     );
   }
 
-  Text _buildSchoolName(SchoolInfoState state, BuildContext context) {
+  Text _buildSchoolName(SchoolState state, BuildContext context) {
     return Text(
-      state is SchoolInfoLoading ? '...' : state.schoolInfo!.name ?? 'School name',
+      state is SchoolLoading ? '...' : state.school!.schoolInfo!.name,
       style: TextStyle(
         fontFamily: 'Poppins',
         color: KorbilTheme.of(context).secondaryColor,

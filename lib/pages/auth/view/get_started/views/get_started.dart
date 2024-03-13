@@ -4,7 +4,7 @@ import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/nav/router.dart';
-import 'package:korbil_mobile/pages/auth/view/create_acc/views/create_acc.dart';
+import 'package:korbil_mobile/pages/auth/view/create_acc/views/create_account.dart';
 
 class GetStartedView extends StatefulWidget {
   const GetStartedView({super.key});

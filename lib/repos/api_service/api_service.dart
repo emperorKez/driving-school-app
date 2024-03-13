@@ -12,18 +12,20 @@ class ApiService {
     headers: {'content-Type': 'application/json', 'accept': 'application/json'},
   );
 
-  Future<DataState<Response<dynamic>?>> getreq(
+  Future<DataState<Response<dynamic>?>> getReq(
     String path, {
     String? token,
+    Map<String, dynamic>? params,
   }) async {
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
+      
       log('$baseUrl/$path');
       final response = await dio.get<dynamic>(
-        '$baseUrl/$path',
+        '$baseUrl/$path', queryParameters: params
       );
       return DataSuccess(response);
     } on DioException catch (e) {

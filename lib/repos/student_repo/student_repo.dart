@@ -22,7 +22,7 @@ class StudentRepo{
 
 
   Future<ResponseState<List<Student>>> getAllStudent(int schoolId) async {
-    final res = await apiService.getreq(ApiPaths.getStudents);
+    final res = await apiService.getReq(ApiPaths.getStudents);
     if (res.data != null) {
       try {
         final jsonList = res.data!.data['response'];

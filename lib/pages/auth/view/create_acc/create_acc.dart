@@ -1,1 +1,1 @@
-export 'views/create_acc.dart';
+export 'views/create_account.dart';

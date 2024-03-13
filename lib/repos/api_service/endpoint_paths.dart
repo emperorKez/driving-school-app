@@ -92,7 +92,7 @@ class ApiPaths {
 
   //driving school page info
   static String getDrivingSchoolPageInfo(String schoolId) =>
-      'school/$schoolId/getDrivingSchoolPage';
+      'school/$schoolId/get-driving-school-page';
 
   //instructor
   static String getInstructorsOfSchool(String schoolId) =>
@@ -159,15 +159,15 @@ class ApiPaths {
       'school/$schoolId/groupLesson';
 
   //group lesson
-  static String updateCourseById(String schoolId, String aId) =>
+  static String updateCourse(int schoolId, String courseId) =>
+      'school/$schoolId/course/$courseId';
+  static String getCourse(int schoolId, String aId) =>
       'school/$schoolId/course/$aId';
-  static String getCourseById(String schoolId, String aId) =>
+  static String deleteCourse(int schoolId, String aId) =>
       'school/$schoolId/course/$aId';
-  static String deleteCourseById(String schoolId, String aId) =>
-      'school/$schoolId/course/$aId';
-  static String addCourseForSchool(String schoolId) =>
+  static String addCourse(int schoolId) =>
       'school/$schoolId/course';
-  static String getCoursesOfSchool(String schoolId) =>
+  static String getCourses(int schoolId) =>
       'school/$schoolId/course';
 
   //pickup location
@@ -219,11 +219,11 @@ class ApiPaths {
       'school/$schoolId/vehicle/$aId';
 
   //students
-  static String getStudents = '/student/by-school';
-  static String createStudents = '/student';
-  static String getStudentById(int studentId) => '/sudent/$studentId';
-  static String updateStudent(int studentId) => '/sudent/$studentId';
-  static String archivetudent(int studentId) => '/sudent/$studentId';
+  static String getStudents = 'student/by-school';
+  static String createStudents = 'student';
+  static String getStudentById(int studentId) => 'sudent/$studentId';
+  static String updateStudent(int studentId) => 'sudent/$studentId';
+  static String archivetudent(int studentId) => 'sudent/$studentId';
   static String updateStudentAvatar(int studentId) =>
       'sudent/$studentId/avatar';
   static String declineStudent(int studentId) =>
@@ -231,5 +231,29 @@ class ApiPaths {
   static String approveStudent(int studentId, int schoolId) =>
       'sudent/$studentId/approve-to-school/$schoolId';
 
-  //promotion
+  //staff
+  static String getAllStaffRoles = 'metadata/staff-roles';
+  static String getStaffbyEmail = 'staff';
+  static String createStaff = 'staff';
+  static String getStaffSchoolInvite = 'staff/pending-school-invite';
+  static String getStaffBySchool = 'staff/by-school';
+
+  //location
+  static String suggestLocation = 'location/suggest';
+  static String getLocationType = 'metadata/location-type';
+
+//Vehicle Transmission Types
+  static String getVehicleTransmissionTypes = '/metadata/transmission-type';
+
+//Schedule Flow
+  static String getScheduleFlow = '/metadata/schedule-flow';
+
+//document type
+  static String getAllDocumentType = 'metadata/document-type';
+
+//instructor selection types
+  static String getAllinstructorSelectionType = 'metadata/instructor-selection';
+
+//course categories
+  static String getAllCourseCategories = 'metadata/course-categories';
 }

@@ -1,6 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/promotion.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PromoCard extends StatelessWidget {
@@ -8,7 +8,7 @@ class PromoCard extends StatelessWidget {
     required this.promo,
     super.key,
   });
-  final Offer promo;
+  final Promotion promo;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class PromoCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text( '${promo.details}',
+              Text( promo.details,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,

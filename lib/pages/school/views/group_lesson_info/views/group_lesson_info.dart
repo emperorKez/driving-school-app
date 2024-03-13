@@ -4,10 +4,10 @@ import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/edit_group_lesson/views/edit_group_lesson.dart';
 import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/add_studnet_btn.dart';
 import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/details_card.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class GroupLessonInfo extends StatefulWidget {
@@ -25,12 +25,12 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
           ? null
           : _buildAppBar(),
       body: CustomScreenPadding(
-        child: BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+        child: BlocBuilder<SchoolBloc, SchoolState>(
           builder: (context, state) {
-            return state is SchoolInfoLoaded
+            return state is SchoolLoaded
                 ? ListView.builder(
                     shrinkWrap: true,
-                    itemCount: state.schoolInfo!.groupLessons!.length,
+                    itemCount: state.school!.lessons!.length,
                     itemBuilder: (context, index) {
                       ListView(
                         children: [
@@ -49,8 +49,8 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
                               AddStudentButon(),
                             ],
                           ),
-                          for (final element in state.schoolInfo!
-                              .groupLessons![index].groupLessonStudentRefs!)
+                          for (final element in state.school!.lessons![index]
+                              .groupLessons[0].groupLessonStudentRefs)
                             InstUserDetailsCard(
                               studentRef: element,
                             ),

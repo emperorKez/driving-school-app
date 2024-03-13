@@ -10,8 +10,8 @@ class HelpTopicRepo {
   final ApiService apiService = ApiService();
   // final PrefStorageRepo prefStorageRepo = PrefStorageRepo();
 
-  Future<ResponseState<List<HelpTopic>>> getAllLanguages() async {
-    final response = await apiService.getreq(ApiPaths.getAllHelpTopics);
+  Future<ResponseState<List<HelpTopic>>> getAllHelpTopics() async {
+    final response = await apiService.getReq(ApiPaths.getAllHelpTopics);
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -20,6 +20,22 @@ class HelpTopicRepo {
           data.map(HelpTopic.fromJson),
         );
         return ResponseSuccess(helpTopics);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
+
+
+  Future<ResponseState<List<String>>> getFeedbackCategories() async {
+    final response =
+        await apiService.getReq(ApiPaths.getAllAppFeedbackCategories);
+    if (response.data != null) {
+      try {
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<String>();
+        return ResponseSuccess(data);
       } catch (e) {
         return ResponseFailed(DataError(null, e));
       }

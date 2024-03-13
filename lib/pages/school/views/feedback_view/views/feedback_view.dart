@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/pages/school/views/feedback_view/bloc/feedback_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/get_help/bloc/help_topic_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -37,15 +37,7 @@ class _FeedBackViewState extends State<FeedBackView> {
               ),
               leading: const InstAppBarBackBtn(),
             ),
-      body: BlocProvider(
-        create: (context) => FeedbackBloc()..add(GetFeedbackCategories()),
-        lazy: false,
-        child: BlocConsumer<FeedbackBloc, FeedbackState>(
-          listener: (context, state) {
-            if (state is FeedbackError) {
-              //todo show error
-            }
-          },
+      body:  BlocBuilder<HelpTopicBloc, HelpTopicState>(
           builder: (context, state) {
             // return state is FeedbackLoaded ?
             return ListView(
@@ -142,7 +134,7 @@ class _FeedBackViewState extends State<FeedBackView> {
                               //todo feed back payload
                             };
                             context
-                                .read<FeedbackBloc>()
+                                .read<HelpTopicBloc>()
                                 .add(AddFeedback(payload: payload));
                           }
                         },
@@ -161,7 +153,6 @@ class _FeedBackViewState extends State<FeedBackView> {
             );
             // : kLoadingWidget(context);
           },
-        ),
       ),
     );
   }
@@ -221,7 +212,6 @@ class _FeedBackViewState extends State<FeedBackView> {
       categories.length,
       (index) => {'key': categories[index], 'value': categories[index]},
     );
-
     return Padding(
       padding: const EdgeInsets.all(10),
       child: ButtonTheme(

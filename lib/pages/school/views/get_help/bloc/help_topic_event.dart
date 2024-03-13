@@ -12,3 +12,9 @@ class ContactUs extends HelpTopicEvent {
   });
   final Map<String, dynamic> payload;
 }
+
+class AddFeedback extends HelpTopicEvent{
+  AddFeedback({required this.payload});
+  final Map<String, dynamic> payload;
+}
+

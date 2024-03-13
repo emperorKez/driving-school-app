@@ -17,11 +17,16 @@ class HelpTopicBloc extends Bloc<HelpTopicEvent, HelpTopicState> {
   final HelpTopicRepo _helpTopicRepo;
 
   Future<void> onGetAllHelpTopic(
-      GetAllHelpTopic event, Emitter<HelpTopicState> emit,) async {
+    GetAllHelpTopic event,
+    Emitter<HelpTopicState> emit,
+  ) async {
     emit(HelpTopicLoading());
     try {
-      final response = await _helpTopicRepo.getAllLanguages();
-      emit(HelpTopicLoaded(allHelpTopic: response.data));
+      final helpTopics = await _helpTopicRepo.getAllHelpTopics();
+      final feedbackCatgories = await _helpTopicRepo.getFeedbackCategories();
+      emit(HelpTopicLoaded(
+          allHelpTopic: helpTopics.data,
+          feedbackCategories: feedbackCatgories.data));
     } catch (e) {
       emit(HelpTopicError(error: e.toString()));
     }

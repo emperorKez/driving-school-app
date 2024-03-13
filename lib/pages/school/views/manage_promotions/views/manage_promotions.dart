@@ -5,9 +5,9 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_promo/views/add_new_promo.dart';
+import 'package:korbil_mobile/pages/school/views/manage_promotions/bloc/promotion_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_promotions/views/no_promo_widget.dart';
 import 'package:korbil_mobile/pages/school/views/manage_promotions/views/promo_card.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstManagePromotions extends StatefulWidget {
@@ -37,9 +37,9 @@ class _InstManagePromotionsState extends State<InstManagePromotions> {
               ),
               leading: const InstAppBarBackBtn(),
             ),
-      body: BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+      body: BlocBuilder<PromotionBloc, PromotionState>(
         builder: (context, state) {
-          if (state is SchoolInfoLoaded) {
+          if (state is PromotionLoaded) {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: ListView(
@@ -59,16 +59,16 @@ class _InstManagePromotionsState extends State<InstManagePromotions> {
                   const SizedBox(
                     height: 15,
                   ),
-                  if (state.schoolInfo!.offers!.isEmpty)
+                  if (state.allPromotion!.isEmpty)
                     const NoPromosWidget()
                   else
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: List.generate(
-                        state.schoolInfo!.offers!.length,
+                        state.allPromotion!.length,
                         (index) => PromoCard(
-                          promo: state.schoolInfo!.offers![index],
+                          promo: state.allPromotion![index],
                         ),
                       ),
                     ),

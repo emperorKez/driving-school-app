@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/pages/school/all_school_bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_promo/views/alert_content.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/manage_promotions/bloc/promotion_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstAddNewPromoView extends StatefulWidget {
@@ -284,12 +284,17 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                   if (await _showConfirmFinishLessonAlert() ??
                                       true) {
                                     if (!mounted) return;
-                                    context.read<SchoolBloc>().add(AddPromo(
-                                        payload: payloadData,
-                                        schoolId: state.schoolInfo!.id,),);
+                                    context.read<PromotionBloc>().add(
+                                          AddPromo(
+                                            payload: payloadData,
+                                            schoolId:
+                                                state.school!.schoolInfo!.id,
+                                          ),
+                                        );
                                   }
                                 }
-                              },)
+                              },
+                            )
                           : kLoadingWidget(context);
                     },
                   ),
@@ -306,10 +311,13 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
   }
 
   Widget selectPackage(BuildContext context) {
-    final packages = context.read<SchoolInfoBloc>().state.schoolInfo!.packages;
+    final packages = context.read<SchoolBloc>().state.school!.packages;
     final items = List.generate(
       packages!.length,
-      (index) => {'key': packages[index].price, 'value': packages[index].id},
+      (index) => {
+        'key': packages[index].schoolPackage.price,
+        'value': packages[index].schoolPackage.id
+      },
     );
 
     return Padding(

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/school_info.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/driving_school.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PackageCard extends StatelessWidget {
@@ -66,7 +66,7 @@ class PackageCard extends StatelessWidget {
               ),
             ),
             Text(
-              package.title!,
+              package.schoolPackage.title,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -100,7 +100,7 @@ class PackageCard extends StatelessWidget {
               ),
             ),
             Text(
-              package.details!,
+              package.schoolPackage.details,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -113,7 +113,7 @@ class PackageCard extends StatelessWidget {
             ),
             Center(
               child: Text(
-                '\$${package.price}',
+                '\$${package.schoolPackage.price}',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,

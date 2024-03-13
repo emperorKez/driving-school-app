@@ -11,7 +11,7 @@ class SettingsRepo {
   // final PrefStorageRepo prefStorageRepo = PrefStorageRepo();
 
   Future<ResponseState<List<Language>>> getAllLanguages() async {
-    final response = await apiService.getreq(ApiPaths.getAllLanguages);
+    final response = await apiService.getReq(ApiPaths.getAllLanguages);
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];

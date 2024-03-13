@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
-import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ProfileSection extends StatelessWidget {
@@ -27,13 +27,15 @@ class ProfileSection extends StatelessWidget {
         Expanded(
           child: Container(
             padding: const EdgeInsets.only(left: 12),
-            child: BlocBuilder<ProfileBloc, ProfileState>(
+            child: BlocBuilder<SchoolBloc, SchoolState>(
               builder: (context, state) {
-                return state is ProfileLoaded ? Column(
+                if (state is SchoolLoaded){
+                final profile = state.school!.schoolInfo!.staff[0].profile;
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${state.profile!.firstName!} ${state.profile!.lastName!}',
+                      '${profile.firstName} ${profile.lastName}',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -42,7 +44,7 @@ class ProfileSection extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      state.profile!.phoneNumber!,
+                      profile.phoneNumber,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -51,7 +53,7 @@ class ProfileSection extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      state.profile!.email!,
+                      profile.email,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -60,7 +62,7 @@ class ProfileSection extends StatelessWidget {
                       ),
                     ),
                   ],
-                ) : kLoadingWidget(context);
+                ); } else{ return kLoadingWidget(context);}
               },
             ),
           ),

@@ -2,8 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/create_new_package/views/create_new_package.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_info/school_info_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/package_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -13,7 +13,7 @@ class PackageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = MediaQuery.sizeOf(context);
-    return BlocBuilder<SchoolInfoBloc, SchoolInfoState>(
+    return BlocBuilder<SchoolBloc, SchoolState>(
       builder: (context, state) {
         return Column(
           children: [
@@ -31,8 +31,8 @@ class PackageSection extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  for (final element in state.schoolInfo!.packages!)
-                    Text(element.title!), //todo Package card
+                  for (final element in state.school!.packages!)
+                    Text(element.schoolPackage.title), //todo Package card
 
                   PrimaryBtn(
                     text: '+ Add New Package',
@@ -56,7 +56,7 @@ class PackageSection extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            if (state is SchoolInfoLoading)
+            if (state is SchoolLoading)
               Center(
                 child: CircularProgressIndicator(
                   color: KorbilTheme.of(context).primaryColor,
@@ -71,8 +71,8 @@ class PackageSection extends StatelessWidget {
   }
 
   Widget _buildPackagesCarousel(
-      Size size, BuildContext context, SchoolInfoState state,) {
-    if (state.schoolInfo!.packages!.isEmpty) {
+      Size size, BuildContext context, SchoolState state,) {
+    if (state.school!.packages!.isEmpty) {
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 30),
         child: Center(
@@ -89,7 +89,7 @@ class PackageSection extends StatelessWidget {
       );
     }
     return CarouselSlider(
-      items: state.schoolInfo!.packages!
+      items: state.school!.packages!
           .map((p) => PackageCard(size: size, package: p))
           .toList(),
       options: CarouselOptions(
