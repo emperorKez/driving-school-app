@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/review.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/driving_school.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstFeedBackCard extends StatelessWidget {
@@ -30,7 +30,8 @@ class InstFeedBackCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                review.student.toString(),
+                review.studentId
+                    .toString(), //todo use studentId to get the student data
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -65,7 +66,7 @@ class InstFeedBackCard extends StatelessWidget {
             height: 10,
           ),
           Text(
-            review.comment ?? '',
+            review.comment,
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,
@@ -95,14 +96,13 @@ class InstFeedBackCard extends StatelessWidget {
                   color: KorbilTheme.of(context).primaryColor,
                 ),
                 child: Center(
-                  // ignore: use_if_null_to_convert_nulls_to_bools
-                  child: review.feedbackApproval == true
+                  child: review.approved
                       ? Icon(
                           Icons.done,
                           color: KorbilTheme.of(context).white,
                           size: 20,
                         )
-                      : Container(),
+                      : const SizedBox(),
                 ),
               ),
             ],

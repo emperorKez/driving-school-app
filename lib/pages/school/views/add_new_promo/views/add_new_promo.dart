@@ -285,7 +285,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                       true) {
                                     if (!mounted) return;
                                     context.read<PromotionBloc>().add(
-                                          AddPromo(
+                                          AddPromotion(
                                             payload: payloadData,
                                             schoolId:
                                                 state.school!.schoolInfo!.id,

@@ -26,12 +26,3 @@ class UploadLicence extends CreateAccountEvent{
   UploadLicence(this.file);
   final String file;
 }
-
-class AddressChanged extends CreateAccountEvent {
-  AddressChanged({
-    required this.address,
-  });
-  final String address;
-
-  
-}

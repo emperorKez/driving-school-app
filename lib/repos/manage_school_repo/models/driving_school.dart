@@ -371,10 +371,8 @@ class SchoolInfo {
         languages: json['languages'] == null
             ? []
             : List<int>.from(json['languages']!.map((int x) => x) as Iterable),
-        staff: json['staff'] == null
-            ? []
-            : List<Staff>.from(
-                json['staff']!.map(Staff.fromJson) as Iterable,
+        staff: List<Staff>.from(
+                json['staff'].map(Staff.fromJson) as Iterable,
               ),
         scheduleFlow: json['scheduleFlow'] as int?,
         schoolStatus: json['schoolStatus'] as int?,

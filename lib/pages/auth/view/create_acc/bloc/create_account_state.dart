@@ -9,30 +9,25 @@ class CreateAccountState {
       this.licence,
       this.documentTypes,
       this.staffRoles,
-      this.suggestedLocations,
-      this.address = ''});
+      });
 
   final List<DocumentType>? documentTypes;
   final List<StaffRole>? staffRoles;
   final UploadedFile? certificate;
   final UploadedFile? licence;
-  final String address;
-  final List<Location>? suggestedLocations;
-  bool get isValidAddress => AddressValidator(address: address).validate();
+  
 
   CreateAccountState copyWith({
     List<DocumentType>? documentTypes,
     List<StaffRole>? staffRoles,
     UploadedFile? certificate,
     UploadedFile? licence,
-    List<Location>? suggestedLocations,
   }) {
     return CreateAccountState(
         documentTypes: documentTypes ?? this.documentTypes,
         staffRoles: staffRoles ?? this.staffRoles,
         certificate: certificate ?? this.certificate,
-        licence: licence ?? this.licence,
-        suggestedLocations: suggestedLocations ?? this.suggestedLocations);
+        licence: licence ?? this.licence,);
   }
 }
 

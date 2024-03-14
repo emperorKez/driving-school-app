@@ -24,7 +24,7 @@ class AllFeedbacksBloc extends Bloc<AllFeedbacksEvent, AllFeedbacksState> {
   ) async {
     const page = 1;
     emit(AllFeedbacksFetching());
-    final resState = await manageSchoolRepo.getSchoolFeedbacks();
+    final resState = await manageSchoolRepo.getSchoolFeedbacks(1);
     if (resState.data == null) {
       return emit(AllFeedbacksFetchError(resState.error?.error.toString()));
     } else {
@@ -43,7 +43,7 @@ class AllFeedbacksBloc extends Bloc<AllFeedbacksEvent, AllFeedbacksState> {
     if (page == state.page) return;
     emit(AllFeedbacksFetching());
 
-    final resState = await manageSchoolRepo.getSchoolFeedbacks();
+    final resState = await manageSchoolRepo.getSchoolFeedbacks(1);
     if (resState.data == null) {
       return emit(AllFeedbacksFetchError(resState.error?.error.toString()));
     } else {

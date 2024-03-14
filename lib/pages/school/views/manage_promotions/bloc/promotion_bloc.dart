@@ -13,7 +13,9 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
       : _manageSchoolRepo = manageSchoolRepo ?? ManageSchoolRepo(),
         super(PromotionInitial()) {
     on<GetPromotions>(onGetPromotions);
-    on<AddPromo>(onAddPromo);
+    on<AddPromotion>(onAddPromotion);
+    on<UpdatePromotion>(onUpdatePromotion);
+    on<DeletePromotion>(onDeletePromotion);
   }
   final ManageSchoolRepo _manageSchoolRepo;
 
@@ -26,11 +28,40 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
     } catch (e) {}
   }
 
-  Future<void> onAddPromo(AddPromo event, Emitter<PromotionState> emit) async {
+  Future<void> onAddPromotion(
+      AddPromotion event, Emitter<PromotionState> emit) async {
     emit(PromotionLoading());
     try {
-      await _manageSchoolRepo.addPromo(
+      await _manageSchoolRepo.addPromotion(
           payload: event.payload, schoolId: event.schoolId);
+      final promotions = await _manageSchoolRepo.getPromotions(event.schoolId);
+      emit(PromotionLoaded(allPromotion: promotions.data));
+    } catch (e) {
+      emit(PromotionError(error: e.toString()));
+    }
+  }
+
+  Future<void> onUpdatePromotion(
+      UpdatePromotion event, Emitter<PromotionState> emit) async {
+    emit(PromotionLoading());
+    try {
+      await _manageSchoolRepo.updatePromotion(
+          schoolId: event.schoolId,
+          payload: event.payload,
+          promotionId: event.promotionId);
+      final promotions = await _manageSchoolRepo.getPromotions(event.schoolId);
+      emit(PromotionLoaded(allPromotion: promotions.data));
+    } catch (e) {
+      emit(PromotionError(error: e.toString()));
+    }
+  }
+
+  Future<void> onDeletePromotion(
+      DeletePromotion event, Emitter<PromotionState> emit) async {
+    emit(PromotionLoading());
+    try {
+      await _manageSchoolRepo.deletePromotion(
+          schoolId: event.schoolId, promotionId: event.promotionId);
       final promotions = await _manageSchoolRepo.getPromotions(event.schoolId);
       emit(PromotionLoaded(allPromotion: promotions.data));
     } catch (e) {

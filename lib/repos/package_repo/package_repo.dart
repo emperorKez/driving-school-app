@@ -11,7 +11,7 @@ class PackageRepo {
   final ApiService apiService;
 
   Future<ResponseState<List<Package>>> getAllPackages() async {
-    final res = await apiService.getReq(ApiPaths.getPackagesOfSchool('1'));
+    final res = await apiService.getReq(ApiPaths.getPackagesOfSchool(1));
     if (res.data != null) {
       try {
         final jsonList =

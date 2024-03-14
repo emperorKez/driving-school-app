@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/driving_school.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstUserDetailsCard extends StatelessWidget {
-  const InstUserDetailsCard({
+  const InstUserDetailsCard({ required this.user,
     super.key,
   });
+
+  final Staff user;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,7 @@ class InstUserDetailsCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Mikael Anders',
+                  '${user.profile.firstName} ${user.profile.lastName}',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: KorbilTheme.of(context).secondaryColor,
@@ -56,7 +59,7 @@ class InstUserDetailsCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Hedemora',
+                      user.profile.email,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).primaryColor,
@@ -66,7 +69,7 @@ class InstUserDetailsCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      '34 years',
+                      user.profile.phoneNumber,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,

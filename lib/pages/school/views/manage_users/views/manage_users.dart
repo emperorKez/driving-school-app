@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_course/views/add_new_course.dart';
 import 'package:korbil_mobile/pages/school/views/manage_users/views/pending_user_detail_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_users/views/user_detail_card.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/driving_school.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -36,60 +40,71 @@ class _InstManageUsersState extends State<InstManageUsers> {
               leading: const InstAppBarBackBtn(),
               actions: const [_AppBarAction()],
             ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
+      body: BlocBuilder<SchoolBloc, SchoolState>(
+        builder: (context, state) {
+          if (state is! SchoolLoaded) {
+            return kLoadingWidget(context);
+          } else {
+            List<Staff> users =[];
+            List<Staff> pendingUsers =[];
+            for (final element in state.school!.staff!) {
+              if (element.profile.userStatus == 1) {
+                pendingUsers.add(element);                
+              } else {
+                users.add(element);
+              }              
+            }
+            return ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               children: [
-                _buildTypeCard('Approved Users'),
-                _buildTypeCard('Pending Users'),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    _buildTypeCard('Approved Users'),
+                    _buildTypeCard('Pending Users'),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                if (_selectedType == 'Approved Users')
+                  _buildUsersList(users)
+                else
+                  _buildPendingUsersList(pendingUsers),
+                const SizedBox(
+                  height: 50,
+                ),
               ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            if (_selectedType == 'Approved Users')
-              _buildUsersList()
-            else
-              _buildPendingUsersList(),
-            const SizedBox(
-              height: 50,
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }
 
-  Column _buildPendingUsersList() {
-    return const Column(
+  Column _buildPendingUsersList(List<Staff> pendingUsers) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InstPendingUserDetailsCard(name: 'mikaelanders@gmail.com'),
-        InstPendingUserDetailsCard(name: 'mikaelanders@gmail.com'),
-        InstPendingUserDetailsCard(name: 'mikaelanders@gmail.com'),
-        InstPendingUserDetailsCard(name: 'mikaelanders@gmail.com'),
-        InstPendingUserDetailsCard(name: 'mikaelanders@gmail.com'),
-        InstPendingUserDetailsCard(name: 'mikaelanders@gmail.com'),
-      ],
+      children: List.generate(
+          pendingUsers.length,
+          (index) => InstPendingUserDetailsCard(
+                pendingUser: pendingUsers[index],
+              )),
     );
   }
 
-  Column _buildUsersList() {
-    return const Column(
+  Column _buildUsersList(List<Staff> users) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InstUserDetailsCard(),
-        InstUserDetailsCard(),
-        InstUserDetailsCard(),
-        InstUserDetailsCard(),
-        InstUserDetailsCard(),
-        InstUserDetailsCard(),
-      ],
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(
+          users.length,
+          (index) => InstUserDetailsCard(
+                user: users[index],
+              )),
     );
   }
 

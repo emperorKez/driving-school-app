@@ -1,7 +1,9 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
@@ -9,6 +11,8 @@ import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/view/create_driving_school/bloc/create_school_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
+
+enum UploadType { logo, registration }
 
 class CreateDrivingSchoolView extends StatefulWidget {
   const CreateDrivingSchoolView({super.key});
@@ -20,8 +24,10 @@ class CreateDrivingSchoolView extends StatefulWidget {
 
 class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -119,12 +125,12 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                           children: [
                             Expanded(
                               child: _renderFormField(
-                                hint: 'Enter your phone no',
-                                ctrl: phoneController,
+                                hint: 'Enter your Driving School Name',
+                                ctrl: nameController,
                                 inputType: TextInputType.phone,
                                 validator: (val) {
                                   if (val == null || val.isEmpty) {
-                                    return 'Please enter Your Phone Number';
+                                    return 'Enter your Driving School Name';
                                   }
                                   return null;
                                 },
@@ -133,15 +139,24 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             ),
                             Expanded(
                               child: _renderFormField(
-                                hint: 'Enter your email',
-                                ctrl: emailController,
+                                hint: 'Address',
+                                ctrl: addressController,
                                 inputType: TextInputType.emailAddress,
-                                validator: (val) {
-                                  if (val == null || val.isEmpty) {
-                                    return 'Please enter Your Email';
-                                  }
-                                  return null;
+                                onChanged: (val) {
+                                  context
+                                      .read<CreateSchoolBloc>()
+                                      .add(AddressChanged(address: val));
                                 },
+                                onEditingComplete: () => context
+                                    .read<CreateSchoolBloc>()
+                                    .add(ClearAddress()),
+                                validator: (val) => context
+                                            .read<CreateSchoolBloc>()
+                                            .state
+                                            .isValidAddress ==
+                                        false
+                                    ? 'Enter your Driving School Address'
+                                    : null,
                                 icon: 'assets/imgs/ins/auth/email.png',
                                 iconSize: 18,
                               ),
@@ -152,27 +167,36 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                         Column(
                           children: [
                             _renderFormField(
-                              hint: 'Enter your phone no',
-                              ctrl: phoneController,
+                              hint: 'Enter your Driving School Name',
+                              ctrl: nameController,
                               inputType: TextInputType.phone,
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
-                                  return 'Please enter Your Phone Number';
+                                  return 'Enter your Driving School Name';
                                 }
                                 return null;
                               },
                               icon: 'assets/imgs/ins/auth/school.png',
                             ),
                             _renderFormField(
-                              hint: 'Enter your email',
-                              ctrl: emailController,
+                              hint: 'Address',
+                              ctrl: addressController,
                               inputType: TextInputType.emailAddress,
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Please enter Your Email';
-                                }
-                                return null;
+                              onChanged: (val) {
+                                context
+                                    .read<CreateSchoolBloc>()
+                                    .add(AddressChanged(address: val));
                               },
+                              onEditingComplete: () => context
+                                  .read<CreateSchoolBloc>()
+                                  .add(ClearAddress()),
+                              validator: (val) => context
+                                          .read<CreateSchoolBloc>()
+                                          .state
+                                          .isValidAddress ==
+                                      false
+                                  ? 'Enter your Driving School Address'
+                                  : null,
                               icon: 'assets/imgs/ins/auth/email.png',
                               iconSize: 18,
                             ),
@@ -184,12 +208,12 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                           children: [
                             Expanded(
                               child: _renderFormField(
-                                hint: 'Enter your phone no',
-                                ctrl: phoneController,
+                                hint: 'City',
+                                ctrl: cityController,
                                 inputType: TextInputType.phone,
                                 validator: (val) {
                                   if (val == null || val.isEmpty) {
-                                    return 'Please enter Your Phone Number';
+                                    return 'Enter your City';
                                   }
                                   return null;
                                 },
@@ -199,12 +223,12 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             ),
                             Expanded(
                               child: _renderFormField(
-                                hint: 'Enter your email',
-                                ctrl: emailController,
+                                hint: 'Enter your Phone',
+                                ctrl: phoneController,
                                 inputType: TextInputType.emailAddress,
                                 validator: (val) {
                                   if (val == null || val.isEmpty) {
-                                    return 'Please enter Your Email';
+                                    return 'Enter your Phone';
                                   }
                                   return null;
                                 },
@@ -218,12 +242,12 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                         Column(
                           children: [
                             _renderFormField(
-                              hint: 'Enter your phone no',
-                              ctrl: phoneController,
+                              hint: 'City',
+                              ctrl: cityController,
                               inputType: TextInputType.phone,
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
-                                  return 'Please enter Your Phone Number';
+                                  return 'Enter City';
                                 }
                                 return null;
                               },
@@ -231,12 +255,12 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                               iconSize: 18,
                             ),
                             _renderFormField(
-                              hint: 'Enter your email',
-                              ctrl: emailController,
+                              hint: 'Enter your phone',
+                              ctrl: phoneController,
                               inputType: TextInputType.emailAddress,
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
-                                  return 'Please enter Your Email';
+                                  return 'Enter Your Phone';
                                 }
                                 return null;
                               },
@@ -276,7 +300,17 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                       ],
                                     ),
                                   ),
-                                  _renderUploadBtn(),
+                                  GestureDetector(
+                                      onTap: () async {
+                                        final doc = await pickFile();
+                                        if (doc != null) {
+                                          if (!mounted) return;
+                                          context
+                                              .read<CreateSchoolBloc>()
+                                              .add(UploadLogo(doc));
+                                        }
+                                      },
+                                      child: _renderUploadBtn(),),
                                 ],
                               ),
                             ),
@@ -308,7 +342,17 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                       ],
                                     ),
                                   ),
-                                  _renderUploadBtn(),
+                                  GestureDetector(
+                                      onTap: () async {
+                                        final doc = await pickFile();
+                                        if (doc != null) {
+                                          if (!mounted) return;
+                                          context
+                                              .read<CreateSchoolBloc>()
+                                              .add(UploadRegistration(doc));
+                                        }
+                                      },
+                                      child: _renderUploadBtn(),),
                                 ],
                               ),
                             ),
@@ -335,7 +379,17 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                     ],
                                   ),
                                 ),
-                                _renderUploadBtn(),
+                                GestureDetector(
+                                    onTap: () async {
+                                      final doc = await pickFile();
+                                      if (doc != null) {
+                                        if (!mounted) return;
+                                        context
+                                            .read<CreateSchoolBloc>()
+                                            .add(UploadLogo(doc));
+                                      }
+                                    },
+                                    child: _renderUploadBtn(),),
                               ],
                             ),
                             Column(
@@ -356,7 +410,17 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                     ],
                                   ),
                                 ),
-                                _renderUploadBtn(),
+                                GestureDetector(
+                                    onTap: () async {
+                                      final doc = await pickFile();
+                                      if (doc != null) {
+                                        if (!mounted) return;
+                                        context
+                                            .read<CreateSchoolBloc>()
+                                            .add(UploadRegistration(doc));
+                                      }
+                                    },
+                                    child: _renderUploadBtn(),),
                               ],
                             ),
                           ],
@@ -384,9 +448,16 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                     text: 'Create',
                     ontap: () {
                       if (_formKey.currentState!.validate()) {
-                        context
-                            .read<CreateSchoolBloc>()
-                            .add(CreateSchool(payload: {}));
+                        if (state.logo == null) {
+                          errorSnackbar(context, error: 'Upload Company logo');
+                        } else if (state.companyRegistration == null) {
+                          errorSnackbar(context,
+                              error: 'Upload Company registration document',);
+                        } else {
+                          context
+                              .read<CreateSchoolBloc>()
+                              .add(CreateSchool(payload: getPayload()));
+                        }
                       }
                     },
                     hm: 23,
@@ -449,12 +520,16 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
     double iconSize = 24,
     TextInputType inputType = TextInputType.text,
     Widget? suffixIcon,
+    void Function(String)? onChanged,
+    void Function()? onEditingComplete,
   }) {
     return Container(
       margin: const EdgeInsets.all(8),
       child: TextFormField(
         controller: ctrl,
         validator: (val) => validator(val),
+        onChanged: (value) => onChanged,
+        onEditingComplete: () => onEditingComplete,
         keyboardType: inputType,
         style: const TextStyle(
           fontFamily: 'Poppins',
@@ -506,6 +581,18 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
         ),
       ),
     );
+  }
+
+  Future<String?> pickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+        allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
+        type: FileType.custom,);
+    if (result != null) {
+      return result.files.single.path;
+    } else {
+      // User canceled the picker
+      return null;
+    }
   }
 
   Map<String, dynamic> getPayload() {

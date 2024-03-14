@@ -5,8 +5,6 @@ import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_vehicle/views/add_new_vehicle.dart';
 import 'package:korbil_mobile/pages/school/views/configuration_view/views/configuration_view.dart';
 import 'package:korbil_mobile/pages/school/views/manage_pickup_location/views/manage_pickup_location.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/package/package_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/manage_school/bloc/school_feedback/school_feedback_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/package_section.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/school_info_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/users_feedback_section.dart';
@@ -18,19 +16,7 @@ class ManageSchoolView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider( 
-      providers: [
-        BlocProvider<PackageBloc>(
-          create: (context) => PackageBloc(lc())..add(GetAllPackages()),
-          lazy: false,
-        ),
-        BlocProvider<SchoolFeedbackBloc>(
-          create: (context) => SchoolFeedbackBloc(lc())..add(GetAllFeedbacks()),
-          lazy: false,
-        ),
-      ],
-      child: const _ManageSchool(),
-    );
+    return  const _ManageSchool();
   }
 }
 

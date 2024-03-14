@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
-import 'package:korbil_mobile/components/snackBar/top_snack_bar.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
-import 'package:korbil_mobile/locator.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/feedback_card.dart';
 import 'package:korbil_mobile/pages/school/views/users_feedback/cubit/all_feedbacks/all_feedbacks_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/users_feedback/views/pagination_item.dart';
@@ -14,104 +14,54 @@ class InstUsersFeedBackView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AllFeedbacksBloc(lc())..add(GetAllFeedbacks()),
-      lazy: false,
-      child: const _InstUsersFeedBackView(),
-    );
-  }
-}
-
-class _InstUsersFeedBackView extends StatefulWidget {
-  const _InstUsersFeedBackView();
-
-  @override
-  State<_InstUsersFeedBackView> createState() => _InstUsersFeedBackViewState();
-}
-
-class _InstUsersFeedBackViewState extends State<_InstUsersFeedBackView> {
-  @override
-  Widget build(BuildContext context) {
-    return BlocListener<AllFeedbacksBloc, AllFeedbacksState>(
-      listener: (context, state) {
-        if (state.errorMsg != null) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              buildTopSnackbar(context, state.errorMsg ?? 'Error fetching'),
-            );
-          context.read<AllFeedbacksBloc>().add(ClearErrorMsg());
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: const Text(
-            'Users Feedback',
-            style: TextStyle(
-              fontFamily: 'Lato',
-              color: AppColors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Users Feedback',
+          style: TextStyle(
+            fontFamily: 'Lato',
+            color: AppColors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
           ),
-          leading: const InstAppBarBackBtn(),
         ),
-        body: _renderMobileBody(),
+        leading: const InstAppBarBackBtn(),
       ),
+      body: _renderMobileBody(),
     );
   }
 
   ListView _renderMobileBody() {
     return ListView(
+      shrinkWrap: true,
       children: [
         const SizedBox(
           height: 15,
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: BlocBuilder<AllFeedbacksBloc, AllFeedbacksState>(
+          child: BlocBuilder<SchoolBloc, SchoolState>(
             builder: (context, state) {
-              if (state is AllFeedbacksFetching) {
-                return _loadingIndicator(context);
+              if (state is! SchoolLoaded) {
+                return kLoadingWidget(context);
+              } else {
+                final feedback = state.school!.reviews ?? [];
+
+                return feedback.isEmpty
+                    ? noFeedbackContainer(context)
+                    : Column(
+                        children: List.generate(
+                          feedback.length,
+                          (index) => InstFeedBackCard(
+                            review: feedback[index],
+                          ),
+                        ),
+                      );
               }
-              if (state.reviews.isEmpty) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 30),
-                  child: Center(
-                    child: Text(
-                      'No feedbacks to show',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: KorbilTheme.of(context).secondaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                );
-              }
-              return Column(
-                children: state.reviews
-                    .map((r) => InstFeedBackCard(
-                          review: r,
-                        ),)
-                    .toList(),
-              );
             },
           ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        BlocBuilder<AllFeedbacksBloc, AllFeedbacksState>(
-          builder: (context, state) {
-            if (state is AllFeedbacksFetching || state.reviews.isEmpty) {
-              return Container();
-            }
-            return _buildPagination(state);
-          },
         ),
       ],
     );
@@ -134,10 +84,28 @@ class _InstUsersFeedBackViewState extends State<_InstUsersFeedBackView> {
     );
   }
 
+  Widget noFeedbackContainer(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 30),
+      child: Center(
+        child: Text(
+          'No feedbacks to show',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: KorbilTheme.of(context).secondaryColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ),
+    );
+  }
+
   Center _loadingIndicator(BuildContext context) {
     return Center(
       child: CircularProgressIndicator(
-          color: KorbilTheme.of(context).primaryColor,),
+        color: KorbilTheme.of(context).primaryColor,
+      ),
     );
   }
 }

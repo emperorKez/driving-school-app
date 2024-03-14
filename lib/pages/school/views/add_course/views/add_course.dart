@@ -37,7 +37,7 @@ class _AddCourseState extends State<InstAddCourse> {
             const SizedBox(
               height: 15,
             ),
-            const InstLessonCard(),
+            const InstLessonCard(), 
             const InstLessonCard(),
             const InstLessonCard(),
             const InstLessonCard(),

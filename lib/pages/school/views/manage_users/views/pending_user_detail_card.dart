@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:korbil_mobile/repos/manage_school_repo/models/driving_school.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstPendingUserDetailsCard extends StatelessWidget {
   const InstPendingUserDetailsCard({
-    required this.name,
+    required this.pendingUser,
     super.key,
   });
-  final String name;
+  final Staff pendingUser;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class InstPendingUserDetailsCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            name,
+            '${pendingUser.profile.firstName} ${pendingUser.profile.lastName}',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,

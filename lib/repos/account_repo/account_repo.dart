@@ -44,7 +44,11 @@ class AccountRepo {
   }
 
  Future<ResponseState<List<StaffRole>>> getAllStaffRoles() async {
-    final response = await apiService.getReq(ApiPaths.getStaffSchoolInvite);
+    final response = await apiService.getReq(ApiPaths.getAllStaffRoles);
+    
+    print(response.data);
+    print(response.error!.error);
+    
     try {
     if (response.data != null) {
        final jsonList = response.data!.data['response'];
@@ -77,8 +81,8 @@ class AccountRepo {
   }
 
 
-  Future<ResponseState<UploadFile>> uploadDocument() async {
-    final response = await apiService.getReq(ApiPaths.uploadFile);
+  Future<ResponseState<UploadFile>> uploadDocument(Map<String, dynamic> payload) async {
+    final response = await apiService.postReq(ApiPaths.uploadFile, payload: payload);
     try {
     if (response.data != null && response.data!.data['code'] == 200) {
         final upload = UploadFile.fromJson(
@@ -91,6 +95,7 @@ class AccountRepo {
       return ResponseFailed(DataError(null, e));
     }    
   }
+
 
 
   Future<ResponseState<List<Location>>> suggestLocation(Map<String, dynamic> params) async {
@@ -113,6 +118,9 @@ class AccountRepo {
 
   Future<ResponseState<List<DocumentType>>> getDocumentTypes() async {
     final response = await apiService.getReq(ApiPaths.getAllDocumentType);
+
+    // print(response.data);
+
     try {
     if (response.data != null) {
        final jsonList = response.data!.data['response'];

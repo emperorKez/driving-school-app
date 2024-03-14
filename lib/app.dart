@@ -32,12 +32,9 @@ class _AppState extends State<App> {
               SchoolBloc()..add(const GetDrivingSchool(schoolId: 1)),
           lazy: false,
         ),
-        BlocProvider<ProfileBloc>(
-          create: (context) => ProfileBloc()..add(GetProfile()),
-          lazy: false,
-        ),
         BlocProvider(
-          create: (context) => CreateAccountBloc()..add(GetMetadata()),
+          create: (context) => CreateAccountBloc()
+          ..add(GetMetadata()),
           lazy: false,
         ),
         BlocProvider(

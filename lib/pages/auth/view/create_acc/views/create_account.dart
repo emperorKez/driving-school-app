@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
@@ -127,6 +128,10 @@ class _CreateAccountViewState extends State<CreateAccountView> {
             }
           },
           builder: (context, state) {
+            if (state is! CreateAccountLoaded){
+              print(state);
+              return kLoadingWidget(context);
+            } else{
             return ListView(
               shrinkWrap: true,
               children: [
@@ -633,7 +638,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 ),
                 const SizedBox(height: 50),
               ],
-            );
+            );}
           },
         ),
       ),
@@ -859,7 +864,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
 
   Future<String?> pickFile() async {
     final result = await FilePicker.platform
-        .pickFiles(allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png']);
+        .pickFiles(allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'], type: FileType.custom);
     if (result != null) {
       return result.files.single.path;
     } else {

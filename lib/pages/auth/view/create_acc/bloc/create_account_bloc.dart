@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/pages/auth/view/create_acc/bloc/validator/suggest_address_validator.dart';
 import 'package:korbil_mobile/repos/account_repo/account_repo.dart';
 import 'package:korbil_mobile/repos/account_repo/models/document_type.dart';
-import 'package:korbil_mobile/repos/account_repo/models/location.dart';
 import 'package:korbil_mobile/repos/account_repo/models/staff_role.dart';
 import 'package:korbil_mobile/repos/account_repo/models/upload.dart';
 
@@ -32,6 +30,7 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
           documentTypes: documentTypeRespone.data,
           staffRoles: staffRoleRespone.data,),);
     } catch (e) {
+      print('metadata error: $e');
       emit(CreateAccountError(error: e.toString()));
     }
   }
