@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/repos/account_repo/account_repo.dart';
-import 'package:korbil_mobile/repos/account_repo/models/document_type.dart';
-import 'package:korbil_mobile/repos/account_repo/models/staff_role.dart';
-import 'package:korbil_mobile/repos/account_repo/models/upload.dart';
+import 'package:korbil_mobile/repos/metadata_repo/models/document_type.dart';
+import 'package:korbil_mobile/repos/metadata_repo/models/staff_role.dart';
+import 'package:korbil_mobile/repos/storage_repo/model/upload.dart';
 
 part 'create_account_event.dart';
 part 'create_account_state.dart';
@@ -16,44 +16,30 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
         super(CreateAccountInitial()) {
     on<CreateAccount>(onCreateAccount);
     on<CreateStaff>(onCreateStaff);
-    on<GetMetadata>(onGetMetadata);
   }
   final AccountRepo _accountRepo;
 
-  Future<void> onGetMetadata(
-      GetMetadata event, Emitter<CreateAccountState> emit,) async {
-    emit(CreateAccountLoading());
-    try {
-      final documentTypeRespone = await _accountRepo.getDocumentTypes();
-      final staffRoleRespone = await _accountRepo.getAllStaffRoles();
-      emit(CreateAccountLoaded(
-          documentTypes: documentTypeRespone.data,
-          staffRoles: staffRoleRespone.data,),);
-    } catch (e) {
-      print('metadata error: $e');
-      emit(CreateAccountError(error: e.toString()));
-    }
-  }
-
   Future<void> onCreateAccount(
-      CreateAccount event, Emitter<CreateAccountState> emit,) async {
-    final documentTypes = state.documentTypes;
-    final staffRoles = state.staffRoles;
+    CreateAccount event,
+    Emitter<CreateAccountState> emit,
+  ) async {
     emit(CreateAccountLoading());
     try {
       await _accountRepo.registerUser(event.payload);
-      emit(CreateAccountLoaded(
-          documentTypes: documentTypes, staffRoles: staffRoles,),);
+      emit(CreateAccountSuccess());
     } catch (e) {
       emit(CreateAccountError(error: e.toString()));
     }
   }
 
-  Future<void> onCreateStaff(CreateStaff event, Emitter<CreateAccountState> emit) async{
+  Future<void> onCreateStaff(
+      CreateStaff event, Emitter<CreateAccountState> emit) async {
     emit(CreateAccountLoading());
     try {
       await _accountRepo.createStaff(event.payload);
-      emit(CreateAccountSuccess(),);
+      emit(
+        CreateAccountSuccess(),
+      );
     } catch (e) {
       emit(CreateAccountError(error: e.toString()));
     }

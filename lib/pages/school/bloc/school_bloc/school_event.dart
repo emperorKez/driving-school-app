@@ -2,154 +2,184 @@ part of 'school_bloc.dart';
 
 @immutable
 sealed class SchoolEvent {
-  const SchoolEvent({this.schoolId, this.payload});
-  final Map<String, dynamic>? payload;
-  final int? schoolId;
 }
 
 class GetAllSchools extends SchoolEvent {}
 
 class GetDrivingSchool extends SchoolEvent {
-  const GetDrivingSchool({required super.schoolId});
+   GetDrivingSchool({required this.schoolId});
+    final int schoolId;
 }
 
 class UpdateSchool extends SchoolEvent {
-  const UpdateSchool({required super.schoolId, required super.payload});
+  UpdateSchool({required this.schoolId, required this.payload});
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class DeleteSchool extends SchoolEvent {
-  const DeleteSchool({required super.schoolId});
+  DeleteSchool({required this.schoolId});
+  final int schoolId;
 }
 
 class AddVehicle extends SchoolEvent {
-  const AddVehicle(
-      {required super.payload, required this.vehicleId, super.schoolId,});
-  final int vehicleId;
+  AddVehicle(
+      {required this.payload,required this.schoolId,});
+      final int schoolId;
+      final Map<String, dynamic> payload;
 }
 
 class UpdateVehicle extends SchoolEvent {
-  const UpdateVehicle({
-    required super.schoolId,
-    required super.payload,
-    required this.vehicleId,
+  UpdateVehicle({
+    required this.payload,
+    required this.vehicleId,required this.schoolId,
+    
   });
   final int vehicleId;
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class DeleteVehicle extends SchoolEvent {
-  const DeleteVehicle({required super.schoolId, required this.vehicleId});
+  DeleteVehicle({required this.vehicleId,required this.schoolId,});
   final int vehicleId;
+  final int schoolId;
 }
 
 class AddPackage extends SchoolEvent {
-  const AddPackage({
-    required super.schoolId,
-    required super.payload,
+  AddPackage({
+    required this.payload,required this.schoolId,
+    
   });
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class UpdatePackage extends SchoolEvent {
-  const UpdatePackage({
-    required super.schoolId,
-    required super.payload,
-    required this.packageId,
+  UpdatePackage({
+    required this.payload,
+    required this.packageId,required this.schoolId,
   });
   final int packageId;
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class DeletePackage extends SchoolEvent {
-  const DeletePackage({required super.schoolId, required this.packageId});
+  DeletePackage({required this.packageId, required this.schoolId,});
   final int packageId;
+  final int schoolId;
 }
 
 class UpdateSchoolConfig extends SchoolEvent {
-  const UpdateSchoolConfig({
-    required super.schoolId,
-    required super.payload,
+  UpdateSchoolConfig({
+    required this.schoolId,
+    required this.payload,
+    
   });
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class AddReview extends SchoolEvent {
-  const AddReview({
-    required super.schoolId,
-    required super.payload,
+  AddReview({
+    required this.payload,required this.schoolId,
   });
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class ApproveReview extends SchoolEvent {
-  const ApproveReview({
-    required super.schoolId,
-    required this.reviewId,
+  ApproveReview({
+    required this.reviewId, required this.schoolId,
   });
   final int reviewId;
+  final int schoolId;
+  
 }
 
 class DisApproveReview extends SchoolEvent {
-  const DisApproveReview({
-    required super.schoolId,
-    required this.reviewId,
+  DisApproveReview({
+    required this.reviewId,required this.schoolId,
   });
   final int reviewId;
+  final int schoolId;
 }
 
 class UpdateReviewList extends SchoolEvent {
-  const UpdateReviewList({
-    required super.schoolId,
-    required super.payload,
+  UpdateReviewList({
+    required this.schoolId,
+    required this.payload,
   });
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class AddLocation extends SchoolEvent {
-  const AddLocation({
-    required super.schoolId,
-    required super.payload,
+  AddLocation({
+    required this.payload,required this.schoolId,
   });
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class DeleteLocation extends SchoolEvent {
-  const DeleteLocation({
-    required super.schoolId,
-    required this.locationId,
+  DeleteLocation({
+    required this.locationId,required this.schoolId,
   });
   final int locationId;
+  final int schoolId;
 }
 
 class UpdateLocationStatusActive extends SchoolEvent {
-  const UpdateLocationStatusActive({
-    required super.schoolId,
-    required this.locationId,
+  UpdateLocationStatusActive({
+    required this.locationId,required this.schoolId,
   });
   final int locationId;
+  final int schoolId;
 }
 
 class UpdateLocationStatusInactive extends SchoolEvent {
-  const UpdateLocationStatusInactive({
-    required super.schoolId,
-    required this.schoolLocationId,
+  UpdateLocationStatusInactive({
+    required this.schoolLocationId,required this.schoolId,
   });
   final int schoolLocationId;
+  final int schoolId;
 }
 
 class AddGroupLesson extends SchoolEvent {
-  const AddGroupLesson({
-    required super.schoolId,
-    required super.payload,
+  AddGroupLesson({
+    required this.payload,required this.schoolId,
   });
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class UpdateGroupLesson extends SchoolEvent {
-  const UpdateGroupLesson({
-    required super.schoolId,
+  UpdateGroupLesson({
     required this.groupLessonId,
-    required super.payload,
+    required this.payload,
+    required this.schoolId,
   });
   final int groupLessonId;
+  final int schoolId;
+  final Map<String, dynamic> payload;
 }
 
 class DeleteGroupLesson extends SchoolEvent {
-  const DeleteGroupLesson({
-    required super.schoolId,
-    required this.groupLessonId,
+  DeleteGroupLesson({
+    required this.groupLessonId,required this.schoolId,
   });
   final int groupLessonId;
+  final int schoolId;
+}
+
+class AddStudentToGroupLesson extends SchoolEvent {
+  AddStudentToGroupLesson({
+    required this.groupLessonId,required this.schoolId,
+    required this.studentId,
+  });
+  final int groupLessonId;
+  final int studentId;
+  final int schoolId;
 }

@@ -91,11 +91,11 @@ class StudentData {
         postcode: json['postcode'] as String,
         schoolRefs: json['schoolRefs'] == null
             ? []
-            : List<int>.from(json['schoolRefs']!.map((x) => x) as Iterable),
+            : List<int>.from(json['schoolRefs']!.map((int x) => x) as Iterable),
         schoolPackageRefs: json['schoolPackageRefs'] == null
             ? []
             : List<int>.from(
-                json['schoolPackageRefs']!.map((x) => x) as Iterable,),
+                json['schoolPackageRefs']!.map((int x) => x) as Iterable,),
       );
 
   String? city;
@@ -107,10 +107,10 @@ class StudentData {
         'city': city,
         'postcode': postcode,
         'schoolRefs': schoolRefs == null
-            ? []
-            : List<dynamic>.from(schoolRefs!.map((x) => x)),
+            ? <int>[]
+            : List<int>.from(schoolRefs!.map((x) => x)),
         'schoolPackageRefs': schoolPackageRefs == null
-            ? []
-            : List<dynamic>.from(schoolPackageRefs!.map((x) => x)),
+            ? <int>[]
+            : List<int>.from(schoolPackageRefs!.map((x) => x)),
       };
 }

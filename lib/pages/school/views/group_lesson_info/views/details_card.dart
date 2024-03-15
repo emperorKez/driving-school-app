@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
-import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstUserDetailsCard extends StatelessWidget {

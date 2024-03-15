@@ -1,6 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/promotion.dart';
+import 'package:korbil_mobile/repos/school_repo/models/promotion.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PromoCard extends StatelessWidget {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/pages/school/views/get_help/bloc/help_topic_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/help_bloc/help_topic_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -20,6 +22,7 @@ class _FeedBackViewState extends State<FeedBackView> {
 
   @override
   Widget build(BuildContext context) {
+    final feedbackCategories =  context.read<MetadataCubit>().state.feedbackCategories ?? [];
     return Scaffold(
       appBar: getPreferedOrientation(context) == PreferedOrientation.landscape
           ? null
@@ -37,122 +40,126 @@ class _FeedBackViewState extends State<FeedBackView> {
               ),
               leading: const InstAppBarBackBtn(),
             ),
-      body:  BlocBuilder<HelpTopicBloc, HelpTopicState>(
-          builder: (context, state) {
-            // return state is FeedbackLoaded ?
-            return ListView(
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              children: [
-                const SizedBox(
-                  height: 10,
+      body: BlocBuilder<HelpTopicBloc, HelpTopicState>(
+        builder: (context, state) {
+          // return state is FeedbackLoaded ?
+          return ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Thanks for sending us your ideas, issues, or appreciation. ',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: KorbilTheme.of(context).secondaryColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
                 ),
-                Text(
-                  'Thanks for sending us your ideas, issues, or appreciation. ',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                "What's your feedback about?",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: KorbilTheme.of(context).secondaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(
-                  height: 15,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              selectCategory(context, categories: feedbackCategories),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Leave your Feedback',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: KorbilTheme.of(context).secondaryColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                 ),
-                Text(
-                  "What's your feedback about?",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                selectCategory(context, categories: state.feedbackCategories!),
-                const SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  'Leave your Feedback',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Form(
-                  key: _formKey,
-                  child: _entryField(),
-                ),
-                const SizedBox(
-                  height: 35,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          padding: const EdgeInsets.symmetric(vertical: 13),
-                          decoration: BoxDecoration(
-                            color: KorbilTheme.of(context).white,
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(
-                              color: KorbilTheme.of(context).secondaryColor,
-                            ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Form(
+                key: _formKey,
+                child: _entryField(),
+              ),
+              const SizedBox(
+                height: 35,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        padding: const EdgeInsets.symmetric(vertical: 13),
+                        decoration: BoxDecoration(
+                          color: KorbilTheme.of(context).white,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                            color: KorbilTheme.of(context).secondaryColor,
                           ),
-                          child: Center(
-                            child: Text(
-                              'Close',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: KorbilTheme.of(context).secondaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Close',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: KorbilTheme.of(context).secondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 10,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: BlocBuilder<HelpTopicBloc, HelpTopicState>(
+                      builder: (context, state) {
+                        return state is HelpTopicLoading ? kLoadingWidget(context): PrimaryBtn(
+                          ontap: () {
+                            if (_formKey.currentState!.validate()) {
+                              final payload = <String, dynamic>{
+                                //todo feed back payload
+                              };
+                              context
+                                  .read<HelpTopicBloc>()
+                                  .add(AddFeedback(payload: payload));
+                            }
+                          },
+                          text: 'Submit',
+                          vm: 0,
+                          hm: 0,
+                          fontSize: 14,
+                        );
+                      },
                     ),
-                    Expanded(
-                      child: PrimaryBtn(
-                        ontap: () {
-                          if (_formKey.currentState!.validate()) {
-                            final payload = <String, dynamic>{
-                              //todo feed back payload
-                            };
-                            context
-                                .read<HelpTopicBloc>()
-                                .add(AddFeedback(payload: payload));
-                          }
-                        },
-                        text: 'Submit',
-                        vm: 0,
-                        hm: 0,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-              ],
-            );
-            // : kLoadingWidget(context);
-          },
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+            ],
+          );
+          // : kLoadingWidget(context);
+        },
       ),
     );
   }
@@ -206,8 +213,10 @@ class _FeedBackViewState extends State<FeedBackView> {
     );
   }
 
-  Widget selectCategory(BuildContext context,
-      {required List<String> categories,}) {
+  Widget selectCategory(
+    BuildContext context, {
+    required List<String> categories,
+  }) {
     final items = List.generate(
       categories.length,
       (index) => {'key': categories[index], 'value': categories[index]},

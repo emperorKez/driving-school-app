@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/manage_school_repo.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/models/driving_school.dart';
+import 'package:korbil_mobile/repos/school_repo/school_repo.dart';
+import 'package:korbil_mobile/repos/school_repo/models/driving_school.dart';
 
 part 'school_event.dart';
 part 'school_state.dart';
@@ -23,6 +23,7 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
     on<AddGroupLesson>(onAddGroupLesson);
     on<DeleteGroupLesson>(onDeleteGroupLesson);
     on<UpdateSchoolConfig>(onUpdateSchoolConfig);
+    on<AddStudentToGroupLesson>(onAddStudentToGroupLesson);
   }
   final ManageSchoolRepo _manageSchoolRepo;
 
@@ -38,13 +39,18 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   // }
 
   Future<void> onGetDrivingSchool(
-      GetDrivingSchool event, Emitter<SchoolState> emit,) async {
+    GetDrivingSchool event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     final response =
-        await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+        await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
     if (response.data == null) {
-      return emit(SchoolError(
-          error: response.error?.error.toString() ?? 'Something went wrong',),);
+      return emit(
+        SchoolError(
+          error: response.error?.error.toString() ?? 'Something went wrong',
+        ),
+      );
     } else {
       return emit(
         SchoolLoaded(
@@ -58,9 +64,11 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.addPackage(
-          schoolId: event.schoolId!, payload: event.payload!,);
+        schoolId: event.schoolId,
+        payload: event.payload,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -68,15 +76,17 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onUpdatePackage(
-      UpdatePackage event, Emitter<SchoolState> emit,) async {
+    UpdatePackage event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.updatePackage(
-          schoolId: event.schoolId!,
-          payload: event.payload!,
-          packageId: event.packageId,);
+        payload: event.payload,
+        packageId: event.packageId,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -84,13 +94,16 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onDeletePackage(
-      DeletePackage event, Emitter<SchoolState> emit,) async {
+    DeletePackage event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.deletePackage(
-          schoolId: event.schoolId!, packageId: event.packageId,);
+        packageId: event.packageId,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -101,9 +114,10 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.addVehicle(
-          schoolId: event.schoolId!, payload: event.payload!,);
+        payload: event.payload,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -111,15 +125,17 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onUpdateVehicle(
-      UpdateVehicle event, Emitter<SchoolState> emit,) async {
+    UpdateVehicle event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.updateVehicle(
-          schoolId: event.schoolId!,
-          payload: event.payload!,
-          vehicleId: event.vehicleId,);
+        payload: event.payload,
+        vehicleId: event.vehicleId,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -127,13 +143,16 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onDeleteVehicle(
-      DeleteVehicle event, Emitter<SchoolState> emit,) async {
+    DeleteVehicle event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.deleteVehicle(
-          schoolId: event.schoolId!, vehicleId: event.vehicleId,);
+        vehicleId: event.vehicleId,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -141,13 +160,16 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onAddGroupLesson(
-      AddGroupLesson event, Emitter<SchoolState> emit,) async {
+    AddGroupLesson event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.addGroupLesson(
-          schoolId: event.schoolId!, payload: event.payload!,);
+        payload: event.payload,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -155,15 +177,17 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onUpdateGroupLesson(
-      UpdateGroupLesson event, Emitter<SchoolState> emit,) async {
+    UpdateGroupLesson event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.updateGroupLesson(
-          schoolId: event.schoolId!,
-          payload: event.payload!,
-          groupLessonId: event.groupLessonId,);
+        payload: event.payload,
+        groupLessonId: event.groupLessonId,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -171,13 +195,16 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onDeleteGroupLesson(
-      DeleteGroupLesson event, Emitter<SchoolState> emit,) async {
+    DeleteGroupLesson event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.deleteGroupLesson(
-          schoolId: event.schoolId!, groupLessonId: event.groupLessonId,);
+        groupLessonId: event.groupLessonId,
+      );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
@@ -185,15 +212,33 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onUpdateSchoolConfig(
-      UpdateSchoolConfig event, Emitter<SchoolState> emit,) async {
+    UpdateSchoolConfig event,
+    Emitter<SchoolState> emit,
+  ) async {
     emit(SchoolLoading());
     try {
       await _manageSchoolRepo.updateSchoolConfig(
-        schoolId: event.schoolId!,
-        payload: event.payload!,
+        schoolId: event.schoolId,
+        payload: event.payload,
       );
       final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId!);
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
+      emit(SchoolLoaded(school: response.data));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+    }
+  }
+
+  Future<void> onAddStudentToGroupLesson(
+      AddStudentToGroupLesson event, Emitter<SchoolState> emit) async {
+    emit(SchoolLoading());
+    try {
+      await _manageSchoolRepo.addStudentToGroupLesson(
+        groupLessonId: event.groupLessonId,
+        studentId: event.studentId,
+      );
+      final response =
+          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(school: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
+import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_course/views/add_new_course.dart';
+import 'package:korbil_mobile/repos/school_repo/models/course.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstAddCourse extends StatefulWidget {
@@ -30,73 +35,87 @@ class _AddCourseState extends State<InstAddCourse> {
         leading: const InstAppBarBackBtn(),
         actions: const [_AppBarAction()],
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            const InstLessonCard(), 
-            const InstLessonCard(),
-            const InstLessonCard(),
-            const InstLessonCard(),
-            const InstLessonCard(),
-            const InstLessonCard(),
-            const SizedBox(
-              height: 50,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                      decoration: BoxDecoration(
-                        color: KorbilTheme.of(context).white,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                          color: KorbilTheme.of(context).secondaryColor,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Close',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
+      body: BlocConsumer<CourseBloc, CourseState>(
+        listener: (context, state) {
+          if (state is CourseError){
+            errorSnackbar(context, error: state.error);
+          }
+        },
+        builder: (context, state) {
+          return state is! CourseLoaded ? kLoadingWidget(context) : ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                    state.courses!.length,
+                    (index) => InstLessonCard(
+                          course: state.courses![index],
+                        )),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        padding: const EdgeInsets.symmetric(vertical: 13),
+                        decoration: BoxDecoration(
+                          color: KorbilTheme.of(context).white,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
                             color: KorbilTheme.of(context).secondaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Close',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: KorbilTheme.of(context).secondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                 Expanded(
-                  child: PrimaryBtn(
-                    text: 'Add',
-                    vm: 0,
-                    hm: 0,
-                    fontSize: 14,
-                    ontap: (){
-                      //todo add a course
-
-                    },
+                  const SizedBox(
+                    width: 10,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
+                  Expanded(
+                    child: PrimaryBtn(
+                      text: 'Add',
+                      vm: 0,
+                      hm: 0,
+                      fontSize: 14,
+                      ontap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (cxt) => const InstAddNewCourse(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -104,8 +123,10 @@ class _AddCourseState extends State<InstAddCourse> {
 
 class InstLessonCard extends StatelessWidget {
   const InstLessonCard({
+    required this.course,
     super.key,
   });
+  final Course course;
 
   @override
   Widget build(BuildContext context) {
@@ -113,16 +134,17 @@ class InstLessonCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: KorbilTheme.of(context).white,
-          boxShadow: [
-            BoxShadow(
-              color: KorbilTheme.of(context).alternate2,
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: const Offset(1, 1),
-            ),
-          ],),
+        borderRadius: BorderRadius.circular(8),
+        color: KorbilTheme.of(context).white,
+        boxShadow: [
+          BoxShadow(
+            color: KorbilTheme.of(context).alternate2,
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: const Offset(1, 1),
+          ),
+        ],
+      ),
       child: Row(
         children: [
           Container(
@@ -130,8 +152,9 @@ class InstLessonCard extends StatelessWidget {
             height: 50,
             margin: const EdgeInsets.only(right: 12),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: KorbilTheme.of(context).primaryColor,),
+              borderRadius: BorderRadius.circular(6),
+              color: KorbilTheme.of(context).primaryColor,
+            ),
             child: Center(
               child: Image.asset(
                 'assets/imgs/ins/lessons/traffic_lights.png',
@@ -144,7 +167,7 @@ class InstLessonCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Traffic Light Drive',
+                  course.course.title,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: KorbilTheme.of(context).secondaryColor,
@@ -157,12 +180,15 @@ class InstLessonCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Image.asset(
-                      'assets/imgs/ins/school/group.png',
-                      width: 24,
-                    ),
+                    if (course.courseCategory.icon != null)
+                      Image.network(course.courseCategory.icon!)
+                    else
+                      Image.asset(
+                        'assets/imgs/ins/school/group.png',
+                        width: 24,
+                      ),
                     Text(
-                      'Group',
+                      course.courseCategory.name,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).primaryColor,
@@ -172,7 +198,7 @@ class InstLessonCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Duration : 60 min',
+                      'Duration : ${course.course.timeDuration}',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,

@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/repos/api_service/api_service.dart';
-import 'package:korbil_mobile/repos/manage_school_repo/manage_school_repo.dart';
+import 'package:korbil_mobile/repos/school_repo/school_repo.dart';
 import 'package:korbil_mobile/repos/package_repo/package_repo.dart';
 import 'package:korbil_mobile/repos/pref_storage_repo/pref_storage_repo.dart';
 import 'package:shared_preferences/shared_preferences.dart';

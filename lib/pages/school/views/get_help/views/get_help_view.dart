@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
-import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/pages/school/views/get_help/bloc/help_topic_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/help_bloc/help_topic_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/views/get_help/views/faq.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
@@ -25,6 +25,8 @@ class _GetHelpViewState extends State<GetHelpView> {
 
   @override
   Widget build(BuildContext context) {
+    final helpTopics= context.read<MetadataCubit>().state.helpTopics ?? [];
+
     return Scaffold(
       appBar: getPreferedOrientation(context) == PreferedOrientation.landscape
           ? null
@@ -42,18 +44,7 @@ class _GetHelpViewState extends State<GetHelpView> {
               ),
               leading: const InstAppBarBackBtn(),
             ),
-      body: BlocProvider(
-        create: (context) => HelpTopicBloc()..add(GetAllHelpTopic()),
-        lazy: false,
-        child: BlocConsumer<HelpTopicBloc, HelpTopicState>(
-          listener: (context, state) {
-            if (state is HelpTopicError) {
-              //todo show error widget
-            }
-          },
-          builder: (context, state) {
-            if (state is HelpTopicLoaded) {
-              return Form(
+      body: Form(
                 key: _formKey,
                 child: ListView(
                   shrinkWrap: true,
@@ -62,7 +53,7 @@ class _GetHelpViewState extends State<GetHelpView> {
                     const SizedBox(
                       height: 10,
                     ),
-                    for (final element in state.allHelpTopic!)
+                    for (final element in helpTopics)
                       FaqCard(
                         helpTopic: element,
                       ),
@@ -248,14 +239,9 @@ class _GetHelpViewState extends State<GetHelpView> {
                     ),
                   ],
                 ),
-              );
-            } else {
-              return kLoadingWidget(context);
-            }
-          },
-        ),
-      ),
-    );
+              ));
+          
+       
   }
 
   Widget _entryField({

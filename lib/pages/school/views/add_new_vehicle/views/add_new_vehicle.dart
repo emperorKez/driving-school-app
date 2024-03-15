@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/repos/storage_repo/storage_repo.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class AddNewVehicleView extends StatefulWidget {
@@ -13,6 +20,12 @@ class AddNewVehicleView extends StatefulWidget {
 }
 
 class _AddNewVehicleViewState extends State<AddNewVehicleView> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
+  List<File> imageFiles = [];
+
   @override
   Widget build(BuildContext context) {
     // final s = MediaQuery.of(context).size;
@@ -39,6 +52,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: ListView(
+        shrinkWrap: true,
         children: [
           const SizedBox(
             height: 10,
@@ -67,47 +81,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
           const SizedBox(
             height: 10,
           ),
-          TextFormField(
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: KorbilTheme.of(context).secondaryColor,
-            ),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: KorbilTheme.of(context).alternate1,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: KorbilTheme.of(context).primaryColor,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: KorbilTheme.of(context).warningColor,
-                ),
-              ),
-              contentPadding: const EdgeInsets.only(
-                left: 15,
-                right: 10,
-                top: 5,
-                bottom: 5,
-              ),
-              hintText: 'Location Name',
-              hintStyle: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: KorbilTheme.of(context).alternate1,
-              ),
-            ),
-          ),
+          _entryField(hintText: 'Location Name', controller: nameController),
           const SizedBox(
             height: 15,
           ),
@@ -129,7 +103,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                     const SizedBox(
                       height: 10,
                     ),
-                    _buildDropDown('Select'),
+                    _buildDropDown('Select Transmission'),
                   ],
                 ),
               ),
@@ -173,46 +147,9 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
           const SizedBox(
             height: 10,
           ),
-          TextFormField(
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: KorbilTheme.of(context).secondaryColor,
-            ),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: KorbilTheme.of(context).alternate1,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: KorbilTheme.of(context).primaryColor,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: KorbilTheme.of(context).warningColor,
-                ),
-              ),
-              contentPadding: const EdgeInsets.only(
-                left: 15,
-                right: 10,
-                top: 5,
-                bottom: 5,
-              ),
-              hintText: 'Description',
-              hintStyle: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: KorbilTheme.of(context).alternate1,
-              ),
-            ),
+          _entryField(
+            hintText: 'Description',
+            controller: descriptionController,
           ),
           const SizedBox(
             height: 15,
@@ -229,29 +166,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
           const SizedBox(
             height: 10,
           ),
-          DottedBorder(
-            color: KorbilTheme.of(context).alternate1,
-            strokeWidth: 2,
-            dashPattern: const [8],
-            padding: const EdgeInsets.all(20),
-            strokeCap: StrokeCap.round,
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '+ Upload Images',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: KorbilTheme.of(context).secondaryColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _uploadVehicleImages(),
           const SizedBox(
             height: 15,
           ),
@@ -267,107 +182,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
           const SizedBox(
             height: 10,
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: KorbilTheme.of(context).white,
-              border: Border.all(color: KorbilTheme.of(context).alternate1),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 15),
-                  width: 120,
-                  height: 80,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/imgs/ins/school/car.png',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Toyota Yaris Hybrid',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color:
-                                        KorbilTheme.of(context).secondaryColor,
-                                  ),
-                                ),
-                                Text(
-                                  'Transmission : Auto',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color:
-                                        KorbilTheme.of(context).secondaryColor,
-                                  ),
-                                ),
-                                Text(
-                                  ' Year : 2018',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color:
-                                        KorbilTheme.of(context).secondaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Image.asset(
-                              'assets/imgs/ins/school/note_add.png',
-                              width: 16,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Image.asset(
-                              'assets/imgs/ins/school/delete_icon.png',
-                              width: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam.',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: KorbilTheme.of(context).secondaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          //_showCurrentVehicles(), //todo uncomment this
           const SizedBox(
             height: 45,
           ),
@@ -375,7 +190,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () => Navigator.pop(context),
                   child: Container(
                     // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                     padding: const EdgeInsets.symmetric(vertical: 13),
@@ -403,8 +218,35 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
               const SizedBox(
                 width: 10,
               ),
-              const Expanded(
+              Expanded(
                 child: PrimaryBtn(
+                  ontap: () async {
+                    if (_formKey.currentState!.validate()) {
+                      final schoolId = context
+                          .read<SchoolBloc>()
+                          .state
+                          .school!
+                          .schoolInfo!
+                          .id;
+                      final payload = {
+                        'name': nameController.text,
+                        'description': descriptionController.text,
+                        'transmission': 'string',
+                        'year': 'string',
+                        'schoolId': schoolId,
+                        'images': [
+                          for (final element in imageFiles)
+                            {
+                              'imageKey': (await StorageRepo()
+                                      .uploadDocument(element.path))
+                                  .data!
+                                  .key,
+                            },
+                        ],
+                      };
+// context.read<SchoolBloc>().add(AddVehicle(payload: payload, vehicleId: vehicleId))
+                    }
+                  },
                   text: 'Add',
                   vm: 0,
                   hm: 0,
@@ -417,6 +259,65 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
             height: 50,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _entryField({
+    required String hintText,
+    required TextEditingController controller,
+    bool isMultiLine = false,
+    TextInputType inputType = TextInputType.text,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: inputType,
+      minLines: isMultiLine ? 6 : null,
+      maxLines: isMultiLine ? null : 1,
+      validator: (val) {
+        if (val == null || val.isEmpty) {
+          return 'Enter $hintText';
+        }
+        return null;
+      },
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: KorbilTheme.of(context).secondaryColor,
+      ),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).alternate1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).primaryColor,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).warningColor,
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(
+          left: 15,
+          right: 10,
+          top: 5,
+          bottom: 5,
+        ),
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: KorbilTheme.of(context).alternate1,
+        ),
       ),
     );
   }
@@ -515,41 +416,274 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
       ),
     );
   }
-}
 
-class _SelectedLangCard extends StatelessWidget {
-  const _SelectedLangCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        color: AppColors.grey2,
-      ),
-      child: Row(
-        children: [
-          const Text(
-            'English',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: AppColors.black,
+  Widget _uploadVehicleImages() {
+    return Column(
+      children: [
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: List.generate(
+            imageFiles.length,
+            (index) => SizedBox(
+              height: 100,
+              width: 100,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.file(
+                    imageFiles[index],
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          imageFiles.removeAt(index);
+                        });
+                      },
+                      child: Icon(
+                        Icons.delete,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          const Spacer(),
-          GestureDetector(
-            onTap: () {},
-            child: Image.asset(
-              'assets/imgs/ins/school/bin_green.png',
-              width: 20,
+        ),
+        DottedBorder(
+          color: KorbilTheme.of(context).alternate1,
+          strokeWidth: 2,
+          dashPattern: const [8],
+          padding: const EdgeInsets.all(20),
+          strokeCap: StrokeCap.round,
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    final pickedFiles = await pickVehicleImages() ?? [];
+                    setState(() {
+                      imageFiles.addAll(pickedFiles);
+                    });
+                  },
+                  child: Text(
+                    '+ Upload Images',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: KorbilTheme.of(context).secondaryColor,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Future<List<File>?> pickVehicleImages() async {
+    final result = await FilePicker.platform.pickFiles(
+      withReadStream: true,
+      allowMultiple: true,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+      type: FileType.custom,
+    );
+    if (result != null) {
+      final files = result.paths.map((path) => File(path!)).toList();
+      return files;
+    } else {
+      // User canceled the picker
+      return null;
+    }
+  }
+
+  Widget _showCurrentVehicles() {
+    return BlocBuilder<SchoolBloc, SchoolState>(
+      builder: (context, state) {
+        if (state is! SchoolLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          final vehicles = state.school!.schoolInfo!.vehicles!;
+          return vehicles.isEmpty
+              ? const Center(
+                  child: Text('You do not have any vehicle currently'),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: vehicles.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15,),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: KorbilTheme.of(context).white,
+                        border: Border.all(
+                            color: KorbilTheme.of(context).alternate1,),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 15),
+                            width: 120,
+                            height: 80,
+                            // child: imageFiles.isEmpty ? null : Image.file(imageFiles[0]),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  '${vehicles[index].images[0]}',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            nameController.text,
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              color: KorbilTheme.of(context)
+                                                  .secondaryColor,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Transmission : ${vehicles[index].transmission}',
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w500,
+                                              color: KorbilTheme.of(context)
+                                                  .secondaryColor,
+                                            ),
+                                          ),
+                                          Text(
+                                            ' Year : ${vehicles[index].year}',
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w500,
+                                              color: KorbilTheme.of(context)
+                                                  .secondaryColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        //todo Navigate to Edit vehicle page
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2,),
+                                        child: Image.asset(
+                                          'assets/imgs/ins/school/note_add.png',
+                                          width: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () => context
+                                          .read<SchoolBloc>()
+                                          .add(DeleteVehicle(
+                                              schoolId:
+                                                  state.school!.schoolInfo!.id,
+                                              vehicleId: vehicles[index].id,),),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2,),
+                                        child: Image.asset(
+                                          'assets/imgs/ins/school/delete_icon.png',
+                                          width: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  vehicles[index].description,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    color:
+                                        KorbilTheme.of(context).secondaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+        }
+      },
     );
   }
 }
+
+// class _SelectedLangCard extends StatelessWidget {
+//   const _SelectedLangCard();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: const EdgeInsets.symmetric(vertical: 4),
+//       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(3),
+//         color: AppColors.grey2,
+//       ),
+//       child: Row(
+//         children: [
+//           const Text(
+//             'English',
+//             style: TextStyle(
+//               fontFamily: 'Poppins',
+//               fontSize: 14,
+//               fontWeight: FontWeight.w400,
+//               color: AppColors.black,
+//             ),
+//           ),
+//           const Spacer(),
+//           GestureDetector(
+//             onTap: () {},
+//             child: Image.asset(
+//               'assets/imgs/ins/school/bin_green.png',
+//               width: 20,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

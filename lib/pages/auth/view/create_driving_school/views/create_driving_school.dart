@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +30,9 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
   TextEditingController addressController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+
+  File? registrationDoc;
+  File? logoDoc;
 
   @override
   Widget build(BuildContext context) {
@@ -300,17 +305,28 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                       ],
                                     ),
                                   ),
+                                  if (logoDoc != null)
+                                    SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: Image.file(logoDoc!,
+                                          fit: BoxFit.cover),
+                                    ),
                                   GestureDetector(
-                                      onTap: () async {
-                                        final doc = await pickFile();
-                                        if (doc != null) {
-                                          if (!mounted) return;
-                                          context
-                                              .read<CreateSchoolBloc>()
-                                              .add(UploadLogo(doc));
-                                        }
-                                      },
-                                      child: _renderUploadBtn(),),
+                                    onTap: () async {
+                                      final doc = await pickFile();
+                                      if (doc != null) {
+                                        setState(() {
+                                          logoDoc = doc;
+                                        });
+                                        if (!mounted) return;
+                                        context
+                                            .read<CreateSchoolBloc>()
+                                            .add(UploadLogo(logoDoc!.path));
+                                      }
+                                    },
+                                    child: _renderUploadBtn(),
+                                  ),
                                 ],
                               ),
                             ),
@@ -342,17 +358,28 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                       ],
                                     ),
                                   ),
+                                  if (registrationDoc != null)
+                                    SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: Image.file(registrationDoc!,
+                                          fit: BoxFit.cover),
+                                    ),
                                   GestureDetector(
-                                      onTap: () async {
-                                        final doc = await pickFile();
-                                        if (doc != null) {
-                                          if (!mounted) return;
-                                          context
-                                              .read<CreateSchoolBloc>()
-                                              .add(UploadRegistration(doc));
-                                        }
-                                      },
-                                      child: _renderUploadBtn(),),
+                                    onTap: () async {
+                                      final doc = await pickFile();
+                                      if (doc != null) {
+                                        setState(() {
+                                          registrationDoc = doc;
+                                        });
+                                        if (!mounted) return;
+                                        context.read<CreateSchoolBloc>().add(
+                                            UploadRegistration(
+                                                registrationDoc!.path));
+                                      }
+                                    },
+                                    child: _renderUploadBtn(),
+                                  ),
                                 ],
                               ),
                             ),
@@ -379,17 +406,28 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                     ],
                                   ),
                                 ),
+                                if (logoDoc != null)
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child:
+                                        Image.file(logoDoc!, fit: BoxFit.cover),
+                                  ),
                                 GestureDetector(
-                                    onTap: () async {
-                                      final doc = await pickFile();
-                                      if (doc != null) {
-                                        if (!mounted) return;
-                                        context
-                                            .read<CreateSchoolBloc>()
-                                            .add(UploadLogo(doc));
-                                      }
-                                    },
-                                    child: _renderUploadBtn(),),
+                                  onTap: () async {
+                                    final doc = await pickFile();
+                                    if (doc != null) {
+                                      setState(() {
+                                        logoDoc = doc;
+                                      });
+                                      if (!mounted) return;
+                                      context
+                                          .read<CreateSchoolBloc>()
+                                          .add(UploadLogo(logoDoc!.path));
+                                    }
+                                  },
+                                  child: _renderUploadBtn(),
+                                ),
                               ],
                             ),
                             Column(
@@ -410,17 +448,28 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                     ],
                                   ),
                                 ),
+                                if (registrationDoc != null)
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.file(registrationDoc!,
+                                        fit: BoxFit.cover),
+                                  ),
                                 GestureDetector(
-                                    onTap: () async {
-                                      final doc = await pickFile();
-                                      if (doc != null) {
-                                        if (!mounted) return;
-                                        context
-                                            .read<CreateSchoolBloc>()
-                                            .add(UploadRegistration(doc));
-                                      }
-                                    },
-                                    child: _renderUploadBtn(),),
+                                  onTap: () async {
+                                    final doc = await pickFile();
+                                    if (doc != null) {
+                                      setState(() {
+                                        registrationDoc = doc;
+                                      });
+                                      if (!mounted) return;
+                                      context.read<CreateSchoolBloc>().add(
+                                          UploadRegistration(
+                                              registrationDoc!.path));
+                                    }
+                                  },
+                                  child: _renderUploadBtn(),
+                                ),
                               ],
                             ),
                           ],
@@ -451,8 +500,10 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                         if (state.logo == null) {
                           errorSnackbar(context, error: 'Upload Company logo');
                         } else if (state.companyRegistration == null) {
-                          errorSnackbar(context,
-                              error: 'Upload Company registration document',);
+                          errorSnackbar(
+                            context,
+                            error: 'Upload Company registration document',
+                          );
                         } else {
                           context
                               .read<CreateSchoolBloc>()
@@ -583,12 +634,14 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
     );
   }
 
-  Future<String?> pickFile() async {
+  Future<File?> pickFile() async {
     final result = await FilePicker.platform.pickFiles(
-        allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
-        type: FileType.custom,);
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
+      type: FileType.custom,
+    );
     if (result != null) {
-      return result.files.single.path;
+      final file = File(result.files.single.path!);
+      return file;
     } else {
       // User canceled the picker
       return null;

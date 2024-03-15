@@ -12,7 +12,7 @@ class ApiPaths {
   // static String getLanguageWithId(String id) => 'language/$id';
   // static String updateLanguageWithId(String id) => 'language/$id';
   // static String deleteLanguageWithId(String id) => 'language/$id';
-  static const getAllLanguages = 'metadata/language';
+  
   // static const createNewLanguage = 'metadata/language';
 
   //courseCategory
@@ -42,20 +42,16 @@ class ApiPaths {
   static String getLogoWithId(int id) => 'logo/$id';
   static const createNewLogo = 'logo';
 
-  //userRole
-  static const getAllUserRoles = 'userRole';
+  // //userRole
+  // static const getAllUserRoles = 'userRole';
 
-  //transmission types
-  static const getAllTransmissionTypes = 'transmissionType';
+  // //transmission types
+  // static const getAllTransmissionTypes = 'transmissionType';
 
-  //get all questions
-  static const getAllQuestions = 'question';
+  // //get all questions
+  // static const getAllQuestions = 'question';
 
-  //helpTopic
-  static const getAllHelpTopics = 'metadata/help-topics';
-
-  //feedbackCategory
-  static const getAllAppFeedbackCategories = 'metadata/feedback-categories';
+ 
 
   //subscriptionItem
   static String getSubscriptionItemWithId(int id) => 'subscriptionItem/$id';
@@ -93,11 +89,12 @@ class ApiPaths {
   //school
   static const getAllSchools = 'school';
   static const createNewSchool = 'school';
+  static const validateName = 'school/validate-name';
   static String getSchool(int schoolId) => 'school/$schoolId';
   static String updateSchool(int schoolId) => 'school/$schoolId';
   static String deleteSchool(int schoolId) => 'school/$schoolId';
-  static String updateSchoolConfig(int schoolId) => 'school/$schoolId/configurations';
-
+  static String updateSchoolConfig(int schoolId) =>
+      'school/$schoolId/configurations';
 
   //driving school page info
   static String getDrivingSchoolPage(int schoolId) =>
@@ -110,18 +107,16 @@ class ApiPaths {
       'school/$schoolId/instructor';
 
   //package
-  static String getPackagesOfSchool(int schoolId) => 'school/$schoolId/package';
-  static String addPackageForSchool(int schoolId) => 'school/$schoolId/package';
-  static String updatePackage({
-    required int schoolId,
-    required int packageId,
-  }) =>
-      'school/$schoolId/package/$packageId';
-  static String deletePackageById({
-    required int schoolId,
-    required int packageId,
-  }) =>
-      'school/$schoolId/package/$packageId';
+  static const getPackages = 'package';
+  static const addPackage = 'package';
+  static String updatePackage(
+    int packageId,
+  ) =>
+      'package/$packageId';
+  static String deletePackage(
+    int packageId,
+  ) =>
+      'package/$packageId';
 
   //availabilityException
   static String getAvailabilityException({
@@ -145,9 +140,10 @@ class ApiPaths {
       'school/$schoolId/availabilityException';
 
   //vehicle
-  static String getVehiclesOfSchool(int schoolId) => 'school/$schoolId/vehicle';
-  static String addVehiclesForSchool(int schoolId) =>
-      'school/$schoolId/vehicle';
+  static const getVehicles = 'vehicle';
+  static const addVehicle = 'vehicle';
+  static String updateVehicle(int vehicleId) => 'vehicle/$vehicleId';
+  static String deleteVehicle(int vehicleId) => 'vehicle/$vehicleId';
 
   //instructor
   static String getInstructor(
@@ -181,157 +177,113 @@ class ApiPaths {
       'school/$schoolId/availableDates';
 
   //group lesson
-  static String getGroupLesson(
-          {required int schoolId, required int groupLessonId}) =>
-      'school/$schoolId/groupLesson/$groupLessonId';
-  static String updateGroupLesson({
-    required int schoolId,
-    required int groupLessonId,
-  }) =>
-      'school/$schoolId/groupLesson/$groupLessonId';
-  static String deleteGroupLesson({
-    required int schoolId,
-    required int groupLessonId,
-  }) =>
-      'school/$schoolId/groupLesson/$groupLessonId';
-  static String addGroupLessonForSchool(int schoolId) =>
-      'school/$schoolId/groupLesson';
-  static String getGroupLessonsOfSchool(int schoolId) =>
-      'school/$schoolId/groupLesson';
+  static String getGroupLesson(int groupLessonId) =>
+      'lesson/group/$groupLessonId';
+  static String updateGroupLesson(
+    int groupLessonId,
+  ) =>
+      'lesson/group/$groupLessonId';
+  static String deleteGroupLesson(
+    int groupLessonId,
+  ) =>
+      'lesson/group/$groupLessonId';
+  static const addGroupLesson = 'lesson/group';
+  static const getGroupLessons = 'lesson/group/list';
+  static String addStudentToGroupLesson(
+    int groupLessonId,
+  ) =>
+      'lesson/group/$groupLessonId/add-student';
 
   //course
-  static String updateCourse({required int schoolId, required int courseId}) =>
-      'school/$schoolId/course/$courseId';
-  static String getCourse({required int schoolId, required int courseId}) =>
-      'school/$schoolId/course/$courseId';
-  static String deleteCourse({required int schoolId, required int courseId}) =>
-      'school/$schoolId/course/$courseId';
-  static String addCourse(int schoolId) => 'school/$schoolId/course';
-  static String getCourses(int schoolId) => 'school/$schoolId/course';
+  static String updateCourse(int courseId) => 'course/$courseId';
+  static String getCourse(int courseId) => 'course/$courseId';
+  static String deleteCourse(int courseId) => 'course/$courseId';
+  static const addCourse = 'course';
+  static const getCourses = 'course';
 
   //pickup location
-  static String getLocation({
-    required int schoolId,
-    required int locationId,
-  }) =>
-      'school/$schoolId/school-location/$locationId';
-  static String updateLocation({
-    required int schoolId,
-    required int locationId,
-  }) =>
-      'school/$schoolId/school-location/$locationId';
-  static String deleteLocation({
-    required int schoolId,
-    required int locationId,
-  }) =>
-      'school/$schoolId/school-location/$locationId';
-  static String getSchoolLocations(int schoolId) =>
-      'school/$schoolId/school-location';
-  static String addLocation(int schoolId) => 'school/$schoolId/school-location';
-  static String updateLocationStatusActive(
-          {required int schoolId, required int locationId}) =>
-      'school/$schoolId/school-location/$locationId/active';
-  static String updateLocationStatusInactive(
-          {required int schoolId, required int locationId}) =>
-      'school/$schoolId/school-location/$locationId/inactive';
+  static String getLocation(
+    int locationId,
+  ) =>
+      'school-location/$locationId';
+  // static String updateLocation(
+  //    int locationId,
+  // ) =>
+  //     'school-location/$locationId';
+  static String deleteLocation(
+    int locationId,
+  ) =>
+      'school-location/$locationId';
+  static const getSchoolLocations = 'school-location';
+  static const addLocation = 'school-location';
+  static String updateLocationStatusActive(int locationId) =>
+      'school-location/$locationId/active';
+  static String updateLocationStatusInactive(int locationId) =>
+      'school-location/$locationId/inactive';
 
   //promotion
-  static String getPromotion({
-    required int schoolId,
-    required int promotionId,
-  }) =>
-      'school/$schoolId/promotion/$promotionId';
-  static String updatePromotion({
-    required int schoolId,
-    required int promotionId,
-  }) =>
-      'school/$schoolId/promotion/$promotionId';
-  static String deletePromotion({
-    required int schoolId,
-    required int promotionId,
-  }) =>
-      'school/$schoolId/promotion/$promotionId';
-  static String getAllPromotion(
-    int schoolId,
+  static String getPromotion(
+    int promotionId,
   ) =>
-      'school/$schoolId/promotion';
-  static String addPromotion(
-    int schoolId,
+      'promotion/$promotionId';
+  static String updatePromotion(
+    int promotionId,
   ) =>
-      'school/$schoolId/promotion';
+      'promotion/$promotionId';
+  static String deletePromotion(
+    int promotionId,
+  ) =>
+      'promotion/$promotionId';
+  static const getAllPromotion = 'promotion';
+  static const addPromotion = 'promotion';
 
   //review
-  static String updateReviewList({
-    required int schoolId,
-  }) =>
-      'school/$schoolId/review/list';
-  static String deleteReview({
-    required int schoolId,
-    required int reviewId,
-  }) =>
-      'school/$schoolId/review/$reviewId';
-  static String getReviewsOfSchool(int schoolId) => 'school/$schoolId/review';
-  static String disApproveReview({
-    required int schoolId,
-    required int reviewId,
-  }) =>
-      'school/$schoolId/review/$reviewId/disapprove';
-  static String approveReview({
-    required int schoolId,
-    required int reviewId,
-  }) =>
-      'school/$schoolId/review/$reviewId/approve';
-  static String addReviewForSchool(int schoolId) => 'school/$schoolId/review';
-
-  //vehicle
-  static String updateVehicle(
-          {required int schoolId, required int vehicleId}) =>
-      'school/$schoolId/vehicle/$vehicleId';
-  static String getVehicle({required int schoolId, required int vehicleId}) =>
-      'school/$schoolId/vehicle/$vehicleId';
-  static String deleteVehicle(
-          {required int schoolId, required int vehicleId}) =>
-      'school/$schoolId/vehicle/$vehicleId';
+  static const updateReviewList = 'review/list';
+  static const getReviews = 'review';
+  static String disApproveReview(
+    int reviewId,
+  ) =>
+      'review/$reviewId/disapprove';
+  static String approveReview(
+    int reviewId,
+  ) =>
+      'review/$reviewId/approve';
+  static const addReview = 'review';
 
   //students
   static String getStudents = 'student/by-school';
-  static String createStudents = 'student';
-  static String getStudentById(int studentId) => 'sudent/$studentId';
-  static String updateStudent(int studentId) => 'sudent/$studentId';
-  static String archivetudent(int studentId) => 'sudent/$studentId';
+  static String createStudent = 'student';
+  static String getStudentById(int studentId) => 'student/$studentId';
+  static String updateStudent(int studentId) => 'student/$studentId';
+  static String archiveStudent(int studentId) => 'student/$studentId';
   static String updateStudentAvatar(int studentId) =>
-      'sudent/$studentId/avatar';
+      'student/$studentId/avatar';
   static String declineStudent(int studentId) =>
-      'sudent/$studentId/decline-to-school';
+      'student/$studentId/decline-to-school';
   static String approveStudent({
     required int studentId,
     required int schoolId,
   }) =>
-      'sudent/$studentId/approve-to-school/$schoolId';
+      'student/$studentId/approve-to-school/$schoolId';
 
   //staff
-  static String getAllStaffRoles = 'metadata/staff-roles';
   static String getStaffbyEmail = 'staff';
   static String createStaff = 'staff';
   static String getStaffSchoolInvite = 'staff/pending-school-invite';
   static String getStaffBySchool = 'staff/by-school';
 
+  //metadata
+  static const getAllStaffRoles = 'metadata/staff-roles';
+  static const getLocationType = 'metadata/location-type';
+  static const getVehicleTransmissionTypes = 'metadata/transmission-type';
+  static const getScheduleFlow = 'metadata/schedule-flow';
+  static const getAllDocumentType = 'metadata/document-type';
+  static const getAllinstructorSelectionType = 'metadata/instructor-selection';
+  static const getAllCourseCategories = 'metadata/course-categories';
+  static const getAllHelpTopics = 'metadata/help-topics';
+  static const getAllLanguages = 'metadata/language';
+  static const getAllAppFeedbackCategories = 'metadata/feedback-categories';
+
   //location
   static String suggestLocation = 'location/suggest';
-  static String getLocationType = 'metadata/location-type';
-
-//Vehicle Transmission Types
-  static String getVehicleTransmissionTypes = 'metadata/transmission-type';
-
-//Schedule Flow
-  static String getScheduleFlow = 'metadata/schedule-flow';
-
-//document type
-  static String getAllDocumentType = 'metadata/document-type';
-
-//instructor selection types
-  static String getAllinstructorSelectionType = 'metadata/instructor-selection';
-
-//course categories
-  static String getAllCourseCategories = 'metadata/course-categories';
 }

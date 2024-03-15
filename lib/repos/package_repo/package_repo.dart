@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:korbil_mobile/repos/api_service/api_service.dart';
 import 'package:korbil_mobile/repos/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repos/api_service/models/data_state.dart';
@@ -11,7 +13,7 @@ class PackageRepo {
   final ApiService apiService;
 
   Future<ResponseState<List<Package>>> getAllPackages() async {
-    final res = await apiService.getReq(ApiPaths.getPackagesOfSchool(1));
+    final res = await apiService.getReq(ApiPaths.getPackages);
     if (res.data != null) {
       try {
         final jsonList =

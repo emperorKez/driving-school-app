@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/bloc/promotion/promotion_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_promo/views/alert_content.dart';
-import 'package:korbil_mobile/pages/school/views/manage_promotions/bloc/promotion_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstAddNewPromoView extends StatefulWidget {
@@ -22,7 +22,8 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
   TextEditingController endDateController = TextEditingController();
   TextEditingController detailController = TextEditingController();
 
-  int packageId = 0;
+  int selectedPackageId = 0;
+  bool promoteInHome = true;
 
   Future<bool?> _showConfirmFinishLessonAlert() {
     return showDialog<bool>(
@@ -193,7 +194,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                 ),
                 Switch(
                   value: true,
-                  onChanged: (val) {},
+                  onChanged: (val) => promoteInHome = val,
                   activeColor: KorbilTheme.of(context).primaryColor,
                 ),
               ],
@@ -264,8 +265,8 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                 Expanded(
                   child: BlocBuilder<SchoolBloc, SchoolState>(
                     builder: (context, state) {
-                      return state is SchoolLoaded
-                          ? PrimaryBtn(
+                      return state is SchoolLoading ? kLoadingWidget(context):
+                           PrimaryBtn(
                               text: 'Submit',
                               vm: 0,
                               hm: 0,
@@ -273,13 +274,12 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                               ontap: () async {
                                 if (_formKey.currentState!.validate()) {
                                   final payloadData = <String, dynamic>{
-                                    'schoolPackageId':
-                                        0, //todo school package Id
+                                    'schoolPackageId': selectedPackageId,
                                     'offer': packageTitleController.text,
                                     'startDate': startDateController.text,
                                     'endDate': endDateController.text,
                                     'details': detailController.text,
-                                    'promoteInHome': true,
+                                    'promoteInHome': promoteInHome,
                                   };
                                   if (await _showConfirmFinishLessonAlert() ??
                                       true) {
@@ -294,8 +294,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                   }
                                 }
                               },
-                            )
-                          : kLoadingWidget(context);
+                            );
                     },
                   ),
                 ),
@@ -311,7 +310,9 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
   }
 
   Widget selectPackage(BuildContext context) {
-    final packages = context.read<SchoolBloc>().state.school!.packages;
+    return BlocBuilder<SchoolBloc, SchoolState>(
+      builder: (context, state) {
+        final packages = state.school!.packages;
     final items = List.generate(
       packages!.length,
       (index) => {
@@ -319,37 +320,40 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
         'value': packages[index].schoolPackage.id
       },
     );
-
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: ButtonTheme(
-        alignedDropdown: true,
-        child: DropdownButtonFormField<String>(
-          value: packageId.toString(),
-          decoration: InputDecoration(
-            label: const Text('Select the Package'),
-            contentPadding: EdgeInsets.zero,
-            enabledBorder:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-            focusedBorder:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      return state is! SchoolLoaded ? const SizedBox() :
+         Padding(
+          padding: const EdgeInsets.all(10),
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButtonFormField<int>(
+              value: selectedPackageId,
+              isExpanded: true,
+              decoration: InputDecoration(
+                label: const Text('Select the Package'),
+                contentPadding: EdgeInsets.zero,
+                enabledBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                focusedBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              items: items.map<DropdownMenuItem<int>>((e) {
+                return DropdownMenuItem<int>(
+                  value: e['value'],
+                  child: Text(e['key'].toString()),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedPackageId =value!;
+                });
+              },
+              hint: const Text('Select the Package'),
+              menuMaxHeight: 300,
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
-          items: items.map<DropdownMenuItem<String>>((e) {
-            return DropdownMenuItem<String>(
-              value: e['value'].toString(),
-              child: Text(e['key'].toString()),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              packageId = int.parse(value!);
-            });
-          },
-          hint: const Text('Select the Package'),
-          menuMaxHeight: 300,
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
+        );
+      },
     );
   }
 

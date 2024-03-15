@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
-import 'package:korbil_mobile/pages/school/views/manage_course/bloc/course_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/profile_section.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/student_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/total_lessons.dart';

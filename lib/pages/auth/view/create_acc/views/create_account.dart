@@ -1,5 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,8 @@ import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/view/create_acc/bloc/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/view/login/login.dart';
-import 'package:korbil_mobile/repos/account_repo/models/document_type.dart';
+import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
+import 'package:korbil_mobile/repos/metadata_repo/models/document_type.dart';
 import 'package:korbil_mobile/theme/colors.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -35,6 +38,8 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   TextEditingController phoneController = TextEditingController();
 
   int selectedStaffRole = 1;
+  File? certificateDoc;
+  File? licenceDoc;
 
   Future<void> _showCreateDrivingSchoolAlert() {
     return showDialog<void>(
@@ -114,7 +119,8 @@ class _CreateAccountViewState extends State<CreateAccountView> {
 
   @override
   Widget build(BuildContext context) {
-    // final s = MediaQuery.of(context).size;
+    final documentTypes =
+        context.read<MetadataCubit>().state.documentTypes ?? [];
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.white,
@@ -128,10 +134,6 @@ class _CreateAccountViewState extends State<CreateAccountView> {
             }
           },
           builder: (context, state) {
-            if (state is! CreateAccountLoaded){
-              print(state);
-              return kLoadingWidget(context);
-            } else{
             return ListView(
               shrinkWrap: true,
               children: [
@@ -466,19 +468,37 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                               PreferedOrientation.landscape)
                             Row(
                               children: [
+                                if (certificateDoc != null)
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.file(
+                                      certificateDoc!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 Expanded(
                                   child: _renderUploadInputField(
                                     icon: 'assets/imgs/ins/auth/circle.png',
                                     hint: 'Instructor Certification',
-                                    documentType: state.documentTypes![0],
+                                    documentType: documentTypes[0],
                                   ),
                                 ),
+                                if (licenceDoc != null)
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.file(
+                                      licenceDoc!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 Expanded(
                                   child: _renderUploadInputField(
                                     icon:
                                         'assets/imgs/ins/auth/drivers_licence.png',
                                     hint: 'Upload Driving license',
-                                    documentType: state.documentTypes![1],
+                                    documentType: documentTypes[1],
                                   ),
                                 ),
                               ],
@@ -486,16 +506,34 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           else
                             Column(
                               children: [
+                                if (certificateDoc != null)
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.file(
+                                      certificateDoc!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 _renderUploadInputField(
                                   icon: 'assets/imgs/ins/auth/circle.png',
                                   hint: 'Instructor Certification',
-                                  documentType: state.documentTypes![0],
+                                  documentType: documentTypes[0],
                                 ),
+                                if (licenceDoc != null)
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.file(
+                                      licenceDoc!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 _renderUploadInputField(
                                   icon:
                                       'assets/imgs/ins/auth/drivers_licence.png',
                                   hint: 'Upload Driving license',
-                                  documentType: state.documentTypes![1],
+                                  documentType: documentTypes[1],
                                 ),
                               ],
                             ),
@@ -524,16 +562,21 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           ontap: () {
                             if (_formKey.currentState!.validate()) {
                               if (state.certificate == null) {
-                                errorSnackbar(context,
-                                    error:
-                                        'Upload Instructor Certificate to Continue');
+                                errorSnackbar(
+                                  context,
+                                  error:
+                                      'Upload Instructor Certificate to Continue',
+                                );
                               } else if (state.licence == null) {
-                                errorSnackbar(context,
-                                    error:
-                                        'Upload Driving Licence to Continue');
+                                errorSnackbar(
+                                  context,
+                                  error: 'Upload Driving Licence to Continue',
+                                );
                               } else {
                                 context.read<CreateAccountBloc>().add(
-                                      CreateAccount(payload: getPayLoad(state)),
+                                      CreateAccount(
+                                        payload: getPayLoad(state),
+                                      ),
                                     );
                               }
                             }
@@ -566,8 +609,11 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                                   color: AppColors.green,
                                 ),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () => lc<NavigationService>()
-                                      .navigateTo(rootNavKey, AppRouter.login),
+                                  ..onTap =
+                                      () => lc<NavigationService>().navigateTo(
+                                            rootNavKey,
+                                            AppRouter.login,
+                                          ),
                               ),
                             ],
                           ),
@@ -590,13 +636,16 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           ontap: () {
                             if (_formKey.currentState!.validate()) {
                               if (state.certificate == null) {
-                                errorSnackbar(context,
-                                    error:
-                                        'Upload Instructor Certificate to Continue');
+                                errorSnackbar(
+                                  context,
+                                  error:
+                                      'Upload Instructor Certificate to Continue',
+                                );
                               } else if (state.licence == null) {
-                                errorSnackbar(context,
-                                    error:
-                                        'Upload Driving Licence to Continue');
+                                errorSnackbar(
+                                  context,
+                                  error: 'Upload Driving Licence to Continue',
+                                );
                               } else {
                                 context.read<CreateAccountBloc>().add(
                                       CreateStaff(payload: getPayLoad(state)),
@@ -638,17 +687,18 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 ),
                 const SizedBox(height: 50),
               ],
-            );}
+            );
           },
         ),
       ),
     );
   }
 
-  Container _renderUploadInputField(
-      {required String icon,
-      required String hint,
-      required DocumentType documentType}) {
+  Container _renderUploadInputField({
+    required String icon,
+    required String hint,
+    required DocumentType documentType,
+  }) {
     return Container(
       // padding: const EdgeInsets.symmetric(vertical: 1),
       margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -696,12 +746,18 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                     //Instructor Certification
                     context
                         .read<CreateAccountBloc>()
-                        .add(UploadCertificate(document));
+                        .add(UploadCertificate(document.path));
+                    setState(() {
+                      certificateDoc = document;
+                    });
                   case 2:
                     //Driving License
                     context
                         .read<CreateAccountBloc>()
-                        .add(UploadLicence(document));
+                        .add(UploadLicence(document.path));
+                    setState(() {
+                      licenceDoc = document;
+                    });
                   default:
                 }
               }
@@ -821,7 +877,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   Widget selectUserRole() {
     return BlocBuilder<CreateAccountBloc, CreateAccountState>(
       builder: (context, state) {
-        final staffRoles = state.staffRoles ?? [];
+        final staffRoles = context.read<MetadataCubit>().state.staffRoles ?? [];
         final items = List.generate(
           staffRoles.length,
           (index) =>
@@ -862,11 +918,14 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     );
   }
 
-  Future<String?> pickFile() async {
-    final result = await FilePicker.platform
-        .pickFiles(allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'], type: FileType.custom);
+  Future<File?> pickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
+      type: FileType.custom,
+    );
     if (result != null) {
-      return result.files.single.path;
+      final file = File(result.files.single.path!);
+      return file;
     } else {
       // User canceled the picker
       return null;
