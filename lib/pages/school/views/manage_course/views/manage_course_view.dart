@@ -6,7 +6,6 @@ import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/profile_section.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/student_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/total_lessons.dart';
-import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstManageCourseView extends StatefulWidget {
@@ -136,9 +135,9 @@ class _AppBarMenu extends StatelessWidget {
       onSelected: (value) {
         switch (value) {
           case 'Change user type':
-            context.read<ProfileBloc>().add(ChangeUserType());
+            // context.read<ProfileBloc>().add(ChangeUserType());
           case 'Deactivate user':
-            context.read<ProfileBloc>().add(DeactivateUser());
+            // context.read<ProfileBloc>().add(DeactivateUser());
           default:
         }
       },

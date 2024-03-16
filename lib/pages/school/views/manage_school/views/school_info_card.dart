@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:korbil_mobile/components/snackBar/top_snack_bar.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -14,11 +14,7 @@ class SchoolInfoCard extends StatelessWidget {
     return BlocConsumer<SchoolBloc, SchoolState>(
       listener: (context, state) {
         if (state is SchoolError) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              buildTopSnackbar(context, state.error),
-            );
+          errorSnackbar(context, error: state.error);
         }
       },
       builder: (context, state) {
@@ -36,7 +32,7 @@ class SchoolInfoCard extends StatelessWidget {
                       Border.all(color: KorbilTheme.of(context).primaryColor),
                 ),
                 child: Center(
-                  child: _buildLogo(state.school!.schoolInfo!.logo),
+                  child: _buildLogo(state.schoolInfo!.logo),
                 ),
               ),
               Expanded(
@@ -44,14 +40,37 @@ class SchoolInfoCard extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildSchoolName(state, context),
+                      Text(
+                        state.schoolInfo!.name,
+                        style: customStyle(context),
+                      ),
                       const SizedBox(height: 2),
-                      _buildSchoolPhone(state, context),
+                      Text(
+                        state.schoolInfo!.phoneNumber,
+                        style: customStyle(context),
+                      ),
                       const SizedBox(height: 2),
-                      _buildSchoolEmail(state, context),
+                      Text(
+                        state.schoolInfo!.email,
+                        style: customStyle(context),
+                      ),
                       const SizedBox(height: 2),
-                      _buildAboutUs(state, context),
+                      Text(
+                        'About Us',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: KorbilTheme.of(context).secondaryColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        state.schoolInfo!.description,
+                        style: customStyle(context),
+                      ),
                       const SizedBox(height: 30),
                     ],
                   ),
@@ -64,73 +83,44 @@ class SchoolInfoCard extends StatelessWidget {
     );
   }
 
-  Container _buildAboutUs(SchoolState state, BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'About Us',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: KorbilTheme.of(context).secondaryColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 15),
-          Text(
-            state is SchoolLoading
-                ? '...'
-                : state.school!.schoolInfo!.description,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: KorbilTheme.of(context).secondaryColor,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Container _buildAboutUs(SchoolState state, BuildContext context) {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(horizontal: 25),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           'About Us',
+  //           style: TextStyle(
+  //             fontFamily: 'Poppins',
+  //             color: KorbilTheme.of(context).secondaryColor,
+  //             fontSize: 16,
+  //             fontWeight: FontWeight.w600,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 15),
+  //         Text(
+  //           state is SchoolLoading
+  //               ? '...'
+  //               : state.school!.schoolInfo!.description,
+  //           style: TextStyle(
+  //             fontFamily: 'Poppins',
+  //             color: KorbilTheme.of(context).secondaryColor,
+  //             fontSize: 12,
+  //             fontWeight: FontWeight.w500,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Text _buildSchoolEmail(SchoolState state, BuildContext context) {
-    return Text(
-      state is SchoolLoading ? '...' : state.school!.schoolInfo!.email,
-      style: TextStyle(
+  TextStyle customStyle(BuildContext context) => TextStyle(
         fontFamily: 'Poppins',
         color: KorbilTheme.of(context).secondaryColor,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-      ),
-    );
-  }
-
-  Text _buildSchoolPhone(SchoolState state, BuildContext context) {
-    return Text(
-      state is SchoolLoading ? '...' : state.school!.schoolInfo!.phoneNumber,
-      style: TextStyle(
-        fontFamily: 'Poppins',
-        color: KorbilTheme.of(context).secondaryColor,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-      ),
-    );
-  }
-
-  Text _buildSchoolName(SchoolState state, BuildContext context) {
-    return Text(
-      state is SchoolLoading ? '...' : state.school!.schoolInfo!.name,
-      style: TextStyle(
-        fontFamily: 'Poppins',
-        color: KorbilTheme.of(context).secondaryColor,
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
+      );
 
   Image _buildLogo(String? path) {
     if (path == null) {

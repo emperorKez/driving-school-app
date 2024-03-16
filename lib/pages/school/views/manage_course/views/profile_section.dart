@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
-import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ProfileSection extends StatelessWidget {
@@ -26,13 +26,13 @@ class ProfileSection extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: BlocBuilder<ProfileBloc, ProfileState>(
+          child: BlocBuilder<StaffBloc, StaffState>(
             builder: (context, state) {
-              return state is ProfileLoaded ? Column(
+              return state is StaffLoaded ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${state.profile!.firstName} ${state.profile!.lastName}',
+                    '${state.staff!.profile.firstName} ${state.staff!.profile.lastName}',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 20,
@@ -67,7 +67,7 @@ class ProfileSection extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    state.profile!.phoneNumber!,
+                    state.staff!.profile.phoneNumber,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -76,7 +76,7 @@ class ProfileSection extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    state.profile!.email!,
+                    state.staff!.profile.email,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,

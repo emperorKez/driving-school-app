@@ -6,7 +6,7 @@ import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_course/views/add_new_course.dart';
 import 'package:korbil_mobile/pages/school/views/manage_users/views/pending_user_detail_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_users/views/user_detail_card.dart';
-import 'package:korbil_mobile/repository/school_info/models/driving_school.dart';
+import 'package:korbil_mobile/repository/school_info/models/school_info.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -45,14 +45,14 @@ class _InstManageUsersState extends State<InstManageUsers> {
           if (state is! SchoolLoaded) {
             return kLoadingWidget(context);
           } else {
-            List<Staff> users =[];
-            List<Staff> pendingUsers =[];
-            for (final element in state.school!.staff!) {
+            final users = <Staff>[];
+            final pendingUsers = <Staff>[];
+            for (final element in state.schoolInfo!.staff) {
               if (element.profile.userStatus == 1) {
-                pendingUsers.add(element);                
+                pendingUsers.add(element);
               } else {
                 users.add(element);
-              }              
+              }
             }
             return ListView(
               shrinkWrap: true,

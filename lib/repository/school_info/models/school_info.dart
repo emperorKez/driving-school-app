@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_dynamic_calls
 
-class SchooInfo {
-  SchooInfo({
+class SchoolInfo {
+  SchoolInfo({
     required this.id,
     required this.name,
     required this.description,
@@ -23,7 +23,7 @@ class SchooInfo {
     required this.updatedAt,
   });
 
-  factory SchooInfo.fromJson(Map<String, dynamic> json) => SchooInfo(
+  factory SchoolInfo.fromJson(Map<String, dynamic> json) => SchoolInfo(
         id: json['id'] as int,
         name: json['name'] as String,
         description: json['description'] as String,

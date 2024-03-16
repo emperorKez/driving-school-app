@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
-import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ProfileSection extends StatelessWidget {
@@ -27,10 +27,10 @@ class ProfileSection extends StatelessWidget {
         Expanded(
           child: Container(
             padding: const EdgeInsets.only(left: 12),
-            child: BlocBuilder<SchoolBloc, SchoolState>(
+            child: BlocBuilder<StaffBloc, StaffState>(
               builder: (context, state) {
-                if (state is SchoolLoaded){
-                final profile = state.school!.schoolInfo!.staff[0].profile;
+                if (state is StaffLoaded){
+                final profile = state.staff!.profile;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

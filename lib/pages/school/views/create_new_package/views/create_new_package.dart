@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
+import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_course/views/add_course.dart';
 import 'package:korbil_mobile/pages/school/views/create_new_package/views/price_breakdown_summary.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -19,6 +21,7 @@ class InstCreateNewPackageView extends StatefulWidget {
 class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   TextEditingController detailController = TextEditingController();
   TextEditingController durationController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -28,6 +31,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
   @override
   void initState() {
     priceController.text = '100';
+
     super.initState();
   }
 
@@ -49,7 +53,18 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: _renderMobileBody(),
+      body: BlocListener<PackageBloc, PackageState>(
+        listener: (context, state) {
+          if (state is PackageError) {
+            errorSnackbar(context, error: state.error);
+          }
+          if (state is PackageLoaded) {
+            //todo success snackbar
+            Navigator.pop(context);
+          }
+        },
+        child: _renderMobileBody(),
+      ),
     );
   }
 
@@ -81,6 +96,25 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                 _entryField(
                   controller: titleController,
                   hintText: 'Package Title',
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Package Description',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: KorbilTheme.of(context).secondaryColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _entryField(
+                  controller: descriptionController,
+                  hintText: 'Package Description',
                 ),
                 const SizedBox(
                   height: 15,
@@ -318,29 +352,38 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                 width: 10,
               ),
               Expanded(
-                child: BlocBuilder<SchoolBloc, SchoolState>(
+                child: BlocBuilder<PackageBloc, PackageState>(
                   builder: (context, state) {
-                    return state is! SchoolLoaded
+                    return state is PackageLoading
                         ? kLoadingWidget(context)
                         : PrimaryBtn(
                             ontap: () {
+                              final schoolId = context
+                                  .read<StaffBloc>()
+                                  .state
+                                  .staff!
+                                  .staffData
+                                  .schoolId;
                               if (_formKey.currentState!.validate()) {
                                 final payload = {
                                   'title': titleController.text,
-                                  'description': 'String',
+                                  'description': descriptionController.text,
                                   'details': detailController.text,
                                   'timeDuration':
                                       int.parse(durationController.text),
                                   'price': int.parse(priceController.text),
                                   'isRecommended': isRecommended,
-                                  'schoolId': state.school!.schoolInfo!.id,
+                                  'schoolId': schoolId,
                                   'packageCourseSyllabus': [
                                     {'courseId': 0},
                                   ],
                                 };
-                                context.read<SchoolBloc>().add(AddPackage(
-                                    payload: payload,
-                                    schoolId: state.school!.schoolInfo!.id));
+                                context.read<PackageBloc>().add(
+                                      AddPackage(
+                                        payload: payload,
+                                        schoolId: schoolId,
+                                      ),
+                                    );
                               }
                             },
                             text: 'Add',

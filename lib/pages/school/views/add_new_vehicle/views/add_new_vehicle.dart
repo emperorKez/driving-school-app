@@ -7,9 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
-import 'package:korbil_mobile/repository/storage_repo/storage_repo.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/vehicle/vehicle_bloc.dart';
+import 'package:korbil_mobile/repository/storage/storage_repo.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 enum SelectionType { transmissionType, year }
@@ -48,11 +51,19 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: _renderAddNewVehicleMobileBody(),
+      body: BlocListener<VehicleBloc, VehicleState>(
+        listener: (context, state) {
+          if (state is VehicleError) {
+            errorSnackbar(context, error: state.error);
+          }
+        },
+        child: _renderAddNewVehicleMobileBody(),
+      ),
     );
   }
 
   Container _renderAddNewVehicleMobileBody() {
+    final schoolId = context.read<StaffBloc>().state.staff!.staffData.id;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: ListView(
@@ -223,42 +234,42 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                 width: 10,
               ),
               Expanded(
-                child: PrimaryBtn(
-                  ontap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      final schoolId = context
-                          .read<SchoolBloc>()
-                          .state
-                          .school!
-                          .schoolInfo!
-                          .id;
-                      final payload = {
-                        'name': nameController.text,
-                        'description': descriptionController.text,
-                        'transmission': selectedTransmissionType,
-                        'year': selectedYear.toString(),
-                        'schoolId': schoolId,
-                        'images': [
-                          for (final element in imageFiles)
-                            {
-                              'imageKey': (await StorageRepo()
-                                      .uploadDocument(element.path))
-                                  .data!
-                                  .key,
+                child: BlocBuilder<VehicleBloc, VehicleState>(
+                  builder: (context, state) {
+                    return state is! VehicleLoaded
+                        ? kLoadingWidget(context)
+                        : PrimaryBtn(
+                            ontap: () async {
+                              if (_formKey.currentState!.validate()) {
+                                final payload = {
+                                  'name': nameController.text,
+                                  'description': descriptionController.text,
+                                  'transmission': selectedTransmissionType,
+                                  'year': selectedYear.toString(),
+                                  'schoolId': schoolId,
+                                  'images': [
+                                    for (final element in imageFiles)
+                                      {
+                                        'imageKey': (await StorageRepo()
+                                                .uploadDocument(element.path))
+                                            .data!
+                                            .key,
+                                      },
+                                  ],
+                                };
+                                if (!mounted) return;
+                                context.read<VehicleBloc>().add(AddVehicle(
+                                      payload: payload,
+                                      schoolId: schoolId,
+                                    ),);
+                              }
                             },
-                        ],
-                      };
-                      if (!mounted) return;
-                      context.read<SchoolBloc>().add(AddVehicle(
-                            payload: payload,
-                            schoolId: schoolId,
-                          ));
-                    }
+                            text: 'Add',
+                            vm: 0,
+                            hm: 0,
+                            fontSize: 14,
+                          );
                   },
-                  text: 'Add',
-                  vm: 0,
-                  hm: 0,
-                  fontSize: 14,
                 ),
               ),
             ],
@@ -551,19 +562,19 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
   }
 
   Widget _showCurrentVehicles() {
-    return BlocBuilder<SchoolBloc, SchoolState>(
+    final schoolId = context.read<StaffBloc>().state.staff!.staffData.id;
+    return BlocBuilder<VehicleBloc, VehicleState>(
       builder: (context, state) {
         if (state is! SchoolLoaded) {
           return kLoadingWidget(context);
         } else {
-          final vehicles = state.school!.schoolInfo!.vehicles!;
-          return vehicles.isEmpty
+          return state.vehicles!.isEmpty
               ? const Center(
                   child: Text('You do not have any vehicle currently'),
                 )
               : ListView.builder(
                   shrinkWrap: true,
-                  itemCount: vehicles.length,
+                  itemCount: state.vehicles!.length,
                   itemBuilder: (context, index) {
                     return Container(
                       padding: const EdgeInsets.symmetric(
@@ -588,7 +599,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: NetworkImage(
-                                  '${vehicles[index].images[0]}',
+                                  '${state.vehicles![index].images[0]}',
                                 ),
                                 fit: BoxFit.cover,
                               ),
@@ -617,7 +628,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                             ),
                                           ),
                                           Text(
-                                            'Transmission : ${vehicles[index].transmission}',
+                                            'Transmission : ${state.vehicles![index].transmission}',
                                             style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 10,
@@ -627,7 +638,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                             ),
                                           ),
                                           Text(
-                                            ' Year : ${vehicles[index].year}',
+                                            ' Year : ${state.vehicles![index].year}',
                                             style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 10,
@@ -655,11 +666,11 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                     ),
                                     GestureDetector(
                                       onTap: () =>
-                                          context.read<SchoolBloc>().add(
+                                          context.read<VehicleBloc>().add(
                                                 DeleteVehicle(
-                                                  schoolId: state
-                                                      .school!.schoolInfo!.id,
-                                                  vehicleId: vehicles[index].id,
+                                                  schoolId: schoolId,
+                                                  vehicleId:
+                                                      state.vehicles![index].id,
                                                 ),
                                               ),
                                       child: Container(
@@ -678,7 +689,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                   height: 5,
                                 ),
                                 Text(
-                                  vehicles[index].description,
+                                  state.vehicles![index].description,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 10,

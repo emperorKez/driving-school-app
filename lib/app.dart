@@ -10,8 +10,8 @@ import 'package:korbil_mobile/pages/school/bloc/help_bloc/help_topic_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/promotion/promotion_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/edit_group_lesson/views/edit_group_lesson.dart';
-import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -29,7 +29,7 @@ class _AppState extends State<App> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<SchoolBloc>(
-          create: (context) => SchoolBloc()..add(GetDrivingSchool(schoolId: 1)),
+          create: (context) => SchoolBloc()..add(GetSchool(schoolId: 1)),
           lazy: false,
         ),
         BlocProvider(
@@ -48,7 +48,7 @@ class _AppState extends State<App> {
           lazy: false,
         ),
         BlocProvider(
-          create: (context) => ProfileBloc(),
+          create: (context) => StaffBloc(),
         ),
         BlocProvider(
           create: (context) => CreateSchoolBloc(),

@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/create_new_package/views/create_new_package.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/package_card.dart';
@@ -13,7 +14,7 @@ class PackageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = MediaQuery.sizeOf(context);
-    return BlocBuilder<SchoolBloc, SchoolState>(
+    return BlocBuilder<PackageBloc, PackageState>(
       builder: (context, state) {
         return Column(
           children: [
@@ -31,7 +32,7 @@ class PackageSection extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  for (final element in state.school!.packages!)
+                  for (final element in state.packages!)
                     Text(element.schoolPackage.title), //todo Package card
 
                   PrimaryBtn(
@@ -71,8 +72,11 @@ class PackageSection extends StatelessWidget {
   }
 
   Widget _buildPackagesCarousel(
-      Size size, BuildContext context, SchoolState state,) {
-    if (state.school!.packages!.isEmpty) {
+    Size size,
+    BuildContext context,
+    PackageState state,
+  ) {
+    if (state.packages!.isEmpty) {
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 30),
         child: Center(
@@ -89,7 +93,7 @@ class PackageSection extends StatelessWidget {
       );
     }
     return CarouselSlider(
-      items: state.school!.packages!
+      items: state.packages!
           .map((p) => PackageCard(size: size, package: p))
           .toList(),
       options: CarouselOptions(

@@ -6,7 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
@@ -17,7 +16,7 @@ import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/view/create_acc/bloc/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/view/login/login.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
-import 'package:korbil_mobile/repository/metadata_repo/models/document_type.dart';
+import 'package:korbil_mobile/repository/metadata/models/document_type.dart';
 import 'package:korbil_mobile/theme/colors.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 

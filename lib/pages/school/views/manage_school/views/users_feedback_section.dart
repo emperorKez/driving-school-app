@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
-import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/review/review_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/feedback_card.dart';
 import 'package:korbil_mobile/pages/school/views/users_feedback/views/users_feedback.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -14,15 +14,15 @@ class UsersFeedbackSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SchoolBloc, SchoolState>(listener: (context, state) {
-      if (state is SchoolError) {
+    return BlocConsumer<ReviewBloc, ReviewState>(listener: (context, state) {
+      if (state is ReviewError) {
         errorSnackbar(context, error: state.error);
       }
     }, builder: (context, state) {
-      if (state is! SchoolLoaded) {
+      if (state is! ReviewLoaded) {
         return kLoadingWidget(context);
       } else {
-        final feedback = state.school!.reviews ?? [];
+        final feedback = state.reviews ?? [];
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(

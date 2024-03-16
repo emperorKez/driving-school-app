@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/review/review_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/feedback_card.dart';
-import 'package:korbil_mobile/pages/school/views/users_feedback/cubit/all_feedbacks/all_feedbacks_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/users_feedback/views/pagination_item.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstUsersFeedBackView extends StatelessWidget {
@@ -42,12 +41,12 @@ class InstUsersFeedBackView extends StatelessWidget {
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: BlocBuilder<SchoolBloc, SchoolState>(
+          child: BlocBuilder<ReviewBloc, ReviewState>(
             builder: (context, state) {
               if (state is! SchoolLoaded) {
                 return kLoadingWidget(context);
               } else {
-                final feedback = state.school!.reviews ?? [];
+                final feedback = state.reviews ?? [];
 
                 return feedback.isEmpty
                     ? noFeedbackContainer(context)
@@ -67,22 +66,22 @@ class InstUsersFeedBackView extends StatelessWidget {
     );
   }
 
-  Row _buildPagination(AllFeedbacksState state) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        state.pageCount,
-        (index) {
-          if (index < 7) {
-            return PaginationItem(
-              page: index + 1,
-            );
-          }
-          return Container();
-        },
-      ),
-    );
-  }
+  // Row _buildPagination(AllFeedbacksState state) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: List.generate(
+  //       state.pageCount,
+  //       (index) {
+  //         if (index < 7) {
+  //           return PaginationItem(
+  //             page: index + 1,
+  //           );
+  //         }
+  //         return Container();
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget noFeedbackContainer(BuildContext context) {
     return Container(

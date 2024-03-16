@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
+import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/promotion/promotion_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_promo/views/alert_content.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -56,303 +59,318 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: BlocListener<PromotionBloc, PromotionState>(
+        listener: (context, state) {
+          if (state is PromotionError) {
+            errorSnackbar(context, error: state.error);
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Select the Package',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    selectPackage(context),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Add an Offer',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    _entryField(
+                      controller: packageTitleController,
+                      hintText: 'Package Title',
+                      inputType: TextInputType.number,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Start Date',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: KorbilTheme.of(context).secondaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              _entryField(
+                                controller: startDateController,
+                                hintText: 'Enter Date',
+                                inputType: TextInputType.datetime,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'End Date',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: KorbilTheme.of(context).secondaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              _entryField(
+                                controller: endDateController,
+                                hintText: 'Enter Date',
+                                inputType: TextInputType.datetime,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                'Promotion Details',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: KorbilTheme.of(context).secondaryColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _entryWideField(
+                controller: detailController,
+                hint: 'Promotion Detail',
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Row(
                 children: [
                   Text(
-                    'Select the Package',
+                    'Promote in the Home',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      color: KorbilTheme.of(context).secondaryColor,
-                      fontSize: 14,
+                      color: KorbilTheme.of(context).primaryColor,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  selectPackage(context),
                   const SizedBox(
-                    height: 10,
+                    width: 10,
                   ),
-                  Text(
-                    'Add an Offer',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: KorbilTheme.of(context).secondaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  _entryField(
-                    controller: packageTitleController,
-                    hintText: 'Package Title',
-                    inputType: TextInputType.number,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Start Date',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: KorbilTheme.of(context).secondaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            _entryField(
-                              controller: startDateController,
-                              hintText: 'Enter Date',
-                              inputType: TextInputType.datetime,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'End Date',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: KorbilTheme.of(context).secondaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            _entryField(
-                              controller: endDateController,
-                              hintText: 'Enter Date',
-                              inputType: TextInputType.datetime,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
+                  Switch(
+                    value: true,
+                    onChanged: (val) => promoteInHome = val,
+                    activeColor: KorbilTheme.of(context).primaryColor,
                   ),
                 ],
               ),
-            ),
-            Text(
-              'Promotion Details',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: KorbilTheme.of(context).secondaryColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            _entryWideField(
-              controller: detailController,
-              hint: 'Promotion Detail',
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Row(
-              children: [
-                Text(
-                  'Promote in the Home',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).primaryColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+              Row(
+                children: [
+                  Text(
+                    'Promotion fee:',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Switch(
-                  value: true,
-                  onChanged: (val) => promoteInHome = val,
-                  activeColor: KorbilTheme.of(context).primaryColor,
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Text(
-                  'Promotion fee:',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                  const SizedBox(
+                    width: 7,
                   ),
-                ),
-                const SizedBox(
-                  width: 7,
-                ),
-                Text(
-                  r'25$ One-time',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    r'25$ One-time',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 35,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                      decoration: BoxDecoration(
-                        color: KorbilTheme.of(context).white,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                          color: KorbilTheme.of(context).secondaryColor,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Close',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
+                ],
+              ),
+              const SizedBox(
+                height: 35,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        padding: const EdgeInsets.symmetric(vertical: 13),
+                        decoration: BoxDecoration(
+                          color: KorbilTheme.of(context).white,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
                             color: KorbilTheme.of(context).secondaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Close',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: KorbilTheme.of(context).secondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: BlocBuilder<SchoolBloc, SchoolState>(
-                    builder: (context, state) {
-                      return state is SchoolLoading ? kLoadingWidget(context):
-                           PrimaryBtn(
-                              text: 'Submit',
-                              vm: 0,
-                              hm: 0,
-                              fontSize: 14,
-                              ontap: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  final payloadData = <String, dynamic>{
-                                    'schoolPackageId': selectedPackageId,
-                                    'offer': packageTitleController.text,
-                                    'startDate': startDateController.text,
-                                    'endDate': endDateController.text,
-                                    'details': detailController.text,
-                                    'promoteInHome': promoteInHome,
-                                  };
-                                  if (await _showConfirmFinishLessonAlert() ??
-                                      true) {
-                                    if (!mounted) return;
-                                    context.read<PromotionBloc>().add(
-                                          AddPromotion(
-                                            payload: payloadData,
-                                            schoolId:
-                                                state.school!.schoolInfo!.id,
-                                          ),
-                                        );
-                                  }
-                                }
-                              },
-                            );
-                    },
+                  const SizedBox(
+                    width: 10,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
+                  Expanded(
+                    child: BlocBuilder<PromotionBloc, PromotionState>(
+                      builder: (context, state) {
+                        return state is! PromotionLoaded
+                            ? kLoadingWidget(context)
+                            : PrimaryBtn(
+                                text: 'Submit',
+                                vm: 0,
+                                hm: 0,
+                                fontSize: 14,
+                                ontap: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    final payloadData = <String, dynamic>{
+                                      'schoolPackageId': selectedPackageId,
+                                      'offer': packageTitleController.text,
+                                      'startDate': startDateController.text,
+                                      'endDate': endDateController.text,
+                                      'details': detailController.text,
+                                      'promoteInHome': promoteInHome,
+                                    };
+                                    if (await _showConfirmFinishLessonAlert() ??
+                                        true) {
+                                      if (!mounted) return;
+                                      context.read<PromotionBloc>().add(
+                                            AddPromotion(
+                                              payload: payloadData,
+                                              schoolId: context
+                                                  .read<StaffBloc>()
+                                                  .state
+                                                  .staff!
+                                                  .staffData
+                                                  .id,
+                                            ),
+                                          );
+                                    }
+                                  }
+                                },
+                              );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget selectPackage(BuildContext context) {
-    return BlocBuilder<SchoolBloc, SchoolState>(
+    return BlocBuilder<PackageBloc, PackageState>(
       builder: (context, state) {
-        final packages = state.school!.packages;
-    final items = List.generate(
-      packages!.length,
-      (index) => {
-        'key': packages[index].schoolPackage.price,
-        'value': packages[index].schoolPackage.id
-      },
-    );
-      return state is! SchoolLoaded ? const SizedBox() :
-         Padding(
-          padding: const EdgeInsets.all(10),
-          child: ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButtonFormField<int>(
-              value: selectedPackageId,
-              isExpanded: true,
-              decoration: InputDecoration(
-                label: const Text('Select the Package'),
-                contentPadding: EdgeInsets.zero,
-                enabledBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                focusedBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              items: items.map<DropdownMenuItem<int>>((e) {
-                return DropdownMenuItem<int>(
-                  value: e['value'],
-                  child: Text(e['key'].toString()),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedPackageId =value!;
-                });
-              },
-              hint: const Text('Select the Package'),
-              menuMaxHeight: 300,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+        final packages = state.packages;
+        final items = List.generate(
+          packages!.length,
+          (index) => {
+            'key': packages[index].schoolPackage.price,
+            'value': packages[index].schoolPackage.id,
+          },
         );
+        return state is! SchoolLoaded
+            ? const SizedBox()
+            : Padding(
+                padding: const EdgeInsets.all(10),
+                child: ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButtonFormField<int>(
+                    value: selectedPackageId,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      label: const Text('Select the Package'),
+                      contentPadding: EdgeInsets.zero,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    items: items.map<DropdownMenuItem<int>>((e) {
+                      return DropdownMenuItem<int>(
+                        value: e['value'],
+                        child: Text(e['key'].toString()),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedPackageId = value!;
+                      });
+                    },
+                    hint: const Text('Select the Package'),
+                    menuMaxHeight: 300,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              );
       },
     );
   }

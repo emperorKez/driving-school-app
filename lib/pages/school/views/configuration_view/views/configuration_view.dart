@@ -5,11 +5,11 @@ import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
-import 'package:korbil_mobile/repository/metadata_repo/models/instructor_type.dart';
-import 'package:korbil_mobile/repository/metadata_repo/models/language.dart';
-import 'package:korbil_mobile/repository/metadata_repo/models/schedule_flow.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/repository/metadata/models/instructor_type.dart';
+import 'package:korbil_mobile/repository/metadata/models/language.dart';
+import 'package:korbil_mobile/repository/metadata/models/schedule_flow.dart';
 import 'package:korbil_mobile/theme/theme.dart';
-
 
 class ConfigurationView extends StatefulWidget {
   const ConfigurationView({super.key});
@@ -26,7 +26,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
   @override
   void initState() {
     selectedLanguageIds.addAll(
-      context.read<SchoolBloc>().state.school!.schoolInfo!.languages ?? [],
+      context.read<SchoolBloc>().state.schoolInfo!.languages,
     );
     super.initState();
   }
@@ -53,9 +53,9 @@ class _ConfigurationViewState extends State<ConfigurationView> {
       body: BlocListener<SchoolBloc, SchoolState>(
         listener: (context, state) {
           if (state is SchoolLoaded) {
-            Navigator.pop(context);            
+            Navigator.pop(context);
           }
-          if (state is SchoolError){
+          if (state is SchoolError) {
             errorSnackbar(context, error: state.error);
           }
         },
@@ -180,11 +180,11 @@ class _ConfigurationViewState extends State<ConfigurationView> {
                   context.read<SchoolBloc>().add(
                         UpdateSchoolConfig(
                           schoolId: context
-                              .read<SchoolBloc>()
+                              .read<StaffBloc>()
                               .state
-                              .school!
-                              .schoolInfo!
-                              .id,
+                              .staff!
+                              .staffData
+                              .schoolId,
                           payload: payload,
                         ),
                       );

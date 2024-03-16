@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
-import 'package:korbil_mobile/repository/school_info/models/driving_school.dart';
+import 'package:korbil_mobile/repository/review/model/review.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstFeedBackCard extends StatelessWidget {

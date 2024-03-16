@@ -10,6 +10,7 @@ class AddStudentButon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        //todo go to add student screen
         // Navigator.push(
         //   context,
         //   MaterialPageRoute<dynamic>(

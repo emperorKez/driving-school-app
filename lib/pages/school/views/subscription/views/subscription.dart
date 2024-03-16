@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/subscription/views/package_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -41,7 +42,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
   }
 
   Widget _renderMobileBody(Size s) {
-    return BlocBuilder<SchoolBloc, SchoolState>(
+    return BlocBuilder<PackageBloc, PackageState>(
       builder: (context, state) {
         return ListView(
           children: [
@@ -51,10 +52,10 @@ class _SubscriptionViewState extends State<SubscriptionView> {
             if (state is SchoolLoaded)
               CarouselSlider(
                 items: List.generate(
-                  state.school!.packages!.length,
+                  state.packages!.length,
                   (index) => PackageCard(
                     s: s,
-                    package: state.school!.packages![index],
+                    package: state.packages![index],
                   ),
                 ),
                 options: CarouselOptions(

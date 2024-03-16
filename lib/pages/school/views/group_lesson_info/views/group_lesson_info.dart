@@ -4,6 +4,7 @@ import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/group_lesson/group_lesson_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/edit_group_lesson/views/edit_group_lesson.dart';
 import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/add_studnet_btn.dart';
@@ -25,12 +26,12 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
           ? null
           : _buildAppBar(),
       body: CustomScreenPadding(
-        child: BlocBuilder<SchoolBloc, SchoolState>(
+        child: BlocBuilder<GroupLessonBloc, GroupLessonState>(
           builder: (context, state) {
             return state is SchoolLoaded
                 ? ListView.builder(
                     shrinkWrap: true,
-                    itemCount: state.school!.lessons!.length,
+                    itemCount: state.groupLessons!.length,
                     itemBuilder: (context, index) {
                       ListView(
                         children: [
@@ -49,8 +50,7 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
                               AddStudentButon(),
                             ],
                           ),
-                          for (final element in state.school!.lessons![index]
-                              .groupLessons[0].groupLessonStudentRefs)
+                          for (final element in state.groupLessons![index].lessons[0].groupLessonStudentRefs)
                             InstUserDetailsCard(
                               studentRef: element,
                             ),

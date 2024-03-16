@@ -1,12 +1,14 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/repository/school_info/models/driving_school.dart';
+import 'package:korbil_mobile/repository/package/models/package.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PackageCard extends StatelessWidget {
   const PackageCard({
-    required this.size, required this.package, super.key,
+    required this.size,
+    required this.package,
+    super.key,
   });
 
   final Size size;
@@ -142,7 +144,8 @@ class PackageCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              package.schoolPackage.packageCourseSyllabus!.length.toString(),
+                              package.schoolPackage.packageCourseSyllabus.length
+                                  .toString(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: KorbilTheme.of(context).primaryColor,

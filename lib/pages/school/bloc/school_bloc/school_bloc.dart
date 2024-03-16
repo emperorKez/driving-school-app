@@ -2,39 +2,42 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repository/school_info/models/driving_school.dart';
+import 'package:korbil_mobile/repository/school_info/models/school_info.dart';
 import 'package:korbil_mobile/repository/school_info/school_repo.dart';
 
 part 'school_event.dart';
 part 'school_state.dart';
 
 class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
-  SchoolBloc({ManageSchoolRepo? manageSchoolRepo})
-      : _manageSchoolRepo = manageSchoolRepo ?? ManageSchoolRepo(),
+  SchoolBloc({SchoolRepo? schoolRepo})
+      : _schoolRepo = schoolRepo ?? SchoolRepo(),
         super(SchoolInitial()) {
-    on<GetDrivingSchool>(onGetDrivingSchool);    
+    // on<GetAllSchool>(onGetAllSchool);
+    on<GetSchool>(onGetSchool);
+    on<GetDrivingSchoolPage>(onGetDrivingSchoolPage);
+    on<UpdateSchool>(onUpdateSchool);
+    on<DeleteSchool>(onDeleteSchool);
     on<UpdateSchoolConfig>(onUpdateSchoolConfig);
   }
-  final ManageSchoolRepo _manageSchoolRepo;
+  final SchoolRepo _schoolRepo;
 
-  // Future<void> onGetAllSchools(
+  // Future<void> onGetAllSchool(
   //     GetAllSchools event, Emitter<SchoolState> emit) async {
   //   emit(SchoolLoading());
   //   try {
-  //     final response = await _manageSchoolRepo.getAllSchools();
+  //     final response = await _schoolRepo.getAllSchools();
   //     emit(SchoolLoaded(schoolList: response.data));
   //   } catch (e) {
   //     emit(SchoolError(error: e.toString()));
   //   }
   // }
 
-  Future<void> onGetDrivingSchool(
-    GetDrivingSchool event,
+  Future<void> onGetDrivingSchoolPage(
+    GetDrivingSchoolPage event,
     Emitter<SchoolState> emit,
   ) async {
     emit(SchoolLoading());
-    final response =
-        await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
+    final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
     if (response.data == null) {
       return emit(
         SchoolError(
@@ -44,12 +47,46 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
     } else {
       return emit(
         SchoolLoaded(
-          school: response.data,
+          schoolInfo: response.data,
         ),
       );
     }
   }
 
+  Future<void> onGetSchool(GetSchool event, Emitter<SchoolState> emit) async {
+    emit(SchoolLoading());
+    try {
+      final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
+      emit(SchoolLoaded(schoolInfo: response.data));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+    }
+  }
+
+  Future<void> onUpdateSchool(
+      UpdateSchool event, Emitter<SchoolState> emit) async {
+    emit(SchoolLoading());
+    try {
+      await _schoolRepo.updateSchool(
+          schoolId: event.schoolId, payload: event.payload);
+      final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
+      emit(SchoolLoaded(schoolInfo: response.data));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+    }
+  }
+
+  Future<void> onDeleteSchool(
+      DeleteSchool event, Emitter<SchoolState> emit) async {
+    emit(SchoolLoading());
+    try {
+      await _schoolRepo.deleteSchool(schoolId: event.schoolId);
+      final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
+      emit(SchoolLoaded(schoolInfo: response.data));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+    }
+  }
 
   Future<void> onUpdateSchoolConfig(
     UpdateSchoolConfig event,
@@ -57,16 +94,14 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   ) async {
     emit(SchoolLoading());
     try {
-      await _manageSchoolRepo.updateSchoolConfig(
+      await _schoolRepo.updateSchoolConfig(
         schoolId: event.schoolId,
         payload: event.payload,
       );
-      final response =
-          await _manageSchoolRepo.getSchool(schoolId: event.schoolId);
-      emit(SchoolLoaded(school: response.data));
+      final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
+      emit(SchoolLoaded(schoolInfo: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
     }
   }
-
 }

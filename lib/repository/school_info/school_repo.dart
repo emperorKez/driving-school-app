@@ -4,10 +4,11 @@ import 'package:korbil_mobile/repository/api_service/api_service.dart';
 import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
-import 'package:korbil_mobile/repository/school_info/models/driving_school.dart';
+import 'package:korbil_mobile/repository/school_info/models/driving_school.dart' as driving;
+import 'package:korbil_mobile/repository/school_info/models/school_info.dart';
 
-class ManageSchoolRepo {
-  ManageSchoolRepo();
+class SchoolRepo {
+  SchoolRepo();
 
   final ApiService apiService = ApiService();
   // final PrefStorageRepo prefStorageRepo = PrefStorageRepo();
@@ -30,14 +31,31 @@ class ManageSchoolRepo {
     return ResponseFailed(response.error!);
   }
 
-  Future<ResponseState<DrivingSchool>> getSchool({
+  Future<ResponseState<driving.DrivingSchool>> getDrivingSchoolPage({
     required int schoolId,
   }) async {
     final response =
         await apiService.getReq(ApiPaths.getDrivingSchoolPage(schoolId));
     if (response.data != null) {
       try {
-        final drivingSchool = DrivingSchool.fromJson(
+        final drivingSchool = driving.DrivingSchool.fromJson(
+          response.data!.data['response'] as Map<String, dynamic>,
+        );
+        return ResponseSuccess(drivingSchool);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
+  Future<ResponseState<SchoolInfo>> getSchool({
+    required int schoolId,
+  }) async {
+    final response =
+        await apiService.getReq(ApiPaths.getSchool(schoolId));
+    if (response.data != null) {
+      try {
+        final drivingSchool = SchoolInfo.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
         );
         return ResponseSuccess(drivingSchool);
@@ -48,7 +66,7 @@ class ManageSchoolRepo {
     return ResponseFailed(response.error!);
   }
 
-  Future<ResponseState<DrivingSchool>> updateSchool({
+  Future<ResponseState<SchoolInfo>> updateSchool({
     required int schoolId,
     required Map<String, dynamic> payload,
   }) async {
@@ -58,7 +76,7 @@ class ManageSchoolRepo {
     );
     if (response.data != null) {
       try {
-        final drivingSchool = DrivingSchool.fromJson(
+        final drivingSchool = SchoolInfo.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
         );
         return ResponseSuccess(drivingSchool);
@@ -84,7 +102,38 @@ class ManageSchoolRepo {
     }
   }
 
-  
+  Future<ResponseState<dynamic>> createSchool(
+    Map<String, dynamic> payload,
+  ) async {
+    final response =
+        await apiService.postReq(ApiPaths.createNewSchool, payload: payload);
+    if (response.data != null) {
+      try {
+        final data = response.data!.data;
+        return ResponseSuccess(data);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
+
+  Future<ResponseState<String>> validateName(
+    String name,
+  ) async {
+    final params = {'name': name};
+    final response =
+        await apiService.postReq(ApiPaths.validateName, params: params);
+    if (response.data != null) {
+      try {
+        final data = response.data!.data as String;
+        return ResponseSuccess(data);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
 
   Future<ResponseState<dynamic>> updateSchoolConfig({
     required int schoolId,
@@ -103,5 +152,4 @@ class ManageSchoolRepo {
       return ResponseFailed(DataError(null, e));
     }
   }
-
 }
