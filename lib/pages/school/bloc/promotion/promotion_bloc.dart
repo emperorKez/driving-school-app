@@ -2,40 +2,42 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/school_repo/models/promotion.dart';
-import 'package:korbil_mobile/repos/school_repo/school_repo.dart';
+import 'package:korbil_mobile/repository/promotion/model/promotion.dart';
+import 'package:korbil_mobile/repository/promotion/promotion_repo.dart';
 
 part 'promotion_event.dart';
 part 'promotion_state.dart';
 
 class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
-  PromotionBloc({ManageSchoolRepo? manageSchoolRepo})
-      : _manageSchoolRepo = manageSchoolRepo ?? ManageSchoolRepo(),
+  PromotionBloc({PromotionRepo? promotionRepo})
+      : _promotionRepo = promotionRepo ?? PromotionRepo(),
         super(PromotionInitial()) {
     on<GetPromotions>(onGetPromotions);
     on<AddPromotion>(onAddPromotion);
     on<UpdatePromotion>(onUpdatePromotion);
     on<DeletePromotion>(onDeletePromotion);
   }
-  final ManageSchoolRepo _manageSchoolRepo;
+  final PromotionRepo _promotionRepo;
 
   Future<void> onGetPromotions(
       GetPromotions event, Emitter<PromotionState> emit) async {
     emit(PromotionLoading());
     try {
-      final promotions = await _manageSchoolRepo.getPromotions(event.schoolId);
+      final promotions = await _promotionRepo.getPromotions(event.schoolId);
       emit(PromotionLoaded(allPromotion: promotions.data));
-    } catch (e) {}
+    } catch (e) {
+      emit(PromotionError(error: e.toString()));
+    }
   }
 
   Future<void> onAddPromotion(
       AddPromotion event, Emitter<PromotionState> emit) async {
     emit(PromotionLoading());
     try {
-      await _manageSchoolRepo.addPromotion(
+      await _promotionRepo.addPromotion(
         payload: event.payload,
       );
-      final promotions = await _manageSchoolRepo.getPromotions(event.schoolId);
+      final promotions = await _promotionRepo.getPromotions(event.schoolId);
       emit(PromotionLoaded(allPromotion: promotions.data));
     } catch (e) {
       emit(PromotionError(error: e.toString()));
@@ -46,9 +48,9 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
       UpdatePromotion event, Emitter<PromotionState> emit) async {
     emit(PromotionLoading());
     try {
-      await _manageSchoolRepo.updatePromotion(
+      await _promotionRepo.updatePromotion(
           payload: event.payload, promotionId: event.promotionId);
-      final promotions = await _manageSchoolRepo.getPromotions(event.schoolId);
+      final promotions = await _promotionRepo.getPromotions(event.schoolId);
       emit(PromotionLoaded(allPromotion: promotions.data));
     } catch (e) {
       emit(PromotionError(error: e.toString()));
@@ -59,8 +61,8 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
       DeletePromotion event, Emitter<PromotionState> emit) async {
     emit(PromotionLoading());
     try {
-      await _manageSchoolRepo.deletePromotion(promotionId: event.promotionId);
-      final promotions = await _manageSchoolRepo.getPromotions(event.schoolId);
+      await _promotionRepo.deletePromotion(promotionId: event.promotionId);
+      final promotions = await _promotionRepo.getPromotions(event.schoolId);
       emit(PromotionLoaded(allPromotion: promotions.data));
     } catch (e) {
       emit(PromotionError(error: e.toString()));

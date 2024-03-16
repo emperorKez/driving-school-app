@@ -7,10 +7,13 @@ sealed class StudentState {
 }
 
 final class StudentInitial extends StudentState {}
+
 final class Studentloading extends StudentState {}
+
 final class StudentLoaded extends StudentState {
   const StudentLoaded({required super.studentList});
 }
+
 final class StudentError extends StudentState {
   const StudentError({required this.error});
 

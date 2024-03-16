@@ -81,7 +81,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                     height: 10,
                   ),
                   _entryField(
-                      hintText: 'Course Title', controller: titleController),
+                      hintText: 'Course Title', controller: titleController,),
                   const SizedBox(
                     height: 15,
                   ),
@@ -101,7 +101,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                       hintText: 'Course Details',
                       controller: detailController,
                       isMultiLine: true,
-                      inputType: TextInputType.multiline),
+                      inputType: TextInputType.multiline,),
                   const SizedBox(
                     height: 15,
                   ),
@@ -159,7 +159,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                           bottomLeft: Radius.circular(8),
                         ),
                         border: Border.all(
-                            color: KorbilTheme.of(context).alternate1),
+                            color: KorbilTheme.of(context).alternate1,),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +203,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                           bottomRight: Radius.circular(8),
                         ),
                         border: Border.all(
-                            color: KorbilTheme.of(context).alternate1),
+                            color: KorbilTheme.of(context).alternate1,),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -266,7 +266,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                           bottomLeft: Radius.circular(8),
                         ),
                         border: Border.all(
-                            color: KorbilTheme.of(context).alternate1),
+                            color: KorbilTheme.of(context).alternate1,),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -310,7 +310,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                           bottomRight: Radius.circular(8),
                         ),
                         border: Border.all(
-                            color: KorbilTheme.of(context).alternate1),
+                            color: KorbilTheme.of(context).alternate1,),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -380,12 +380,12 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                           ontap: () {
                             if (_formKey.currentState!.validate()) {
                               final payload = {
-                                'id': 0
+                                'id': 0,
                                 //todo payload
                               };
                               //todo get school Id for the staff
                               context.read<CourseBloc>().add(
-                                  AddCourse(payload: payload, schoolId: 1));
+                                  AddCourse(payload: payload, schoolId: 1),);
                             }
                           },
                           text: 'Add',

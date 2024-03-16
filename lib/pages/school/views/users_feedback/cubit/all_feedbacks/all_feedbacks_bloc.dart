@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/school_repo/school_repo.dart';
-import 'package:korbil_mobile/repos/school_repo/models/review.dart';
+import 'package:korbil_mobile/repository/school_info/school_repo.dart';
+import 'package:korbil_mobile/repository/school_info/models/review.dart';
 import 'package:meta/meta.dart';
 
 part 'all_feedbacks_event.dart';

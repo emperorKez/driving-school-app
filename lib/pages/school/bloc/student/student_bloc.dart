@@ -1,15 +1,17 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:korbil_mobile/repos/student_repo/models/student.dart';
-import 'package:korbil_mobile/repos/student_repo/student_repo.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:korbil_mobile/repository/student/models/student.dart';
+import 'package:korbil_mobile/repository/student/student_repo.dart';
 
 part 'student_event.dart';
 part 'student_state.dart';
 
 class StudentBloc extends Bloc<StudentEvent, StudentState> {
-  StudentBloc({StudentRepo? studentRepo}) : _studentRepo = studentRepo ?? StudentRepo(), super(StudentInitial()) {
+  StudentBloc({StudentRepo? studentRepo})
+      : _studentRepo = studentRepo ?? StudentRepo(),
+        super(StudentInitial()) {
     on<GetAllStudent>(onGetAllStudent);
     on<GetStudent>(onGetStudent);
     on<CreateStudent>(onCreateStudent);
@@ -21,7 +23,8 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   }
   final StudentRepo _studentRepo;
 
-  Future<void> onGetAllStudent(GetAllStudent event, Emitter<StudentState> emit) async {
+  Future<void> onGetAllStudent(
+      GetAllStudent event, Emitter<StudentState> emit) async {
     emit(Studentloading());
     try {
       final response = await _studentRepo.getAllStudent(event.schoolId);
@@ -31,24 +34,23 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     }
   }
 
-  FutureOr<void> onGetStudent(GetStudent event, Emitter<StudentState> emit) {
-  }
+  FutureOr<void> onGetStudent(GetStudent event, Emitter<StudentState> emit) {}
 
-  FutureOr<void> onCreateStudent(CreateStudent event, Emitter<StudentState> emit) {
-  }
+  FutureOr<void> onCreateStudent(
+      CreateStudent event, Emitter<StudentState> emit) {}
 
-  FutureOr<void> onUpdateStudent(UpdateStudent event, Emitter<StudentState> emit) {
-  }
+  FutureOr<void> onUpdateStudent(
+      UpdateStudent event, Emitter<StudentState> emit) {}
 
-  FutureOr<void> onDeleteStudent(DeleteStudent event, Emitter<StudentState> emit) {
-  }
+  FutureOr<void> onDeleteStudent(
+      DeleteStudent event, Emitter<StudentState> emit) {}
 
-  FutureOr<void> onUpdateStudentAvatar(UpdateStudentAvatar event, Emitter<StudentState> emit) {
-  }
+  FutureOr<void> onUpdateStudentAvatar(
+      UpdateStudentAvatar event, Emitter<StudentState> emit) {}
 
-  FutureOr<void> onDeclineStudent(DeclineStudent event, Emitter<StudentState> emit) {
-  }
+  FutureOr<void> onDeclineStudent(
+      DeclineStudent event, Emitter<StudentState> emit) {}
 
-  FutureOr<void> onApproveStudent(ApproveStudent event, Emitter<StudentState> emit) {
-  }
+  FutureOr<void> onApproveStudent(
+      ApproveStudent event, Emitter<StudentState> emit) {}
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_course/views/add_course.dart';
 import 'package:korbil_mobile/pages/school/views/create_new_package/views/price_breakdown_summary.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -14,6 +17,20 @@ class InstCreateNewPackageView extends StatefulWidget {
 }
 
 class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController detailController = TextEditingController();
+  TextEditingController durationController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+
+  bool isRecommended = true;
+
+  @override
+  void initState() {
+    priceController.text = '100';
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +62,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
             height: 15,
           ),
           Form(
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -60,46 +78,9 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                 const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: KorbilTheme.of(context).secondaryColor,
-                  ),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).alternate1,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).primaryColor,
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).warningColor,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.only(
-                      left: 15,
-                      right: 10,
-                      top: 5,
-                      bottom: 5,
-                    ),
-                    hintText: 'Package Title',
-                    hintStyle: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: KorbilTheme.of(context).alternate1,
-                    ),
-                  ),
+                _entryField(
+                  controller: titleController,
+                  hintText: 'Package Title',
                 ),
                 const SizedBox(
                   height: 15,
@@ -116,49 +97,11 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                 const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: KorbilTheme.of(context).secondaryColor,
-                  ),
-                  maxLines: null,
-                  minLines: 6,
-                  scrollPadding: const EdgeInsets.all(8),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).alternate1,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).primaryColor,
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).warningColor,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.only(
-                      left: 15,
-                      right: 10,
-                      top: 15,
-                      bottom: 5,
-                    ),
-                    hintText: 'Package Details',
-                    hintStyle: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: KorbilTheme.of(context).alternate1,
-                    ),
-                  ),
+                _entryField(
+                  controller: detailController,
+                  hintText: 'Package Details',
+                  isMultiline: true,
+                  inputType: TextInputType.multiline,
                 ),
                 const SizedBox(
                   height: 15,
@@ -170,7 +113,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Time Duration',
+                            'Time Duration (Minutes)',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: KorbilTheme.of(context).secondaryColor,
@@ -181,75 +124,52 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                           const SizedBox(
                             height: 10,
                           ),
-                          TextFormField(
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: KorbilTheme.of(context).secondaryColor,
-                            ),
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              // isDense: true,
-                              suffixIconConstraints: const BoxConstraints(
-                                maxHeight: 48,
-                              ),
-                              suffixIcon: Container(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(
-                                      height: 2,
+                          _entryField(
+                            controller: durationController,
+                            hintText: 'Time Duration',
+                            inputType: TextInputType.number,
+                            suffixIcon: Container(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      var intValue =
+                                          int.parse(durationController.text);
+                                      intValue += 1;
+                                      setState(() {
+                                        durationController.text =
+                                            intValue.toString();
+                                      });
+                                    },
+                                    child: Image.asset(
+                                      'assets/imgs/ins/school/drop_up.png',
+                                      width: 12,
                                     ),
-                                    GestureDetector(
-                                      child: Image.asset(
-                                        'assets/imgs/ins/school/drop_up.png',
-                                        width: 12,
-                                      ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      var intValue =
+                                          int.parse(durationController.text);
+                                      intValue -= 1;
+                                      setState(() {
+                                        durationController.text =
+                                            intValue.toString();
+                                      });
+                                    },
+                                    child: Image.asset(
+                                      'assets/imgs/ins/school/drop_down.png',
+                                      width: 12,
                                     ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    GestureDetector(
-                                      child: Image.asset(
-                                        'assets/imgs/ins/school/drop_down.png',
-                                        width: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: KorbilTheme.of(context).alternate1,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: KorbilTheme.of(context).primaryColor,
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: KorbilTheme.of(context).warningColor,
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.only(
-                                left: 15,
-                                right: 15,
-                                top: 12,
-                                bottom: 12,
-                              ),
-                              hintText: 'Package Title',
-                              hintStyle: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: KorbilTheme.of(context).alternate1,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -275,58 +195,18 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                           const SizedBox(
                             height: 10,
                           ),
-                          TextFormField(
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: KorbilTheme.of(context).secondaryColor,
-                            ),
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              // isDense: true,
-                              suffixIconConstraints: const BoxConstraints(
-                                maxHeight: 48,
-                              ),
-                              suffixIcon: Container(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Image.asset(
-                                  'assets/imgs/ins/school/dollar.png',
-                                  width: 13,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: KorbilTheme.of(context).alternate1,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: KorbilTheme.of(context).primaryColor,
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: KorbilTheme.of(context).warningColor,
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.only(
-                                left: 15,
-                                right: 15,
-                                top: 12,
-                                bottom: 12,
-                              ),
-                              hintText: 'Package Title',
-                              hintStyle: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: KorbilTheme.of(context).alternate1,
+                          _entryField(
+                            controller: priceController,
+                            hintText: 'Price',
+                            inputType: TextInputType.number,
+                            suffixIcon: Container(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Image.asset(
+                                'assets/imgs/ins/school/dollar.png',
+                                width: 13,
                               ),
                             ),
+                            onChanged: (val) => setState(() {}),
                           ),
                         ],
                       ),
@@ -351,7 +231,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
           const SizedBox(
             height: 20,
           ),
-          const PriceBreakdownSummaryCard(),
+          PriceBreakdownSummaryCard(price: int.parse(priceController.text)),
           const SizedBox(
             height: 30,
           ),
@@ -392,8 +272,12 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                 width: 10,
               ),
               Switch(
-                value: true,
-                onChanged: (val) {},
+                value: isRecommended,
+                onChanged: (val) {
+                  setState(() {
+                    isRecommended = val;
+                  });
+                },
                 activeColor: KorbilTheme.of(context).primaryColor,
               ),
             ],
@@ -405,7 +289,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () => Navigator.pop(context),
                   child: Container(
                     // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                     padding: const EdgeInsets.symmetric(vertical: 13),
@@ -433,12 +317,38 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
               const SizedBox(
                 width: 10,
               ),
-              const Expanded(
-                child: PrimaryBtn(
-                  text: 'Add',
-                  vm: 0,
-                  hm: 0,
-                  fontSize: 14,
+              Expanded(
+                child: BlocBuilder<SchoolBloc, SchoolState>(
+                  builder: (context, state) {
+                    return state is! SchoolLoaded
+                        ? kLoadingWidget(context)
+                        : PrimaryBtn(
+                            ontap: () {
+                              if (_formKey.currentState!.validate()) {
+                                final payload = {
+                                  'title': titleController.text,
+                                  'description': 'String',
+                                  'details': detailController.text,
+                                  'timeDuration':
+                                      int.parse(durationController.text),
+                                  'price': int.parse(priceController.text),
+                                  'isRecommended': isRecommended,
+                                  'schoolId': state.school!.schoolInfo!.id,
+                                  'packageCourseSyllabus': [
+                                    {'courseId': 0},
+                                  ],
+                                };
+                                context.read<SchoolBloc>().add(AddPackage(
+                                    payload: payload,
+                                    schoolId: state.school!.schoolInfo!.id));
+                              }
+                            },
+                            text: 'Add',
+                            vm: 0,
+                            hm: 0,
+                            fontSize: 14,
+                          );
+                  },
                 ),
               ),
             ],
@@ -450,4 +360,98 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
       ),
     );
   }
+
+  Widget _entryField({
+    required TextEditingController controller,
+    required String hintText,
+    TextInputType inputType = TextInputType.text,
+    bool isMultiline = false,
+    Widget? suffixIcon,
+    void Function(String)? onChanged,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: inputType,
+      minLines: isMultiline ? 6 : null,
+      maxLines: isMultiline ? null : 1,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter $hintText';
+        }
+        return null;
+      },
+      onChanged: onChanged,
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: KorbilTheme.of(context).secondaryColor,
+      ),
+      decoration: InputDecoration(
+        // isDense: true,
+        suffixIconConstraints: const BoxConstraints(
+          maxHeight: 48,
+        ),
+        suffixIcon: suffixIcon,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).alternate1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).primaryColor,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).warningColor,
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(
+          left: 15,
+          right: 15,
+          top: 12,
+          bottom: 12,
+        ),
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: KorbilTheme.of(context).alternate1,
+        ),
+      ),
+    );
+  }
+
+  // Container(
+  //                               padding: const EdgeInsets.only(right: 10),
+  //                               child: Column(
+  //                                 mainAxisAlignment: MainAxisAlignment.center,
+  //                                 children: [
+  //                                   const SizedBox(
+  //                                     height: 2,
+  //                                   ),
+  //                                   GestureDetector(
+  //                                     child: Image.asset(
+  //                                       'assets/imgs/ins/school/drop_up.png',
+  //                                       width: 12,
+  //                                     ),
+  //                                   ),
+  //                                   const SizedBox(
+  //                                     height: 5,
+  //                                   ),
+  //                                   GestureDetector(
+  //                                     child: Image.asset(
+  //                                       'assets/imgs/ins/school/drop_down.png',
+  //                                       width: 12,
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
 }

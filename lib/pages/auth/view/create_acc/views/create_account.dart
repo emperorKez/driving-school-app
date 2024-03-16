@@ -17,7 +17,7 @@ import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/view/create_acc/bloc/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/view/login/login.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/document_type.dart';
+import 'package:korbil_mobile/repository/metadata_repo/models/document_type.dart';
 import 'package:korbil_mobile/theme/colors.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 

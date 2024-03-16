@@ -6,7 +6,7 @@ import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_course/views/add_new_course.dart';
-import 'package:korbil_mobile/repos/school_repo/models/course.dart';
+import 'package:korbil_mobile/repository/course/model/course.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstAddCourse extends StatefulWidget {

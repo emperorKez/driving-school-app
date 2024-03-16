@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/account_repo/account_repo.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/document_type.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/staff_role.dart';
-import 'package:korbil_mobile/repos/storage_repo/model/upload.dart';
+import 'package:korbil_mobile/repository/account_repo/account_repo.dart';
+import 'package:korbil_mobile/repository/metadata_repo/models/document_type.dart';
+import 'package:korbil_mobile/repository/metadata_repo/models/staff_role.dart';
+import 'package:korbil_mobile/repository/storage_repo/model/upload.dart';
 
 part 'create_account_event.dart';
 part 'create_account_state.dart';

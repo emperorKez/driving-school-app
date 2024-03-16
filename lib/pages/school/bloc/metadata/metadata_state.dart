@@ -2,17 +2,18 @@ part of 'metadata_cubit.dart';
 
 @immutable
 sealed class MetadataState {
-  MetadataState(
-      {this.transmisionTypes,
-      this.languages,
-      this.scheduleFlows,
-      this.courseCategories,
-      this.instructorTypes,
-      this.helpTopics,
-      this.feedbackCategories,
-      this.documentTypes,
-      this.staffRoles,
-      this.locationTypes,});
+  const MetadataState({
+    this.transmisionTypes,
+    this.languages,
+    this.scheduleFlows,
+    this.courseCategories,
+    this.instructorTypes,
+    this.helpTopics,
+    this.feedbackCategories,
+    this.documentTypes,
+    this.staffRoles,
+    this.locationTypes,
+  });
 
   final List<String>? transmisionTypes;
   final List<Language>? languages;
@@ -31,21 +32,22 @@ final class MetadataInitial extends MetadataState {}
 final class MetadataLoading extends MetadataState {}
 
 final class MetadataLoaded extends MetadataState {
-  MetadataLoaded(
-      {required super.transmisionTypes,
-      required super.languages,
-      required super.scheduleFlows,
-      required super.courseCategories,
-      required super.instructorTypes,
-      required super.helpTopics,
-      required super.feedbackCategories,
-      required super.documentTypes,
-      required super.staffRoles,
-      required super.locationTypes,});
+  const MetadataLoaded({
+    required super.transmisionTypes,
+    required super.languages,
+    required super.scheduleFlows,
+    required super.courseCategories,
+    required super.instructorTypes,
+    required super.helpTopics,
+    required super.feedbackCategories,
+    required super.documentTypes,
+    required super.staffRoles,
+    required super.locationTypes,
+  });
 }
 
 final class MetadataError extends MetadataState {
-  MetadataError({this.error = 'Something went wrong'});
+  const MetadataError({this.error = 'Something went wrong'});
 
   final String error;
 }

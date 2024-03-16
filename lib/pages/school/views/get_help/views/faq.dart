@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/help_topic.dart';
+import 'package:korbil_mobile/repository/metadata_repo/models/help_topic.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class FaqCard extends StatefulWidget {

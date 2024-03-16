@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/school_repo/models/driving_school.dart';
+import 'package:korbil_mobile/repository/school_info/models/driving_school.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstUserDetailsCard extends StatelessWidget {

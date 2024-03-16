@@ -7,10 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
-import 'package:korbil_mobile/repos/storage_repo/storage_repo.dart';
+import 'package:korbil_mobile/repository/storage_repo/storage_repo.dart';
 import 'package:korbil_mobile/theme/theme.dart';
+
+enum SelectionType { transmissionType, year }
 
 class AddNewVehicleView extends StatefulWidget {
   const AddNewVehicleView({super.key});
@@ -25,6 +27,8 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
   TextEditingController descriptionController = TextEditingController();
 
   List<File> imageFiles = [];
+  String selectedTransmissionType = '';
+  int selectedYear = 2015;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +107,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                     const SizedBox(
                       height: 10,
                     ),
-                    _buildDropDown('Select Transmission'),
+                    _selectTransmissionType(),
                   ],
                 ),
               ),
@@ -126,7 +130,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                     const SizedBox(
                       height: 10,
                     ),
-                    _buildDropDown('Select'),
+                    _selectYear(),
                   ],
                 ),
               ),
@@ -182,7 +186,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
           const SizedBox(
             height: 10,
           ),
-          //_showCurrentVehicles(), //todo uncomment this
+          _showCurrentVehicles(),
           const SizedBox(
             height: 45,
           ),
@@ -231,8 +235,8 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                       final payload = {
                         'name': nameController.text,
                         'description': descriptionController.text,
-                        'transmission': 'string',
-                        'year': 'string',
+                        'transmission': selectedTransmissionType,
+                        'year': selectedYear.toString(),
                         'schoolId': schoolId,
                         'images': [
                           for (final element in imageFiles)
@@ -244,7 +248,11 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                             },
                         ],
                       };
-// context.read<SchoolBloc>().add(AddVehicle(payload: payload, vehicleId: vehicleId))
+                      if (!mounted) return;
+                      context.read<SchoolBloc>().add(AddVehicle(
+                            payload: payload,
+                            schoolId: schoolId,
+                          ));
                     }
                   },
                   text: 'Add',
@@ -361,7 +369,14 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
     );
   }
 
-  Container _buildDropDown(String hint) {
+  Widget _selectTransmissionType() {
+    final transmissionTypes =
+        context.read<MetadataCubit>().state.transmisionTypes ?? [];
+    final items = List.generate(
+      transmissionTypes.length,
+      (index) =>
+          {'key': transmissionTypes[index], 'value': transmissionTypes[index]},
+    );
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.symmetric(
@@ -376,7 +391,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
         underline: Container(),
         iconSize: 25,
         hint: Text(
-          hint,
+          'Select Transmission',
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
@@ -386,33 +401,61 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
         ),
         iconDisabledColor: KorbilTheme.of(context).secondaryColor,
         iconEnabledColor: KorbilTheme.of(context).secondaryColor,
-        items: [
-          DropdownMenuItem<String>(
-            value: 'item1',
-            child: Text(
-              'Item 1',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: KorbilTheme.of(context).secondaryColor,
-              ),
-            ),
+        items: items.map<DropdownMenuItem<String>>((e) {
+          return DropdownMenuItem<String>(
+            value: e['value'],
+            child: Text(e['key']!),
+          );
+        }).toList(),
+        onChanged: (val) {
+          setState(() {
+            selectedTransmissionType = val!;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _selectYear() {
+    final items = List.generate(
+      15,
+      (index) => {'key': 2000 + index, 'value': 2000 + index},
+    );
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: KorbilTheme.of(context).alternate1),
+      ),
+      child: DropdownButton<int>(
+        isExpanded: true,
+        underline: Container(),
+        iconSize: 25,
+        hint: Text(
+          'Select Year',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: KorbilTheme.of(context).alternate1,
           ),
-          DropdownMenuItem<String>(
-            value: 'item2',
-            child: Text(
-              'Item 2',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: KorbilTheme.of(context).secondaryColor,
-              ),
-            ),
-          ),
-        ],
-        onChanged: (val) {},
+        ),
+        iconDisabledColor: KorbilTheme.of(context).secondaryColor,
+        iconEnabledColor: KorbilTheme.of(context).secondaryColor,
+        items: items.map<DropdownMenuItem<int>>((e) {
+          return DropdownMenuItem<int>(
+            value: e['value'],
+            child: Text(e['key']! as String),
+          );
+        }).toList(),
+        onChanged: (val) {
+          setState(() {
+            selectedYear = val!;
+          });
+        },
       ),
     );
   }
@@ -524,12 +567,15 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                   itemBuilder: (context, index) {
                     return Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15,),
+                        horizontal: 15,
+                        vertical: 15,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: KorbilTheme.of(context).white,
                         border: Border.all(
-                            color: KorbilTheme.of(context).alternate1,),
+                          color: KorbilTheme.of(context).alternate1,
+                        ),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -599,7 +645,8 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 2,),
+                                          horizontal: 2,
+                                        ),
                                         child: Image.asset(
                                           'assets/imgs/ins/school/note_add.png',
                                           width: 16,
@@ -607,15 +654,18 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: () => context
-                                          .read<SchoolBloc>()
-                                          .add(DeleteVehicle(
-                                              schoolId:
-                                                  state.school!.schoolInfo!.id,
-                                              vehicleId: vehicles[index].id,),),
+                                      onTap: () =>
+                                          context.read<SchoolBloc>().add(
+                                                DeleteVehicle(
+                                                  schoolId: state
+                                                      .school!.schoolInfo!.id,
+                                                  vehicleId: vehicles[index].id,
+                                                ),
+                                              ),
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 2,),
+                                          horizontal: 2,
+                                        ),
                                         child: Image.asset(
                                           'assets/imgs/ins/school/delete_icon.png',
                                           width: 16,

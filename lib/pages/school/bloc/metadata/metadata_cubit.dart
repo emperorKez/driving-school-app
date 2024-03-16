@@ -1,14 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repos/metadata_repo/metadata_repo.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/document_type.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/help_topic.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/instructor_type.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/language.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/location_type.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/schedule_flow.dart';
-import 'package:korbil_mobile/repos/metadata_repo/models/staff_role.dart';
-import 'package:korbil_mobile/repos/school_repo/models/course.dart';
+import 'package:korbil_mobile/repository/course/model/course.dart';
+import 'package:korbil_mobile/repository/metadata/metadata_repo.dart';
+import 'package:korbil_mobile/repository/metadata/models/document_type.dart';
+import 'package:korbil_mobile/repository/metadata/models/help_topic.dart';
+import 'package:korbil_mobile/repository/metadata/models/instructor_type.dart';
+import 'package:korbil_mobile/repository/metadata/models/language.dart';
+import 'package:korbil_mobile/repository/metadata/models/location_type.dart';
+import 'package:korbil_mobile/repository/metadata/models/schedule_flow.dart';
+import 'package:korbil_mobile/repository/metadata/models/staff_role.dart';
 
 part 'metadata_state.dart';
 

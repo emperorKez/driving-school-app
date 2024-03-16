@@ -6,7 +6,7 @@ import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_course/views/add_new_course.dart';
 import 'package:korbil_mobile/pages/school/views/manage_users/views/pending_user_detail_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_users/views/user_detail_card.dart';
-import 'package:korbil_mobile/repos/school_repo/models/driving_school.dart';
+import 'package:korbil_mobile/repository/school_info/models/driving_school.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 

@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:korbil_mobile/pages/auth/view/create_driving_school/bloc/validator/suggest_address_validator.dart';
-import 'package:korbil_mobile/repos/account_repo/account_repo.dart';
-import 'package:korbil_mobile/repos/account_repo/models/location.dart';
-import 'package:korbil_mobile/repos/storage_repo/model/upload.dart';
+import 'package:korbil_mobile/repository/account_repo/account_repo.dart';
+import 'package:korbil_mobile/repository/account_repo/models/location.dart';
+import 'package:korbil_mobile/repository/storage_repo/model/upload.dart';
 import 'package:meta/meta.dart';
 
 part 'create_school_event.dart';

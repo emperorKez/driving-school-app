@@ -10,7 +10,7 @@ import 'package:korbil_mobile/pages/school/bloc/help_bloc/help_topic_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/promotion/promotion_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/add_new_vehicle/views/add_new_vehicle.dart';
+import 'package:korbil_mobile/pages/school/views/edit_group_lesson/views/edit_group_lesson.dart';
 import 'package:korbil_mobile/pages/school/views/school_settings/bloc/profile/profile_bloc.dart';
 
 class App extends StatefulWidget {
@@ -29,20 +29,18 @@ class _AppState extends State<App> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<SchoolBloc>(
-          create: (context) =>
-              SchoolBloc()..add(GetDrivingSchool(schoolId: 1)),
+          create: (context) => SchoolBloc()..add(GetDrivingSchool(schoolId: 1)),
           lazy: false,
         ),
         BlocProvider(
-          create: (context) => CreateAccountBloc()..add(GetMetadata()),
-          lazy: false,
+          create: (context) => CreateAccountBloc(),
         ),
         BlocProvider(
           create: (context) => PromotionBloc()..add(GetPromotions(schoolId: 1)),
           lazy: false,
         ),
         BlocProvider(
-          create: (context) => CourseBloc()..add( GetCourses(schoolId: 1)),
+          create: (context) => CourseBloc()..add(GetCourses(schoolId: 1)),
           lazy: false,
         ),
         BlocProvider(
@@ -54,10 +52,10 @@ class _AppState extends State<App> {
         ),
         BlocProvider(
           create: (context) => CreateSchoolBloc(),
-        ), 
+        ),
         BlocProvider(
           create: (context) => MetadataCubit()..getMetadata(),
-        ), 
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -76,7 +74,7 @@ class _AppState extends State<App> {
         themeMode: _themeMode,
         navigatorKey: rootNavKey,
         // initialRoute: AppRouter.getStarted,
-        home: AddNewVehicleView(),
+        home: EditGroupLessonView(),
         onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );

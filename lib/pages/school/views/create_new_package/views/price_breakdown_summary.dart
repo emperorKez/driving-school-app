@@ -3,11 +3,16 @@ import 'package:korbil_mobile/theme/theme.dart';
 
 class PriceBreakdownSummaryCard extends StatelessWidget {
   const PriceBreakdownSummaryCard({
+    required this.price,
     super.key,
   });
+  final int price;
 
   @override
   Widget build(BuildContext context) {
+    final fees = (0.01 * price).round(); //1% of price
+    final earnings = (0.99 * price).round(); //99% of price
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
@@ -33,7 +38,7 @@ class PriceBreakdownSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                r'100$',
+                '$price\$',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -59,7 +64,7 @@ class PriceBreakdownSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                r'-1$',
+                '-$fees\$',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -85,7 +90,7 @@ class PriceBreakdownSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                r'99$',
+                '$earnings\$',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
