@@ -5,6 +5,7 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstAddNewCourse extends StatefulWidget {
@@ -20,8 +21,8 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
   TextEditingController detailController = TextEditingController();
   TextEditingController durationController = TextEditingController();
 
-  String _selectedCourseCategory = 'Group';
-  String _selectedCourseType = 'Practical';
+  int _selectedCourseCategory = 0;
+  int _selectedCourseType = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -41,367 +42,390 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: _renderMobileBody(),
+      body: BlocListener<CourseBloc, CourseState>(
+        listener: (context, state) {
+          if (state is CourseError) {
+            errorSnackbar(context, error: state.error);
+          }
+          if (state is CourseLoaded) {
+            Navigator.pop(context);
+          }
+        },
+        child: _renderMobileBody(),
+      ),
     );
   }
 
   Widget _renderMobileBody() {
-    return BlocConsumer<CourseBloc, CourseState>(
-      listener: (context, state) {
-        if (state is CourseError) {
-          errorSnackbar(context, error: state.error);
-        }
-        if (state is CourseLoaded) {
-          Navigator.pop(context);
-        }
-      },
-      builder: (context, state) {
-        return ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.symmetric(horizontal: 25),
+    return ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      children: [
+        const SizedBox(
+          height: 15,
+        ),
+        Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Package Title',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: KorbilTheme.of(context).secondaryColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _entryField(
+                hintText: 'Course Title',
+                controller: titleController,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Course Details',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: KorbilTheme.of(context).secondaryColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _entryField(
+                hintText: 'Course Details',
+                controller: detailController,
+                isMultiLine: true,
+                inputType: TextInputType.multiline,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Time Duration (minutes)',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: KorbilTheme.of(context).secondaryColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _durationEntryField(),
+              const SizedBox(
+                height: 15,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Text(
+          'Course Category',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: KorbilTheme.of(context).secondaryColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
           children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Package Title',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: KorbilTheme.of(context).secondaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedCourseCategory =
+                        0; //todo know categoryId for group and individual course
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    color: _selectedCourseCategory == 0
+                        ? KorbilTheme.of(context).primaryColor
+                        : KorbilTheme.of(context).white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    ),
+                    border: Border.all(
+                      color: KorbilTheme.of(context).alternate1,
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _entryField(
-                      hintText: 'Course Title', controller: titleController,),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    'Course Details',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: KorbilTheme.of(context).secondaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _entryField(
-                      hintText: 'Course Details',
-                      controller: detailController,
-                      isMultiLine: true,
-                      inputType: TextInputType.multiline,),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    'Time Duration (minutes)',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: KorbilTheme.of(context).secondaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _durationEntryField(),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text(
-              'Course Category',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: KorbilTheme.of(context).secondaryColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedCourseCategory = 'Group';
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      decoration: BoxDecoration(
-                        color: _selectedCourseCategory == 'Group'
-                            ? KorbilTheme.of(context).primaryColor
-                            : KorbilTheme.of(context).white,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomLeft: Radius.circular(8),
-                        ),
-                        border: Border.all(
-                            color: KorbilTheme.of(context).alternate1,),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/imgs/ins/school/group_black.png',
+                        height: 15,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/imgs/ins/school/group_black.png',
-                            height: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Group',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: KorbilTheme.of(context).secondaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
+                      const SizedBox(
+                        width: 10,
                       ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedCourseCategory = 'Individual';
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      decoration: BoxDecoration(
-                        color: _selectedCourseCategory == 'Individual'
-                            ? KorbilTheme.of(context).primaryColor
-                            : KorbilTheme.of(context).white,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                        ),
-                        border: Border.all(
-                            color: KorbilTheme.of(context).alternate1,),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/imgs/ins/school/individual_black.png',
-                            height: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Individual',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: KorbilTheme.of(context).secondaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Text(
-              'Course Type',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: KorbilTheme.of(context).secondaryColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedCourseType = 'Theory';
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      decoration: BoxDecoration(
-                        color: _selectedCourseType == 'Theory'
-                            ? KorbilTheme.of(context).primaryColor
-                            : KorbilTheme.of(context).white,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomLeft: Radius.circular(8),
-                        ),
-                        border: Border.all(
-                            color: KorbilTheme.of(context).alternate1,),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/imgs/ins/school/road_sign.png',
-                            height: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Theory',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: KorbilTheme.of(context).secondaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedCourseType = 'Practical';
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      decoration: BoxDecoration(
-                        color: _selectedCourseType == 'Practical'
-                            ? KorbilTheme.of(context).primaryColor
-                            : KorbilTheme.of(context).white,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                        ),
-                        border: Border.all(
-                            color: KorbilTheme.of(context).alternate1,),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/imgs/ins/school/steering_wheel.png',
-                            height: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Practical',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: KorbilTheme.of(context).secondaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 35,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                      decoration: BoxDecoration(
-                        color: KorbilTheme.of(context).white,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
+                      Text(
+                        'Group',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      child: Center(
-                        child: Text(
-                          'Close',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: KorbilTheme.of(context).secondaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedCourseCategory = 1;
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    color: _selectedCourseCategory == 1
+                        ? KorbilTheme.of(context).primaryColor
+                        : KorbilTheme.of(context).white,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    ),
+                    border: Border.all(
+                      color: KorbilTheme.of(context).alternate1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/imgs/ins/school/individual_black.png',
+                        height: 15,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Individual',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: KorbilTheme.of(context).secondaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        Text(
+          'Course Type',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: KorbilTheme.of(context).secondaryColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedCourseType = 0; //todo courseTypeId = 0 for theory
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    color: _selectedCourseType == 0
+                        ? KorbilTheme.of(context).primaryColor
+                        : KorbilTheme.of(context).white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    ),
+                    border: Border.all(
+                      color: KorbilTheme.of(context).alternate1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/imgs/ins/school/road_sign.png',
+                        height: 15,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Theory',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: KorbilTheme.of(context).secondaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedCourseType =
+                        1; //todo courseTypeId = 1 for practical
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    color: _selectedCourseType == 1
+                        ? KorbilTheme.of(context).primaryColor
+                        : KorbilTheme.of(context).white,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    ),
+                    border: Border.all(
+                      color: KorbilTheme.of(context).alternate1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/imgs/ins/school/steering_wheel.png',
+                        height: 15,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Practical',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: KorbilTheme.of(context).secondaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 35,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  padding: const EdgeInsets.symmetric(vertical: 13),
+                  decoration: BoxDecoration(
+                    color: KorbilTheme.of(context).white,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: KorbilTheme.of(context).secondaryColor,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Close',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: state is CourseLoading
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: BlocBuilder<CourseBloc, CourseState>(
+                builder: (context, state) {
+                  return state is! CourseLoaded
                       ? kLoadingWidget(context)
                       : PrimaryBtn(
                           ontap: () {
+                            final schoolId = context
+                                .read<StaffBloc>()
+                                .state
+                                .staff!
+                                .staffData
+                                .schoolId;
                             if (_formKey.currentState!.validate()) {
                               final payload = {
-                                'id': 0,
-                                //todo payload
+                                'title': titleController.text,
+                                'details': detailController.text,
+                                'timeDuration':
+                                    int.parse(durationController.text),
+                                'courseCategoryId': _selectedCourseCategory,
+                                'schoolId': schoolId,
+                                'courseTypeId': _selectedCourseType,
                               };
-                              //todo get school Id for the staff
                               context.read<CourseBloc>().add(
-                                  AddCourse(payload: payload, schoolId: 1),);
+                                    AddCourse(
+                                        payload: payload, schoolId: schoolId),
+                                  );
                             }
                           },
                           text: 'Add',
                           vm: 0,
                           hm: 0,
                           fontSize: 14,
-                        ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 40,
+                        );
+                },
+              ),
             ),
           ],
-        );
-      },
+        ),
+        const SizedBox(
+          height: 40,
+        ),
+      ],
     );
   }
 

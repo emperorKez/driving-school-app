@@ -5,6 +5,8 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/pages/school/bloc/help_bloc/help_topic_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
+import 'package:korbil_mobile/pages/school/bloc/review/review_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -22,7 +24,8 @@ class _FeedBackViewState extends State<FeedBackView> {
 
   @override
   Widget build(BuildContext context) {
-    final feedbackCategories =  context.read<MetadataCubit>().state.feedbackCategories ?? [];
+    final feedbackCategories =
+        context.read<MetadataCubit>().state.feedbackCategories ?? [];
     return Scaffold(
       appBar: getPreferedOrientation(context) == PreferedOrientation.landscape
           ? null
@@ -130,24 +133,35 @@ class _FeedBackViewState extends State<FeedBackView> {
                     width: 10,
                   ),
                   Expanded(
-                    child: BlocBuilder<HelpTopicBloc, HelpTopicState>(
+                    child: BlocBuilder<ReviewBloc, ReviewState>(
                       builder: (context, state) {
-                        return state is HelpTopicLoading ? kLoadingWidget(context): PrimaryBtn(
-                          ontap: () {
-                            if (_formKey.currentState!.validate()) {
-                              final payload = <String, dynamic>{
-                                //todo feed back payload
-                              };
-                              context
-                                  .read<HelpTopicBloc>()
-                                  .add(AddFeedback(payload: payload));
-                            }
-                          },
-                          text: 'Submit',
-                          vm: 0,
-                          hm: 0,
-                          fontSize: 14,
-                        );
+                        return state is! ReviewLoaded
+                            ? kLoadingWidget(context)
+                            : PrimaryBtn(
+                                ontap: () {
+                                  final schoolId = context
+                                      .read<StaffBloc>()
+                                      .state
+                                      .staff!
+                                      .staffData
+                                      .schoolId;
+                                  if (_formKey.currentState!.validate()) {
+                                    final payload = <String, dynamic>{
+                                      'studentId': 0,
+                                      'schoolId': schoolId,
+                                      'date': DateTime.now().toIso8601String(),
+                                      'stars': 0, //todo get the stars
+                                      'comment': feedbackController.text
+                                    };
+                                    context.read<ReviewBloc>().add(AddReview(
+                                        payload: payload, schoolId: schoolId));
+                                  }
+                                },
+                                text: 'Submit',
+                                vm: 0,
+                                hm: 0,
+                                fontSize: 14,
+                              );
                       },
                     ),
                   ),

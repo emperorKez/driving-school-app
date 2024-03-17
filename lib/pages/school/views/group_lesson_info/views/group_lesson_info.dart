@@ -5,14 +5,16 @@ import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/school/bloc/group_lesson/group_lesson_bloc.dart';
-import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/edit_group_lesson/views/edit_group_lesson.dart';
 import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/add_studnet_btn.dart';
 import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/details_card.dart';
+import 'package:korbil_mobile/repository/group_lesson/models/group_lesson.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class GroupLessonInfo extends StatefulWidget {
-  const GroupLessonInfo({super.key});
+  const GroupLessonInfo({required this.lesson, super.key});
+  final Lesson lesson;
 
   @override
   State<GroupLessonInfo> createState() => _GroupLessonInfoState();
@@ -28,38 +30,32 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
       body: CustomScreenPadding(
         child: BlocBuilder<GroupLessonBloc, GroupLessonState>(
           builder: (context, state) {
-            return state is SchoolLoaded
-                ? ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.groupLessons!.length,
-                    itemBuilder: (context, index) {
-                      ListView(
+            return state is! GroupLessonLoaded
+                ? kLoadingWidget(context)
+                : ListView(
+                    children: [
+                      const Row(
                         children: [
-                          const Row(
-                            children: [
-                              Text(
-                                'Students',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: AppColors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Spacer(),
-                              AddStudentButon(),
-                            ],
-                          ),
-                          for (final element in state.groupLessons![index].lessons[0].groupLessonStudentRefs)
-                            InstUserDetailsCard(
-                              studentRef: element,
+                          Text(
+                            'Students',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: AppColors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
+                          ),
+                          Spacer(),
+                          AddStudentButon(),
                         ],
-                      );
-                      return null;
-                    },
-                  )
-                : kLoadingWidget(context);
+                      ),
+                      for (final element
+                          in widget.lesson.groupLessonStudentRefs)
+                        InstUserDetailsCard(
+                          studentRef: element,
+                        ),
+                    ],
+                  );
           },
         ),
       ),
@@ -89,7 +85,9 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
                   Navigator.push(
                     context,
                     MaterialPageRoute<dynamic>(
-                      builder: (_) => const EditGroupLessonView(),
+                      builder: (_) => EditGroupLessonView(
+                        lesson: widget.lesson,
+                      ),
                     ),
                   );
                 },
@@ -104,8 +102,17 @@ class _GroupLessonInfoState extends State<GroupLessonInfo> {
                 ),
               ),
             ),
-            const PopupMenuItem(
-              child: Text(
+            PopupMenuItem(
+              onTap: () => context.read<GroupLessonBloc>().add(
+                  DeleteGroupLesson(
+                      groupLessonId: widget.lesson.id,
+                      schoolId: context
+                          .read<StaffBloc>()
+                          .state
+                          .staff!
+                          .staffData
+                          .schoolId,),),
+              child: const Text(
                 'Delete Group',
                 style: TextStyle(
                   fontFamily: 'Poppins',

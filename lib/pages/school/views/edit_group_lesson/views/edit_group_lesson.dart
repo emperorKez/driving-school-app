@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/group_lesson/group_lesson_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/repository/group_lesson/models/group_lesson.dart';
+import 'package:korbil_mobile/theme/theme.dart';
 
 class EditGroupLessonView extends StatefulWidget {
-  const EditGroupLessonView({super.key});
+  const EditGroupLessonView({required this.lesson, super.key});
+  final Lesson lesson;
 
   @override
   State<EditGroupLessonView> createState() => _EditGroupLessonViewState();
 }
 
 class _EditGroupLessonViewState extends State<EditGroupLessonView> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController seatController = TextEditingController();
+  int selectedStaffId = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +43,7 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
       ),
       body: CustomScreenPadding(
         child: ListView(
+          shrinkWrap: true,
           children: [
             const SizedBox(
               height: 10,
@@ -55,12 +69,12 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: AppColors.grey1),
               ),
-              child: DropdownButton<String>(
+              child: DropdownButton<dynamic>(
                 isExpanded: true,
                 underline: Container(),
                 iconSize: 25,
                 hint: const Text(
-                  'Glenn Musa',
+                  'Select Instructor',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -70,33 +84,23 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
                 ),
                 iconDisabledColor: AppColors.black,
                 iconEnabledColor: AppColors.black,
-                items: const [
-                  DropdownMenuItem<String>(
-                    value: 'item1',
-                    child: Text(
-                      'Item 1',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                    ),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'item2',
-                    child: Text(
-                      'Item 2',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                    ),
-                  ),
-                ],
-                onChanged: (val) {},
+                items: context
+                    .read<SchoolBloc>()
+                    .state
+                    .schoolInfo!
+                    .staff
+                    .map<DropdownMenuItem<dynamic>>((e) {
+                  return DropdownMenuItem<dynamic>(
+                    value: e.staffData.id,
+                    child:
+                        Text('${e.profile.firstName} ${e.profile.firstName}'),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  setState(() {
+                    selectedStaffId = val as int;
+                  });
+                },
               ),
             ),
             const SizedBox(
@@ -140,6 +144,13 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
                               height: 2,
                             ),
                             GestureDetector(
+                              onTap: () {
+                                var intValue = int.parse(seatController.text);
+                                intValue += 1;
+                                setState(() {
+                                  seatController.text = intValue.toString();
+                                });
+                              },
                               child: Image.asset(
                                 'assets/imgs/ins/school/drop_up.png',
                                 width: 12,
@@ -149,6 +160,13 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
                               height: 5,
                             ),
                             GestureDetector(
+                              onTap: () {
+                                var intValue = int.parse(seatController.text);
+                                intValue -= 1;
+                                setState(() {
+                                  seatController.text = intValue.toString();
+                                });
+                              },
                               child: Image.asset(
                                 'assets/imgs/ins/school/drop_down.png',
                                 width: 12,
@@ -195,6 +213,75 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
             ),
             const SizedBox(
               height: 80,
+            ),
+            const SizedBox(
+              height: 35,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 13),
+                      decoration: BoxDecoration(
+                        color: KorbilTheme.of(context).white,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: KorbilTheme.of(context).secondaryColor,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Close',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: KorbilTheme.of(context).secondaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: BlocBuilder<GroupLessonBloc, GroupLessonState>(
+                    builder: (context, state) {
+                      return state is! GroupLessonLoaded
+                          ? kLoadingWidget(context)
+                          : PrimaryBtn(
+                              ontap: () {
+                                final schoolId = context
+                                    .read<StaffBloc>()
+                                    .state
+                                    .staff!
+                                    .staffData
+                                    .schoolId;
+                                if (_formKey.currentState!.validate()) {
+                                  final payload = {
+                                    'staffId': selectedStaffId,
+                                    'seats': int.parse(seatController.text),
+                                  };
+                                  context.read<GroupLessonBloc>().add(
+                                      UpdateGroupLesson(
+                                          groupLessonId: widget.lesson.id,
+                                          payload: payload,
+                                          schoolId: schoolId,),);
+                                }
+                              },
+                              text: 'Add',
+                              vm: 0,
+                              hm: 0,
+                              fontSize: 14,
+                            );
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

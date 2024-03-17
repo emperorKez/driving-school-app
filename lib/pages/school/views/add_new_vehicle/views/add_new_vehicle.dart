@@ -63,7 +63,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
   }
 
   Container _renderAddNewVehicleMobileBody() {
-    final schoolId = context.read<StaffBloc>().state.staff!.staffData.id;
+    final schoolId = context.read<StaffBloc>().state.staff!.staffData.schoolId;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: ListView(
@@ -562,7 +562,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
   }
 
   Widget _showCurrentVehicles() {
-    final schoolId = context.read<StaffBloc>().state.staff!.staffData.id;
+    final schoolId = context.read<StaffBloc>().state.staff!.staffData.schoolId;
     return BlocBuilder<VehicleBloc, VehicleState>(
       builder: (context, state) {
         if (state is! SchoolLoaded) {

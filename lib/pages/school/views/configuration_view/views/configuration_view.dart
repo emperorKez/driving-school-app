@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
@@ -168,31 +169,38 @@ class _ConfigurationViewState extends State<ConfigurationView> {
               width: 10,
             ),
             Expanded(
-              child: PrimaryBtn(
-                ontap: () {
-                  final payload = {
-                    'scheduleFlowId': selectedScheduleFlow,
-                    'instructorSelectionId': selectedInstructorType,
-                    'languageIds': [
-                      for (final element in selectedLanguageIds) element,
-                    ],
-                  };
-                  context.read<SchoolBloc>().add(
-                        UpdateSchoolConfig(
-                          schoolId: context
-                              .read<StaffBloc>()
-                              .state
-                              .staff!
-                              .staffData
-                              .schoolId,
-                          payload: payload,
-                        ),
-                      );
+              child: BlocBuilder<SchoolBloc, SchoolState>(
+                builder: (context, state) {
+                  return state is! SchoolLoaded
+                      ? kLoadingWidget(context)
+                      : PrimaryBtn(
+                          ontap: () {
+                            final payload = {
+                              'scheduleFlowId': selectedScheduleFlow,
+                              'instructorSelectionId': selectedInstructorType,
+                              'languageIds': [
+                                for (final element in selectedLanguageIds)
+                                  element,
+                              ],
+                            };
+                            context.read<SchoolBloc>().add(
+                                  UpdateSchoolConfig(
+                                    schoolId: context
+                                        .read<StaffBloc>()
+                                        .state
+                                        .staff!
+                                        .staffData
+                                        .schoolId,
+                                    payload: payload,
+                                  ),
+                                );
+                          },
+                          text: 'Add',
+                          vm: 0,
+                          hm: 0,
+                          fontSize: 14,
+                        );
                 },
-                text: 'Add',
-                vm: 0,
-                hm: 0,
-                fontSize: 14,
               ),
             ),
           ],

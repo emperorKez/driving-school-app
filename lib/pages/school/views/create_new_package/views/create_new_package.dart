@@ -354,7 +354,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
               Expanded(
                 child: BlocBuilder<PackageBloc, PackageState>(
                   builder: (context, state) {
-                    return state is PackageLoading
+                    return state is! PackageLoaded
                         ? kLoadingWidget(context)
                         : PrimaryBtn(
                             ontap: () {
@@ -375,7 +375,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                                   'isRecommended': isRecommended,
                                   'schoolId': schoolId,
                                   'packageCourseSyllabus': [
-                                    {'courseId': 0},
+                                    {'courseId': 0}, //todo get courseId
                                   ],
                                 };
                                 context.read<PackageBloc>().add(

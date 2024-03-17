@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/school/bloc/group_lesson/group_lesson_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/feedback_view/views/feedback_view.dart';
 import 'package:korbil_mobile/pages/school/views/get_help/views/get_help_view.dart';
 import 'package:korbil_mobile/pages/school/views/group_lesson_info/views/group_lesson_info.dart';
@@ -71,22 +73,26 @@ class _MainWidgetState extends State<MainWidget> {
             );
           },
         ),
-        _buildMenuItem(
-          'assets/imgs/ins/school/menu3.png',
-          'Manage Course',
-          () {
-            if (getPreferedOrientation(context) ==
-                PreferedOrientation.landscape) {
-              context.read<TabMenuBloc>().add(
-                    ChangeMenuItem(TabMenuState.manageCourse),
-                  );
-              return;
-            }
-            Navigator.push(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (cxt) => const GroupLessonInfo(),
-              ),
+        BlocBuilder<GroupLessonBloc, GroupLessonState>(
+          builder: (context, state) {
+            return state is! GroupLessonLoaded? kLoadingWidget(context): _buildMenuItem(
+              'assets/imgs/ins/school/menu3.png',
+              'Manage Course',
+              () {
+                if (getPreferedOrientation(context) ==
+                    PreferedOrientation.landscape) {
+                  context.read<TabMenuBloc>().add(
+                        ChangeMenuItem(TabMenuState.manageCourse),
+                      );
+                  return;
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (cxt) =>  GroupLessonInfo(lesson: state.groupLessons![0].lessons[0],),
+                  ),
+                );
+              },
             );
           },
         ),

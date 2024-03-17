@@ -28,8 +28,8 @@ class SelectedTab extends StatelessWidget {
             return const InstManageCourseView();
           case TabMenuState.manageSchool:
             return const ManageSchoolView();
-          case TabMenuState.manageCourse:
-            return const GroupLessonInfo();
+          // case TabMenuState.manageCourse:
+          //   return const GroupLessonInfo();
           case TabMenuState.manageUsers:
             return const InstManageUsers();
           case TabMenuState.subscription:

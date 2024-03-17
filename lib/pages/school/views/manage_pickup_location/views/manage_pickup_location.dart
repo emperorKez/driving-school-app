@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_location/school_location_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 
 class ManagePickupLocationView extends StatefulWidget {
   const ManagePickupLocationView({super.key});
@@ -12,6 +17,13 @@ class ManagePickupLocationView extends StatefulWidget {
 }
 
 class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController postalCodeController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // final s = MediaQuery.of(context).size;
@@ -30,14 +42,23 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: _renderAddNewLocationMobileBody(),
+      body: BlocListener<SchoolLocationBloc, SchoolLocationState>(
+        listener: (context, state) {
+          if (state is SchoolLocationError) {
+            errorSnackbar(context, error: state.error);
+          }
+        },
+        child: _renderAddNewLocationMobileBody(),
+      ),
     );
   }
 
-  Container _renderAddNewLocationMobileBody() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+  Widget _renderAddNewLocationMobileBody() {
+    return Form(
+      key: _formKey,
       child: ListView(
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         children: [
           const SizedBox(
             height: 10,
@@ -66,47 +87,7 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
           const SizedBox(
             height: 10,
           ),
-          TextFormField(
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: AppColors.black,
-            ),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.grey1,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.green,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.red,
-                ),
-              ),
-              contentPadding: const EdgeInsets.only(
-                left: 15,
-                right: 10,
-                top: 5,
-                bottom: 5,
-              ),
-              hintText: 'Location Name',
-              hintStyle: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey1,
-              ),
-            ),
-          ),
+          _entryField(controller: nameController, hintText: 'Location Name'),
           const SizedBox(
             height: 15,
           ),
@@ -122,47 +103,9 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
           const SizedBox(
             height: 10,
           ),
-          TextFormField(
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: AppColors.black,
-            ),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.grey1,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.green,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.red,
-                ),
-              ),
-              contentPadding: const EdgeInsets.only(
-                left: 15,
-                right: 10,
-                top: 5,
-                bottom: 5,
-              ),
-              hintText: 'Enter Location Address',
-              hintStyle: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey1,
-              ),
-            ),
-          ),
+          _entryField(
+              controller: addressController,
+              hintText: 'Enter Location Address'),
           const SizedBox(
             height: 15,
           ),
@@ -184,7 +127,9 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
                     const SizedBox(
                       height: 10,
                     ),
-                    _buildDropDown('Select City'),
+                    // _buildDropDown('Select City'),
+                    _entryField(
+                        controller: cityController, hintText: 'Enter City'),
                   ],
                 ),
               ),
@@ -207,47 +152,10 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextFormField(
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: AppColors.grey1,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: AppColors.green,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: AppColors.red,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.only(
-                          left: 15,
-                          right: 10,
-                          top: 5,
-                          bottom: 5,
-                        ),
-                        hintText: 'Enter Code',
-                        hintStyle: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.grey1,
-                        ),
-                      ),
-                    ),
+                    _entryField(
+                        controller: postalCodeController,
+                        hintText: 'Enter Postal code',
+                        inputType: TextInputType.number),
                   ],
                 ),
               ),
@@ -268,48 +176,9 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
           const SizedBox(
             height: 10,
           ),
-          TextFormField(
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: AppColors.black,
-            ),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.grey1,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.green,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.red,
-                ),
-              ),
-              contentPadding: const EdgeInsets.only(
-                left: 15,
-                right: 10,
-                top: 5,
-                bottom: 5,
-              ),
+          _entryField(
+              controller: searchController,
               hintText: 'Search Location',
-              hintStyle: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey1,
-              ),
-              suffixIconConstraints: const BoxConstraints(
-                maxHeight: 48,
-              ),
               suffixIcon: GestureDetector(
                 onTap: () {},
                 child: Container(
@@ -320,9 +189,7 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
                     width: 24,
                   ),
                 ),
-              ),
-            ),
-          ),
+              )),
           const SizedBox(
             height: 15,
           ),
@@ -338,7 +205,17 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
           const SizedBox(
             height: 10,
           ),
-          _buildPredefinedLocation(true),
+
+          // BlocBuilder<SchoolLocationBloc, SchoolLocationState>(builder: (context, state){
+          //   if (state is SchoolLocationLoaded) {
+          //     return state.schoolLocations!.isEmpty? SizedBox(): Column(
+          //       mainAxisSize: MainAxisSize.min,
+          //       children: List.generate(state.schoolLocations!.length, (index) => _buildPredefinedLocation(true)),
+          //     );
+              
+          //   }else{ return kLoadingWidget(context);}
+
+          // }),
           _buildPredefinedLocation(false),
           _buildPredefinedLocation(true),
           _buildPredefinedLocation(true),
@@ -350,7 +227,7 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () => Navigator.pop(context),
                   child: Container(
                     // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                     padding: const EdgeInsets.symmetric(vertical: 13),
@@ -378,12 +255,38 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
               const SizedBox(
                 width: 10,
               ),
-              const Expanded(
-                child: PrimaryBtn(
-                  text: 'Add',
-                  vm: 0,
-                  hm: 0,
-                  fontSize: 14,
+              Expanded(
+                child: BlocBuilder<SchoolLocationBloc, SchoolLocationState>(
+                  builder: (context, state) {
+                    return PrimaryBtn(
+                      ontap: () {
+                        final schoolId = context
+                            .read<StaffBloc>()
+                            .state
+                            .staff!
+                            .staffData
+                            .schoolId;
+                        if (_formKey.currentState!.validate()) {
+                          final payload = {
+                            'name': nameController.text,
+                            'address': addressController.text,
+                            'city': cityController.text,
+                            'postalCode': postalCodeController.text,
+                            'locationType': 0,
+                            'landmark': 'string',
+                            'schoolId': schoolId
+                          };
+
+                          context.read<SchoolLocationBloc>().add(AddLocation(
+                              payload: payload, schoolId: schoolId));
+                        }
+                      },
+                      text: 'Add',
+                      vm: 0,
+                      hm: 0,
+                      fontSize: 14,
+                    );
+                  },
                 ),
               ),
             ],
@@ -487,6 +390,72 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
           ),
         ],
         onChanged: (val) {},
+      ),
+    );
+  }
+
+  Widget _entryField({
+    required TextEditingController controller,
+    required String hintText,
+    TextInputType inputType = TextInputType.text,
+    bool isMultiline = false,
+    Widget? suffixIcon,
+    void Function(String)? onChanged,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: inputType,
+      minLines: isMultiline ? 6 : null,
+      maxLines: isMultiline ? null : 1,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Enter $hintText';
+        }
+        return null;
+      },
+      onChanged: onChanged,
+      style: const TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: AppColors.black,
+      ),
+      decoration: InputDecoration(
+        suffixIcon: suffixIcon,
+        suffixIconConstraints: const BoxConstraints(
+          maxHeight: 48,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: AppColors.grey1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: AppColors.green,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: AppColors.red,
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(
+          left: 15,
+          right: 10,
+          top: 5,
+          bottom: 5,
+        ),
+        hintText: hintText,
+        hintStyle: const TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: AppColors.grey1,
+        ),
       ),
     );
   }
