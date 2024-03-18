@@ -8,7 +8,7 @@ class GroupLessonRepo {
   final ApiService apiService = ApiService();
 
   Future<ResponseState<List<GroupLesson>>> getAllGroupLesson(
-      int schoolId) async {
+      int schoolId,) async {
     final params = {'schoolId': schoolId};
     try {
       final response =

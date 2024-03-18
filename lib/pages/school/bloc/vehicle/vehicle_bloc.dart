@@ -20,7 +20,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
   final VehicleRepo _vehicleRepo;
 
   Future<void> onGetVehicles(
-      GetVehicles event, Emitter<VehicleState> emit) async {
+      GetVehicles event, Emitter<VehicleState> emit,) async {
     emit(VehicleLoading());
     try {
       final response = await _vehicleRepo.getVehicles(event.schoolId);
@@ -31,7 +31,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
   }
 
   Future<void> onAddVehicle(
-      AddVehicle event, Emitter<VehicleState> emit) async {
+      AddVehicle event, Emitter<VehicleState> emit,) async {
     emit(VehicleLoading());
     try {
       await _vehicleRepo.addVehicle(

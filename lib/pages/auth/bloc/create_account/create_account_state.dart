@@ -9,12 +9,12 @@ class CreateAccountState {
     this.licence,
   });
 
-  final UploadedFile? certificate;
-  final UploadedFile? licence;
+  final UploadDocument? certificate;
+  final UploadDocument? licence;
 
   CreateAccountState copyWith({
-    UploadedFile? certificate,
-    UploadedFile? licence,
+    UploadDocument? certificate,
+    UploadDocument? licence,
   }) {
     return CreateAccountState(
       certificate: certificate ?? this.certificate,

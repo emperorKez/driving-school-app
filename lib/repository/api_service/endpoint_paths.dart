@@ -147,7 +147,7 @@ class ApiPaths {
 
   //instructor
   static String getInstructor(
-          {required int schoolId, required int instructorId}) =>
+          {required int schoolId, required int instructorId,}) =>
       'school/$schoolId/instructor/$instructorId';
   static String updateInstructor({
     required int schoolId,

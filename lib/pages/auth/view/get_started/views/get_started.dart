@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/nav/router.dart';
-import 'package:korbil_mobile/pages/auth/view/create_acc/views/create_account.dart';
+import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 
 class GetStartedView extends StatefulWidget {
   const GetStartedView({super.key});
@@ -64,20 +67,23 @@ class _SplashState extends State<GetStartedView> {
               ],
             ),
             const Spacer(),
-            GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (cxt) => const CreateAccountView(),
-                ),
-              ),
-              child: PrimaryBtn(
-                text: 'Get Started',
-                ontap: () {
-                  lc<NavigationService>()
-                      .navigateTo(rootNavKey, AppRouter.createAcc);
-                },
-              ),
+            BlocConsumer<MetadataCubit, MetadataState>(
+              listener: (context, state) {
+                if (state is MetadataError) {
+                  errorSnackbar(context, error: state.error);
+                }
+              },
+              builder: (context, state) {
+                return state is! MetadataLoaded
+                    ? kLoadingWidget(context)
+                    : PrimaryBtn(
+                        text: 'Get Started',
+                        ontap: () {
+                          lc<NavigationService>()
+                              .navigateTo(rootNavKey, AppRouter.login);
+                        },
+                      );
+              },
             ),
             const Spacer(),
           ],

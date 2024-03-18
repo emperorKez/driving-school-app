@@ -408,7 +408,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                               };
                               context.read<CourseBloc>().add(
                                     AddCourse(
-                                        payload: payload, schoolId: schoolId),
+                                        payload: payload, schoolId: schoolId,),
                                   );
                             }
                           },
@@ -520,7 +520,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    int duration = int.parse(durationController.text);
+                    var duration = int.parse(durationController.text);
                     durationController.text = (duration += 1).toString();
                   });
                 },
@@ -535,7 +535,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    int duration = int.parse(durationController.text);
+                    var duration = int.parse(durationController.text);
                     durationController.text = (duration -= 1).toString();
                   });
                 },

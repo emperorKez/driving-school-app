@@ -47,7 +47,7 @@ class UsersFeedbackSection extends StatelessWidget {
                         feedback.length,
                         (index) => InstFeedBackCard(
                               review: feedback[index],
-                            ))),
+                            ),),),
               if (feedback.isNotEmpty)
                 Center(
                   child: GestureDetector(
@@ -74,7 +74,7 @@ class UsersFeedbackSection extends StatelessWidget {
           ),
         );
       }
-    });
+    },);
   }
 
   Widget noFeedbackContainer(BuildContext context) {

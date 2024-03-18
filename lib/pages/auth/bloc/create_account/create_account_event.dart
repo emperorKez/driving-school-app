@@ -12,17 +12,15 @@ class CreateAccount extends CreateAccountEvent{
 }
 
 
-class CreateStaff extends CreateAccountEvent{
-  CreateStaff({required this.payload});
-  final Map<String, dynamic> payload;
-}
-
 class UploadCertificate extends CreateAccountEvent{
-  UploadCertificate(this.file);
+  UploadCertificate({required this.file, required this.documentType});
   final String file;
+  final DocumentType documentType;
 }
 
 class UploadLicence extends CreateAccountEvent{
-  UploadLicence(this.file);
+  UploadLicence({required this.file, required this.documentType});
+
   final String file;
+  final DocumentType documentType;
 }

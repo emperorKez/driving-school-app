@@ -13,9 +13,10 @@ import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
-import 'package:korbil_mobile/pages/auth/view/create_acc/bloc/create_account_bloc.dart';
+import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/view/login/login.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/repository/metadata/models/document_type.dart';
 import 'package:korbil_mobile/theme/colors.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
@@ -40,8 +41,8 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   File? certificateDoc;
   File? licenceDoc;
 
-  Future<void> _showCreateDrivingSchoolAlert() {
-    return showDialog<void>(
+  Future<bool?> _showCreateDrivingSchoolAlert() {
+    return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -103,7 +104,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 SecondaryBtn(
                   text: 'Discard',
                   ontap: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, false);
                   },
                   vm: 5,
                   hm: 0,
@@ -124,12 +125,17 @@ class _CreateAccountViewState extends State<CreateAccountView> {
       child: Scaffold(
         backgroundColor: AppColors.white,
         body: BlocConsumer<CreateAccountBloc, CreateAccountState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is CreateAccountError) {
               errorSnackbar(context, error: state.error);
             }
             if (state is CreateAccountSuccess) {
-              _showCreateDrivingSchoolAlert();
+           final isCreateSchool =   await _showCreateDrivingSchoolAlert();
+           if (isCreateSchool == false){
+             await lc<NavigationService>()
+                      .navigateTo(rootNavKey, AppRouter.joinDrivingSchool);
+           }
+              
             }
           },
           builder: (context, state) {
@@ -546,17 +552,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                     PreferedOrientation.landscape)
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            //todo
-                            context,
-                            MaterialPageRoute<dynamic>(
-                              builder: (cxt) => const CreateAccountView(),
-                            ),
-                          );
-                        },
-                        child: PrimaryBtn(
+                       PrimaryBtn(
                           text: 'Sign Up',
                           ontap: () {
                             if (_formKey.currentState!.validate()) {
@@ -586,7 +582,6 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                               ? 80
                               : 0,
                         ),
-                      ),
                       const SizedBox(width: 12),
                       Center(
                         child: RichText(
@@ -622,15 +617,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   )
                 else
                   Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute<dynamic>(
-                            builder: (cxt) => const CreateAccountView(),
-                          ),
-                        ),
-                        child: PrimaryBtn(
+                    children: [ PrimaryBtn(
                           text: 'Sign Up',
                           ontap: () {
                             if (_formKey.currentState!.validate()) {
@@ -646,7 +633,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                                   error: 'Upload Driving Licence to Continue',
                                 );
                               } else {
-                                context.read<CreateAccountBloc>().add(
+                                context.read<StaffBloc>().add(
                                       CreateStaff(payload: getPayLoad(state)),
                                     );
                               }
@@ -654,7 +641,6 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           },
                           hm: 23,
                         ),
-                      ),
                     ],
                   ),
                 Center(
@@ -745,7 +731,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                     //Instructor Certification
                     context
                         .read<CreateAccountBloc>()
-                        .add(UploadCertificate(document.path));
+                        .add(UploadCertificate( documentType: documentType, file: document.path,));
                     setState(() {
                       certificateDoc = document;
                     });
@@ -753,7 +739,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                     //Driving License
                     context
                         .read<CreateAccountBloc>()
-                        .add(UploadLicence(document.path));
+                        .add(UploadLicence(file:document.path, documentType: documentType));
                     setState(() {
                       licenceDoc = document;
                     });
@@ -955,15 +941,4 @@ class _CreateAccountViewState extends State<CreateAccountView> {
       },
     };
   }
-
-  // Map<String, Object> getPayLoadData() {
-  //   return {
-  //     'firstName': firstnameController.text,
-  //     'lastName': lastnameController.text,
-  //     'phoneNumber': phoneController.text,
-  //     'email': emailController.value,
-  //     // 'createdAt': DateTime.now(),
-  //     // 'updatedAt': DateTime.now(),
-  //   };
-  // }
 }

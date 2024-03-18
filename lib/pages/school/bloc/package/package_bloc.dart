@@ -20,7 +20,7 @@ class PackageBloc extends Bloc<PackageEvent, PackageState> {
   final PackageRepo _packageRepo;
 
   Future<void> onGetPackages(
-      GetPackages event, Emitter<PackageState> emit) async {
+      GetPackages event, Emitter<PackageState> emit,) async {
     emit(PackageLoading());
     try {
       final response = await _packageRepo.getPackages(event.schoolId);
@@ -31,7 +31,7 @@ class PackageBloc extends Bloc<PackageEvent, PackageState> {
   }
 
   Future<void> onAddPackage(
-      AddPackage event, Emitter<PackageState> emit) async {
+      AddPackage event, Emitter<PackageState> emit,) async {
     emit(PackageLoading());
     try {
       await _packageRepo.addPackage(

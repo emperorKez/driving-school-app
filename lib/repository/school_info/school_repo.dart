@@ -102,15 +102,17 @@ class SchoolRepo {
     }
   }
 
-  Future<ResponseState<dynamic>> createSchool(
+  Future<ResponseState<SchoolInfo>> createSchool(
     Map<String, dynamic> payload,
   ) async {
     final response =
         await apiService.postReq(ApiPaths.createNewSchool, payload: payload);
     if (response.data != null) {
       try {
-        final data = response.data!.data;
-        return ResponseSuccess(data);
+        final school = SchoolInfo.fromJson(
+          response.data!.data['response'] as Map<String, dynamic>,
+        );
+        return ResponseSuccess(school);
       } catch (e) {
         return ResponseFailed(DataError(null, e));
       }

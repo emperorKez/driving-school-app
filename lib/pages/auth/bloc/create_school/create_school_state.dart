@@ -7,21 +7,21 @@ class CreateSchoolState {
     this.suggestedLocations,
     this.logo,
     this.companyRegistration,
-    this.isNameValid = false,
+    this.isNameValid = 'no',
   });
   final String address;
-  final String? logo;
-  final UploadedFile? companyRegistration;
+  final UploadFile? logo;
+  final UploadDocument? companyRegistration;
   final List<Location>? suggestedLocations;
-  final bool isNameValid;
+  final String isNameValid;
   bool get isValidAddress => AddressValidator(address: address).validate();
 
   CreateSchoolState copyWith({
     String? address,
     List<Location>? suggestedLocations,
-    String? logo,
-    UploadedFile? companyRegistration,
-    bool? isNameValid,
+    UploadFile? logo,
+    UploadDocument? companyRegistration,
+    String? isNameValid,
   }) {
     return CreateSchoolState(
         address: address ?? this.address,

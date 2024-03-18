@@ -10,7 +10,7 @@ class MyStudentsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start, 
       children: [
         StudentCard(
           name: 'Isaiah Richardson',

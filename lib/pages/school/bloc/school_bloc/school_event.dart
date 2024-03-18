@@ -5,6 +5,11 @@ sealed class SchoolEvent {}
 
 class GetAllSchool extends SchoolEvent {}
 
+class CreateSchool extends SchoolEvent {
+  CreateSchool({required this.payload});
+  final Map<String, dynamic> payload;
+}
+
 class GetDrivingSchoolPage extends SchoolEvent {
   GetDrivingSchoolPage({required this.schoolId});
   final int schoolId;

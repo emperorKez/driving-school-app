@@ -21,7 +21,7 @@ class GroupLessonBloc extends Bloc<GroupLessonEvent, GroupLessonState> {
   final GroupLessonRepo _groupLessonRepo;
 
   Future<void> onGetAllGroupLesson(
-      GetAllGroupLesson event, Emitter<GroupLessonState> emit) async {
+      GetAllGroupLesson event, Emitter<GroupLessonState> emit,) async {
     emit(GroupLessonLoading());
     try {
       final response = await _groupLessonRepo.getAllGroupLesson(event.schoolId);
@@ -32,7 +32,7 @@ class GroupLessonBloc extends Bloc<GroupLessonEvent, GroupLessonState> {
   }
 
   Future<void> onAddGroupLesson(
-      AddGroupLesson event, Emitter<GroupLessonState> emit) async {
+      AddGroupLesson event, Emitter<GroupLessonState> emit,) async {
     emit(GroupLessonLoading());
     try {
       await _groupLessonRepo.addGroupLesson(payload: event.payload);
@@ -44,11 +44,11 @@ class GroupLessonBloc extends Bloc<GroupLessonEvent, GroupLessonState> {
   }
 
   Future<void> onUpdateGroupLesson(
-      UpdateGroupLesson event, Emitter<GroupLessonState> emit) async {
+      UpdateGroupLesson event, Emitter<GroupLessonState> emit,) async {
     emit(GroupLessonLoading());
     try {
       await _groupLessonRepo.updateGroupLesson(
-          payload: event.payload, groupLessonId: event.groupLessonId);
+          payload: event.payload, groupLessonId: event.groupLessonId,);
       final response = await _groupLessonRepo.getAllGroupLesson(event.schoolId);
       emit(GroupLessonLoaded(groupLessons: response.data));
     } catch (e) {
@@ -57,11 +57,11 @@ class GroupLessonBloc extends Bloc<GroupLessonEvent, GroupLessonState> {
   }
 
   Future<void> onDeleteGroupLesson(
-      DeleteGroupLesson event, Emitter<GroupLessonState> emit) async {
+      DeleteGroupLesson event, Emitter<GroupLessonState> emit,) async {
     emit(GroupLessonLoading());
     try {
       await _groupLessonRepo.deleteGroupLesson(
-          groupLessonId: event.groupLessonId);
+          groupLessonId: event.groupLessonId,);
       final response = await _groupLessonRepo.getAllGroupLesson(event.schoolId);
       emit(GroupLessonLoaded(groupLessons: response.data));
     } catch (e) {
@@ -70,11 +70,11 @@ class GroupLessonBloc extends Bloc<GroupLessonEvent, GroupLessonState> {
   }
 
   Future<void> onAddStudentToGroupLesson(
-      AddStudentToGroupLesson event, Emitter<GroupLessonState> emit) async {
+      AddStudentToGroupLesson event, Emitter<GroupLessonState> emit,) async {
     emit(GroupLessonLoading());
     try {
       await _groupLessonRepo.addStudentToGroupLesson(
-          studentId: event.studentId, groupLessonId: event.groupLessonId);
+          studentId: event.studentId, groupLessonId: event.groupLessonId,);
       final response = await _groupLessonRepo.getAllGroupLesson(event.schoolId);
       emit(GroupLessonLoaded(groupLessons: response.data));
     } catch (e) {

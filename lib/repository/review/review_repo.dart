@@ -82,7 +82,7 @@ class ReviewRepo {
     final params = {'schoolId': schoolId};
     try {
       final response = await apiService.putReq(ApiPaths.updateReviewList,
-          payload: payload, params: params);
+          payload: payload, params: params,);
       if (response.data != null) {
         return ResponseSuccess(response.data!.data['response']);
       }

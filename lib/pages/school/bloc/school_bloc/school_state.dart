@@ -8,12 +8,15 @@ sealed class SchoolState {
 }
 
 final class SchoolInitial extends SchoolState {}
+
 final class SchoolLoading extends SchoolState {}
+
 final class SchoolLoaded extends SchoolState {
-  const SchoolLoaded({required super.schoolInfo});
+  const SchoolLoaded({required super.schoolInfo, super.schoolList});
 }
+
 final class SchoolError extends SchoolState {
-  const SchoolError({ this.error = 'Something went wrong'});
+  const SchoolError({this.error = 'Something went wrong'});
 
   final String error;
 }

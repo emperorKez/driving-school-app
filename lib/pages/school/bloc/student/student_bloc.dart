@@ -24,7 +24,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   final StudentRepo _studentRepo;
 
   Future<void> onGetAllStudent(
-      GetAllStudent event, Emitter<StudentState> emit) async {
+      GetAllStudent event, Emitter<StudentState> emit,) async {
     emit(Studentloading());
     try {
       final response = await _studentRepo.getAllStudent(event.schoolId);
@@ -37,20 +37,20 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   FutureOr<void> onGetStudent(GetStudent event, Emitter<StudentState> emit) {}
 
   FutureOr<void> onCreateStudent(
-      CreateStudent event, Emitter<StudentState> emit) {}
+      CreateStudent event, Emitter<StudentState> emit,) {}
 
   FutureOr<void> onUpdateStudent(
-      UpdateStudent event, Emitter<StudentState> emit) {}
+      UpdateStudent event, Emitter<StudentState> emit,) {}
 
   FutureOr<void> onDeleteStudent(
-      DeleteStudent event, Emitter<StudentState> emit) {}
+      DeleteStudent event, Emitter<StudentState> emit,) {}
 
   FutureOr<void> onUpdateStudentAvatar(
-      UpdateStudentAvatar event, Emitter<StudentState> emit) {}
+      UpdateStudentAvatar event, Emitter<StudentState> emit,) {}
 
   FutureOr<void> onDeclineStudent(
-      DeclineStudent event, Emitter<StudentState> emit) {}
+      DeclineStudent event, Emitter<StudentState> emit,) {}
 
   FutureOr<void> onApproveStudent(
-      ApproveStudent event, Emitter<StudentState> emit) {}
+      ApproveStudent event, Emitter<StudentState> emit,) {}
 }

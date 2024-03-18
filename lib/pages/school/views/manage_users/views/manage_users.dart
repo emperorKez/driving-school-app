@@ -92,7 +92,7 @@ class _InstManageUsersState extends State<InstManageUsers> {
           pendingUsers.length,
           (index) => InstPendingUserDetailsCard(
                 pendingUser: pendingUsers[index],
-              )),
+              ),),
     );
   }
 
@@ -104,7 +104,7 @@ class _InstManageUsersState extends State<InstManageUsers> {
           users.length,
           (index) => InstUserDetailsCard(
                 user: users[index],
-              )),
+              ),),
     );
   }
 

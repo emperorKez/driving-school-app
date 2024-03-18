@@ -9,13 +9,8 @@ import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
 class AccountRepo {
   final ApiService apiService = ApiService();
 
- 
-
-
-  
-
-  Future<ResponseState<List<Location>>> suggestLocation(
-      Map<String, dynamic> params) async {
+  Future<ResponseState<List<Location>>> suggestLocation(String address) async {
+    final params = {'address': address};
     final response =
         await apiService.getReq(ApiPaths.suggestLocation, params: params);
     try {
@@ -32,8 +27,6 @@ class AccountRepo {
       return ResponseFailed(DataError(null, e));
     }
   }
-
-  
 
   // Future<ResponseState<String>> login(param) async {
   //   final response = await apiService.postReq(ApiPaths.registerUser);

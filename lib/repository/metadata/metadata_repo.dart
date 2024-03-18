@@ -4,6 +4,7 @@ import 'package:korbil_mobile/repository/api_service/api_service.dart';
 import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
+import 'package:korbil_mobile/repository/course/model/course.dart';
 import 'package:korbil_mobile/repository/metadata/models/document_type.dart';
 import 'package:korbil_mobile/repository/metadata/models/help_topic.dart';
 import 'package:korbil_mobile/repository/metadata/models/instructor_type.dart';
@@ -11,7 +12,6 @@ import 'package:korbil_mobile/repository/metadata/models/language.dart';
 import 'package:korbil_mobile/repository/metadata/models/location_type.dart';
 import 'package:korbil_mobile/repository/metadata/models/schedule_flow.dart';
 import 'package:korbil_mobile/repository/metadata/models/staff_role.dart';
-import 'package:korbil_mobile/repository/course/model/course.dart';
 
 class MetadataRepo {
   final ApiService apiService = ApiService();

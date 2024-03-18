@@ -20,7 +20,7 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
   final PromotionRepo _promotionRepo;
 
   Future<void> onGetPromotions(
-      GetPromotions event, Emitter<PromotionState> emit) async {
+      GetPromotions event, Emitter<PromotionState> emit,) async {
     emit(PromotionLoading());
     try {
       final promotions = await _promotionRepo.getPromotions(event.schoolId);
@@ -31,7 +31,7 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
   }
 
   Future<void> onAddPromotion(
-      AddPromotion event, Emitter<PromotionState> emit) async {
+      AddPromotion event, Emitter<PromotionState> emit,) async {
     emit(PromotionLoading());
     try {
       await _promotionRepo.addPromotion(
@@ -45,11 +45,11 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
   }
 
   Future<void> onUpdatePromotion(
-      UpdatePromotion event, Emitter<PromotionState> emit) async {
+      UpdatePromotion event, Emitter<PromotionState> emit,) async {
     emit(PromotionLoading());
     try {
       await _promotionRepo.updatePromotion(
-          payload: event.payload, promotionId: event.promotionId);
+          payload: event.payload, promotionId: event.promotionId,);
       final promotions = await _promotionRepo.getPromotions(event.schoolId);
       emit(PromotionLoaded(allPromotion: promotions.data));
     } catch (e) {
@@ -58,7 +58,7 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
   }
 
   Future<void> onDeletePromotion(
-      DeletePromotion event, Emitter<PromotionState> emit) async {
+      DeletePromotion event, Emitter<PromotionState> emit,) async {
     emit(PromotionLoading());
     try {
       await _promotionRepo.deletePromotion(promotionId: event.promotionId);

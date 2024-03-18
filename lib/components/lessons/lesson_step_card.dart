@@ -129,7 +129,7 @@ class DottedVerticalLinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const dashHeight = 10;
     const dashSpace = 5;
-    double startY = 0;
+    var startY = 0.0;
     final paint = Paint()
       ..color = Colors.grey
       ..strokeWidth = 0.5;

@@ -23,8 +23,8 @@ class UploadFile {
       };
 }
 
-class UploadedFile {
-  UploadedFile({
+class UploadDocument {
+  UploadDocument({
     required this.documentType,
     required this.file,
   });
@@ -32,7 +32,7 @@ class UploadedFile {
   final DocumentType documentType;
   final UploadFile file;
 
-  factory UploadedFile.fromMap(Map<String, dynamic> json) => UploadedFile(
+  factory UploadDocument.fromMap(Map<String, dynamic> json) => UploadDocument(
         documentType:
             DocumentType.fromJson(json['documentType'] as Map<String, dynamic>),
         file: UploadFile.fromJson(json['file'] as Map<String, dynamic>),

@@ -8,8 +8,8 @@ class ApiService {
   static const String baseUrl = 'http://64.226.114.43:8080/api/v1';
 
   final baseOptions = BaseOptions(
-    connectTimeout: const Duration(seconds: 10),
-    // validateStatus: (status) => status! < 400,
+    connectTimeout: const Duration(seconds: 5),
+    validateStatus: (status) => status! < 400,
     headers: {'content-Type': 'application/json', 'accept': 'application/json'},
   );
 
@@ -32,11 +32,11 @@ class ApiService {
       return DataSuccess(response);
     } on DioException catch (e) {
       print('dio error: $e');
+      throw Exception((e.response?.statusCode, e.response?.data));
       // final errMsg = e.response?.data['response'] as String;
-      return DataFailed(DataError(e.response?.statusCode, e.response?.data));
+      // return DataFailed(DataError(e.response?.statusCode, e.response?.data));
     } catch (e) {
-      rethrow;
-      // return DataFailed(DataError(null, e));
+      return DataFailed(DataError(null, e));
     }
   }
 
@@ -52,7 +52,7 @@ class ApiService {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
       final response = await dio.post<dynamic>('$baseUrl/$path',
-          data: payload, queryParameters: params);
+          data: payload, queryParameters: params,);
       return DataSuccess(response);
     } on DioException catch (e) {
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
@@ -73,7 +73,7 @@ class ApiService {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
       final response = await dio.put<dynamic>('$baseUrl/$path',
-          data: payload, queryParameters: params);
+          data: payload, queryParameters: params,);
       return DataSuccess(response);
     } on DioException catch (e) {
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
@@ -113,7 +113,7 @@ class ApiService {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
       final formData = FormData.fromMap({
-        'file': await MultipartFile.fromString(file),
+        'file': MultipartFile.fromString(file),
       });
       final response =
           await dio.post<dynamic>('$baseUrl/$path', data: formData);

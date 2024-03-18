@@ -12,8 +12,9 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   SchoolBloc({SchoolRepo? schoolRepo})
       : _schoolRepo = schoolRepo ?? SchoolRepo(),
         super(SchoolInitial()) {
-    // on<GetAllSchool>(onGetAllSchool);
+    on<GetAllSchool>(onGetAllSchool);
     on<GetSchool>(onGetSchool);
+    on<CreateSchool>(onCreateSchool);
     on<GetDrivingSchoolPage>(onGetDrivingSchoolPage);
     on<UpdateSchool>(onUpdateSchool);
     on<DeleteSchool>(onDeleteSchool);
@@ -21,16 +22,16 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
   final SchoolRepo _schoolRepo;
 
-  // Future<void> onGetAllSchool(
-  //     GetAllSchools event, Emitter<SchoolState> emit) async {
-  //   emit(SchoolLoading());
-  //   try {
-  //     final response = await _schoolRepo.getAllSchools();
-  //     emit(SchoolLoaded(schoolList: response.data));
-  //   } catch (e) {
-  //     emit(SchoolError(error: e.toString()));
-  //   }
-  // }
+  Future<void> onGetAllSchool(
+      GetAllSchool event, Emitter<SchoolState> emit,) async {
+    emit(SchoolLoading());
+    try {
+      final response = await _schoolRepo.getAllSchools();
+      emit(SchoolLoaded(schoolList: response.data, schoolInfo: null));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+    }
+  }
 
   Future<void> onGetDrivingSchoolPage(
     GetDrivingSchoolPage event,
@@ -64,11 +65,11 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onUpdateSchool(
-      UpdateSchool event, Emitter<SchoolState> emit) async {
+      UpdateSchool event, Emitter<SchoolState> emit,) async {
     emit(SchoolLoading());
     try {
       await _schoolRepo.updateSchool(
-          schoolId: event.schoolId, payload: event.payload);
+          schoolId: event.schoolId, payload: event.payload,);
       final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(schoolInfo: response.data));
     } catch (e) {
@@ -77,7 +78,7 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onDeleteSchool(
-      DeleteSchool event, Emitter<SchoolState> emit) async {
+      DeleteSchool event, Emitter<SchoolState> emit,) async {
     emit(SchoolLoading());
     try {
       await _schoolRepo.deleteSchool(schoolId: event.schoolId);
@@ -99,6 +100,17 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
         payload: event.payload,
       );
       final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
+      emit(SchoolLoaded(schoolInfo: response.data));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+    }
+  }
+
+  Future<void> onCreateSchool(
+      CreateSchool event, Emitter<SchoolState> emit,) async {
+    emit(SchoolLoading());
+    try {
+      final response = await _schoolRepo.createSchool(event.payload);
       emit(SchoolLoaded(schoolInfo: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));

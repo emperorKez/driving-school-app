@@ -8,7 +8,7 @@ ScaffoldMessengerState errorSnackbar(
   return ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
-      buildTopSnackbar(context, error)
+      buildTopSnackbar(context, error),
       // SnackBar(
       //   content: Container(
       //     width: double.infinity,

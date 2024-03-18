@@ -239,7 +239,7 @@ class _GetHelpViewState extends State<GetHelpView> {
                     ),
                   ],
                 ),
-              ));
+              ),);
           
        
   }

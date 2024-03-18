@@ -55,7 +55,7 @@ class _AddCourseState extends State<InstAddCourse> {
                     state.courses!.length,
                     (index) => InstLessonCard(
                           course: state.courses![index],
-                        )),
+                        ),),
               ),
               const SizedBox(
                 height: 50,

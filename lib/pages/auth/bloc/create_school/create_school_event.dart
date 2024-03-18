@@ -3,11 +3,6 @@ part of 'create_school_bloc.dart';
 @immutable
 sealed class CreateSchoolEvent {}
 
-class CreateSchool extends CreateSchoolEvent {
-  CreateSchool({required this.payload});
-
-  final Map<String, dynamic> payload;
-}
 
 class ValidateName extends CreateSchoolEvent {
   ValidateName(this.name);
@@ -15,8 +10,10 @@ class ValidateName extends CreateSchoolEvent {
 }
 
 class UploadRegistration extends CreateSchoolEvent {
-  UploadRegistration(this.file);
+  UploadRegistration({required this.file, required this.documentType});
+
   final String file;
+  final DocumentType documentType;
 }
 
 class UploadLogo extends CreateSchoolEvent {

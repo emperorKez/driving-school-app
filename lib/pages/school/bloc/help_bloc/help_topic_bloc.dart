@@ -5,5 +5,5 @@ part 'help_topic_event.dart';
 part 'help_topic_state.dart';
 
 class HelpTopicBloc extends Bloc<HelpTopicEvent, HelpTopicState> {
-  HelpTopicBloc() : super(HelpTopicInitial()) {}
+  HelpTopicBloc() : super(HelpTopicInitial());
 }

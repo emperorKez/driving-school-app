@@ -1,11 +1,16 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/app_home/app_home.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
+import 'package:korbil_mobile/pages/auth/bloc/login/login_cubit.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 typedef ValidatorFunctionType = String? Function(String? val);
@@ -18,6 +23,10 @@ class LoginView extends StatefulWidget {
 }
 
 class _CreateAccountViewState extends State<LoginView> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   Future<void> _showCreateDrivingSchoolAlert() {
     return showDialog<void>(
       context: context,
@@ -106,7 +115,24 @@ class _CreateAccountViewState extends State<LoginView> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.white,
-        body: _renderMobileBody(context),
+        body: BlocListener<StaffBloc, StaffState>(
+          listener: (context, state) {
+            if (state is StaffError) {
+              errorSnackbar(context, error: state.error);
+            }
+            if (state is StaffLoaded) {
+              if (state.staff != null) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                        builder: (_) => const AppHomePage(),),);
+              } else {
+                _showCreateDrivingSchoolAlert();
+              }
+            }
+          },
+          child: _renderMobileBody(context),
+        ),
       ),
     );
   }
@@ -165,14 +191,19 @@ class _CreateAccountViewState extends State<LoginView> {
         const SizedBox(height: 30),
         Center(
           child: Form(
+            key: _formKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
                   _renderFormField(
                     hint: 'Enter your email',
-                    ctrl: TextEditingController(),
-                    validator: (val) {
+                    inputType: TextInputType.emailAddress,
+                    ctrl: emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter your email';
+                      }
                       return null;
                     },
                     icon: 'assets/imgs/ins/auth/email.png',
@@ -180,8 +211,13 @@ class _CreateAccountViewState extends State<LoginView> {
                   ),
                   _renderFormField(
                     hint: 'Password',
-                    ctrl: TextEditingController(),
-                    validator: (val) {
+                    ctrl: passwordController,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          value.characters.length < 6) {
+                        return 'Password must be more than 6 characters';
+                      }
                       return null;
                     },
                     icon: 'assets/imgs/ins/auth/lock_green.png',
@@ -230,24 +266,68 @@ class _CreateAccountViewState extends State<LoginView> {
             ],
           ),
         ),
+        const SizedBox(height: 15),
+        CustomScreenPadding(
+          child: Row(
+            children: [
+              const Text(
+                "Don't have an Account?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  color: AppColors.black,
+                ),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) => const CreateAccountView(),
+                  ),
+                ),
+                child: const Text(
+                  'Register',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: AppColors.green,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         SizedBox(
           height:
               getPreferedOrientation(context) == PreferedOrientation.landscape
                   ? 50
                   : 150,
         ),
-        GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute<dynamic>(
-              builder: (cxt) => const CreateAccountView(),
-            ),
-          ),
-          child: PrimaryBtn(
-            text: 'Sign In',
-            ontap: _showCreateDrivingSchoolAlert,
-            hm: 23,
-          ),
+        BlocBuilder<LoginCubit, LoginState>(
+          builder: (context, state) {
+            return PrimaryBtn(
+              text: 'Sign In',
+              ontap: () {
+                context.read<LoginCubit>().login(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+                if (state is LoginSuccess) {
+                  context
+                      .read<StaffBloc>()
+                      .add(GetStaffByEmail(email: emailController.text));
+                }
+              },
+              hm: 23,
+            );
+          },
         ),
       ],
     );
@@ -323,13 +403,15 @@ class _CreateAccountViewState extends State<LoginView> {
             const SizedBox(
               width: 10,
             ),
-            const Text('Upload',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: AppColors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),),
+            const Text(
+              'Upload',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: AppColors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
       ),
@@ -341,6 +423,7 @@ class _CreateAccountViewState extends State<LoginView> {
     required TextEditingController ctrl,
     required ValidatorFunctionType validator,
     required String icon,
+    TextInputType inputType = TextInputType.text,
     bool obscure = false,
     double iconSize = 24,
     Widget? suffixIcon,
@@ -350,6 +433,7 @@ class _CreateAccountViewState extends State<LoginView> {
       child: TextFormField(
         obscureText: obscure,
         controller: ctrl,
+        keyboardType: inputType,
         validator: (val) => validator(val),
         style: const TextStyle(
           fontFamily: 'Poppins',

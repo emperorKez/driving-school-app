@@ -8,7 +8,7 @@ class Course {
   factory Course.fromJson(Map<String, dynamic> json) => Course(
         course: CourseClass.fromJson(json['course'] as Map<String, dynamic>),
         courseCategory: CourseCategory.fromJson(
-            json['courseCategory'] as Map<String, dynamic>),
+            json['courseCategory'] as Map<String, dynamic>,),
         courseType: json['courseType'] as String,
       );
 

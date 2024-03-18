@@ -9,21 +9,6 @@ import 'package:korbil_mobile/repository/school_info/models/school_info.dart';
 class StaffRepo {
   final ApiService apiService = ApiService();
 
-  Future<ResponseState<dynamic>> registerUser(
-    Map<String, dynamic> payload,
-  ) async {
-    try {
-      final response =
-          await apiService.postReq(ApiPaths.registerUser, payload: payload);
-      if (response.data != null && response.data!.data['code'] == 200) {
-        return ResponseSuccess(response.data!.data['response']);
-      }
-      return ResponseFailed(response.error!);
-    } catch (e) {
-      return ResponseFailed(DataError(null, e));
-    }
-  }
-
   Future<ResponseState<Staff>> createStaff(
     Map<String, dynamic> payload,
   ) async {
@@ -48,7 +33,7 @@ class StaffRepo {
     final params = {'email': email};
     try {
       final response = await apiService.getReq(ApiPaths.getStaffSchoolInvite,
-          params: params);
+          params: params,);
       if (response.data != null && response.data!.data['code'] == 200) {
         final invite = SchoolInfo.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
