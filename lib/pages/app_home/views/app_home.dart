@@ -28,7 +28,7 @@ class _AppHome extends StatefulWidget {
   State<_AppHome> createState() => _AppHomeState();
 }
 
-class _AppHomeState extends State<_AppHome> {
+class _AppHomeState extends State<_AppHome> { 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TabViewBloc, TabViewState>(

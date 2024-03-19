@@ -4,6 +4,7 @@ import 'package:korbil_mobile/repository/api_service/api_service.dart';
 import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
+import 'package:korbil_mobile/repository/student/models/invited_student.dart';
 import 'package:korbil_mobile/repository/student/models/student.dart';
 
 class StudentRepo {
@@ -23,15 +24,15 @@ class StudentRepo {
   //   return ResponseFailed(res.error!);
   // }
 
-  Future<ResponseState<List<StudentData>>> getAllStudent(int schoolId) async {
+  Future<ResponseState<List<Student>>> getAllStudent(int schoolId) async {
     final params = {'id': schoolId};
     try {
       final res = await apiService.getReq(ApiPaths.getStudents, params: params);
       if (res.data != null) {
         final jsonList = res.data!.data['response'];
         final data = (jsonList as List).cast<Map<String, dynamic>>();
-        final students = List<StudentData>.from(
-          data.map(StudentData.fromJson),
+        final students = List<Student>.from(
+          data.map(Student.fromJson),
         );
         return ResponseSuccess(students);
       }
@@ -93,9 +94,8 @@ class StudentRepo {
     }
   }
 
-  Future<ResponseState<dynamic>> deletePackage({
+  Future<ResponseState<dynamic>> deleteStudent({
     required int studentId,
-    required int packageId,
   }) async {
     try {
       final response = await apiService.deleteReq(
@@ -155,6 +155,24 @@ class StudentRepo {
         return ResponseSuccess(response.data!.data['response']);
       }
       return ResponseFailed(response.error!);
+    } catch (e) {
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+  Future<ResponseState<List<InvitedStudents>>> getInvitedStudents(
+      int schoolId) async {
+    try {
+      final res = await apiService.getReq(ApiPaths.invitedStudents(schoolId));
+      if (res.data != null) {
+        final jsonList = res.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final students = List<InvitedStudents>.from(
+          data.map(InvitedStudents.fromJson),
+        );
+        return ResponseSuccess(students);
+      }
+      return ResponseFailed(res.error!);
     } catch (e) {
       return ResponseFailed(DataError(null, e));
     }

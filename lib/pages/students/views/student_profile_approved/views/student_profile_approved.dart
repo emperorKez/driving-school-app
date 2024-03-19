@@ -1,11 +1,15 @@
 // ignore_for_file: always_use_package_imports
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/bloc/group_lesson/group_lesson_bloc.dart';
 import 'package:korbil_mobile/pages/students/views/manage_student_lesson/views/manage_student_lesson.dart';
 import 'package:korbil_mobile/pages/students/views/profile_package_history/views/profile_package_history.dart';
+import 'package:korbil_mobile/repository/group_lesson/models/group_lesson.dart';
+import 'package:korbil_mobile/repository/student/models/student.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -17,7 +21,8 @@ import 'stat_progress_item.dart';
 import 'stats.dart';
 
 class StudentProfileApproved extends StatelessWidget {
-  const StudentProfileApproved({super.key});
+  const StudentProfileApproved({required this.student, super.key});
+  final Student student;
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +48,39 @@ class StudentProfileApproved extends StatelessWidget {
               children: [
                 Expanded(child: _buildLandscapeLeft(context, s)),
                 const SizedBox(width: 20),
-                Expanded(child: _buildLandscapeRight(context)),
+                Expanded(
+                    child: _buildLandscapeRight(context, student: student)),
               ],
             )
           : ListView(
+              shrinkWrap: true,
               children: [
                 _buildLandscapeLeft(context, s),
                 const SizedBox(height: 35),
-                _buildLandscapeRight(context),
+                _buildLandscapeRight(context, student: student),
                 const SizedBox(height: 50),
               ],
             ),
     );
   }
 
-  Widget _buildLandscapeRight(BuildContext context) {
+  Widget _buildLandscapeRight(BuildContext context,
+      {required Student student}) {
+    final groupLessons = context.read<GroupLessonBloc>().state.groupLessons![
+        context.read<GroupLessonBloc>().state.groupLessons!.indexWhere((e) =>
+            e.lessons[0].groupLessonStudentRefs.contains(student.profile.id))];
+
+    final completedLessons = <Lesson>[];
+
+    for (final element in groupLessons.lessons) {
+      if (element.lessonStatus ==
+          2) //todo assume status 2 means completed lesson
+      {
+        completedLessons.add(element);
+      }
+    }
     return ListView(
+      shrinkWrap: true,
       children: [
         CustomScreenPadding(
           child: Row(
@@ -91,7 +113,7 @@ class StudentProfileApproved extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         const CustomScreenPadding(
-          child: InstFeedBackCard(),
+          child: InstFeedBackCard(), //todo feedback api is not available
         ),
         const SizedBox(height: 20),
         CustomScreenPadding(
@@ -106,34 +128,16 @@ class StudentProfileApproved extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 15),
-        const CustomScreenPadding(
-          child: LessonDetailCard(
-            title: 'Traffic Light Drive',
-            subTitle: 'Completed Date 2022/06/26',
-          ),
-        ),
-        const CustomScreenPadding(
-          child: LessonDetailCard(
-            title: 'Traffic Light Drive',
-            subTitle: 'Completed Date 2022/06/26',
-          ),
-        ),
-        const CustomScreenPadding(
-          child: LessonDetailCard(
-            title: 'Traffic Light Drive',
-            subTitle: 'Completed Date 2022/06/26',
-          ),
-        ),
-        const CustomScreenPadding(
-          child: LessonDetailCard(
-            title: 'Traffic Light Drive',
-            subTitle: 'Completed Date 2022/06/26',
-          ),
-        ),
-        const CustomScreenPadding(
-          child: LessonDetailCard(
-            title: 'Traffic Light Drive',
-            subTitle: 'Completed Date 2022/06/26',
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(
+            completedLessons.length,
+            (index) => const CustomScreenPadding(
+              child: LessonDetailCard(
+                title: 'Traffic Light Drive',
+                subTitle: 'Completed Date 2022/06/26',
+              ),
+            ),
           ),
         ),
       ],
@@ -142,9 +146,10 @@ class StudentProfileApproved extends StatelessWidget {
 
   Widget _buildLandscapeLeft(BuildContext context, Size s) {
     return ListView(
+      shrinkWrap: true,
       children: [
         const SizedBox(height: 30),
-        const ProfileSection(),
+         ProfileSection(student: student,),
         const SizedBox(height: 25),
         const Stats(),
         const SizedBox(height: 10),
@@ -153,7 +158,9 @@ class StudentProfileApproved extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute<dynamic>(
-                builder: (cxt) => const ManageStudentLesson(),
+                builder: (cxt) => ManageStudentLesson(
+                  student: student,
+                ),
               ),
             );
           },
@@ -168,7 +175,8 @@ class StudentProfileApproved extends StatelessWidget {
                   ? null
                   : 80,
           margin: const EdgeInsets.symmetric(vertical: 12),
-          child: const InstructorsList(),
+          child:
+              const InstructorsList(), //todo student cannot be linked to an istructor for now
         ),
         const SizedBox(height: 15),
         CustomScreenPadding(
@@ -183,6 +191,8 @@ class StudentProfileApproved extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
+
+        //todo student stat api is not available now
         StatProgressItem(
           s: s,
           title: 'Maneuvering',

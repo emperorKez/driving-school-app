@@ -4,7 +4,8 @@ import 'package:korbil_mobile/repository/api_service/api_service.dart';
 import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
-import 'package:korbil_mobile/repository/school_info/models/driving_school.dart' as driving;
+import 'package:korbil_mobile/repository/school_info/models/driving_school.dart'
+    as driving;
 import 'package:korbil_mobile/repository/school_info/models/school_info.dart';
 
 class SchoolRepo {
@@ -48,11 +49,11 @@ class SchoolRepo {
     }
     return ResponseFailed(response.error!);
   }
+
   Future<ResponseState<SchoolInfo>> getSchool({
     required int schoolId,
   }) async {
-    final response =
-        await apiService.getReq(ApiPaths.getSchool(schoolId));
+    final response = await apiService.getReq(ApiPaths.getSchool(schoolId));
     if (response.data != null) {
       try {
         final drivingSchool = SchoolInfo.fromJson(
@@ -146,6 +147,40 @@ class SchoolRepo {
         ApiPaths.updateSchoolConfig(schoolId),
         payload: payload,
       );
+      if (response.data != null) {
+        return ResponseSuccess(response.data!.data['response']);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+  Future<ResponseState<dynamic>> inviteStudentToSchool({
+    required int schoolId,
+    required String email,
+  }) async {
+    final params = {'email': email};
+    try {
+      final response = await apiService
+          .putReq(ApiPaths.inviteStudentToSchool(schoolId), params: params);
+      if (response.data != null) {
+        return ResponseSuccess(response.data!.data['response']);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+  Future<ResponseState<dynamic>> inviteStaffToSchool({
+    required int schoolId,
+    required String email,
+  }) async {
+    final params = {'email': email};
+    try {
+      final response = await apiService
+          .putReq(ApiPaths.inviteStaffToSchool(schoolId), params: params);
       if (response.data != null) {
         return ResponseSuccess(response.data!.data['response']);
       }

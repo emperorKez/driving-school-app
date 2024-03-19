@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 
 import 'package:korbil_mobile/pages/students/views/student_list/views/student_card.dart';
 
@@ -9,30 +11,20 @@ class MyStudentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start, 
-      children: [
-        StudentCard(
-          name: 'Isaiah Richardson',
-          package: 'Packege 2',
-          completedLessons: '5',
-        ),
-        StudentCard(
-          name: 'Mikael Anders',
-          package: '10 Hours Packege',
-          completedLessons: '12',
-        ),
-        StudentCard(
-          name: 'Mikael Anders',
-          package: '10 Hours Packege',
-          completedLessons: '12',
-        ),
-        StudentCard(
-          name: 'Mikael Anders',
-          package: '10 Hours Packege',
-          completedLessons: '12',
-        ),
-      ],
+    return BlocBuilder<StudentBloc, StudentState>(
+      builder: (context, state) {
+        return state.studentList!.isEmpty
+            ? const Center(
+                child: Text('No student found'),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                    state.studentList!.length,
+                    (index) =>
+                        StudentCard(student: state.studentList![index])));
+      },
     );
   }
 }

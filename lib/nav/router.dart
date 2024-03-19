@@ -5,6 +5,7 @@ import 'package:korbil_mobile/pages/lessons/lessons.dart';
 import 'package:korbil_mobile/pages/notifications/notifications.dart';
 import 'package:korbil_mobile/pages/school/school.dart';
 import 'package:korbil_mobile/pages/students/students.dart';
+import 'package:korbil_mobile/repository/student/models/student.dart';
 
 // root
 final rootNavKey = GlobalKey<NavigatorState>();
@@ -88,7 +89,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const LoginView());
       case createDrivingSchool:
         return MaterialPageRoute(
-            builder: (_) => const CreateDrivingSchoolView(),);
+          builder: (_) => const CreateDrivingSchoolView(),
+        );
       case joinDrivingSchool:
         return MaterialPageRoute(builder: (_) => const JoinDrivingSchoolView());
       case appHome:
@@ -106,17 +108,20 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const InstBookedLessons());
       case completedLessonDetails:
         return MaterialPageRoute(
-            builder: (_) => const InstCompletedLessonDetails(),);
+          builder: (_) => const InstCompletedLessonDetails(),
+        );
       case completedLessons:
         return MaterialPageRoute(builder: (_) => const InstCompletedLessons());
       case lessonDetails:
         return MaterialPageRoute(builder: (_) => const InstLessonDetails());
       case lessonDetailAddReview:
         return MaterialPageRoute(
-            builder: (_) => const InstLessonDetailAddReviewView(),);
+          builder: (_) => const InstLessonDetailAddReviewView(),
+        );
       case lessonDetailMapView:
         return MaterialPageRoute(
-            builder: (_) => const InstLessonDetailMapView(),);
+          builder: (_) => const InstLessonDetailMapView(),
+        );
       case addException:
         return MaterialPageRoute(builder: (_) => const AddExceptionView());
       case editTimeSchedule:
@@ -127,17 +132,25 @@ class AppRouter {
       // students screens
       case manageLessonAddLessonView:
         return MaterialPageRoute(
-            builder: (_) => const ManageLessonAddLessonView(),);
+          builder: (_) => const ManageLessonAddLessonView(),
+        );
       case manageStudentLesson:
-        return MaterialPageRoute(builder: (_) => const ManageStudentLesson());
+        return MaterialPageRoute(
+            builder: (_) =>
+                ManageStudentLesson(student: settings.arguments! as Student));
       case studentProfileApproved:
         return MaterialPageRoute(
-            builder: (_) => const StudentProfileApproved(),);
+          builder: (_) =>
+              StudentProfileApproved(student: settings.arguments! as Student),
+        );
       case profilePackageHistory:
         return MaterialPageRoute(builder: (_) => const ProfilePackageHistory());
       case studentProfileUnapproved:
         return MaterialPageRoute(
-            builder: (_) => const StudentProfileUnApproved(),);
+          builder: (_) => StudentProfileUnApproved(
+            student: settings.arguments! as Student,
+          ),
+        );
 
       //school screens
       case addCourse:
@@ -150,12 +163,14 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const AddNewVehicleView());
       case createNewPackage:
         return MaterialPageRoute(
-            builder: (_) => const InstCreateNewPackageView(),);
+          builder: (_) => const InstCreateNewPackageView(),
+        );
       case configurations:
         return MaterialPageRoute(builder: (_) => const ConfigurationView());
       case editPackage:
         return MaterialPageRoute(
-            builder: (_) => const InstEditNewPackageView(),);
+          builder: (_) => const InstEditNewPackageView(),
+        );
       case feedback:
         return MaterialPageRoute(builder: (_) => const FeedBackView());
       case getHelp:
@@ -166,7 +181,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const InstManageCourseView());
       case managePickupLocation:
         return MaterialPageRoute(
-            builder: (_) => const ManagePickupLocationView(),);
+          builder: (_) => const ManagePickupLocationView(),
+        );
       case managePromotions:
         return MaterialPageRoute(builder: (_) => const InstManagePromotions());
       case manageSchool:

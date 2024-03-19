@@ -1,5 +1,5 @@
 class ApiPaths {
-  static const registerUser = 'user/register';
+  // static const registerUser = 'user/register';
 
   //schedule flow
   static String getScheduleFlowWithId(int id) => 'scheduleFlow/$id';
@@ -12,7 +12,7 @@ class ApiPaths {
   // static String getLanguageWithId(String id) => 'language/$id';
   // static String updateLanguageWithId(String id) => 'language/$id';
   // static String deleteLanguageWithId(String id) => 'language/$id';
-  
+
   // static const createNewLanguage = 'metadata/language';
 
   //courseCategory
@@ -50,8 +50,6 @@ class ApiPaths {
 
   // //get all questions
   // static const getAllQuestions = 'question';
-
- 
 
   //subscriptionItem
   static String getSubscriptionItemWithId(int id) => 'subscriptionItem/$id';
@@ -95,6 +93,13 @@ class ApiPaths {
   static String deleteSchool(int schoolId) => 'school/$schoolId';
   static String updateSchoolConfig(int schoolId) =>
       'school/$schoolId/configurations';
+  static String inviteStudentToSchool(int schoolId) =>
+      'school/$schoolId/invite-student';
+  static String inviteStaffToSchool(int schoolId) =>
+      'school/$schoolId/invite-staff';
+  static String invitedStudents(int schoolId) =>
+      'school/$schoolId/invited-students';
+  static String invitedStaffs(int schoolId) => 'school/$schoolId/invited-staff';
 
   //driving school page info
   static String getDrivingSchoolPage(int schoolId) =>
@@ -118,22 +123,37 @@ class ApiPaths {
   ) =>
       'package/$packageId';
 
-  //availabilityException
-  static String getAvailabilityException({
+  //availability
+  static String getAvailableDates({
     required int schoolId,
-    required int id,
   }) =>
-      'school/$schoolId/availabilityException/$id';
-  static String updateAvailabilityException({
+      'availability/school/$schoolId/available-date';
+  static String addAvailableDates({
     required int schoolId,
-    required int id,
   }) =>
-      'school/$schoolId/availabilityException/$id';
-  static String deleteAvailabilityException({
+      'availability/school/$schoolId/available-date';
+  static String getTimeOffDays({
     required int schoolId,
-    required int id,
   }) =>
-      'school/$schoolId/availabilityException/$id';
+      'availability/school/$schoolId/time-off-day';
+  static String addTimeOffDays({
+    required int schoolId,
+  }) =>
+      'availability/school/$schoolId/time-off-day';
+  static String addMultipleTimeOffDays({
+    required int schoolId,
+  }) =>
+      'availability/school/$schoolId/time-off-day/multiple';
+  static String updateTimeOffDays({
+    required int schoolId,
+    required int offDayId,
+  }) =>
+      'availability/school/$schoolId/time-off-day/$offDayId';
+  static String deleteTimeOffDays({
+    required int schoolId,
+    required int offDayId,
+  }) =>
+      'availability/school/$schoolId/time-off-day/$offDayId';
   static String getAvailabilityExceptionsOfSchool(int schoolId) =>
       'school/$schoolId/availabilityException';
   static String addAvailabilityExceptionForSchool(int schoolId) =>
@@ -146,8 +166,10 @@ class ApiPaths {
   static String deleteVehicle(int vehicleId) => 'vehicle/$vehicleId';
 
   //instructor
-  static String getInstructor(
-          {required int schoolId, required int instructorId,}) =>
+  static String getInstructor({
+    required int schoolId,
+    required int instructorId,
+  }) =>
       'school/$schoolId/instructor/$instructorId';
   static String updateInstructor({
     required int schoolId,

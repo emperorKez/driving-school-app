@@ -20,8 +20,12 @@ class InstHomeMainBody extends StatefulWidget {
 }
 
 class _InstHomeMainBodyState extends State<InstHomeMainBody> {
-  Container _renderScheduleFilterTypeCard(String text,
-      {bool selected = false,}) {
+  String selectedCategory = 'all';
+
+  Container _renderScheduleFilterTypeCard(
+    String text, {
+    bool selected = false,
+  }) {
     final th = KorbilTheme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -168,7 +172,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                             fontSize: 16,
-                            color: th.secondaryColor, 
+                            color: th.secondaryColor,
                           ),
                         ),
                       ),
@@ -208,9 +212,6 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                 const SizedBox(
                   height: 20,
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
                 PrimaryBtn(
                   text: 'OK',
                   ontap: () {
@@ -231,165 +232,167 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
   Widget build(BuildContext context) {
     final s = MediaQuery.of(context).size;
     final th = KorbilTheme.of(context);
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Container(
-          height:
-              getPreferedOrientation(context) == PreferedOrientation.landscape
-                  ? null
-                  : s.height * 0.7,
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-          child: ListView(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              const SizedBox(height: 15),
-              Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image:
-                            AssetImage('assets/imgs/ins/lessons/avatar2.png'),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Hello Good Morning',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          fontSize: getPreferedOrientation(context) ==
-                                  PreferedOrientation.landscape
-                              ? 24
-                              : 14,
-                          color: th.secondaryColor,
+    return Material(
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          Container(
+            height:
+                getPreferedOrientation(context) == PreferedOrientation.landscape
+                    ? null
+                    : s.height * 0.7,
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+            child: ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                const SizedBox(height: 15),
+                Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image:
+                              AssetImage('assets/imgs/ins/lessons/avatar2.png'),
                         ),
                       ),
-                      Text(
-                        'Jack Martines',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: getPreferedOrientation(context) ==
-                                  PreferedOrientation.landscape
-                              ? 24
-                              : 16,
-                          color: th.secondaryColor,
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello Good Morning',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                            fontSize: getPreferedOrientation(context) ==
+                                    PreferedOrientation.landscape
+                                ? 24
+                                : 14,
+                            color: th.secondaryColor,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    width: 55,
-                    height: 55,
-                    child: Image.asset(
-                      'assets/imgs/ins/global/bell.png',
-                      fit: BoxFit.cover,
+                        Text(
+                          'Jack Martines',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: getPreferedOrientation(context) ==
+                                    PreferedOrientation.landscape
+                                ? 24
+                                : 16,
+                            color: th.secondaryColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
-              if (getPreferedOrientation(context) ==
-                  PreferedOrientation.landscape)
-                Container()
-              else
-                _buildCategoryCardsPortrait(),
-              const SizedBox(height: 25),
-              Row(
-                children: [
-                  Text(
-                    'Time Schedule',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: th.secondaryColor,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  GestureDetector(
-                    onTap: _showScheduleStatusInfo,
-                    child: SizedBox(
-                      width: 20,
-                      height: 20,
+                    const Spacer(),
+                    SizedBox(
+                      width: 55,
+                      height: 55,
                       child: Image.asset(
-                        'assets/imgs/ins/lessons/warning_grey.png',
+                        'assets/imgs/ins/global/bell.png',
                         fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (_) => const EditTimeSchedule(),
-                        ),
-                      );
-                    },
-                    child: SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: Image.asset(
-                        'assets/imgs/ins/lessons/add_task.png',
-                        fit: BoxFit.cover,
+                  ],
+                ),
+                const SizedBox(height: 25),
+                if (getPreferedOrientation(context) ==
+                    PreferedOrientation.landscape)
+                  Container()
+                else
+                  _buildCategoryCardsPortrait(),
+                const SizedBox(height: 25),
+                Row(
+                  children: [
+                    Text(
+                      'Time Schedule',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: th.secondaryColor,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (getPreferedOrientation(context) ==
-                      PreferedOrientation.landscape)
-                    _buildCategoryCardsLandscape()
-                  else
-                    Container(),
-                  if (getPreferedOrientation(context) ==
-                      PreferedOrientation.landscape)
-                    const SizedBox(width: 15)
-                  else
-                    Container(),
-                  Expanded(
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.ease,
-                      child: widget.showMainCal
-                          ? const MainCalendarWidget()
-                          : const InstWeeklyCalendar(),
+                    const SizedBox(
+                      width: 8,
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: getPreferedOrientation(context) ==
-                        PreferedOrientation.landscape
-                    ? 15
-                    : 100,
-              ),
-            ],
+                    GestureDetector(
+                      onTap: _showScheduleStatusInfo,
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: Image.asset(
+                          'assets/imgs/ins/lessons/warning_grey.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (_) => const EditTimeSchedule(),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: Image.asset(
+                          'assets/imgs/ins/lessons/add_task.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 25),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (getPreferedOrientation(context) ==
+                        PreferedOrientation.landscape)
+                      _buildCategoryCardsLandscape()
+                    else
+                      Container(),
+                    if (getPreferedOrientation(context) ==
+                        PreferedOrientation.landscape)
+                      const SizedBox(width: 15)
+                    else
+                      Container(),
+                    Expanded(
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.ease,
+                        child: widget.showMainCal
+                            ? const MainCalendarWidget()
+                            : const InstWeeklyCalendar(),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: getPreferedOrientation(context) ==
+                          PreferedOrientation.landscape
+                      ? 15
+                      : 100,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -398,14 +401,33 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
       width: MediaQuery.sizeOf(context).width * 0.2,
       child: Column(
         children: [
-          _renderScheduleFilterTypeCard(
-            'All',
-            selected: true,
+          GestureDetector(
+            onTap: () => setState(() {
+              selectedCategory = 'all';
+            }),
+            child: _renderScheduleFilterTypeCard(
+              'All',
+              selected: selectedCategory == 'all' || false,
+            ),
           ),
           const SizedBox(height: 7),
-          _renderScheduleFilterTypeCard('Individual'),
+          GestureDetector(
+              onTap: () => setState(() {
+                    selectedCategory = 'individual';
+                  }),
+              child: _renderScheduleFilterTypeCard(
+                'Individual',
+                selected: selectedCategory == 'individual' || false,
+              )),
           const SizedBox(height: 7),
-          _renderScheduleFilterTypeCard('Group'),
+          GestureDetector(
+              onTap: () => setState(() {
+                    selectedCategory = 'group';
+                  }),
+              child: _renderScheduleFilterTypeCard(
+                'Group',
+                selected: selectedCategory == 'group' || false,
+              )),
         ],
       ),
     );
@@ -415,18 +437,39 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
     return Row(
       children: [
         Expanded(
-          child: _renderScheduleFilterTypeCard(
-            'All',
-            selected: true,
+          child: GestureDetector(
+            onTap: () => setState(() {
+              selectedCategory = 'all';
+            }),
+            child: _renderScheduleFilterTypeCard(
+              'All',
+              selected: selectedCategory == 'all' || false,
+            ),
           ),
         ),
         Expanded(
           flex: 3,
-          child: _renderScheduleFilterTypeCard('Individual'),
+          child: GestureDetector(
+            onTap: () => setState(() {
+              selectedCategory = 'individual';
+            }),
+            child: _renderScheduleFilterTypeCard(
+              'Individual',
+              selected: selectedCategory == 'individual' || false,
+            ),
+          ),
         ),
         Expanded(
           flex: 2,
-          child: _renderScheduleFilterTypeCard('Group'),
+          child: GestureDetector(
+            onTap: () => setState(() {
+              selectedCategory = 'group';
+            }),
+            child: _renderScheduleFilterTypeCard(
+              'Group',
+              selected: selectedCategory == 'group' || false,
+            ),
+          ),
         ),
       ],
     );

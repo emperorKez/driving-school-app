@@ -21,7 +21,7 @@ class MetadataCubit extends Cubit<MetadataState> {
     emit(MetadataInitial());
     try {
       final languageRes = await _metadataRepo.getAllLanguages();
-      final helpTopicsRes = await _metadataRepo.getAllHelpTopics();
+      // final helpTopicsRes = await _metadataRepo.getAllHelpTopics();
       final feedbackCatgoriesRes = await _metadataRepo.getFeedbackCategories();
       final locationTypeRes = await _metadataRepo.getLocationType();
       final courseCategoryRes = await _metadataRepo.getAllCourseCategories();
@@ -38,7 +38,8 @@ class MetadataCubit extends Cubit<MetadataState> {
           scheduleFlows: scheduleFlowRes.data,
           courseCategories: courseCategoryRes.data,
           instructorTypes: instructorTypeRes.data,
-          helpTopics: helpTopicsRes.data,
+          helpTopics: [],
+          // helpTopics: helpTopicsRes.data,
           feedbackCategories: feedbackCatgoriesRes.data,
           documentTypes: documentTypeRes.data,
           staffRoles: staffRoleRes.data,

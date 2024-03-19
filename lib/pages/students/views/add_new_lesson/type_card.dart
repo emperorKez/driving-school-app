@@ -11,8 +11,8 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
     super.key,
   });
 
-  final String lessonCount;
-  final String hoursCount;
+  final int lessonCount;
+  final int hoursCount;
   final int type;
   final bool selected;
   final Function ontap;
@@ -86,7 +86,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        lessonCount,
+                        '$lessonCount',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: selected
@@ -115,7 +115,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        hoursCount,
+                        '$hoursCount',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: selected

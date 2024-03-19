@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
+import 'package:korbil_mobile/repository/student/models/invited_student.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InvitedStudentList extends StatelessWidget {
@@ -9,25 +14,35 @@ class InvitedStudentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _InvitedStudentCard(),
-        _InvitedStudentCard(),
-        _InvitedStudentCard(),
-        _InvitedStudentCard(),
-        _InvitedStudentCard(),
-        _InvitedStudentCard(),
-      ],
+    final schoolId = context.read<StaffBloc>().state.staff!.staffData.schoolId;
+    return BlocBuilder<StudentBloc, StudentState>(
+      builder: (context, state) {
+        if (state.invitedStudents == null) {
+          context
+              .read<StudentBloc>()
+              .add(GetInvitedStudents(schoolId: schoolId));
+        }
+        if (state is! StudentLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          return state.invitedStudents!.isEmpty
+              ? const Center(
+                  child: Text('No invited Student Found!'),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(
+                      state.invitedStudents!.length,
+                      (index) => _invitedStudentCard(context,
+                          student: state.invitedStudents![index])));
+        }
+      },
     );
   }
-}
 
-class _InvitedStudentCard extends StatelessWidget {
-  const _InvitedStudentCard();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _invitedStudentCard(BuildContext context,
+      {required InvitedStudents student}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -39,7 +54,7 @@ class _InvitedStudentCard extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            'mikaelanders@gmail.com',
+            student.email,
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,
@@ -48,9 +63,12 @@ class _InvitedStudentCard extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          Image.asset(
-            'assets/imgs/ins/school/delete_bin_red.png',
-            width: 20,
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(
+              'assets/imgs/ins/school/delete_bin_red.png',
+              width: 20,
+            ),
           ),
         ],
       ),

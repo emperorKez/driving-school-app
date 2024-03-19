@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/pages/students/views/manage_student_lesson/manage_students.dart';
+import 'package:korbil_mobile/repository/student/models/student.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class ProfileSection extends StatelessWidget {
   const ProfileSection({
+    required this.student,
     super.key,
   });
+  final Student student;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +37,10 @@ class ProfileSection extends StatelessWidget {
         ),
         const SizedBox(width: 15),
         Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Mikael Anders',
+              '${student.profile.firstName} ${student.profile.lastName}',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -46,7 +49,7 @@ class ProfileSection extends StatelessWidget {
               ),
             ),
             Text(
-              '+462139564235',
+              student.profile.phoneNumber,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -55,7 +58,7 @@ class ProfileSection extends StatelessWidget {
               ),
             ),
             Text(
-              'mikaelanders@gmail.com',
+              student.profile.email,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -68,12 +71,7 @@ class ProfileSection extends StatelessWidget {
               children: [
                 PrimaryBtn(
                   ontap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (cxt) => const ManageStudentLesson(),
-                      ),
-                    );
+                    //todo there is no api to send message to student
                   },
                   text: 'Message',
                   fontSize: 14,
@@ -110,7 +108,7 @@ class ProfileSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Mikael Anders',
+                '${student.profile.firstName} ${student.profile.lastName}',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -119,7 +117,7 @@ class ProfileSection extends StatelessWidget {
                 ),
               ),
               Text(
-                '+462139564235',
+                student.profile.phoneNumber,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -128,7 +126,7 @@ class ProfileSection extends StatelessWidget {
                 ),
               ),
               Text(
-                'mikaelanders@gmail.com',
+                student.profile.email,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -140,12 +138,7 @@ class ProfileSection extends StatelessWidget {
                 children: [
                   PrimaryBtn(
                     ontap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (cxt) => const ManageStudentLesson(),
-                        ),
-                      );
+                      //todo no api to send message to student right now
                     },
                     text: 'Message',
                     fontSize: 14,

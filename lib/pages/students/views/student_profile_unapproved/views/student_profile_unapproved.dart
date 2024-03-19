@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/pages/students/views/profile_package_history/views/profile_package_history.dart';
+import 'package:korbil_mobile/repository/student/models/student.dart';
 
 class StudentProfileUnApproved extends StatefulWidget {
-  const StudentProfileUnApproved({super.key});
+  const StudentProfileUnApproved({required this.student, super.key});
+  final Student student;
 
   @override
   State<StudentProfileUnApproved> createState() =>
@@ -30,9 +37,9 @@ class _StudentProfileUnApprovedState extends State<StudentProfileUnApproved> {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return const AlertDialog(
+        return AlertDialog(
           // title: Text('Dialog Title'),
-          content: _ApproveUserAlertContent(),
+          content: _ApproveUserAlertContent(widget.student),
         );
       },
     );
@@ -64,30 +71,42 @@ class _StudentProfileUnApprovedState extends State<StudentProfileUnApproved> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: ListView(
+        shrinkWrap: true,
         children: [
           const SizedBox(
             height: 30,
           ),
-          const _ProfileDetails(),
-          const _PaymentDetailsCard(),
+           _ProfileDetails(widget.student),
+           _PaymentDetailsCard(widget.student),
           const SizedBox(
             height: 20,
           ),
-          PrimaryBtn(
-            text: 'Approve',
-            fontSize: 16,
-            hm: 0,
-            vm: 8,
-            ontap: _showApproveUserAlert,
-          ),
-          SecondaryBtn(
-            text: 'Decline',
-            hm: 0,
-            fontSize: 16,
-            borderColor: AppColors.black,
-            textColor: AppColors.black,
-            vm: 8,
-            ontap: _showDeclineUserAlert,
+          Row(
+            children: [
+              Expanded(
+                child: PrimaryBtn(
+                  text: 'Approve',
+                  fontSize: 16,
+                  hm: 0,
+                  vm: 8,
+                  ontap: _showApproveUserAlert,
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: SecondaryBtn(
+                  text: 'Decline',
+                  hm: 0,
+                  fontSize: 16,
+                  borderColor: AppColors.black,
+                  textColor: AppColors.black,
+                  vm: 8,
+                  ontap: _showDeclineUserAlert,
+                ),
+              )
+            ],
           ),
           const SizedBox(
             height: 50,
@@ -99,10 +118,12 @@ class _StudentProfileUnApprovedState extends State<StudentProfileUnApproved> {
 }
 
 class _ApproveUserAlertContent extends StatelessWidget {
-  const _ApproveUserAlertContent();
+  const _ApproveUserAlertContent(this.student);
+  final Student student;
 
   @override
   Widget build(BuildContext context) {
+    final schoolId = context.read<StaffBloc>().state.staff!.staffData.schoolId;
     return Container(
       padding: const EdgeInsets.all(7),
       child: Column(
@@ -138,10 +159,10 @@ class _ApproveUserAlertContent extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          const Text(
-            '“Mikael Anders”',
+          Text(
+            '“${student.profile.firstName} ${student.profile.lastName}',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 16,
@@ -174,6 +195,8 @@ class _ApproveUserAlertContent extends StatelessWidget {
                 child: PrimaryBtn(
                   text: 'Yes, Approve',
                   ontap: () {
+                    context.read<StudentBloc>().add(ApproveStudent(
+                        schoolId: schoolId, studentId: student.profile.id));
                     Navigator.pop(context);
                     // Navigator.push(
                     //   context,
@@ -317,10 +340,17 @@ class _DeclineAlertContent extends StatelessWidget {
 }
 
 class _PaymentDetailsCard extends StatelessWidget {
-  const _PaymentDetailsCard();
+  const _PaymentDetailsCard(this.student);
+  final Student student;
 
   @override
   Widget build(BuildContext context) {
+    final package = context
+        .read<PackageBloc>()
+        .state
+        .packages![context.read<PackageBloc>().state.packages!.indexWhere((e) =>
+            student.studentData.schoolPackageRefs!
+                .contains(e.schoolPackage.id))].schoolPackage;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 30),
       decoration: BoxDecoration(
@@ -336,9 +366,9 @@ class _PaymentDetailsCard extends StatelessWidget {
             ),
             child: Column(
               children: [
-                const Text(
-                  '90 Min Traffic Light Drive',
-                  style: TextStyle(
+                 Text(
+                  package.title,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: AppColors.black,
                     fontSize: 16,
@@ -347,9 +377,9 @@ class _PaymentDetailsCard extends StatelessWidget {
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),
-                  child: const Text(
-                    '€ 259.00',
-                    style: TextStyle(
+                  child:  Text(
+                    '€ ${package.price}',
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: AppColors.green,
                       fontSize: 20,
@@ -357,11 +387,11 @@ class _PaymentDetailsCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Row(
+                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Payment date ',
+                   const Text(
+                       'Payment Date: ',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: AppColors.black,
@@ -369,9 +399,8 @@ class _PaymentDetailsCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Text(
-                      '2022 June 10',
-                      style: TextStyle(
+                    Text(DateFormat.yMMMMd().format(package.createdAt),
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: AppColors.black,
                         fontSize: 12,
@@ -387,7 +416,7 @@ class _PaymentDetailsCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Status : ',
+                      'Completed? : ',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: AppColors.black,
@@ -395,9 +424,9 @@ class _PaymentDetailsCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const Text(
-                      'Completed',
-                      style: TextStyle(
+                     Text(
+                      '${package.isActive}',
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: AppColors.black,
                         fontSize: 12,
@@ -420,11 +449,12 @@ class _PaymentDetailsCard extends StatelessWidget {
             margin: const EdgeInsets.only(top: 15),
             padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: const BoxDecoration(
-                color: AppColors.green,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(6),
-                  bottomRight: Radius.circular(6),
-                ),),
+              color: AppColors.green,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(6),
+                bottomRight: Radius.circular(6),
+              ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -454,7 +484,8 @@ class _PaymentDetailsCard extends StatelessWidget {
 }
 
 class _ProfileDetails extends StatelessWidget {
-  const _ProfileDetails();
+  const _ProfileDetails(this.student);
+  final Student student;
 
   @override
   Widget build(BuildContext context) {
@@ -465,35 +496,35 @@ class _ProfileDetails extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 15),
             width: 120,
             height: 120,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: AssetImage('assets/imgs/ins/lessons/avatar2.png'),
+                image: NetworkImage(student.profile.avatar),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          const Text(
-            'Mikael Anders',
-            style: TextStyle(
+           Text(
+            '${student.profile.firstName} ${student.profile.lastName}',
+            style: const TextStyle(
               fontFamily: 'Poppins',
               color: AppColors.black,
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const Text(
-            '+462139564235',
-            style: TextStyle(
+           Text(
+            student.profile.phoneNumber,
+            style: const TextStyle(
               fontFamily: 'Poppins',
               color: AppColors.black,
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const Text(
-            'mikaelanders@gmail.com',
-            style: TextStyle(
+           Text(
+           student.profile.email,
+            style: const TextStyle(
               fontFamily: 'Poppins',
               color: AppColors.black,
               fontSize: 16,

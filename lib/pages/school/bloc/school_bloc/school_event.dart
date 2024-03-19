@@ -39,3 +39,21 @@ class UpdateSchoolConfig extends SchoolEvent {
   final int schoolId;
   final Map<String, dynamic> payload;
 }
+
+class InviteStudent extends SchoolEvent {
+  InviteStudent({
+    required this.schoolId,
+    required this.email,
+  });
+  final int schoolId;
+  final String email;
+}
+
+class InviteStaff extends SchoolEvent {
+  InviteStaff({
+    required this.schoolId,
+    required this.email,
+  });
+  final int schoolId;
+  final String email;
+}

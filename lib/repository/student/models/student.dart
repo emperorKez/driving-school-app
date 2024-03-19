@@ -1,50 +1,48 @@
+// ignore_for_file: avoid_dynamic_calls
+
 class Student {
   Student({
-    this.profile,
-    this.studentData,
+   required this.profile,
+   required this.studentData,
   });
 
   factory Student.fromJson(Map<String, dynamic> json) => Student(
-        profile: json['profile'] == null
-            ? null
-            : Profile.fromJson(json['profile'] as Map<String, dynamic>),
-        studentData: json['studentData'] == null
-            ? null
-            : StudentData.fromJson(json['studentData'] as Map<String, dynamic>),
+        profile:  Profile.fromJson(json['profile'] as Map<String, dynamic>),
+        studentData: StudentData.fromJson(json['studentData'] as Map<String, dynamic>),
       );
 
-  Profile? profile;
-  StudentData? studentData;
+  Profile profile;
+  StudentData studentData;
 
   Map<String, dynamic> toJson() => {
-        'profile': profile?.toJson(),
-        'studentData': studentData?.toJson(),
+        'profile': profile.toJson(),
+        'studentData': studentData.toJson(),
       };
 }
 
 class Profile {
   Profile({
-    this.id,
-    this.firstName,
-    this.lastName,
-    this.phoneNumber,
-    this.email,
-    this.avatar,
-    this.userStatus,
-    this.userType,
+   required this.id,
+   required this.firstName,
+   required this.lastName,
+   required this.phoneNumber,
+   required this.email,
+   required this.avatar,
+   required this.userStatus,
+   required this.userType,
     this.createdAt,
     this.updatedAt,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json['id'] as int?,
-        firstName: json['firstName'] as String?,
-        lastName: json['lastName'] as String?,
-        phoneNumber: json['phoneNumber'] as String?,
-        email: json['email'] as String?,
-        avatar: json['avatar'] as String?,
-        userStatus: json['userStatus'] as int?,
-        userType: json['userType'] as int?,
+        id: json['id'] as int,
+        firstName: json['firstName'] as String,
+        lastName: json['lastName'] as String,
+        phoneNumber: json['phoneNumber'] as String,
+        email: json['email'] as String,
+        avatar: json['avatar'] as String,
+        userStatus: json['userStatus'] as int,
+        userType: json['userType'] as int,
         createdAt: json['createdAt'] == null
             ? null
             : DateTime.parse(json['createdAt'] as String),
@@ -53,14 +51,14 @@ class Profile {
             : DateTime.parse(json['updatedAt'] as String),
       );
 
-  int? id;
-  String? firstName;
-  String? lastName;
-  String? phoneNumber;
-  String? email;
-  String? avatar;
-  int? userStatus;
-  int? userType;
+  int id;
+  String firstName;
+  String lastName;
+  String phoneNumber;
+  String email;
+  String avatar;
+  int userStatus;
+  int userType;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -74,7 +72,7 @@ class Profile {
         'userStatus': userStatus,
         'userType': userType,
         'createdAt': createdAt?.toIso8601String(),
-        'updatedAt': updatedAt?.toIso8601String(),
+        'updatedAt': updatedAt?.toIso8601String(), 
       };
 }
 

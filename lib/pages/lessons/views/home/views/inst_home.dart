@@ -12,7 +12,7 @@ class LessonsHomeView extends StatefulWidget {
 }
 
 class _InstHomeState extends State<LessonsHomeView> {
-  bool _showMainCalendar = true;
+  bool _showMainCalendar = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class _InstHomeState extends State<LessonsHomeView> {
         scrollController: sctrl,
       ),
       body: InstHomeMainBody(
-        showMainCal: _showMainCalendar,
+        showMainCal: _showMainCalendar, 
       ),
     );
   }

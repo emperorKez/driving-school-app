@@ -6,7 +6,7 @@ import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ProfilePackageHistory extends StatefulWidget {
-  const ProfilePackageHistory({super.key});
+  const ProfilePackageHistory({super.key}); 
 
   @override
   State<ProfilePackageHistory> createState() => _ProfilePackageHistoryState();

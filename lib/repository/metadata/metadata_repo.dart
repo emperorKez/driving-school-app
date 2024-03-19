@@ -87,7 +87,9 @@ class MetadataRepo {
   }
 
   Future<ResponseState<List<HelpTopic>>> getAllHelpTopics() async {
-    final response = await apiService.getReq(ApiPaths.getAllHelpTopics);
+    final params = {'languageId': 1};
+    final response =
+        await apiService.getReq(ApiPaths.getAllHelpTopics, params: params);
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -167,6 +169,7 @@ class MetadataRepo {
       return ResponseFailed(DataError(null, e));
     }
   }
+
   Future<ResponseState<List<LocationType>>> getLocationType() async {
     final response = await apiService.getReq(ApiPaths.getLocationType);
 

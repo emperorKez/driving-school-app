@@ -1,48 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/bloc/group_lesson/group_lesson_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/pages/students/views/student_profile_approved/views/student_profile_approved.dart';
 import 'package:korbil_mobile/pages/students/views/student_profile_unapproved/views/student_profile_unapproved.dart';
+import 'package:korbil_mobile/repository/group_lesson/models/group_lesson.dart';
+import 'package:korbil_mobile/repository/student/models/student.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class StudentCard extends StatelessWidget {
   const StudentCard({
-    required this.name,
-    required this.package,
-    this.completedLessons,
-    this.approved = true,
-    this.onApprove,
+    required this.student,
     super.key,
   });
-  final String name;
-  final String package;
-  final String? completedLessons;
-  final bool approved;
-  final Function? onApprove;
+  final Student student;
 
   @override
   Widget build(BuildContext context) {
+    final package = context
+        .read<PackageBloc>()
+        .state
+        .packages![context.read<PackageBloc>().state.packages!.indexWhere((e) =>
+            student.studentData.schoolPackageRefs!
+                .contains(e.schoolPackage.id))]
+        .schoolPackage;
+    final groupLessons = context.read<GroupLessonBloc>().state.groupLessons![
+        context.read<GroupLessonBloc>().state.groupLessons!.indexWhere((e) =>
+            e.lessons[0].groupLessonStudentRefs.contains(student.profile.id))];
+
+    final completedLessons = <Lesson>[];
+
+    for (final element in groupLessons.lessons) {
+      if (element.lessonStatus ==
+          2) //todo assume status 2 means completed lesson
+      {
+        completedLessons.add(element);
+      }
+    }
+    final isApproved =
+        student.profile.userStatus == 1; //todo check is status 1 means approved
     return GestureDetector(
       onTap: () {
-        if (approved) {
+        if (isApproved) {
           Navigator.push(
             context,
             MaterialPageRoute<dynamic>(
-              builder: (cxt) => const StudentProfileApproved(),
+              builder: (cxt) => StudentProfileApproved(student: student,),
             ),
           );
         } else {
           Navigator.push(
             context,
             MaterialPageRoute<dynamic>(
-              builder: (cxt) => const StudentProfileUnApproved(),
+              builder: (cxt) => StudentProfileUnApproved(
+                student: student,
+              ),
             ),
           );
         }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         decoration: BoxDecoration(
           color: KorbilTheme.of(context).white,
           boxShadow: [defaultBoxShadow()],
@@ -71,7 +94,7 @@ class StudentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name,
+                    '${student.profile.firstName} ${student.profile.firstName}',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: KorbilTheme.of(context).secondaryColor,
@@ -93,13 +116,13 @@ class StudentCard extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        package,
+                        package.title,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
                           fontSize: 12,
                           fontWeight:
-                              approved ? FontWeight.w400 : FontWeight.w600,
+                              isApproved ? FontWeight.w400 : FontWeight.w600,
                         ),
                       ),
                     ],
@@ -107,8 +130,8 @@ class StudentCard extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
-                  if (!approved)
-                    Container()
+                  if (!isApproved)
+                    SizedBox()
                   else
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -132,11 +155,19 @@ class StudentCard extends StatelessWidget {
                         const SizedBox(
                           width: 3,
                         ),
-                        if (completedLessons == null)
-                          Container()
+                        if (completedLessons.isEmpty)
+                          Text(
+                            'None',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: KorbilTheme.of(context).secondaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
                         else
                           Text(
-                            completedLessons!,
+                            '${completedLessons.length}',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: KorbilTheme.of(context).secondaryColor,
@@ -149,20 +180,34 @@ class StudentCard extends StatelessWidget {
                 ],
               ),
             ),
-            if (approved)
-              Container()
+            if (isApproved)
+              Text(
+                'Approved',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontStyle: FontStyle.italic,
+                  color: KorbilTheme.of(context).secondaryColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                ),
+              )
             else
               PrimaryBtn(
-                text: 'Approval',
+                text: 'Approve',
                 fontSize: 12,
                 vm: 0,
-                hm: 12,
+                hm: 0,
                 phm: 12,
                 pvm: 10,
                 ontap: () {
-                  if (onApprove != null) {
-                    onApprove!();
-                  }
+                  context.read<StudentBloc>().add(ApproveStudent(
+                      schoolId: context
+                          .read<StaffBloc>()
+                          .state
+                          .staff!
+                          .staffData
+                          .schoolId,
+                      studentId: student.profile.id));
                 },
               ),
           ],

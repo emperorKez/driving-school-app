@@ -1,17 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'student_bloc.dart';
 
 @immutable
 sealed class StudentState {
-  const StudentState({this.studentList});
+  const StudentState({
+    this.studentList,
+    this.invitedStudents,
+  });
   final List<Student>? studentList;
+
+  final List<InvitedStudents>? invitedStudents;
 }
 
 final class StudentInitial extends StudentState {}
 
-final class Studentloading extends StudentState {}
+final class StudentLoading extends StudentState {}
 
 final class StudentLoaded extends StudentState {
-  const StudentLoaded({required super.studentList});
+  const StudentLoaded({required super.studentList, super.invitedStudents});
 }
 
 final class StudentError extends StudentState {

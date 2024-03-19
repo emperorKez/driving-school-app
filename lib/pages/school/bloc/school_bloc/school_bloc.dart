@@ -19,6 +19,8 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
     on<UpdateSchool>(onUpdateSchool);
     on<DeleteSchool>(onDeleteSchool);
     on<UpdateSchoolConfig>(onUpdateSchoolConfig);
+    on<InviteStudent>(onInviteStudent);
+    on<InviteStaff>(onInviteStaff);
   }
   final SchoolRepo _schoolRepo;
 
@@ -111,6 +113,33 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
     emit(SchoolLoading());
     try {
       final response = await _schoolRepo.createSchool(event.payload);
+      emit(SchoolLoaded(schoolInfo: response.data));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+    }
+  }
+
+  Future<void> onInviteStudent(InviteStudent event, Emitter<SchoolState> emit) async{
+    emit(SchoolLoading());
+    try {
+      await _schoolRepo.inviteStudentToSchool(
+        schoolId: event.schoolId, email: event.email,
+      );
+      final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
+      emit(SchoolLoaded(schoolInfo: response.data));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+    }
+  }
+
+  Future<void> onInviteStaff(InviteStaff event, Emitter<SchoolState> emit) async{
+    emit(SchoolLoading());
+    try {
+      await _schoolRepo.inviteStaffToSchool(
+        schoolId: event.schoolId,
+        email: event.email,
+      );
+      final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
       emit(SchoolLoaded(schoolInfo: response.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
