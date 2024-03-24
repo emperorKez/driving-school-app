@@ -2,18 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/repository/package/models/package.dart';
+import 'package:korbil_mobile/repository/subscription/model/subscription.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PackageCard extends StatelessWidget {
   const PackageCard({
     required this.s,
-    required this.package,
+    required this.subscriptionLevel,
     super.key,
   });
 
   final Size s;
-  final Package package;
+  final Subscription subscriptionLevel;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class PackageCard extends StatelessWidget {
               ),
             ),
             Text(
-              package.schoolPackage.title,
+              subscriptionLevel.name,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -100,7 +100,7 @@ class PackageCard extends StatelessWidget {
               ),
             ),
             Text(
-              package.schoolPackage.details,
+              subscriptionLevel.details,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -113,7 +113,7 @@ class PackageCard extends StatelessWidget {
             ),
             Center(
               child: Text(
-                '\$${package.schoolPackage.price}',
+                '\$${subscriptionLevel.price}',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -125,11 +125,11 @@ class PackageCard extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-             PrimaryBtn(
+            PrimaryBtn(
               text: 'More Details',
               fontSize: 14,
               pvm: 10,
-              ontap: (){
+              ontap: () {
                 //todo more package info
               },
             ),

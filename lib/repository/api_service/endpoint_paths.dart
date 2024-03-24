@@ -52,11 +52,12 @@ class ApiPaths {
   // static const getAllQuestions = 'question';
 
   //subscriptionItem
-  static String getSubscriptionItemWithId(int id) => 'subscriptionItem/$id';
-  static String updateSubscriptionItemWithId(int id) => 'subscriptionItem/$id';
-  static String deleteSubscriptionItemWithId(int id) => 'subscriptionItem/$id';
-  static const getAllSubscriptionItems = 'subscriptionItem';
-  static const createNewSubscriptionItem = 'subscriptionItem';
+  static const getAllSubscriptionLevels = 'subscription/level';
+  static const createSubscriptionLevel = 'subscription/level';
+  static const getAllSubscriptionItems = 'subscription/item';
+  static const createSubscriptionItem = 'subscription/item';
+  static String getSubscriptionLevel(int id) => 'subscription/level/$id';
+  static String getSubscriptionItem(int id) => 'subscription/item/$id';
 
   //subscriptionLevel item
   static String getSubLevelItemByid({
@@ -308,4 +309,23 @@ class ApiPaths {
 
   //location
   static String suggestLocation = 'location/suggest';
+
+  //Payment
+static const makePackagePayment = 'payment/package';
+static const makeGroupLessonPayment = 'payment/group-lesson';
+static const getDeposithandlers = 'payment/handler/deposit';
+
+//lesson
+static String enableLessonBooking(int lessonId) => 'lesson/$lessonId/enable';
+static String disableLessonBooking(int lessonId) => 'lesson/$lessonId/disable';
+static const addLesson = 'lesson';
+static String getLesson(int lessonId) => 'lesson/$lessonId';
+static String modifyLesson(int lessonId) => 'lesson/$lessonId';
+static String deleteLesson(int lessonId) => 'lesson/$lessonId';
+static String finishLesson(int lessonId) => 'lesson/$lessonId/finish';
+static String sendLessonFeedback(int lessonId) => 'lesson/$lessonId/feedback';
+static String sendLessonCoordinates(int lessonId) => 'lesson/$lessonId/coordinates';
+static String startLesson(int lessonId) => 'lesson/$lessonId/start';
+static const getUpcomingLesson = 'lesson/upcoming';
+static const getPastLesson = 'lesson/past';
 }

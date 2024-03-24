@@ -1,23 +1,40 @@
 // ignore_for_file: avoid_dynamic_calls
 
-class Student {
-  Student({
-    required this.profile,
-    required this.studentData,
-  });
+import 'package:korbil_mobile/repository/lesson/model/past_lesson.dart';
+import 'package:korbil_mobile/repository/lesson/model/upcoming_lesson.dart';
 
-  factory Student.fromJson(Map<String, dynamic> json) => Student(
-        profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
-        studentData:
-            StudentData.fromJson(json['studentData'] as Map<String, dynamic>),
-      );
+class CustomStudent {
+  CustomStudent(
+      {required this.profile,
+      required this.studentData,
+      required this.packageId,
+      required this.upcomingLessons,
+      required this.completedLessons});
+
+  factory CustomStudent.fromJson(Map<String, dynamic> json) => CustomStudent(
+      profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
+      studentData:
+          StudentData.fromJson(json['studentData'] as Map<String, dynamic>),
+      packageId: json['packageId'] as int,
+      upcomingLessons: List<UpcomingLesson>.from(
+          json['upcomingLessons'].map(UpcomingLesson.fromJson) as Iterable),
+      completedLessons: List<PastLesson>.from(
+          json['completedLessons'].map(PastLesson.fromJson) as Iterable));
 
   Profile profile;
   StudentData studentData;
+  int packageId;
+  List<UpcomingLesson> upcomingLessons;
+  List<PastLesson> completedLessons;
 
   Map<String, dynamic> toJson() => {
         'profile': profile.toJson(),
         'studentData': studentData.toJson(),
+        'packageId': packageId,
+        'upcomingLessons':
+            List<dynamic>.from(upcomingLessons.map((x) => x.toJson())),
+        'completedLessons':
+            List<dynamic>.from(completedLessons.map((x) => x.toJson())),
       };
 }
 

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repository/account_repo/account_repo.dart';
 import 'package:korbil_mobile/repository/metadata/models/document_type.dart';
 import 'package:korbil_mobile/repository/storage/model/upload.dart';
 import 'package:korbil_mobile/repository/storage/storage_repo.dart';
@@ -11,15 +10,14 @@ part 'create_account_event.dart';
 part 'create_account_state.dart';
 
 class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
-  CreateAccountBloc({AccountRepo? accountRepo, StorageRepo? storageRepo})
-      : _accountRepo = accountRepo ?? AccountRepo(),
-        _storageRepo = storageRepo ?? StorageRepo(),
+  CreateAccountBloc({StorageRepo? storageRepo})
+      : _storageRepo = storageRepo ?? StorageRepo(),
         super(CreateAccountInitial()) {
     on<UploadCertificate>(onUploadCertificate);
     on<UploadLicence>(onUploadLicence);
     // on<CreateAccount>(onCreateAccount);
   }
-  final AccountRepo _accountRepo;
+
   final StorageRepo _storageRepo;
 
   Future<void> onUploadCertificate(

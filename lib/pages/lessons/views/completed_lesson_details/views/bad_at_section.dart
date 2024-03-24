@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/assesment_type_icon.dart';
 import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/selected_bad_assesment_card.dart';
+import 'package:korbil_mobile/repository/lesson/model/lesson.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class BadAtSection extends StatelessWidget {
-  const BadAtSection({
+  const BadAtSection({ required this.detail,
     required String needToPracticeAssesment, super.key,
   }) : _needToPracticeAssesment = needToPracticeAssesment;
 
   final String _needToPracticeAssesment;
+  final LessonDetail detail;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class BadAtSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: BadAssestmentTypeIcon(
+                child:  BadAssestmentTypeIcon(
                   type: 'Vehicle knowledge',
                   selected: _needToPracticeAssesment == 'Vehicle knowledge',
                   ontap: (String val) {

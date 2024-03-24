@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:korbil_mobile/components/loading_widget.dart';
-import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:korbil_mobile/components/loading_widget.dart';
+// import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstUserDetailsCard extends StatelessWidget {
@@ -13,11 +13,11 @@ class InstUserDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StudentBloc, StudentState>(
-      builder: (context, state) {
-        if (state is StudentLoaded) {
-          final student = state.studentList![state.studentList!
-              .indexWhere((e) => e.profile.id == studentRef)];
+    // return BlocBuilder<StudentBloc, StudentState>(
+    //   builder: (context, state) {
+    //     if (state is StudentLoaded) {
+    //       final student = state.studentList![state.studentList!
+    //           .indexWhere((e) => e.profile.id == studentRef)];
 
           return Container(
             margin: const EdgeInsets.symmetric(vertical: 4),
@@ -43,7 +43,7 @@ class InstUserDetailsCard extends StatelessWidget {
                     color: KorbilTheme.of(context).primaryColor,
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image:  NetworkImage(student.profile.avatar),
+                      image:  NetworkImage('student.profile.avatar'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -52,8 +52,8 @@ class InstUserDetailsCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${student.profile.firstName} ${student.profile.lastName}',
+                      Text('',
+                        // '${student.profile.firstName} ${student.profile.lastName}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -64,8 +64,8 @@ class InstUserDetailsCard extends StatelessWidget {
                       const SizedBox(
                         height: 5,
                       ),
-                      Text(
-                        '${student.studentData.city}',
+                      Text('',
+                        // '${studen't.studentData.city}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -76,8 +76,8 @@ class InstUserDetailsCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(
-                  '${student.profile.userStatus}',
+                Text('',
+                  // '${student.profile.userStatus}',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: KorbilTheme.of(context).secondaryColor,
@@ -88,10 +88,10 @@ class InstUserDetailsCard extends StatelessWidget {
               ],
             ),
           );
-        } else {
-          return kLoadingWidget(context);
-        }
-      },
-    );
+        // } else {
+        //   return kLoadingWidget(context);
+        // }
+    //   },
+    // );
   }
 }

@@ -12,6 +12,7 @@ class MapSection extends StatelessWidget {
     return SizedBox(
       height: s.height * 0.35,
       child: ClipRRect(
+        //todo integrate google map
         child: Image.asset(
           'assets/imgs/ins/lessons/sample_map.png',
           fit: BoxFit.cover,

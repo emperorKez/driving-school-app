@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:korbil_mobile/repository/lesson/model/lesson.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class AssignementDetailSection extends StatelessWidget {
-  const AssignementDetailSection({
+  const AssignementDetailSection({ required this.detail,
     super.key,
   });
+  final LessonDetail detail;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +113,7 @@ class AssignementDetailSection extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '18KM',
+                        '${detail.lesson.distance}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -146,7 +149,7 @@ class AssignementDetailSection extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Manoga Nimanja',
+                        '${detail.staff.firstName} ${detail.staff.lastName}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -196,7 +199,7 @@ class AssignementDetailSection extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '02/06/2022',
+                        DateFormat.yMd().format(detail.lesson.scheduledDate),
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -232,7 +235,7 @@ class AssignementDetailSection extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '12:00',
+                        DateFormat.Hm().format(detail.lesson.scheduledTime as DateTime),
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -268,7 +271,7 @@ class AssignementDetailSection extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '60 min',
+                        '${detail.lesson.duration}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -293,7 +296,7 @@ class AssignementDetailSection extends StatelessWidget {
             ),
           ),
           Text(
-            'Aniaraplatsen 6, 191 47 Sollentuna, Sweden',
+            detail.location.address,
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,

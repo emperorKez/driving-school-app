@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/payments_view/views/current_plan_card.dart';
 import 'package:korbil_mobile/pages/school/views/payments_view/views/earning_details.dart';
 import 'package:korbil_mobile/pages/school/views/payments_view/views/payment_data_table.dart';
@@ -38,18 +40,20 @@ class _InstPaymentsViewState extends State<InstPaymentsView> {
   }
 
   Container _renderMobileBody() {
+    final subscriptionLevel =
+        context.read<SchoolBloc>().state.schoolInfo!.subscriptionLevel;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: ListView(
-        children: const [
-          SizedBox(
+        children: [
+          const SizedBox(
             height: 20,
           ),
-          EarningDetails(),
-          SizedBox(
+          const EarningDetails(),
+          const SizedBox(
             height: 15,
           ),
-          Text(
+          const Text(
             'Current Plan',
             style: TextStyle(
               fontFamily: 'Poppins',
@@ -58,14 +62,16 @@ class _InstPaymentsViewState extends State<InstPaymentsView> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          CurrentPlanCard(),
-          SizedBox(
+          CurrentPlanCard(
+            subscriptionLevel: subscriptionLevel,
+          ),
+          const SizedBox(
             height: 15,
           ),
-          Text(
+          const Text(
             'Payment History',
             style: TextStyle(
               fontFamily: 'Poppins',
@@ -74,10 +80,10 @@ class _InstPaymentsViewState extends State<InstPaymentsView> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
-          SizedBox(
+          const SizedBox(
             width: double.infinity,
             child: SingleChildScrollView(
               child: PaymentDataTable(),

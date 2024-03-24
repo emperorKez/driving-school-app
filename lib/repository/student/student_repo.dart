@@ -24,15 +24,15 @@ class StudentRepo {
   //   return ResponseFailed(res.error!);
   // }
 
-  Future<ResponseState<List<Student>>> getAllStudent(int schoolId) async {
+  Future<ResponseState<List<StudentData>>> getAllStudent(int schoolId) async {
     final params = {'id': schoolId};
     try {
       final res = await apiService.getReq(ApiPaths.getStudents, params: params);
       if (res.data != null) {
         final jsonList = res.data!.data['response'];
         final data = (jsonList as List).cast<Map<String, dynamic>>();
-        final students = List<Student>.from(
-          data.map(Student.fromJson),
+        final students = List<StudentData>.from(
+          data.map(StudentData.fromJson),
         );
         return ResponseSuccess(students);
       }

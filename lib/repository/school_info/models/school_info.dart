@@ -193,7 +193,7 @@ class Profile {
 class StaffData {
   StaffData({
     required this.id,
-    required this.userProfileId,
+    required this.refId,
     required this.documents,
     required this.staffRole,
     required this.schoolId,
@@ -201,7 +201,7 @@ class StaffData {
 
   factory StaffData.fromJson(Map<String, dynamic> json) => StaffData(
         id: json['id'] as int,
-        userProfileId: json['userProfileId'] as int,
+        refId: json['refId'] as int,
         documents: List<Document>.from(
           json['documents'].map(Document.fromJson) as Iterable,
         ),
@@ -210,14 +210,14 @@ class StaffData {
       );
 
   int id;
-  int userProfileId;
+  int refId;
   List<Document> documents;
   int staffRole;
   int schoolId;
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'userProfileId': userProfileId,
+        'refId': refId,
         'documents': List<dynamic>.from(documents.map((x) => x.toJson())),
         'staffRole': staffRole,
         'schoolId': schoolId,
