@@ -6,6 +6,7 @@ import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
 import 'package:korbil_mobile/repository/student/models/invited_student.dart';
 import 'package:korbil_mobile/repository/student/models/student.dart';
+import 'package:korbil_mobile/repository/student/models/student_package.dart';
 
 class StudentRepo {
   final ApiService apiService = ApiService();
@@ -24,15 +25,15 @@ class StudentRepo {
   //   return ResponseFailed(res.error!);
   // }
 
-  Future<ResponseState<List<StudentData>>> getAllStudent(int schoolId) async {
+  Future<ResponseState<List<Student>>> getAllStudent(int schoolId) async {
     final params = {'id': schoolId};
     try {
       final res = await apiService.getReq(ApiPaths.getStudents, params: params);
       if (res.data != null) {
         final jsonList = res.data!.data['response'];
         final data = (jsonList as List).cast<Map<String, dynamic>>();
-        final students = List<StudentData>.from(
-          data.map(StudentData.fromJson),
+        final students = List<Student>.from(
+          data.map(Student.fromJson),
         );
         return ResponseSuccess(students);
       }
@@ -171,6 +172,22 @@ class StudentRepo {
           data.map(InvitedStudents.fromJson),
         );
         return ResponseSuccess(students);
+      }
+      return ResponseFailed(res.error!);
+    } catch (e) {
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+  Future<ResponseState<StudentPackage>> getStudentCurrentPackage(
+      int studentId) async {
+    try {
+      final res =
+          await apiService.getReq(ApiPaths.getStudentCurrentPackage(studentId));
+      if (res.data != null) {
+        final data = res.data!.data['response'];
+        final studentPackage = data.map(StudentPackage.fromJson);
+        return ResponseSuccess(studentPackage as StudentPackage);
       }
       return ResponseFailed(res.error!);
     } catch (e) {

@@ -16,3 +16,9 @@ class MakeGroupLessonPayment extends PaymentEvent {
 }
 
 class GetDeposithandlers extends PaymentEvent {}
+
+class GetPaymentHistory extends PaymentEvent{
+  GetPaymentHistory({required this.schoolId});
+
+  final int schoolId;
+}

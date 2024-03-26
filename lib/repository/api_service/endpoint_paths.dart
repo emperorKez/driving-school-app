@@ -288,6 +288,8 @@ class ApiPaths {
     required int schoolId,
   }) =>
       'student/$studentId/approve-to-school/$schoolId';
+  static String getStudentCurrentPackage(int studentId) =>
+      'student/$studentId/current-package';
 
   //staff
   static String getStaffbyEmail = 'staff';
@@ -311,21 +313,25 @@ class ApiPaths {
   static String suggestLocation = 'location/suggest';
 
   //Payment
-static const makePackagePayment = 'payment/package';
-static const makeGroupLessonPayment = 'payment/group-lesson';
-static const getDeposithandlers = 'payment/handler/deposit';
+  static const makePackagePayment = 'payment/package';
+  static const makeGroupLessonPayment = 'payment/group-lesson';
+  static const getDeposithandlers = 'payment/handler/deposit';
+  static const getSchoolEarnings = 'payment/stats';
+  static const getPaymentHistory = 'payment/history';
 
 //lesson
-static String enableLessonBooking(int lessonId) => 'lesson/$lessonId/enable';
-static String disableLessonBooking(int lessonId) => 'lesson/$lessonId/disable';
-static const addLesson = 'lesson';
-static String getLesson(int lessonId) => 'lesson/$lessonId';
-static String modifyLesson(int lessonId) => 'lesson/$lessonId';
-static String deleteLesson(int lessonId) => 'lesson/$lessonId';
-static String finishLesson(int lessonId) => 'lesson/$lessonId/finish';
-static String sendLessonFeedback(int lessonId) => 'lesson/$lessonId/feedback';
-static String sendLessonCoordinates(int lessonId) => 'lesson/$lessonId/coordinates';
-static String startLesson(int lessonId) => 'lesson/$lessonId/start';
-static const getUpcomingLesson = 'lesson/upcoming';
-static const getPastLesson = 'lesson/past';
+  static String enableLessonBooking(int lessonId) => 'lesson/$lessonId/enable';
+  static String disableLessonBooking(int lessonId) =>
+      'lesson/$lessonId/disable';
+  static const addLesson = 'lesson';
+  static String getLesson(int lessonId) => 'lesson/$lessonId';
+  static String modifyLesson(int lessonId) => 'lesson/$lessonId';
+  static String deleteLesson(int lessonId) => 'lesson/$lessonId';
+  static String finishLesson(int lessonId) => 'lesson/$lessonId/finish';
+  static String sendLessonFeedback(int lessonId) => 'lesson/$lessonId/feedback';
+  static String sendLessonCoordinates(int lessonId) =>
+      'lesson/$lessonId/coordinates';
+  static String startLesson(int lessonId) => 'lesson/$lessonId/start';
+  static const getUpcomingLesson = 'lesson/upcoming';
+  static const getPastLesson = 'lesson/past';
 }

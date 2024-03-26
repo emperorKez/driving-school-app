@@ -5,7 +5,9 @@ import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
 import 'package:korbil_mobile/repository/payment/model/deposit.dart';
+import 'package:korbil_mobile/repository/payment/model/earning.dart';
 import 'package:korbil_mobile/repository/payment/model/package_payment.dart';
+import 'package:korbil_mobile/repository/payment/model/payment_history.dart';
 
 class PaymentRepo {
   ApiService apiService = ApiService();
@@ -54,6 +56,40 @@ class PaymentRepo {
           data.map(Deposit.fromJson),
         );
         return ResponseSuccess(handlers);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
+
+
+  Future<ResponseState<List<PaymentHistory>>> getPaymentHistory(int schoolId) async {
+    final params = {'schoolId': schoolId };
+    final response = await apiService.getReq(ApiPaths.getPaymentHistory, params: params);
+    if (response.data != null) {
+      try {
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final history = List<PaymentHistory>.from(
+          data.map(PaymentHistory.fromJson),
+        );
+        return ResponseSuccess(history);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
+  Future<ResponseState<Earning>> getSchoolEarnings(int schoolId) async {
+    final params = {'schoolId': schoolId };
+    final response = await apiService.getReq(ApiPaths.getSchoolEarnings, params: params);
+    if (response.data != null) {
+      try {
+        final data = response.data!.data['response'];
+        final earnings = 
+          data.map(Earning.fromJson);
+        return ResponseSuccess(earnings as Earning);
       } catch (e) {
         return ResponseFailed(DataError(null, e));
       }
