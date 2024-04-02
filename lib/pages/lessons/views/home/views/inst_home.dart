@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/cubit/calender_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/inst_home_mainbody.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/slide_up_panel.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
@@ -19,14 +22,27 @@ class _InstHomeState extends State<LessonsHomeView> {
     final s = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: getPreferedOrientation(context) == PreferedOrientation.landscape
-            ? _buildLandscape(s)
-            : _buildPortrait(s),
-      ),
+          body: BlocConsumer<CalenderCubit, CalenderState>(
+        listener: (context, state) {
+          if (state is CalenderError) {
+            errorSnackbar(context, error: state.error);
+          }
+        },
+        builder: (context, state) {
+          // if (state is! CalenderLoaded) {
+          //   return kLoadingWidget(context);
+          // } else {
+          return getPreferedOrientation(context) ==
+                  PreferedOrientation.landscape
+              ? _buildLandscape(s: s, state: state)
+              : _buildPortrait(s: s, state: state);
+          // }
+        },
+      )),
     );
   }
 
-  Widget _buildLandscape(Size s) {
+  Widget _buildLandscape({required Size s, required CalenderState state}) {
     return ListView(
       children: [
         InstHomeMainBody(
@@ -37,7 +53,8 @@ class _InstHomeState extends State<LessonsHomeView> {
     );
   }
 
-  SlidingUpPanel _buildPortrait(Size s) {
+  SlidingUpPanel _buildPortrait(
+      {required Size s, required CalenderState state}) {
     return SlidingUpPanel(
       onPanelOpened: () {
         setState(() {
@@ -57,7 +74,7 @@ class _InstHomeState extends State<LessonsHomeView> {
         scrollController: sctrl,
       ),
       body: InstHomeMainBody(
-        showMainCal: _showMainCalendar, 
+        showMainCal: _showMainCalendar,
       ),
     );
   }

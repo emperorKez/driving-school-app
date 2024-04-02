@@ -49,7 +49,7 @@ class StudentProfileApproved extends StatelessWidget {
                 Expanded(child: _buildLandscapeLeft(context, s)),
                 const SizedBox(width: 20),
                 Expanded(
-                    child: _buildLandscapeRight(context, student: student)),
+                    child: _buildLandscapeRight(context, student: student),),
               ],
             )
           : ListView(
@@ -65,7 +65,7 @@ class StudentProfileApproved extends StatelessWidget {
   }
 
   Widget _buildLandscapeRight(BuildContext context,
-      {required CustomStudent student}) {
+      {required CustomStudent student,}) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -130,11 +130,11 @@ class StudentProfileApproved extends StatelessWidget {
                         .courses!
                         .indexWhere((e) =>
                             e.course.id ==
-                            student.studentPackage.pastLessons[index].courseId)]
+                            student.studentPackage.pastLessons[index].courseId,)]
                     .course
                     .title,
                 subTitle: DateFormat.yMd().format(
-                    student.studentPackage.pastLessons[index].scheduledDate),
+                    student.studentPackage.pastLessons[index].scheduledDate,),
               ),
             ),
           ),

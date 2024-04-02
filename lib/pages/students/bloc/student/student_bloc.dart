@@ -39,10 +39,10 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
               e
                   .studentData
                   .schoolRefs[e.studentData.schoolRefs.indexWhere(
-                      (element) => element.schoolId == event.schoolId)]
-                  .studentId);
+                      (element) => element.schoolId == event.schoolId,)]
+                  .studentId,);
           allStudent.add(CustomStudent(
-              student: e, studentPackage: studentPackageRes.data!));
+              student: e, studentPackage: studentPackageRes.data!,),);
         }
       }
 
@@ -53,12 +53,12 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   }
 
     Future<void> onGetInvitedStudents(
-      GetInvitedStudents event, Emitter<StudentState> emit) async {
+      GetInvitedStudents event, Emitter<StudentState> emit,) async {
     final studentList = state.studentList;
     try {
       final response = await _studentRepo.getInvitedStudents(event.schoolId);
       emit(StudentLoaded(
-          studentList: studentList, invitedStudents: response.data));
+          studentList: studentList, invitedStudents: response.data,),);
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
@@ -82,7 +82,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     emit(StudentLoading());
     try {
       await _studentRepo.createSudent(
-          schoolId: event.schoolId, payload: event.payload);
+          schoolId: event.schoolId, payload: event.payload,);
       
     } catch (e) {
       emit(StudentError(error: e.toString()));
@@ -96,7 +96,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     emit(StudentLoading());
     try {
       await _studentRepo.updateStudent(
-          studentId: event.studentId, payload: event.payload);
+          studentId: event.studentId, payload: event.payload,);
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
@@ -121,7 +121,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     emit(StudentLoading());
     try {
       await _studentRepo.updateStudentAvatar(
-          studentId: event.studentId, avatar: event.avatar);
+          studentId: event.studentId, avatar: event.avatar,);
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
@@ -146,7 +146,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     emit(StudentLoading());
     try {
       await _studentRepo.approveStudent(
-          studentId: event.studentId, schoolId: event.schoolId);
+          studentId: event.studentId, schoolId: event.schoolId,);
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }

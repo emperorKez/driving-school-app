@@ -94,7 +94,7 @@ class ApproveUserAlertContent extends StatelessWidget {
                             .staff!
                             .staffData
                             .schoolId,
-                        studentId: student.profile.id));
+                        studentId: student.profile.id,),);
                     Navigator.pop(context);
                     // Navigator.push(
                     //   context,

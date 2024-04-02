@@ -14,7 +14,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   FutureOr<void> onKeywordChanged(
-      KeywordChanged event, Emitter<SearchState> emit) async {
+      KeywordChanged event, Emitter<SearchState> emit,) async {
     emit(SearchLoading());
     try {
       final result = <CustomStudent>[];

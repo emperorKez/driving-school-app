@@ -23,7 +23,6 @@ class ApiService {
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
-
       final response = await dio.get<dynamic>(
         '$baseUrl/$path',
         queryParameters: params,
@@ -51,8 +50,35 @@ class ApiService {
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
-      final response = await dio.post<dynamic>('$baseUrl/$path',
-          data: payload, queryParameters: params,);
+      final response = await dio.post<dynamic>(
+        '$baseUrl/$path',
+        data: payload,
+        queryParameters: params,
+      );
+      log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
+      return DataSuccess(response);
+    } on DioException catch (e) {
+      return DataFailed(DataError(e.response?.statusCode, e.response?.data));
+    } catch (e) {
+      return DataFailed(DataError(null, e));
+    }
+  }
+
+  Future<DataState<Response<dynamic>?>> postReq2(
+    String path, {
+    required List<int> payload,
+    String? token,
+  }) async {
+    try {
+      final dio = Dio(baseOptions);
+      if (token != null) {
+        dio.options.headers['authorization'] = 'Bearer $token';
+      }
+      final response = await dio.post<dynamic>(
+        '$baseUrl/$path',
+        data: payload,
+      );
+      log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
@@ -72,8 +98,12 @@ class ApiService {
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
-      final response = await dio.put<dynamic>('$baseUrl/$path',
-          data: payload, queryParameters: params,);
+      final response = await dio.put<dynamic>(
+        '$baseUrl/$path',
+        data: payload,
+        queryParameters: params,
+      );
+      log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
@@ -94,6 +124,7 @@ class ApiService {
       final response = await dio.put<dynamic>(
         '$baseUrl/$path',
       );
+      log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
@@ -117,6 +148,7 @@ class ApiService {
       });
       final response =
           await dio.post<dynamic>('$baseUrl/$path', data: formData);
+      log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));

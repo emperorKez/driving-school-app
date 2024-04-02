@@ -26,8 +26,8 @@ class AllStudentsList extends StatelessWidget {
                     children: List.generate(
                         state.studentList!.length,
                         (index) =>
-                            StudentCard(student: state.studentList![index])),
-                  ));
+                            StudentCard(student: state.studentList![index]),),
+                  ),);
       },
     );
   }

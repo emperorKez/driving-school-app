@@ -73,7 +73,7 @@ class CreateSchoolBloc extends Bloc<CreateSchoolEvent, CreateSchoolState> {
   }
 
   Future<void> onUploadLogo(
-      UploadLogo event, Emitter<CreateSchoolState> emit) async {
+      UploadLogo event, Emitter<CreateSchoolState> emit,) async {
     try {
       final response = await _storageRepo.uploadDocument(event.file);
       emit(state.copyWith(logo: response.data));

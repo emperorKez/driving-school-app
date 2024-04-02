@@ -132,7 +132,7 @@ class _AddNewUserlertContentState extends State<AddNewUserlertContent> {
                           .staff!
                           .staffData
                           .schoolId,
-                      email: emailController.text));
+                      email: emailController.text,),);
                   Navigator.pop(context);
                 }
                 // Navigator.push(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type1.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type2.dart';
@@ -7,6 +9,7 @@ import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
 import 'package:korbil_mobile/pages/lessons/views/edit_time_schedule/views/edit_time_schedule.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/main_calendar_widget.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/weekly_calendar_widget.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -247,63 +250,71 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 const SizedBox(height: 15),
-                Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image:
-                              AssetImage('assets/imgs/ins/lessons/avatar2.png'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Hello Good Morning',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            fontSize: getPreferedOrientation(context) ==
-                                    PreferedOrientation.landscape
-                                ? 24
-                                : 14,
-                            color: th.secondaryColor,
-                          ),
-                        ),
-                        Text(
-                          'Jack Martines',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: getPreferedOrientation(context) ==
-                                    PreferedOrientation.landscape
-                                ? 24
-                                : 16,
-                            color: th.secondaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      width: 55,
-                      height: 55,
-                      child: Image.asset(
-                        'assets/imgs/ins/global/bell.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
+                BlocBuilder<StaffBloc, StaffState>(builder: (context, state) {
+                  return state is! StaffLoaded
+                      ? kLoadingWidget(context)
+                      : Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        state.staff!.profile.avatar)),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  DateTime.now().hour < 12.00
+                                      ? 'Hello Good Morning'
+                                      : (DateTime.now().hour >= 12.00 &&
+                                              DateTime.now().hour < 19.00)
+                                          ? 'Hello Good Afternoon'
+                                          : 'Hello Good Evening',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: getPreferedOrientation(context) ==
+                                            PreferedOrientation.landscape
+                                        ? 24
+                                        : 14,
+                                    color: th.secondaryColor,
+                                  ),
+                                ),
+                                Text(
+                                  '${state.staff!.profile.firstName} ${state.staff!.profile.firstName}',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: getPreferedOrientation(context) ==
+                                            PreferedOrientation.landscape
+                                        ? 24
+                                        : 16,
+                                    color: th.secondaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            SizedBox(
+                              width: 55,
+                              height: 55,
+                              child: Image.asset(
+                                'assets/imgs/ins/global/bell.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
+                        );
+                }),
                 const SizedBox(height: 25),
                 if (getPreferedOrientation(context) ==
                     PreferedOrientation.landscape)
@@ -376,8 +387,8 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.ease,
                         child: widget.showMainCal
-                            ? const MainCalendarWidget()
-                            : const InstWeeklyCalendar(),
+                            ?  MainCalendarWidget(category: selectedCategory,)
+                            :  InstWeeklyCalendar(category: selectedCategory,),
                       ),
                     ),
                   ],
@@ -412,22 +423,24 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
           ),
           const SizedBox(height: 7),
           GestureDetector(
-              onTap: () => setState(() {
-                    selectedCategory = 'individual';
-                  }),
-              child: _renderScheduleFilterTypeCard(
-                'Individual',
-                selected: selectedCategory == 'individual' || false,
-              )),
-          const SizedBox(height: 7),
+            onTap: () => setState(() {
+              selectedCategory = 'individual';
+            }),
+            child: _renderScheduleFilterTypeCard(
+              'Individual',
+              selected: selectedCategory == 'individual' || false,
+            ),
+          ),
+          const SizedBox(height: 7), 
           GestureDetector(
-              onTap: () => setState(() {
-                    selectedCategory = 'group';
-                  }),
-              child: _renderScheduleFilterTypeCard(
-                'Group',
-                selected: selectedCategory == 'group' || false,
-              )),
+            onTap: () => setState(() {
+              selectedCategory = 'group';
+            }),
+            child: _renderScheduleFilterTypeCard(
+              'Group',
+              selected: selectedCategory == 'group' || false,
+            ),
+          ),
         ],
       ),
     );

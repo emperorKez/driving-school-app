@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/lessons/lesson_step_card.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/components/single_lesson_step_card.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/cubit/calender_cubit.dart';
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -15,43 +20,6 @@ class HomeSlideUpPanel extends StatefulWidget {
 }
 
 class _HomeSlideUpPanelState extends State<HomeSlideUpPanel> {
-  final List<StepDetails> _steps = [
-    StepDetails(
-      title: 'Safety Courses on Road',
-      time: '3 June, 10:00 am',
-      duration: '60 min',
-      name: 'Mikael Anders',
-      location: 'Aniaraplatsen 6, 191 47 Sollentuna, Sweden',
-      isCompleted: true,
-    ),
-    StepDetails(
-      title: '90 Min Traffic Light Drive',
-      time: '3 June, 11:00 am',
-      duration: '90 min',
-      name: 'Rosemary Fisher',
-      isCompleted: true,
-    ),
-    StepDetails(
-      title: 'End-of Step 2 Assessment',
-      time: '3 June, 13:00 pm',
-      duration: '60 min',
-      name: 'Group Class',
-      isCompleted: true,
-    ),
-    StepDetails(
-      title: '90 Min Traffic Light Drive',
-      time: '3 June, 11:00 am',
-      duration: '90 min',
-      name: 'Rosemary Fisher',
-    ),
-    StepDetails(
-      title: 'End-of Step 2 Assessment',
-      time: '3 June, 13:00 pm',
-      duration: '60 min',
-      name: 'Group Class',
-    ),
-  ];
-
   String _selectedCategory = 'Booked';
   int activeStep = 2;
 
@@ -91,23 +59,25 @@ class _HomeSlideUpPanelState extends State<HomeSlideUpPanel> {
                 children: [
                   const Spacer(),
                   LessonCategoryTab(
-                      s: s,
-                      title: 'Booked',
-                      ontap: (String val) {
-                        setState(() {
-                          _selectedCategory = val;
-                        });
-                      },
-                      selected: _selectedCategory == 'Booked',),
+                    s: s,
+                    title: 'Booked',
+                    ontap: (String val) {
+                      setState(() {
+                        _selectedCategory = val;
+                      });
+                    },
+                    selected: _selectedCategory == 'Booked',
+                  ),
                   LessonCategoryTab(
-                      s: s,
-                      title: 'Completed',
-                      ontap: (String val) {
-                        setState(() {
-                          _selectedCategory = val;
-                        });
-                      },
-                      selected: _selectedCategory == 'Completed',),
+                    s: s,
+                    title: 'Completed',
+                    ontap: (String val) {
+                      setState(() {
+                        _selectedCategory = val;
+                      });
+                    },
+                    selected: _selectedCategory == 'Completed',
+                  ),
                   const Spacer(),
                 ],
               ),
@@ -122,25 +92,37 @@ class _HomeSlideUpPanelState extends State<HomeSlideUpPanel> {
             top: 30,
             bottom: 30,
           ),
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _steps.length,
-            itemBuilder: (cxt, index) {
-              final step = _steps.elementAt(index);
-              var isNextCompleted = false;
-              try {
-                isNextCompleted = _steps.elementAt(index + 1).isCompleted;
-              } catch (e) {
-                print(e);
+          child: BlocBuilder<CalenderCubit, CalenderState>(
+            builder: (context, state) {
+              if (state is! CalenderLoaded) {
+                return kLoadingWidget(context);
+              } else {
+                return _selectedCategory == 'Booked'
+                    ? bookedCalender(state.calender)
+                    : completedCalender(state.completedCalender);
               }
-              return LessonStepCard(
-                reached: step.isCompleted,
-                step: step,
-                isFirst: index == 0,
-                isLast: index == (_steps.length - 1),
-                isNextCompleted: isNextCompleted,
-              );
+
+              // return ListView.builder(
+              //   shrinkWrap: true,
+              //   physics: const NeverScrollableScrollPhysics(),
+              //   itemCount: _steps.length,
+              //   itemBuilder: (cxt, index) {
+              //     final step = _steps.elementAt(index);
+              //     var isNextCompleted = false;
+              //     try {
+              //       isNextCompleted = _steps.elementAt(index + 1).isCompleted;
+              //     } catch (e) {
+              //       print(e);
+              //     }
+              //     return LessonStepCard(
+              //       reached: step.isCompleted,
+              //       step: step,
+              //       isFirst: index == 0,
+              //       isLast: index == (_steps.length - 1),
+              //       isNextCompleted: isNextCompleted,
+              //     );
+              //   },
+              // );
             },
           ),
         ),
@@ -149,9 +131,65 @@ class _HomeSlideUpPanelState extends State<HomeSlideUpPanel> {
   }
 }
 
+Widget bookedCalender(List<Calender> bookedCalender) {
+  return bookedCalender.isEmpty
+      ? const SizedBox()
+      : ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: bookedCalender.length,
+          itemBuilder: (cxt, index) {
+            final item = bookedCalender[index];
+            final step = StepDetails(
+                title: item.title,
+                time: '${item.scheduledTime.hour}-${item.scheduledTime.minute}',
+                duration: item.duration.toString(),
+                name: '${item.student.firstName} ${item.student.lastName}',
+                location: item.location.address);
+            // final step = _steps.elementAt(index);
+            var isNextCompleted = false;
+            try {
+              isNextCompleted = false;
+            } catch (e) {
+              print(e);
+            }
+            return LessonStepCard(
+              reached: step.isCompleted,
+              step: step,
+              isFirst: index == 0,
+              isLast: index == (bookedCalender.length - 1),
+              isNextCompleted: isNextCompleted,
+            );
+          },
+        );
+}
+
+Widget completedCalender(List<Calender> completedCalender) {
+  return completedCalender.isEmpty
+      ? const SizedBox()
+      : ListView.builder(
+          itemCount: completedCalender.length,
+          itemBuilder: (context, index) {
+            final item = completedCalender[index];
+            return SingleLessonStepCard(
+                step: StepDetails(
+                    title: item.title,
+                    time:
+                        '${item.scheduledTime.hour}-${item.scheduledTime.minute}',
+                    duration: item.duration.toString(),
+                    name: '${item.student.firstName} ${item.student.lastName}',
+                    location: item.location.address,
+                    isCompleted: true));
+          });
+}
+
 class LessonCategoryTab extends StatelessWidget {
   const LessonCategoryTab({
-    required this.s, required this.title, required this.ontap, required this.selected, super.key,
+    required this.s,
+    required this.title,
+    required this.ontap,
+    required this.selected,
+    super.key,
   });
 
   final Size s;

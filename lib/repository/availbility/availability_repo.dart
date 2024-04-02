@@ -9,7 +9,7 @@ class AvailabilityRepo {
   final ApiService apiService = ApiService();
 
   Future<ResponseState<List<AvailableDate>>> getAvailableDates(
-      int schoolId) async {
+      int schoolId,) async {
     final response =
         await apiService.getReq(ApiPaths.getAvailableDates(schoolId: schoolId));
     if (response.data != null) {
@@ -33,7 +33,7 @@ class AvailabilityRepo {
   }) async {
     final response = await apiService.postReq(
         ApiPaths.addAvailableDates(schoolId: schoolId),
-        payload: payload);
+        payload: payload,);
     if (response.data != null) {
       try {
         final availableDate = AvailableDate.fromJson(
@@ -90,7 +90,7 @@ class AvailabilityRepo {
   }) async {
     final response = await apiService.postReq(
         ApiPaths.addMultipleTimeOffDays(schoolId: schoolId),
-        payload: payload);
+        payload: payload,);
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -113,7 +113,7 @@ class AvailabilityRepo {
   }) async {
     final response = await apiService.putReq(
         ApiPaths.updateTimeOffDays(schoolId: schoolId, offDayId: offDayId),
-        payload: payload);
+        payload: payload,);
     if (response.data != null) {
       try {
         final timeOffDay = TimeOffDay.fromJson(
@@ -132,7 +132,7 @@ class AvailabilityRepo {
     required int offDayId,
   }) async {
     final response = await apiService.putReq(
-        ApiPaths.deleteTimeOffDays(schoolId: schoolId, offDayId: offDayId));
+        ApiPaths.deleteTimeOffDays(schoolId: schoolId, offDayId: offDayId),);
     if (response.data != null) {
       try {
         final timeOffDay =

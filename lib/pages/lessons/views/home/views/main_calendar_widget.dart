@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/schedule_status_types/default.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type1.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type2.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type3.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
 import 'package:korbil_mobile/global/constants/schedule_status_types.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/cubit/calender_cubit.dart';
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class MainCalendarWidget extends StatefulWidget {
   const MainCalendarWidget({
+    this.category = 'all',
     super.key,
   });
+  final String category;
 
   @override
   State<MainCalendarWidget> createState() => _MainCalendarWidgetState();
@@ -64,71 +70,91 @@ class _MainCalendarWidgetState extends State<MainCalendarWidget> {
   @override
   Widget build(BuildContext context) {
     final th = KorbilTheme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: th.alternate2,
-            blurRadius: 3,
-            spreadRadius: 3,
-            offset: const Offset(2, 2),
+    return BlocBuilder<CalenderCubit, CalenderState>(
+      builder: (context, state) {
+        if (state is! CalenderLoaded){
+          return kLoadingWidget(context);
+        } else{
+final schedule = <Calender>[];
+for (final e in state.calender) {
+          if (widget.category == 'group' && e.groupLesson){
+            schedule.add(e);
+          } else if (widget.category == 'individual' && !e.groupLesson){
+            schedule.add(e);
+          } else{
+            schedule.add(e);
+          }
+  
+}
+
+        return Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: th.alternate2,
+                blurRadius: 3,
+                spreadRadius: 3,
+                offset: const Offset(2, 2),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: SfDateRangePicker(
-        backgroundColor: th.white,
-        selectionColor: Colors.transparent,
-        showNavigationArrow: true,
-        cellBuilder: (context, cellDetails) {
-          return LayoutBuilder(
-            builder: (cxt, cts) {
-              final date = DateTime(
-                cellDetails.date.year,
-                cellDetails.date.month,
-                cellDetails.date.day,
-              );
+          child: SfDateRangePicker(
+            backgroundColor: th.white,
+            selectionColor: Colors.transparent,
+            showNavigationArrow: true,
+            cellBuilder: (context, cellDetails) {
+              return LayoutBuilder(
+                builder: (cxt, cts) {
+                  final date = DateTime(
+                    cellDetails.date.year,
+                    cellDetails.date.month,
+                    cellDetails.date.day,
+                  );
 
-              for (var i = 0; i < _schedule.length; i++) {
-                final s = _schedule[i];
-                if (s.date.compareTo(date) == 0) {
-                  switch (s.type) {
-                    case ScheduleStatusTypes.onetofiveBooked:
-                      return ScheduleStatusType1Widget(
-                        cellDetails: cellDetails,
-                        cts: cts,
-                      );
-                    case ScheduleStatusTypes.oneOrTwoLeft:
-                      return ScheduleStatusType2Widget(
-                        cellDetails: cellDetails,
-                        cts: cts,
-                      );
-                    case ScheduleStatusTypes.almostbookedWithGroupClass:
-                      return ScheduleStatusType3Widget(
-                        cellDetails: cellDetails,
-                        cts: cts,
-                      );
-                    case ScheduleStatusTypes.fullyBooked:
-                      return ScheduleStatusType4Widget(
-                        cellDetails: cellDetails,
-                        cts: cts,
-                      );
-                    default:
-                      return ScheduleStatusTypeDefaultWidget(
-                        cellDetails: cellDetails,
-                        cts: cts,
-                      );
+                  for (var i = 0; i < _schedule.length; i++) {
+                    final s = _schedule[i];
+                    if (s.date.compareTo(date) == 0) {
+                      switch (s.type) {
+                        case ScheduleStatusTypes.onetofiveBooked:
+                          return ScheduleStatusType1Widget(
+                            cellDetails: cellDetails,
+                            cts: cts,
+                          );
+                        case ScheduleStatusTypes.oneOrTwoLeft:
+                          return ScheduleStatusType2Widget(
+                            cellDetails: cellDetails,
+                            cts: cts,
+                          );
+                        case ScheduleStatusTypes.almostbookedWithGroupClass:
+                          return ScheduleStatusType3Widget(
+                            cellDetails: cellDetails,
+                            cts: cts,
+                          );
+                        case ScheduleStatusTypes.fullyBooked:
+                          return ScheduleStatusType4Widget(
+                            cellDetails: cellDetails,
+                            cts: cts,
+                          );
+                        default:
+                          return ScheduleStatusTypeDefaultWidget(
+                            cellDetails: cellDetails,
+                            cts: cts,
+                          );
+                      }
+                    }
                   }
-                }
-              }
 
-              return ScheduleStatusTypeDefaultWidget(
-                cellDetails: cellDetails,
-                cts: cts,
+                  return ScheduleStatusTypeDefaultWidget(
+                    cellDetails: cellDetails,
+                    cts: cts,
+                  );
+                },
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+        }
+      },
     );
   }
 }

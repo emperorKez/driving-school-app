@@ -16,7 +16,7 @@ class Subscription {
         price: json['price'] as int,
         subscriptionLevelItems: List<SubscriptionLevelItem>.from(
             json['subscriptionLevelItems'].map(SubscriptionLevelItem.fromJson)
-                as Iterable),
+                as Iterable,),
       );
 
   int id;

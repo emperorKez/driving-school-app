@@ -110,7 +110,7 @@ class _InstStudentListViewState extends State<InstStudentListView> {
                           },
                           onChanged: (value) {
                             context.read<SearchBloc>().add(KeywordChanged(
-                                keyword: value, students: state.studentList!));
+                                keyword: value, students: state.studentList!,),);
                           },
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -283,7 +283,7 @@ class _InstStudentListViewState extends State<InstStudentListView> {
                           '${state.searchResult![index].student.profile.firstName} ${state.searchResult![index].student.profile.lastName}',
                         ),
                         subtitle: Text(
-                            state.searchResult![index].student.profile.email),
+                            state.searchResult![index].student.profile.email,),
                       );
                     },
                   ),

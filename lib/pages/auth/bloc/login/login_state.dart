@@ -18,5 +18,5 @@ final class LoginSuccess extends LoginState {
 final class LoginError extends LoginState {
   const LoginError({this.error = 'Invalid Login detail'});
 
-  final String error;
+  final String error; 
 }

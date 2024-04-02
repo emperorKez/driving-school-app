@@ -42,7 +42,7 @@ class InstUserDetailsCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: KorbilTheme.of(context).primaryColor,
                     shape: BoxShape.circle,
-                    image: DecorationImage(
+                    image: const DecorationImage(
                       image:  NetworkImage('student.profile.avatar'),
                       fit: BoxFit.cover,
                     ),

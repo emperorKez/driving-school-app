@@ -149,7 +149,7 @@ class Profile {
     required this.userType,
     required this.createdAt,
     required this.updatedAt,
-    this.avatar,
+    required this.avatar,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
@@ -158,7 +158,7 @@ class Profile {
         lastName: json['lastName'] as String,
         phoneNumber: json['phoneNumber'] as String,
         email: json['email'] as String,
-        avatar: json['avatar'] as String?,
+        avatar: json['avatar'] as String,
         userStatus: json['userStatus'] as int,
         userType: json['userType'] as int,
         createdAt: DateTime.parse(json['createdAt'] as String),
@@ -170,7 +170,7 @@ class Profile {
   String lastName;
   String phoneNumber;
   String email;
-  String? avatar;
+  String avatar;
   int userStatus;
   int userType;
   DateTime createdAt;

@@ -62,7 +62,7 @@ class AlertContent extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (cxt) => const InstCompletedLessonDetails(lessonId: 1,), // todo change the value
+                  builder: (cxt) => const InstCompletedLessonDetails(lessonId: 1,), // TODOchange the value
                 ),
               );
             },

@@ -22,7 +22,7 @@ class CreateStudent extends StudentEvent {
 
 class UpdateStudent extends StudentEvent {
   UpdateStudent(
-      {required this.payload, required this.studentId, required this.schoolId});
+      {required this.payload, required this.studentId, required this.schoolId,});
   final Map<String, dynamic> payload;
   final int studentId;
   final int schoolId;
@@ -36,7 +36,7 @@ class DeleteStudent extends StudentEvent {
 
 class UpdateStudentAvatar extends StudentEvent {
   UpdateStudentAvatar(
-      {required this.avatar, required this.studentId, required this.schoolId});
+      {required this.avatar, required this.studentId, required this.schoolId,});
   final String avatar;
   final int studentId;
   final int schoolId;

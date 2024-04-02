@@ -34,7 +34,7 @@ class PaymentRepo {
     Map<String, dynamic> payload,
   ) async {
     final response = await apiService.postReq(ApiPaths.makeGroupLessonPayment,
-        payload: payload);
+        payload: payload,);
     if (response.data != null) {
       try {
         final data = response.data!.data['response'] as Map<String, dynamic>;

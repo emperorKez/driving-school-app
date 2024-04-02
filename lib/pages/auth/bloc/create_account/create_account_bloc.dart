@@ -21,7 +21,7 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
   final StorageRepo _storageRepo;
 
   Future<void> onUploadCertificate(
-      UploadCertificate event, Emitter<CreateAccountState> emit) async {
+      UploadCertificate event, Emitter<CreateAccountState> emit,) async {
     try {
       final response = await _storageRepo.uploadDocument(event.file);
       final data = UploadDocument(
@@ -35,7 +35,7 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
   }
 
   Future<void> onUploadLicence(
-      UploadLicence event, Emitter<CreateAccountState> emit) async {
+      UploadLicence event, Emitter<CreateAccountState> emit,) async {
     try {
       final response = await _storageRepo.uploadDocument(event.file);
       final data = UploadDocument(

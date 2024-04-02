@@ -28,7 +28,7 @@ class CreateSchoolState {
         suggestedLocations: suggestedLocations ?? this.suggestedLocations,
         logo: logo ?? this.logo,
         companyRegistration: companyRegistration ?? this.companyRegistration,
-        isNameValid: isNameValid ?? this.isNameValid);
+        isNameValid: isNameValid ?? this.isNameValid,);
   }
 }
 

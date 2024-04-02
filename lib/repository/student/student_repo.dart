@@ -162,7 +162,7 @@ class StudentRepo {
   }
 
   Future<ResponseState<List<InvitedStudents>>> getInvitedStudents(
-      int schoolId) async {
+      int schoolId,) async {
     try {
       final res = await apiService.getReq(ApiPaths.invitedStudents(schoolId));
       if (res.data != null) {
@@ -180,7 +180,7 @@ class StudentRepo {
   }
 
   Future<ResponseState<StudentPackage>> getStudentCurrentPackage(
-      int studentId) async {
+      int studentId,) async {
     try {
       final res =
           await apiService.getReq(ApiPaths.getStudentCurrentPackage(studentId));

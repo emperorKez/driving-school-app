@@ -38,7 +38,7 @@ class MetadataCubit extends Cubit<MetadataState> {
           scheduleFlows: scheduleFlowRes.data,
           courseCategories: courseCategoryRes.data,
           instructorTypes: instructorTypeRes.data,
-          helpTopics: [],
+          helpTopics: const [],
           // helpTopics: helpTopicsRes.data,
           feedbackCategories: feedbackCatgoriesRes.data,
           documentTypes: documentTypeRes.data,

@@ -7,6 +7,8 @@ import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_school/create_school_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/login/login_cubit.dart';
+import 'package:korbil_mobile/pages/auth/view/login/views/login.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/cubit/calender_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/lesson/lesson_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/inst_home.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
@@ -22,7 +24,7 @@ import 'package:korbil_mobile/pages/school/bloc/school_location/school_location_
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/subscription/subscription_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/vehicle/vehicle_bloc.dart';
-// import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -83,9 +85,9 @@ class _AppState extends State<App> {
         BlocProvider(
           create: (context) => LoginCubit(),
         ),
-        // BlocProvider(
-        //   create: (context) => StudentBloc(),
-        // ),
+        BlocProvider(
+          create: (context) => StudentBloc(),
+        ),
         BlocProvider(
           create: (context) => PaymentBloc()..add(GetDeposithandlers()),
           lazy: false,
@@ -93,6 +95,7 @@ class _AppState extends State<App> {
         BlocProvider(
           create: (context) => LessonBloc(),
         ),
+        BlocProvider(create: (context) => CalenderCubit()),
         BlocProvider(
           create: (context) =>
               SubscriptionBloc()..add(GetAllSubscriptionLevels()),
@@ -115,9 +118,8 @@ class _AppState extends State<App> {
         theme: ThemeData(brightness: Brightness.light),
         themeMode: _themeMode,
         navigatorKey: rootNavKey,
-        // initialRoute: AppRouter.getStarted,
-        // home: InstHomeMainBody(showMainCal: true,),
-        home: LessonsHomeView(),
+        initialRoute: AppRouter.getStarted,
+        // home: const LoginView(),
         onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );

@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_dynamic_calls
 
+
 import 'package:korbil_mobile/repository/api_service/api_service.dart';
 import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/repository/lesson/model/lesson.dart';
 import 'package:korbil_mobile/repository/lesson/model/past_lesson.dart' as past;
 import 'package:korbil_mobile/repository/lesson/model/upcoming_lesson.dart'
@@ -82,7 +84,7 @@ class LessonRepo {
     required Map<String, dynamic> payload,
   }) async {
     final response = await apiService.postReq(ApiPaths.modifyLesson(lessonId),
-        payload: payload);
+        payload: payload,);
     if (response.data != null) {
       try {
         final data = response.data!.data['response'] as Map<String, dynamic>;
@@ -115,7 +117,7 @@ class LessonRepo {
     required Map<String, dynamic> payload,
   }) async {
     final response = await apiService.postReq(ApiPaths.finishLesson(lessonId),
-        payload: payload);
+        payload: payload,);
     if (response.data != null) {
       try {
         final data = response.data!.data['response'] as Map<String, dynamic>;
@@ -177,7 +179,7 @@ class LessonRepo {
   }
 
   Future<ResponseState<List<upcoming.UpcomingLesson>>> getUpcomingLesson(
-      {required int packageId, required int studentId}) async {
+      {required int packageId, required int studentId,}) async {
     final params = {'packageId': packageId, 'studentId': studentId};
     final response =
         await apiService.getReq(ApiPaths.getUpcomingLesson, params: params);
@@ -197,7 +199,7 @@ class LessonRepo {
   }
 
   Future<ResponseState<List<past.PastLesson>>> getPastLesson(
-      {required int packageId, required int studentId}) async {
+      {required int packageId, required int studentId,}) async {
     final params = {'packageId': packageId, 'studentId': studentId};
     final response =
         await apiService.getReq(ApiPaths.getPastLesson, params: params);
@@ -209,6 +211,44 @@ class LessonRepo {
           data.map(past.PastLesson.fromJson),
         );
         return ResponseSuccess(pastLessons);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
+
+  Future<ResponseState<List<Calender>>> getCalender(
+      {required List<int> staffIds,}) async {
+    final response =
+        await apiService.postReq2(ApiPaths.getCalender, payload: staffIds);
+    if (response.data != null) {
+      try {
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final bookings = List<Calender>.from(
+          data.map(Calender.fromJson),
+        );
+        return ResponseSuccess(bookings);
+      } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
+
+  Future<ResponseState<List<Calender>>> getCompletedCalender(
+      {required List<int> staffIds,}) async {
+    final response = await apiService.postReq2(ApiPaths.getCompletedCalender,
+        payload: staffIds,);
+    if (response.data != null) {
+      try {
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final bookings = List<Calender>.from(
+          data.map(Calender.fromJson),
+        );
+        return ResponseSuccess(bookings);
       } catch (e) {
         return ResponseFailed(DataError(null, e));
       }

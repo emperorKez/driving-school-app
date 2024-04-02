@@ -17,7 +17,7 @@ class LessonStepCard extends StatelessWidget {
 
   Widget _renderTrailingLine() {
     if (isLast) {
-      return Expanded(flex: 2, child: Container());
+      return Expanded(flex: 2, child: Container()); 
     } else if (!isNextCompleted) {
       return Expanded(
         flex: 2,

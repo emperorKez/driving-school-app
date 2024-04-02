@@ -17,7 +17,7 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
   final SubscriptionRepo _subscriptionRepo;
 
   Future<void> onGetAllSubscriptionLevels(
-      GetAllSubscriptionLevels event, Emitter<SubscriptionState> emit) async {
+      GetAllSubscriptionLevels event, Emitter<SubscriptionState> emit,) async {
     emit(SubscriptionLoading());
     try {
       final response = await _subscriptionRepo.getAllSubscriptionLevels();

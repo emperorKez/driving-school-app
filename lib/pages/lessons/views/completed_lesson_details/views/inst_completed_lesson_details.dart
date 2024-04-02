@@ -110,7 +110,7 @@ class _InstCompletedLessonDetailsState
                           ),
                           const SizedBox(height: 25),
                           BadAtSection(
-                            needToPracticeAssesment: _needToPracticeAssesment, detail: state.lessonDetail
+                            needToPracticeAssesment: _needToPracticeAssesment, detail: state.lessonDetail,
                           ),
                         ],
                       ),

@@ -90,7 +90,7 @@ class StudentData {
         city: json['city'] as String,
         postcode: json['postcode'] as String,
         schoolRefs: List<SchoolRef>.from(
-            json['schoolRefs'].map(SchoolRef.fromJson) as Iterable),
+            json['schoolRefs'].map(SchoolRef.fromJson) as Iterable,),
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
       );

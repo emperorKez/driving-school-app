@@ -334,4 +334,6 @@ class ApiPaths {
   static String startLesson(int lessonId) => 'lesson/$lessonId/start';
   static const getUpcomingLesson = 'lesson/upcoming';
   static const getPastLesson = 'lesson/past';
+  static String getCalender = 'lesson/calendar';
+  static String getCompletedCalender = 'lesson/calendar/completed';
 }

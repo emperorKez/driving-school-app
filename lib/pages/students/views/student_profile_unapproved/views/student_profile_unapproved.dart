@@ -105,7 +105,7 @@ class _StudentProfileUnApprovedState extends State<StudentProfileUnApproved> {
                   vm: 8,
                   ontap: _showDeclineUserAlert,
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(
@@ -196,7 +196,7 @@ class _ApproveUserAlertContent extends StatelessWidget {
                   text: 'Yes, Approve',
                   ontap: () {
                     context.read<StudentBloc>().add(ApproveStudent(
-                        schoolId: schoolId, studentId: student.profile.id));
+                        schoolId: schoolId, studentId: student.profile.id,),);
                     Navigator.pop(context);
                     // Navigator.push(
                     //   context,

@@ -3,12 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/app_home/app_home.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
+import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/login/login_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
@@ -123,9 +125,11 @@ class _CreateAccountViewState extends State<LoginView> {
             if (state is StaffLoaded) {
               if (state.staff != null) {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                        builder: (_) => const AppHomePage(),),);
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) => const AppHomePage(),
+                  ),
+                );
               } else {
                 _showCreateDrivingSchoolAlert();
               }
@@ -229,7 +233,22 @@ class _CreateAccountViewState extends State<LoginView> {
             ),
           ),
         ),
-        const SizedBox(height: 15),
+        BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            // TODO: implement listener
+          },
+          builder: (context, state) {
+            return state.status == AuthStatus.none ? kLoadingWidget(context) :  PrimaryBtn(
+              text: 'Login',
+              ontap: () {
+                if (_formKey.currentState!.validate()) {
+                  context.read<AuthBloc>().add(SignIn(email: emailController.text, password: passwordController.text));
+                }
+              },
+              hm: 23,
+            );
+          },
+        ),
         CustomScreenPadding(
           child: Row(
             children: [

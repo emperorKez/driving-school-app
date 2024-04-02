@@ -35,14 +35,14 @@ class InvitedStudentList extends StatelessWidget {
                   children: List.generate(
                       state.invitedStudents!.length,
                       (index) => _invitedStudentCard(context,
-                          student: state.invitedStudents![index])));
+                          student: state.invitedStudents![index],),),);
         }
       },
     );
   }
 
   Widget _invitedStudentCard(BuildContext context,
-      {required InvitedStudents student}) {
+      {required InvitedStudents student,}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),

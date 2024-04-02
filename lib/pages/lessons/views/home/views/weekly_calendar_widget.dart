@@ -10,7 +10,9 @@ import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class InstWeeklyCalendar extends StatefulWidget {
-  const InstWeeklyCalendar({super.key});
+  const InstWeeklyCalendar({this.category = 'all',
+    super.key});
+  final String category;
 
   @override
   State<InstWeeklyCalendar> createState() => _InstWeeklyCalendarState();

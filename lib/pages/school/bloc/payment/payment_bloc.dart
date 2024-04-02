@@ -22,17 +22,17 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   final PaymentRepo _paymentRepo;
 
   Future<void> onMakePackagePayment(
-      MakePackagePayment event, Emitter<PaymentState> emit) async {
+      MakePackagePayment event, Emitter<PaymentState> emit,) async {
     await _paymentRepo.makePackagePayment(event.payload);
   }
 
   Future<void> onMakeGroupLessonPayment(
-      MakeGroupLessonPayment event, Emitter<PaymentState> emit) async {
+      MakeGroupLessonPayment event, Emitter<PaymentState> emit,) async {
     await _paymentRepo.makeGroupLessonPayment(event.payload);
   }
 
   Future<void> onGetDeposithandlers(
-      GetDeposithandlers event, Emitter<PaymentState> emit) async {
+      GetDeposithandlers event, Emitter<PaymentState> emit,) async {
     emit(PaymentLoading());
     try {
       final response = await _paymentRepo.getDeposithandlers();
@@ -43,7 +43,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   }
 
   Future<void> onGetPaymentHistory(
-      GetPaymentHistory event, Emitter<PaymentState> emit) async {
+      GetPaymentHistory event, Emitter<PaymentState> emit,) async {
     final depositHandlers = state.depositHandlers;
     emit(PaymentLoading());
     try {
@@ -52,7 +52,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       emit(PaymentLoaded(
           paymentHistory: historyRes.data,
           earnings: earningRes.data,
-          depositHandlers: depositHandlers));
+          depositHandlers: depositHandlers,),);
     } catch (e) {
       emit(PaymentError(error: e.toString()));
     }

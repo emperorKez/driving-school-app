@@ -12,9 +12,9 @@ class StudentPackage {
         schoolPackageId: json['schoolPackageId'] as int,
         stats: Stats.fromJson(json['stats'] as Map<String, dynamic>),
         upcomingLessons: List<Lesson>.from(
-            json['upcomingLessons'].map(Lesson.fromJson) as Iterable),
+            json['upcomingLessons'].map(Lesson.fromJson) as Iterable,),
         pastLessons: List<Lesson>.from(
-            json['pastLessons'].map(Lesson.fromJson) as Iterable),
+            json['pastLessons'].map(Lesson.fromJson) as Iterable,),
       );
 
   int studentPackageId;

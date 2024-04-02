@@ -3,7 +3,7 @@ class InvitedStudents {
       {required this.id,
       required this.schoolId,
       required this.email,
-      this.comment});
+      this.comment,});
 
   factory InvitedStudents.fromJson(Map<String, dynamic> json) =>
       InvitedStudents(

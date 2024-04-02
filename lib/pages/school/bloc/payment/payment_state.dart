@@ -5,7 +5,7 @@ part of 'payment_bloc.dart';
 // sealed
 class PaymentState {
   const PaymentState(
-      {this.paymentHistory, this.earnings, this.depositHandlers});
+      {this.paymentHistory, this.earnings, this.depositHandlers,});
 
   final List<Deposit>? depositHandlers;
   final List<PaymentHistory>? paymentHistory;
@@ -30,9 +30,7 @@ final class PaymentLoading extends PaymentState {}
 
 final class PaymentLoaded extends PaymentState {
   const PaymentLoaded(
-      {super.depositHandlers,
-      required super.paymentHistory,
-      required super.earnings});
+      {required super.paymentHistory, required super.earnings, super.depositHandlers,});
 }
 
 final class PaymentError extends PaymentState {

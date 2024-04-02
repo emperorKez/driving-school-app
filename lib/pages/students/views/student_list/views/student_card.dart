@@ -107,7 +107,7 @@ class StudentCard extends StatelessWidget {
                                           (e) =>
                                               e.schoolPackage.id ==
                                               student.studentPackage
-                                                  .schoolPackageId)]
+                                                  .schoolPackageId,)]
                                       .schoolPackage
                                       .title,
                                   style: TextStyle(
@@ -204,7 +204,7 @@ class StudentCard extends StatelessWidget {
                           .staff!
                           .staffData
                           .schoolId,
-                      studentId: student.student.profile.id));
+                      studentId: student.student.profile.id,),);
                 },
               ),
           ],
