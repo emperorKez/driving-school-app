@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ProfileDetails extends StatelessWidget {
   const ProfileDetails({
-    required this.context, super.key,
+    required this.calender, super.key,
   });
 
-  final BuildContext context;
+final Calender calender;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +40,7 @@ class ProfileDetails extends StatelessWidget {
                 color: KorbilTheme.of(context).secondaryColor,
               ),
             ),
-            Text(
-              'Mikael Anders',
+            Text('${calender.student.firstName} ${calender.student.firstName}',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
@@ -51,13 +51,19 @@ class ProfileDetails extends StatelessWidget {
           ],
         ),
         const Spacer(),
-        const SizedBox(
+         const SizedBox(
           width: 120,
           child: PrimaryBtn(
             text: 'View',
             fontSize: 14,
             pvm: 5,
             vm: 0,
+            // ontap: () => Navigator.push(
+            //     context,
+            //     MaterialPageRoute<dynamic>(
+            //       builder: (cxt) => ,
+            //     ),
+            //   ),
           ),
         ),
       ],

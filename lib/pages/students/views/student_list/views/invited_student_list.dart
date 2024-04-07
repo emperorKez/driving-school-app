@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
-import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/repository/student/models/invited_student.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -14,14 +13,8 @@ class InvitedStudentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final schoolId = context.read<StaffBloc>().state.staff!.staffData.schoolId;
     return BlocBuilder<StudentBloc, StudentState>(
       builder: (context, state) {
-        if (state.invitedStudents == null) {
-          context
-              .read<StudentBloc>()
-              .add(GetInvitedStudents(schoolId: schoolId));
-        }
         if (state is! StudentLoaded) {
           return kLoadingWidget(context);
         } else {

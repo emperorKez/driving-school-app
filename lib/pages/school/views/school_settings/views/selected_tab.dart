@@ -34,13 +34,13 @@ class SelectedTab extends StatelessWidget {
           case TabMenuState.subscription:
             return const SubscriptionView();
           case TabMenuState.messages:
-            return const MessagesView(); //todo
+            return const MessagesView(); //todo no message Api
           case TabMenuState.payments:
-            return const InstPaymentsView(); //todo
+            return const InstPaymentsView(); 
           case TabMenuState.promote:
             return const InstManagePromotions();
           case TabMenuState.settings:
-            return const InstAppSettingsView(); //todo
+            return const InstAppSettingsView();
           case TabMenuState.getHelp:
             return const GetHelpView();
           case TabMenuState.feedback:

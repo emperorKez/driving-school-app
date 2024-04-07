@@ -14,7 +14,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       : _studentRepo = studentRepo ?? StudentRepo(),
         super(StudentInitial()) {
     on<GetAllStudent>(onGetAllStudent);
-    on<GetInvitedStudents>(onGetInvitedStudents);
+    // on<GetInvitedStudents>(onGetInvitedStudents);
     // on<GetStudent>(onGetStudent);
     on<CreateStudent>(onCreateStudent);
     on<UpdateStudent>(onUpdateStudent);
@@ -33,6 +33,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     try {
       final allStudent = <CustomStudent>[];
       final studentRes = await _studentRepo.getAllStudent(event.schoolId);
+      final invitedStudentRes = await _studentRepo.getInvitedStudents(event.schoolId);
       if (studentRes.data != null) {
         for (final e in studentRes.data!) {
           final studentPackageRes = await _studentRepo.getStudentCurrentPackage(
@@ -46,23 +47,23 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
         }
       }
 
-      emit(StudentLoaded(studentList: allStudent));
+      emit(StudentLoaded(studentList: allStudent, invitedStudents: invitedStudentRes.data));
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
   }
 
-    Future<void> onGetInvitedStudents(
-      GetInvitedStudents event, Emitter<StudentState> emit,) async {
-    final studentList = state.studentList;
-    try {
-      final response = await _studentRepo.getInvitedStudents(event.schoolId);
-      emit(StudentLoaded(
-          studentList: studentList, invitedStudents: response.data,),);
-    } catch (e) {
-      emit(StudentError(error: e.toString()));
-    }
-  }
+  //   Future<void> onGetInvitedStudents(
+  //     GetInvitedStudents event, Emitter<StudentState> emit,) async {
+  //   final studentList = state.studentList;
+  //   try {
+  //     final response = await _studentRepo.getInvitedStudents(event.schoolId);
+  //     emit(StudentLoaded(
+  //         studentList: studentList, invitedStudents: response.data,),);
+  //   } catch (e) {
+  //     emit(StudentError(error: e.toString()));
+  //   }
+  // }
 
   // Future<void> onGetStudent(GetStudent event, Emitter<StudentState> emit) async{
   //   emit(StudentLoading());

@@ -4,15 +4,17 @@ import 'package:korbil_mobile/global/constants/colors.dart';
 class PrimarySelectedSwitch extends StatelessWidget {
   const PrimarySelectedSwitch({
     required this.selected,
+    required this.onTap,
     super.key,
   });
 
   final bool selected;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.only(right: 12),
         child: Container(

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/radio_boxes/primary_square_radio_box.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/lesson_detail/lesson_detail_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/class_assignment_detail_card.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/history_item_card.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/lesson_feedback_card.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/profile_details.dart';
+import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstLessonDetails extends StatefulWidget {
-  const InstLessonDetails({super.key});
+  const InstLessonDetails({required this.calender, super.key});
+  final Calender calender;
 
   @override
   State<InstLessonDetails> createState() => _InstLessonDetailsState();
@@ -20,6 +26,7 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<LessonDetailCubit>().getDetail(widget.calender.id);
     return SafeArea(
       child: Scaffold(
         backgroundColor: KorbilTheme.of(context).white,
@@ -43,12 +50,12 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
               getPreferedOrientation(context) == PreferedOrientation.landscape
                   ? ListView(
                       children: [
-                        ProfileDetails(context: context),
+                        ProfileDetails( calender: widget.calender,),
                         const SizedBox(height: 25),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Expanded(child: ClassAssignmentDetailsCard()),
+                             Expanded(child: ClassAssignmentDetailsCard(calender: widget.calender)),
                             const SizedBox(width: 15),
                             Expanded(child: _buildOtherSections()),
                           ],
@@ -57,9 +64,9 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
                     )
                   : ListView(
                       children: [
-                        const ClassAssignmentDetailsCard(),
+                         ClassAssignmentDetailsCard(calender: widget.calender,),
                         const SizedBox(height: 35),
-                        ProfileDetails(context: context),
+                        ProfileDetails(calender: widget.calender),
                         const SizedBox(height: 35),
                         _buildOtherSections(),
                       ],
@@ -141,99 +148,9 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _selectedLessonReviewSection,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: KorbilTheme.of(context).secondaryColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 3),
-                  child: Row(
-                    children: [
-                      const PrimarySelectedSwitch(
-                        selected: true,
-                      ),
-                      Text(
-                        'Pulling up on the right',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: KorbilTheme.of(context).secondaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 3),
-                  child: Row(
-                    children: [
-                      const PrimarySelectedSwitch(
-                        selected: true,
-                      ),
-                      Text(
-                        'Forward parking into a bay',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: KorbilTheme.of(context).secondaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 3),
-                  child: Row(
-                    children: [
-                      const PrimarySelectedSwitch(
-                        selected: false,
-                      ),
-                      Text(
-                        'Reverse parking into a bay',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: KorbilTheme.of(context).secondaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 3),
-                  child: Row(
-                    children: [
-                      const PrimarySelectedSwitch(
-                        selected: false,
-                      ),
-                      Text(
-                        'Entering and leaving traffic',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: KorbilTheme.of(context).secondaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            child: category(context),
+            
+           
           ),
           const SizedBox(height: 35),
           Text(
@@ -260,15 +177,85 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
           const SizedBox(
             height: 20,
           ),
-          const InstHIstoryItemCard(),
-          const InstHIstoryItemCard(),
-          const InstHIstoryItemCard(),
-          const InstHIstoryItemCard(),
-          const InstHIstoryItemCard(),
+          BlocBuilder<StudentBloc, StudentState>(
+            builder: (context, state) {
+              if (state is! StudentLoaded)
+              {return kLoadingWidget(context);}else{
+                final pastLessons = state.studentList![state.studentList!.indexWhere((e) => e.student.profile.id == widget.calender.student.id)].studentPackage.pastLessons;
+              return  Column(
+                      mainAxisSize: MainAxisSize.min, 
+                      children: List.generate(pastLessons.length > 5? 5 : pastLessons.length, (index) => InstHIstoryItemCard(lesson: pastLessons[index],)),
+                    );}
+            },
+          ),
 
           const SizedBox(height: 80),
         ],
       ),
+    );
+  }
+
+   Widget category(BuildContext context) {
+    switch (_selectedLessonReviewSection) {
+      case 'Maneuvering':
+        return _maneuvering(context);
+      case 'Eco-friendly driving':
+        return const SizedBox();
+      case 'Rules of the road':
+        return const SizedBox();
+      default:
+        return const SizedBox();
+    }
+  }
+  
+  Widget _maneuvering(BuildContext context) {
+    return  BlocBuilder<LessonDetailCubit, LessonDetailState>(
+      builder: (context, state) {
+        return state is! LessonDetailLoaded ? kLoadingWidget(context) : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _selectedLessonReviewSection,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    for (final element in state
+                            .lessonDetail
+                            .feedback[state.lessonDetail.feedback.indexWhere(
+                                (e) => e.category.name == _selectedLessonReviewSection,)]
+                            .category
+                            .subCategories)
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 3),
+                      child: Row(
+                        children: [
+                          PrimarySelectedSwitch(
+                            selected: true,
+                            onTap: () {},
+                          ),
+                          Text(
+                            element.name,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: KorbilTheme.of(context).secondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  ],
+                );
+      },
     );
   }
 }

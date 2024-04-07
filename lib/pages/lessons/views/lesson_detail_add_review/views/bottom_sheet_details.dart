@@ -6,10 +6,11 @@ import 'package:korbil_mobile/theme/theme.dart';
 class BottomSheetDetails extends StatelessWidget {
   const BottomSheetDetails({
     required this.s,
-    super.key,
+    required this.lessonId, super.key,
   });
 
   final Size s;
+  final int lessonId;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +66,7 @@ class BottomSheetDetails extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      'Driven 15 KM',
+                      'Driven 12 KM',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -89,7 +90,7 @@ class BottomSheetDetails extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      'Time 40 min',
+                      '30 mins',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -111,7 +112,7 @@ class BottomSheetDetails extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (cxt) => const InstFinishLessonView(),
+                  builder: (cxt) =>  InstFinishLessonView(lessonId: lessonId,),
                 ),
               );
             },

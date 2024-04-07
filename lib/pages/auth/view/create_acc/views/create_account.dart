@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
@@ -13,6 +14,7 @@ import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
+import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/view/login/login.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
@@ -130,12 +132,11 @@ class _CreateAccountViewState extends State<CreateAccountView> {
               errorSnackbar(context, error: state.error);
             }
             if (state is CreateAccountSuccess) {
-           final isCreateSchool =   await _showCreateDrivingSchoolAlert();
-           if (isCreateSchool == false){
-             await lc<NavigationService>()
-                      .navigateTo(rootNavKey, AppRouter.joinDrivingSchool);
-           }
-              
+              final isCreateSchool = await _showCreateDrivingSchoolAlert();
+              if (isCreateSchool == false) {
+                await lc<NavigationService>()
+                    .navigateTo(rootNavKey, AppRouter.joinDrivingSchool);
+              }
             }
           },
           builder: (context, state) {
@@ -552,36 +553,55 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                     PreferedOrientation.landscape)
                   Row(
                     children: [
-                       PrimaryBtn(
-                          text: 'Sign Up',
-                          ontap: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (state.certificate == null) {
-                                errorSnackbar(
-                                  context,
-                                  error:
-                                      'Upload Instructor Certificate to Continue',
-                                );
-                              } else if (state.licence == null) {
-                                errorSnackbar(
-                                  context,
-                                  error: 'Upload Driving Licence to Continue',
-                                );
-                              } else {
-                                context.read<CreateAccountBloc>().add(
-                                      CreateAccount(
-                                        payload: getPayLoad(state),
-                                      ),
-                                    );
-                              }
+                      BlocConsumer<AuthBloc, AuthState>(
+                        listener: (context, state) {
+                          if (state is AuthError) {
+                            errorSnackbar(context, error: state.error);
+                          }
+                        },
+                        builder: (context, state) {
+                          final createAccountState =
+                              context.read<CreateAccountBloc>().state;
+                          if (state is AuthLoading) {
+                            return kLoadingWidget(context);
+                          } else {
+                            if (state.status == AuthStatus.authenticated) {
+                              context.read<CreateAccountBloc>().add(
+                                    CreateAccount(
+                                      payload: getPayLoad(createAccountState),
+                                    ),
+                                  );
                             }
-                          },
-                          hm: 23,
-                          phm: getPreferedOrientation(context) ==
-                                  PreferedOrientation.landscape
-                              ? 80
-                              : 0,
-                        ),
+
+                            return PrimaryBtn(
+                              text: 'Sign Up',
+                              ontap: () {
+                                if (_formKey.currentState!.validate()) {
+                                  if (createAccountState.certificate == null) {
+                                    errorSnackbar(
+                                      context,
+                                      error:
+                                          'Upload Instructor Certificate to Continue',
+                                    );
+                                  } else if (createAccountState.licence ==
+                                      null) {
+                                    errorSnackbar(
+                                      context,
+                                      error:
+                                          'Upload Driving Licence to Continue',
+                                    );
+                                  }
+                                }
+                              },
+                              hm: 23,
+                              phm: getPreferedOrientation(context) ==
+                                      PreferedOrientation.landscape
+                                  ? 80
+                                  : 0,
+                            );
+                          }
+                        },
+                      ),
                       const SizedBox(width: 12),
                       Center(
                         child: RichText(
@@ -617,30 +637,31 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   )
                 else
                   Column(
-                    children: [ PrimaryBtn(
-                          text: 'Sign Up',
-                          ontap: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (state.certificate == null) {
-                                errorSnackbar(
-                                  context,
-                                  error:
-                                      'Upload Instructor Certificate to Continue',
-                                );
-                              } else if (state.licence == null) {
-                                errorSnackbar(
-                                  context,
-                                  error: 'Upload Driving Licence to Continue',
-                                );
-                              } else {
-                                context.read<StaffBloc>().add(
-                                      CreateStaff(payload: getPayLoad(state)),
-                                    );
-                              }
+                    children: [
+                      PrimaryBtn(
+                        text: 'Sign Up',
+                        ontap: () {
+                          if (_formKey.currentState!.validate()) {
+                            if (state.certificate == null) {
+                              errorSnackbar(
+                                context,
+                                error:
+                                    'Upload Instructor Certificate to Continue',
+                              );
+                            } else if (state.licence == null) {
+                              errorSnackbar(
+                                context,
+                                error: 'Upload Driving Licence to Continue',
+                              );
+                            } else {
+                              context.read<StaffBloc>().add(
+                                    CreateStaff(payload: getPayLoad(state)),
+                                  );
                             }
-                          },
-                          hm: 23,
-                        ),
+                          }
+                        },
+                        hm: 23,
+                      ),
                     ],
                   ),
                 Center(
@@ -723,23 +744,25 @@ class _CreateAccountViewState extends State<CreateAccountView> {
               ),
             ),
             _renderUploadButton(() async {
+              print('document');
               final document = await pickFile();
+              print(document);
               if (document != null) {
                 if (!mounted) return;
                 switch (documentType.value) {
                   case 1:
                     //Instructor Certification
-                    context
-                        .read<CreateAccountBloc>()
-                        .add(UploadCertificate( documentType: documentType, file: document.path,));
+                    context.read<CreateAccountBloc>().add(UploadCertificate(
+                          documentType: documentType,
+                          file: document.path,
+                        ),);
                     setState(() {
                       certificateDoc = document;
                     });
                   case 2:
                     //Driving License
-                    context
-                        .read<CreateAccountBloc>()
-                        .add(UploadLicence(file:document.path, documentType: documentType));
+                    context.read<CreateAccountBloc>().add(UploadLicence(
+                        file: document.path, documentType: documentType,),);
                     setState(() {
                       licenceDoc = document;
                     });
@@ -908,12 +931,16 @@ class _CreateAccountViewState extends State<CreateAccountView> {
       allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
       type: FileType.custom,
     );
-    if (result != null) {
-      final file = File(result.files.single.path!);
-      return file;
-    } else {
-      // User canceled the picker
-      return null;
+    try {
+      if (result != null) {
+        final file = File(result.files.single.path!);
+        return file;
+      } else {
+        // User canceled the picker
+        return null;
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 

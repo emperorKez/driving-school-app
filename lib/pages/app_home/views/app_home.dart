@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_bottom_bar.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/app_home/cubit/tab_view/tab_view_bloc.dart';
@@ -7,6 +8,8 @@ import 'package:korbil_mobile/pages/app_home/views/tabs/lesson_tab_view.dart';
 import 'package:korbil_mobile/pages/app_home/views/tabs/notification_tab_view.dart';
 import 'package:korbil_mobile/pages/app_home/views/tabs/school_tab_view.dart';
 import 'package:korbil_mobile/pages/app_home/views/tabs/student_tab_view.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class AppHomePage extends StatelessWidget {
@@ -14,9 +17,21 @@ class AppHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TabViewBloc(),
-      child: const _AppHome(),
+    return BlocBuilder<StaffBloc, StaffState>(
+      builder: (context, state) {
+        if (state is! StaffLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          context
+              .read<SchoolBloc>()
+              .add(GetSchool(schoolId: state.staff!.staffData.schoolId));
+
+          return BlocProvider(
+            create: (context) => TabViewBloc(),
+            child: const _AppHome(),
+          );
+        }
+      },
     );
   }
 }
@@ -28,7 +43,7 @@ class _AppHome extends StatefulWidget {
   State<_AppHome> createState() => _AppHomeState();
 }
 
-class _AppHomeState extends State<_AppHome> { 
+class _AppHomeState extends State<_AppHome> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TabViewBloc, TabViewState>(

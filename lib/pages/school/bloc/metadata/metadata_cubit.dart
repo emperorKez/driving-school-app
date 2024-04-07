@@ -21,8 +21,8 @@ class MetadataCubit extends Cubit<MetadataState> {
     emit(MetadataInitial());
     try {
       final languageRes = await _metadataRepo.getAllLanguages();
-      // final helpTopicsRes = await _metadataRepo.getAllHelpTopics();
-      final feedbackCatgoriesRes = await _metadataRepo.getFeedbackCategories();
+      final helpTopicsRes = await _metadataRepo.getAllHelpTopics();
+      // final feedbackCatgoriesRes = await _metadataRepo.getFeedbackCategories();
       final locationTypeRes = await _metadataRepo.getLocationType();
       final courseCategoryRes = await _metadataRepo.getAllCourseCategories();
       final documentTypeRes = await _metadataRepo.getDocumentTypes();
@@ -38,9 +38,9 @@ class MetadataCubit extends Cubit<MetadataState> {
           scheduleFlows: scheduleFlowRes.data,
           courseCategories: courseCategoryRes.data,
           instructorTypes: instructorTypeRes.data,
-          helpTopics: const [],
-          // helpTopics: helpTopicsRes.data,
-          feedbackCategories: feedbackCatgoriesRes.data,
+          helpTopics: helpTopicsRes.data,
+          // feedbackCategories: feedbackCatgoriesRes.data,
+          feedbackCategories: const [],
           documentTypes: documentTypeRes.data,
           staffRoles: staffRoleRes.data,
           locationTypes: locationTypeRes.data,),);

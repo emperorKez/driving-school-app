@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
-import 'package:korbil_mobile/pages/lessons/bloc/cubit/calender_cubit.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/inst_home_mainbody.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/slide_up_panel.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -29,6 +31,20 @@ class _InstHomeState extends State<LessonsHomeView> {
           }
         },
         builder: (context, state) {
+          final staff = context.read<StaffBloc>().state.staff;
+          final schoolStaffs = context.read<SchoolBloc>().state.schoolInfo!.staff;
+          final staffIds = <int>[];
+          if (staff!.staffData.staffRole != 1){
+            for (final e in schoolStaffs){
+              staffIds.add(e.staffData.id);
+            }
+
+          } else{
+            staffIds.add(staff.staffData.id);
+          }
+          if (state is CalenderInitial){
+            context.read<CalenderCubit>().getCalender(staffIds: staffIds);
+          }
           // if (state is! CalenderLoaded) {
           //   return kLoadingWidget(context);
           // } else {
@@ -38,7 +54,7 @@ class _InstHomeState extends State<LessonsHomeView> {
               : _buildPortrait(s: s, state: state);
           // }
         },
-      )),
+      ),),
     );
   }
 
@@ -54,7 +70,7 @@ class _InstHomeState extends State<LessonsHomeView> {
   }
 
   SlidingUpPanel _buildPortrait(
-      {required Size s, required CalenderState state}) {
+      {required Size s, required CalenderState state,}) {
     return SlidingUpPanel(
       onPanelOpened: () {
         setState(() {

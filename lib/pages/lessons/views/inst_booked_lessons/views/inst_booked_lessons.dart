@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstBookedLessons extends StatefulWidget {
@@ -14,7 +18,31 @@ class _InstBookedLessonsState extends State<InstBookedLessons> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: KorbilTheme.of(context).primaryBg,
-        body: ListView(),
+        body: BlocBuilder<CalenderCubit, CalenderState>(
+          builder: (context, state) {
+            return state is! CalenderLoaded
+                ? kLoadingWidget(context)
+                : ListView.builder(
+                    itemCount: state.calender.length,
+                    itemBuilder: (context, index) => ListTile(
+                          title: Text(
+                            state.calender[index].title,
+                          ),
+                          subtitle:
+                              Text(state.calender[index].location.address),
+                          trailing: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(DateFormat.Md()
+                                  .format(state.calender[index].scheduledDate),),
+                              Text(
+                                  '${state.calender[index].scheduledTime.hour}:${state.calender[index].scheduledTime.minute}',),
+                            ],
+                          ),
+                        ),);
+          },
+        ),
       ),
     );
   }

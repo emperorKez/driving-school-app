@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/lessons/lesson_step_card.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
-import 'package:korbil_mobile/pages/lessons/lessons.dart';
 
 class SingleLessonStepCard extends StatelessWidget {
   const SingleLessonStepCard({
@@ -14,12 +13,12 @@ class SingleLessonStepCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute<dynamic>(
-            builder: (cxt) => const InstLessonDetails(),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute<dynamic>(
+        //     builder: (cxt) => const InstLessonDetails(calender: null,),
+        //   ),
+        // );
       },
       child: Container(
         padding: const EdgeInsets.all(15),

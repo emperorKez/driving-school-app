@@ -13,7 +13,7 @@ class AddAvailableDates extends AvailabiltyEvent {
   AddAvailableDates({required this.schoolId, required this.payload});
 
   final int schoolId;
-  final Map<String, dynamic> payload;
+  final dynamic payload;
 }
 
 class GetTimeOffDays extends AvailabiltyEvent {
@@ -26,7 +26,7 @@ class AddTimeOffDays extends AvailabiltyEvent {
   AddTimeOffDays({required this.schoolId, required this.payload});
 
   final int schoolId;
-  final Map<String, dynamic> payload;
+  final dynamic payload;
 }
 
 class AddMultipleTimeOffDays extends AvailabiltyEvent {

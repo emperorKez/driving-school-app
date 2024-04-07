@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/students/bloc/search/search_bloc.dart';
 import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/pages/students/views/student_list/views/add_new_user_alert.dart';
@@ -71,14 +73,22 @@ class _InstStudentListViewState extends State<InstStudentListView> {
           _appBarAction(context),
         ],
       ),
-      body: BlocProvider(
-        create: (context) => SearchBloc(),
-        child: _renderMobileBody(),
+      body: BlocConsumer<SchoolBloc, SchoolState>(
+        listener: (context, state) {
+          if (state is SchoolError) {
+            errorSnackbar(context, error: state.error);
+          }
+        },
+        builder: (context, state) {
+          return state is! SchoolLoaded
+              ? kLoadingWidget(context)
+              : _renderMobileBody(state);
+        },
       ),
     );
   }
 
-  Container _renderMobileBody() {
+  Container _renderMobileBody(SchoolState schoolState) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: ListView(
@@ -93,8 +103,17 @@ class _InstStudentListViewState extends State<InstStudentListView> {
             ),
             child: Form(
               key: _formKey,
-              child: BlocBuilder<StudentBloc, StudentState>(
+              child: BlocConsumer<StudentBloc, StudentState>(
+                listener: (context, state) {
+                  if (state is StudentError) {
+                    errorSnackbar(context, error: state.error);
+                  }
+                },
                 builder: (context, state) {
+                  if (state is StudentInitial) {
+                    context.read<StudentBloc>().add(
+                        GetAllStudent(schoolId: schoolState.schoolInfo!.id),);
+                  }
                   return state is! StudentLoaded
                       ? kLoadingWidget(context)
                       : TextFormField(
@@ -109,8 +128,12 @@ class _InstStudentListViewState extends State<InstStudentListView> {
                                 : null;
                           },
                           onChanged: (value) {
-                            context.read<SearchBloc>().add(KeywordChanged(
-                                keyword: value, students: state.studentList!,),);
+                            context.read<SearchBloc>().add(
+                                  KeywordChanged(
+                                    keyword: value,
+                                    students: state.studentList!,
+                                  ),
+                                );
                           },
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -283,7 +306,8 @@ class _InstStudentListViewState extends State<InstStudentListView> {
                           '${state.searchResult![index].student.profile.firstName} ${state.searchResult![index].student.profile.lastName}',
                         ),
                         subtitle: Text(
-                            state.searchResult![index].student.profile.email,),
+                          state.searchResult![index].student.profile.email,
+                        ),
                       );
                     },
                   ),

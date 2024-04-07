@@ -11,7 +11,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class InstWeeklyCalendar extends StatefulWidget {
   const InstWeeklyCalendar({this.category = 'all',
-    super.key});
+    super.key,});
   final String category;
 
   @override

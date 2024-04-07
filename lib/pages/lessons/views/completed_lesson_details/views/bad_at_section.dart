@@ -73,7 +73,7 @@ class BadAtSection extends StatelessWidget {
         const SizedBox(height: 15),
         // assessment details
         SelectedBadAssementDetailCard(
-          selectedGoodAssesment: _needToPracticeAssesment,
+          selectedBadAssesment: _needToPracticeAssesment,
         ),
       ],
     );

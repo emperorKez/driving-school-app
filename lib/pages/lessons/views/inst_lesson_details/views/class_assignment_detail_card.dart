@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details_map_view/views/inst_lesson_details_map_view.dart';
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ClassAssignmentDetailsCard extends StatelessWidget {
   const ClassAssignmentDetailsCard({
-    super.key,
+    required this.calender, super.key,
   });
+  final Calender calender;
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +53,7 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text(
-                        '02/06/2022',
+                      Text( DateFormat.yMd().format(calender.scheduledDate),
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -86,8 +88,7 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text(
-                        '12:00',
+                      Text('${calender.scheduledTime.hour}:${calender.scheduledTime.minute}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -122,8 +123,7 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text(
-                        '60 min',
+                      Text('${calender.duration}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -147,8 +147,7 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          Text(
-            'Aniaraplatsen 6, 191 47 Sollentuna, Sweden',
+          Text('${calender.location.address}, ${calender.location.city}',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,
@@ -167,7 +166,7 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (cxt) => const InstLessonDetailMapView(),
+                  builder: (cxt) =>  InstLessonDetailMapView(lessonId: calender.id,),
                 ),
               );
             },

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/lessons/lesson_step_card.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/single_lesson_step_card.dart';
-import 'package:korbil_mobile/pages/lessons/bloc/cubit/calender_cubit.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
@@ -145,7 +145,7 @@ Widget bookedCalender(List<Calender> bookedCalender) {
                 time: '${item.scheduledTime.hour}-${item.scheduledTime.minute}',
                 duration: item.duration.toString(),
                 name: '${item.student.firstName} ${item.student.lastName}',
-                location: item.location.address);
+                location: item.location.address,);
             // final step = _steps.elementAt(index);
             var isNextCompleted = false;
             try {
@@ -179,8 +179,8 @@ Widget completedCalender(List<Calender> completedCalender) {
                     duration: item.duration.toString(),
                     name: '${item.student.firstName} ${item.student.lastName}',
                     location: item.location.address,
-                    isCompleted: true));
-          });
+                    isCompleted: true,),);
+          },);
 }
 
 class LessonCategoryTab extends StatelessWidget {

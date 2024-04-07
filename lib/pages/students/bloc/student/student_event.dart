@@ -53,8 +53,8 @@ class ApproveStudent extends StudentEvent {
   final int studentId;
   final int schoolId;
 }
-class GetInvitedStudents extends StudentEvent {
-  GetInvitedStudents({required this.schoolId});
-  final int schoolId;
-}
+// class GetInvitedStudents extends StudentEvent {
+//   GetInvitedStudents({required this.schoolId});
+//   final int schoolId;
+// }
 

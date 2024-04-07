@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:korbil_mobile/repository/lesson/lesson_repo.dart';
+import 'package:korbil_mobile/repository/lesson/model/lesson.dart';
 
 part 'lesson_event.dart';
 part 'lesson_state.dart';
@@ -24,6 +25,40 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
   }
   final LessonRepo _lessonRepo;
 
+   Future<void> onFinishLesson(FinishLesson event, Emitter<LessonState> emit) async {
+    emit(LessonLoading());
+    try {
+      await _lessonRepo.finishLesson(lessonId: event.lessonId, payload: event.payload);
+      emit(LessonLoaded());
+    } catch (e) {emit(LessonError(error: e.toString()));
+      
+    }         
+  }
+
+  Future<void> onSendLessonFeedback(SendLessonFeedback event, Emitter<LessonState> emit) async { 
+    emit(LessonLoading());
+    try {
+      await _lessonRepo.sendLessonFeedback(lessonId: event.lessonId, payload: event.payload);
+      emit(LessonLoaded());
+    } catch (e) {emit(LessonError(error: e.toString()));
+      
+    }       
+  }
+
+  Future<void> onGetLesson(GetLesson event, Emitter<LessonState> emit) async {
+        emit(LessonLoading());
+    try {
+      final response = await _lessonRepo.getLesson(event.lessonId);
+      emit(LessonLoaded(previousLesson: response.data));
+    } catch (e) {emit(LessonError(error: e.toString()));
+      
+    }
+  }
+
+   Future<void> onGetPastLesson(GetPastLesson event, Emitter<LessonState> emit) async {
+  }
+
+
   Future<void> onEnableLessonBooking(EnableLessonBooking event, Emitter<LessonState> emit) async {
   }
 
@@ -33,8 +68,7 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
   Future<void> onAddLesson(AddLesson event, Emitter<LessonState> emit) async {
   }
 
-  Future<void> onGetLesson(GetLesson event, Emitter<LessonState> emit) async {
-  }
+  
 
   Future<void> onModifyLesson(ModifyLesson event, Emitter<LessonState> emit) async {
   }
@@ -42,12 +76,7 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
   Future<void> onDeleteLesson(DeleteLesson event, Emitter<LessonState> emit) async {
   }
 
-  Future<void> onFinishLesson(FinishLesson event, Emitter<LessonState> emit) async {
-  }
-
-  Future<void> onSendLessonFeedback(SendLessonFeedback event, Emitter<LessonState> emit) async {
-  }
-
+ 
   Future<void> onSendLessonCoordinates(SendLessonCoordinates event, Emitter<LessonState> emit) async {
   }
 
@@ -57,6 +86,5 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
   Future<void> onGetUpcomingLesson(GetUpcomingLesson event, Emitter<LessonState> emit) async {
   }
 
-  Future<void> onGetPastLesson(GetPastLesson event, Emitter<LessonState> emit) async {
-  }
+ 
 }

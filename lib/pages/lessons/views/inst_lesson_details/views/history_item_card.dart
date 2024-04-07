@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
+import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
+import 'package:korbil_mobile/repository/student/models/student_package.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstHIstoryItemCard extends StatelessWidget {
   const InstHIstoryItemCard({
+    required this.lesson,
     super.key,
   });
+  final Lesson lesson;
 
   @override
   Widget build(BuildContext context) {
+    final course = context
+        .read<CourseBloc>()
+        .state
+        .courses![context
+            .read<CourseBloc>()
+            .state
+            .courses!
+            .indexWhere((e) => e.course.id == lesson.courseId)]
+        .course;
     return Container(
       margin: const EdgeInsets.only(top: 15),
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 12),
@@ -44,7 +59,7 @@ class InstHIstoryItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '90 Min Traffic Light Drive',
+                      course.title,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -53,7 +68,7 @@ class InstHIstoryItemCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Completed Date 2022/06/26',
+                      'Completed Date:${DateFormat.yMMMd().format(lesson.scheduledDate)}',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -62,7 +77,7 @@ class InstHIstoryItemCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Duration : 90min',
+                      'Duration : ${lesson.duration}',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -87,7 +102,7 @@ class InstHIstoryItemCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Pick up location',
+                        'distance',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -96,7 +111,7 @@ class InstHIstoryItemCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Bergmansgatan 20, 431 30 Mölndal',
+                        '${lesson.distance}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,

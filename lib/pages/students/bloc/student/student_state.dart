@@ -27,7 +27,8 @@ final class StudentInitial extends StudentState {}
 final class StudentLoading extends StudentState {}
 
 final class StudentLoaded extends StudentState {
-  const StudentLoaded({required super.studentList, super.invitedStudents});
+  const StudentLoaded(
+      {required super.studentList, required super.invitedStudents});
 }
 
 final class StudentError extends StudentState {

@@ -1,6 +1,9 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/nav/router.dart';
+import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 
 class ApiService {
@@ -15,14 +18,16 @@ class ApiService {
 
   Future<DataState<Response<dynamic>?>> getReq(
     String path, {
-    String? token,
+    // String? token,
     Map<String, dynamic>? params,
   }) async {
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
+      log(path);
       final response = await dio.get<dynamic>(
         '$baseUrl/$path',
         queryParameters: params,
@@ -41,7 +46,7 @@ class ApiService {
 
   Future<DataState<Response<dynamic>?>> postReq(
     String path, {
-    Map<String, dynamic>? payload,
+    dynamic payload,
     Map<String, dynamic>? params,
     String? token,
   }) async {
@@ -50,6 +55,7 @@ class ApiService {
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
+      log(path);
       final response = await dio.post<dynamic>(
         '$baseUrl/$path',
         data: payload,
@@ -74,6 +80,7 @@ class ApiService {
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
+      log(path);
       final response = await dio.post<dynamic>(
         '$baseUrl/$path',
         data: payload,
@@ -98,6 +105,7 @@ class ApiService {
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
+      log(path);
       final response = await dio.put<dynamic>(
         '$baseUrl/$path',
         data: payload,
@@ -121,6 +129,7 @@ class ApiService {
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer $token';
       }
+      log(path);
       final response = await dio.put<dynamic>(
         '$baseUrl/$path',
       );
@@ -146,6 +155,7 @@ class ApiService {
       final formData = FormData.fromMap({
         'file': MultipartFile.fromString(file),
       });
+      log(path);
       final response =
           await dio.post<dynamic>('$baseUrl/$path', data: formData);
       log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');

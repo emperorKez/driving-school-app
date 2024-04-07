@@ -11,7 +11,6 @@ import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/app_home/app_home.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
-import 'package:korbil_mobile/pages/auth/bloc/login/login_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -130,8 +129,15 @@ class _CreateAccountViewState extends State<LoginView> {
                     builder: (_) => const AppHomePage(),
                   ),
                 );
-              } else {
+              } else if (state.staff!.staffData.schoolId == 0) {
                 _showCreateDrivingSchoolAlert();
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) => const CreateAccountView(),
+                  ),
+                );
               }
             }
           },
@@ -235,18 +241,30 @@ class _CreateAccountViewState extends State<LoginView> {
         ),
         BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            // TODO: implement listener
+            if (state is AuthError) {
+              errorSnackbar(context, error: state.error);
+            }
           },
           builder: (context, state) {
-            return state.status == AuthStatus.none ? kLoadingWidget(context) :  PrimaryBtn(
-              text: 'Login',
-              ontap: () {
-                if (_formKey.currentState!.validate()) {
-                  context.read<AuthBloc>().add(SignIn(email: emailController.text, password: passwordController.text));
-                }
-              },
-              hm: 23,
-            );
+            return state is AuthLoading
+                ? kLoadingWidget(context)
+                : PrimaryBtn(
+                    text: 'Login',
+                    ontap: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBloc>().add(SignIn(
+                            email: emailController.text,
+                            password: passwordController.text,),);
+                      }
+                      print(state.status);
+                      if (state.status == AuthStatus.authenticated) {
+                        context
+                            .read<StaffBloc>()
+                            .add(GetStaffByEmail(email: emailController.text));
+                      }
+                    },
+                    hm: 23,
+                  );
           },
         ),
         CustomScreenPadding(
@@ -329,23 +347,26 @@ class _CreateAccountViewState extends State<LoginView> {
                   ? 50
                   : 150,
         ),
-        BlocBuilder<LoginCubit, LoginState>(
+        BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            return PrimaryBtn(
-              text: 'Sign In',
-              ontap: () {
-                context.read<LoginCubit>().login(
-                      email: emailController.text,
-                      password: passwordController.text,
-                    );
-                if (state is LoginSuccess) {
-                  context
-                      .read<StaffBloc>()
-                      .add(GetStaffByEmail(email: emailController.text));
-                }
-              },
-              hm: 23,
-            );
+            return state is AuthLoading
+                ? kLoadingWidget(context)
+                : PrimaryBtn(
+                    text: 'Sign In',
+                    ontap: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBloc>().add(SignIn(
+                            email: emailController.text,
+                            password: passwordController.text,),);
+                      }
+                      if (state.status == AuthStatus.authenticated) {
+                        context
+                            .read<StaffBloc>()
+                            .add(GetStaffByEmail(email: emailController.text));
+                      }
+                    },
+                    hm: 23,
+                  );
           },
         ),
       ],

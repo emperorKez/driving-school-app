@@ -324,7 +324,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                         setState(() {
                                           logoDoc = doc;
                                         });
-                                        if (!mounted) return;
+                                        if (!context.mounted) return;
                                         context
                                             .read<CreateSchoolBloc>()
                                             .add(UploadLogo(logoDoc!.path));
@@ -379,7 +379,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                         setState(() {
                                           registrationDoc = doc;
                                         });
-                                        if (!mounted) return;
+                                        if (!context.mounted) return;
                                         context.read<CreateSchoolBloc>().add(
                                               UploadRegistration(
                                                 documentType: context
@@ -433,7 +433,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                       setState(() {
                                         logoDoc = doc;
                                       });
-                                      if (!mounted) return;
+                                      if (!context.mounted) return;
                                       context
                                           .read<CreateSchoolBloc>()
                                           .add(UploadLogo(logoDoc!.path));
@@ -477,7 +477,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                       setState(() {
                                         registrationDoc = doc;
                                       });
-                                      if (!mounted) return;
+                                      if (!context.mounted) return;
                                       context.read<CreateSchoolBloc>().add(
                                             UploadRegistration(
                                               documentType: context

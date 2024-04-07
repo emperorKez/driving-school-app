@@ -262,7 +262,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                        state.staff!.profile.avatar)),
+                                        state.staff!.profile.avatar,),),
                               ),
                             ),
                             const SizedBox(
@@ -314,7 +314,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                             ),
                           ],
                         );
-                }),
+                },),
                 const SizedBox(height: 25),
                 if (getPreferedOrientation(context) ==
                     PreferedOrientation.landscape)

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/selected_good_assesment_card.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/inst_lesson_details.dart';
+import 'package:korbil_mobile/repository/lesson/model/lesson.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class GoodAtSection extends StatelessWidget {
-  const GoodAtSection({
+  const GoodAtSection({required this.detail,
     required String selectedGoodAssesment, super.key,
   }) : _selectedGoodAssesment = selectedGoodAssesment;
 
   final String _selectedGoodAssesment;
+  final LessonDetail detail;
 
   @override
   Widget build(BuildContext context) {

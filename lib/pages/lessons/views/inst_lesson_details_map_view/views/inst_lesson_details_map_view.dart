@@ -5,7 +5,8 @@ import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstLessonDetailMapView extends StatefulWidget {
-  const InstLessonDetailMapView({super.key});
+  const InstLessonDetailMapView({required this.lessonId, super.key});
+  final int lessonId;
 
   @override
   State<InstLessonDetailMapView> createState() =>
@@ -43,7 +44,7 @@ class _InstLessonDetailMapViewState extends State<InstLessonDetailMapView> {
               height: 400,
               child: Column(
                 children: [
-                  _BottomSheetDetails(s: s),
+                  _BottomSheetDetails(s: s, lessonId: widget.lessonId,),
                 ],
               ),
             ),
@@ -74,7 +75,7 @@ class _InstLessonDetailMapViewState extends State<InstLessonDetailMapView> {
               child: Column(
                 children: [
                   const Spacer(),
-                  _BottomSheetDetails(s: s),
+                  _BottomSheetDetails(s: s, lessonId: widget.lessonId,),
                 ],
               ),
             ),
@@ -87,8 +88,9 @@ class _InstLessonDetailMapViewState extends State<InstLessonDetailMapView> {
 
 class _BottomSheetDetails extends StatelessWidget {
   const _BottomSheetDetails({
-    required this.s,
+    required this.s, required this.lessonId,
   });
+  final int lessonId;
 
   final Size s;
 
@@ -149,7 +151,7 @@ class _BottomSheetDetails extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      'Driven 15 KM',
+                      'Driven 12 KM',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -173,7 +175,7 @@ class _BottomSheetDetails extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      'Time 40 min',
+                      '25 mins ',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,

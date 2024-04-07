@@ -4,6 +4,16 @@ import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/lessons/lessons.dart';
 import 'package:korbil_mobile/pages/notifications/notifications.dart';
 import 'package:korbil_mobile/pages/school/school.dart';
+import 'package:korbil_mobile/pages/students/views/add_new_lesson/add_lesson.dart';
+import 'package:korbil_mobile/pages/students/views/manage_student_lesson/views/manage_student_lesson.dart';
+import 'package:korbil_mobile/pages/students/views/profile_package_history/views/profile_package_history.dart';
+import 'package:korbil_mobile/pages/students/views/student_list/views/student_list.dart';
+import 'package:korbil_mobile/pages/students/views/student_profile_approved/views/student_profile_approved.dart';
+import 'package:korbil_mobile/pages/students/views/student_profile_unapproved/views/student_profile_unapproved.dart' ;
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
+import 'package:korbil_mobile/repository/student/models/custom_student.dart';
+import 'package:korbil_mobile/repository/student/models/student.dart' as student;
+import 'package:korbil_mobile/repository/student/models/student_package.dart';
 // import 'package:korbil_mobile/pages/students/students.dart';
 // import 'package:korbil_mobile/repository/student/models/student.dart';
 
@@ -97,8 +107,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const AppHomePage());
       case lessonHome:
         return MaterialPageRoute(builder: (_) => const LessonsHomeView());
-      // case studentList:
-      //   return MaterialPageRoute(builder: (_) => const InstStudentListView());
+      case studentList:
+        return MaterialPageRoute(builder: (_) => const InstStudentListView());
       case notifications:
         return MaterialPageRoute(builder: (_) => const InstNotificationsView());
       case schoolSettings:
@@ -108,49 +118,51 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const InstBookedLessons());
       case completedLessonDetails:
         return MaterialPageRoute(
-          builder: (_) =>  InstCompletedLessonDetails(lessonId: settings.arguments! as int,),
+          builder: (_) => InstCompletedLessonDetails(
+            lessonId: settings.arguments! as int,
+          ),
         );
       case completedLessons:
         return MaterialPageRoute(builder: (_) => const InstCompletedLessons());
       case lessonDetails:
-        return MaterialPageRoute(builder: (_) => const InstLessonDetails());
+        return MaterialPageRoute(builder: (_) => InstLessonDetails(calender: settings.arguments! as Calender,));
       case lessonDetailAddReview:
         return MaterialPageRoute(
           builder: (_) => const InstLessonDetailAddReviewView(),
         );
       case lessonDetailMapView:
         return MaterialPageRoute(
-          builder: (_) => const InstLessonDetailMapView(),
+          builder: (_) => InstLessonDetailMapView(lessonId: settings.arguments! as int,),
         );
       case addException:
         return MaterialPageRoute(builder: (_) => const AddExceptionView());
       case editTimeSchedule:
         return MaterialPageRoute(builder: (_) => const EditTimeSchedule());
       case finishLesson:
-        return MaterialPageRoute(builder: (_) => const InstFinishLessonView());
+        return MaterialPageRoute(builder: (_) => InstFinishLessonView(lessonId: settings.arguments! as int,));
 
       // students screens
-      // case manageLessonAddLessonView:
-      //   return MaterialPageRoute(
-      //     builder: (_) => const ManageLessonAddLessonView(),
-      //   );
-      // case manageStudentLesson:
-      //   return MaterialPageRoute(
-      //       builder: (_) =>
-      //           ManageStudentLesson(student: settings.arguments! as Student));
-      // case studentProfileApproved:
-      //   return MaterialPageRoute(
-      //     builder: (_) =>
-      //         StudentProfileApproved(student: settings.arguments! as Student),
-      //   );
-      // case profilePackageHistory:
-      //   return MaterialPageRoute(builder: (_) => const ProfilePackageHistory());
-      // case studentProfileUnapproved:
-      //   return MaterialPageRoute(
-      //     builder: (_) => StudentProfileUnApproved(
-      //       student: settings.arguments! as Student,
-      //     ),
-      //   );
+      case manageLessonAddLessonView:
+        return MaterialPageRoute(
+          builder: (_) => const ManageLessonAddLessonView(),
+        );
+      case manageStudentLesson:
+        return MaterialPageRoute(
+            builder: (_) => ManageStudentLesson(
+                studentPackage: settings.arguments! as StudentPackage,),);
+      case studentProfileApproved:
+        return MaterialPageRoute(
+          builder: (_) => StudentProfileApproved(
+              student: settings.arguments! as CustomStudent,),
+        );
+      case profilePackageHistory:
+        return MaterialPageRoute(builder: (_) => const ProfilePackageHistory());
+      case studentProfileUnapproved:
+        return MaterialPageRoute(
+          builder: (_) => StudentProfileUnApproved(
+            student: settings.arguments! as student.Student,
+          ),
+        );
 
       //school screens
       case addCourse:

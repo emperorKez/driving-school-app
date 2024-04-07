@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/bad_at_section.dart';
-import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/good_at_section.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/assessment/assessment_bloc.dart';
+import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/assesment_type_icon.dart';
+import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/bad_assesment_card.dart';
+import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/good_assessment_card.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_finish_lesson_with_map_screen/views/inst_finish_lesson_with_map_screen.dart';
+import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/inst_lesson_details.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstFinishLessonView extends StatefulWidget {
-  const InstFinishLessonView({super.key});
+  const InstFinishLessonView({required this.lessonId, super.key});
+  final int lessonId;
 
   @override
   State<InstFinishLessonView> createState() => _InstFinishLessonViewState();
 }
 
 class _InstFinishLessonViewState extends State<InstFinishLessonView> {
-  final String _selectedGoodAssesment = 'Maneuvering';
-  final String _needToPracticeAssesment = 'Vehicle knowledge';
+  final _formKey = GlobalKey<FormState>();
+  final feedbackController = TextEditingController();
+  String _selectedGoodAssesment = 'Maneuvering';
+
+  String _needToPracticeAssesment = 'Vehicle knowledge';
 
   @override
   Widget build(BuildContext context) {
@@ -25,118 +33,140 @@ class _InstFinishLessonViewState extends State<InstFinishLessonView> {
         backgroundColor: KorbilTheme.of(context).primaryBg,
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: ListView(
-            children: [
-              SizedBox(
-                height: s.height * 0.35,
-                child: ClipRRect(
-                  child: Image.asset(
-                    'assets/imgs/ins/lessons/sample_map.png',
-                    fit: BoxFit.cover,
-                    width: s.width,
+          child: BlocProvider(
+            create: (context) => AssessmentBloc(),
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: s.height * 0.35,
+                  child: ClipRRect(
+                    child: Image.asset(
+                      'assets/imgs/ins/lessons/sample_map.png',
+                      fit: BoxFit.cover,
+                      width: s.width,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 25),
-              if (getPreferedOrientation(context) ==
-                  PreferedOrientation.landscape)
-                _buildStatsLandscape()
-              else
-                _buildStatsPortrait(),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Reviews',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: KorbilTheme.of(context).secondaryColor,
+                const SizedBox(height: 25),
+                if (getPreferedOrientation(context) ==
+                    PreferedOrientation.landscape)
+                  _buildStatsLandscape()
+                else
+                  _buildStatsPortrait(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Reviews',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: KorbilTheme.of(context).secondaryColor,
+                        ),
                       ),
                     ),
-                  ),
-                  const Expanded(
-                    child: PrimaryBtn(
-                      text: 'Add More',
-                      pvm: 8,
-                      vm: 0,
-                      fontSize: 14,
+                    const Expanded(
+                      child: PrimaryBtn(
+                        text: 'Add More',
+                        pvm: 8,
+                        vm: 0,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Text(
-                'Feedback',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: KorbilTheme.of(context).secondaryColor,
+                  ],
                 ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: TextFormField(
+                const SizedBox(height: 30),
+                Text(
+                  'Feedback',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
                     color: KorbilTheme.of(context).secondaryColor,
                   ),
-                  keyboardType: TextInputType.multiline,
-                  minLines: 9,
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 15,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).alternate2,
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: feedbackController,
+                      validator: (val) {
+                        if (val == null) {
+                          return 'Add a review';
+                        } else if (val.characters.length < 50) {
+                          return 'Enter at least 50 characters';
+                        } else {
+                          return null;
+                        }
+                      },
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: KorbilTheme.of(context).secondaryColor,
                       ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).primaryColor,
+                      keyboardType: TextInputType.multiline,
+                      minLines: 9,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 15,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide: BorderSide(
+                            color: KorbilTheme.of(context).alternate2,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide: BorderSide(
+                            color: KorbilTheme.of(context).primaryColor,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide: BorderSide(
+                            color: KorbilTheme.of(context).warningColor,
+                          ),
+                        ),
+                        hintText: 'Add a Review',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: KorbilTheme.of(context).alternate1,
+                        ),
                       ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(
-                        color: KorbilTheme.of(context).warningColor,
-                      ),
-                    ),
-                    hintText: 'Add a Review',
-                    hintStyle: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: KorbilTheme.of(context).alternate1,
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              PrimaryBtn(
-                text: 'Finish Lesson',
-                hm: 0,
-                ontap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (cxt) => const InstFinishLessonWithMapView(),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 30),
-            ],
+                const SizedBox(height: 20),
+                PrimaryBtn(
+                  text: 'Finish Lesson',
+                  hm: 0,
+                  ontap: () {
+                    if (_formKey.currentState!.validate()) {
+                      context
+                          .read<AssessmentBloc>()
+                          .add(AddFeedback(feedback: feedbackController.text));
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (cxt) => const InstFinishLessonWithMapView(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
@@ -146,9 +176,9 @@ class _InstFinishLessonViewState extends State<InstFinishLessonView> {
   Column _buildStatsPortrait() {
     return Column(
       children: [
-        GoodAtSection(selectedGoodAssesment: _selectedGoodAssesment),
+        goodAtSection(),
         const SizedBox(height: 25),
-        BadAtSection(needToPracticeAssesment: _needToPracticeAssesment),
+        badAtSection(),
         const SizedBox(height: 30),
       ],
     );
@@ -159,12 +189,152 @@ class _InstFinishLessonViewState extends State<InstFinishLessonView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: GoodAtSection(selectedGoodAssesment: _selectedGoodAssesment),
+          child: goodAtSection(),
         ),
         const SizedBox(width: 30),
         Expanded(
-          child:
-              BadAtSection(needToPracticeAssesment: _needToPracticeAssesment),
+          child: badAtSection(),
+        ),
+      ],
+    );
+  }
+
+  Widget goodAtSection() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          children: [
+            Text(
+              'Good At',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: KorbilTheme.of(context).secondaryColor,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Icon(
+              Icons.thumb_up,
+              color: KorbilTheme.of(context).primaryColor,
+              size: 18,
+            ),
+          ],
+        ),
+        const SizedBox(height: 25),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: AssestmentTypeIcon(
+                  type: 'Maneuvering',
+                  selected: _selectedGoodAssesment == 'Maneuvering',
+                  ontap: (String val) {
+                    setState(() {
+                      _selectedGoodAssesment = val;
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                child: AssestmentTypeIcon(
+                  type: 'Eco-friendly driving',
+                  selected: _selectedGoodAssesment == 'Eco-friendly driving',
+                  ontap: (String val) {
+                    setState(() {
+                      _selectedGoodAssesment = val;
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                child: AssestmentTypeIcon(
+                  type: 'Rules of the road',
+                  selected: _selectedGoodAssesment == 'Rules of the road',
+                  ontap: (String val) {
+                    setState(() {
+                      _selectedGoodAssesment = val;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15),
+        // assessment details
+        SelectedGoodAssementDetailCard(
+          selectedGoodAssesment: _selectedGoodAssesment,
+        ),
+      ],
+    );
+  }
+
+  Widget badAtSection() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          children: [
+            Text(
+              'Bad At',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: KorbilTheme.of(context).secondaryColor,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Icon(
+              Icons.thumb_down,
+              color: KorbilTheme.of(context).secondaryColor,
+              size: 18,
+            ),
+          ],
+        ),
+        const SizedBox(height: 25),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: BadAssestmentTypeIcon(
+                  type: 'Vehicle knowledge',
+                  selected: _needToPracticeAssesment == 'Vehicle knowledge',
+                  ontap: (String val) {
+                    setState(() {
+                      _needToPracticeAssesment = val;
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                child: BadAssestmentTypeIcon(
+                  type: 'Road safety and behavior',
+                  selected:
+                      _needToPracticeAssesment == 'Road safety and behavior',
+                  ontap: (String val) {
+                    setState(() {
+                      _needToPracticeAssesment = val;
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15),
+        // assessment details
+        SelectedBadAssementDetailCard(
+          selectedAssesment: _needToPracticeAssesment,
         ),
       ],
     );

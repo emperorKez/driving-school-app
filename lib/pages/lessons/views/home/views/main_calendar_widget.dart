@@ -7,7 +7,7 @@ import 'package:korbil_mobile/components/schedule_status_types/type2.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type3.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
 import 'package:korbil_mobile/global/constants/schedule_status_types.dart';
-import 'package:korbil_mobile/pages/lessons/bloc/cubit/calender_cubit.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';

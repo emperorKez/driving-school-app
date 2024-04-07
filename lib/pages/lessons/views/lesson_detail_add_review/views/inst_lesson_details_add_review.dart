@@ -225,7 +225,7 @@ class _InstLessonDetailAddReviewViewState
           width: MediaQuery.sizeOf(context).width * 0.5,
           child: ListView(
             children: [
-              BottomSheetDetails(s: s),
+              BottomSheetDetails(s: s, lessonId: 0,), //todo change the id
               const SizedBox(height: 35),
               _buildReviewSection(),
             ],
@@ -240,7 +240,7 @@ class _InstLessonDetailAddReviewViewState
       children: [
         _buildReviewSection(),
         const SizedBox(height: 35),
-        BottomSheetDetails(s: s),
+        BottomSheetDetails(s: s, lessonId: 0 ), //todo change the id
       ],
     );
   }
