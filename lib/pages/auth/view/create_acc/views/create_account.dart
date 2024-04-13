@@ -566,10 +566,10 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             return kLoadingWidget(context);
                           } else {
                             if (state.status == AuthStatus.authenticated) {
-                              context.read<CreateAccountBloc>().add(
-                                    CreateAccount(
-                                      payload: getPayLoad(createAccountState),
-                                    ),
+                              context.read<StaffBloc>().add(
+                                    CreateStaff(
+                                        payload:
+                                            getPayLoad(createAccountState)),
                                   );
                             }
 
@@ -590,6 +590,13 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                                       error:
                                           'Upload Driving Licence to Continue',
                                     );
+                                  } else {
+                                    context.read<AuthBloc>().add(SignUp(
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                        firstname: firstnameController.text,
+                                        lastname: lastnameController.text,
+                                        phoneNumber: phoneController.text));
                                   }
                                 }
                               },
@@ -638,29 +645,53 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 else
                   Column(
                     children: [
-                      PrimaryBtn(
-                        text: 'Sign Up',
-                        ontap: () {
-                          if (_formKey.currentState!.validate()) {
-                            if (state.certificate == null) {
-                              errorSnackbar(
-                                context,
-                                error:
-                                    'Upload Instructor Certificate to Continue',
-                              );
-                            } else if (state.licence == null) {
-                              errorSnackbar(
-                                context,
-                                error: 'Upload Driving Licence to Continue',
-                              );
-                            } else {
-                              context.read<StaffBloc>().add(
-                                    CreateStaff(payload: getPayLoad(state)),
-                                  );
-                            }
+                      BlocConsumer<AuthBloc, AuthState>(
+                        listener: (context, state) {
+                          if (state is AuthError) {
+                            errorSnackbar(context, error: state.error);
                           }
                         },
-                        hm: 23,
+                        builder: (context, state) {
+                          final createAccountState =
+                              context.read<CreateAccountBloc>().state;
+                          if (state is AuthLoading) {
+                            return kLoadingWidget(context);
+                          } else {
+                            if (state.status == AuthStatus.authenticated) {
+                              context.read<StaffBloc>().add(
+                                    CreateStaff(
+                                        payload:
+                                            getPayLoad(createAccountState)),
+                                  );
+                            }
+                          return PrimaryBtn(
+                            text: 'Sign Up',
+                            ontap: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (createAccountState.certificate == null) {
+                                  errorSnackbar(
+                                    context,
+                                    error:
+                                        'Upload Instructor Certificate to Continue',
+                                  );
+                                } else if (createAccountState.licence == null) {
+                                  errorSnackbar(
+                                    context,
+                                    error: 'Upload Driving Licence to Continue',
+                                  );
+                                } else {
+                                  context.read<AuthBloc>().add(SignUp(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      firstname: firstnameController.text,
+                                      lastname: lastnameController.text,
+                                      phoneNumber: phoneController.text));
+                                }
+                              }
+                            },
+                            hm: 23,
+                          );}
+                        },
                       ),
                     ],
                   ),
@@ -752,17 +783,23 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 switch (documentType.value) {
                   case 1:
                     //Instructor Certification
-                    context.read<CreateAccountBloc>().add(UploadCertificate(
-                          documentType: documentType,
-                          file: document.path,
-                        ),);
+                    context.read<CreateAccountBloc>().add(
+                          UploadCertificate(
+                            documentType: documentType,
+                            file: document.path,
+                          ),
+                        );
                     setState(() {
                       certificateDoc = document;
                     });
                   case 2:
                     //Driving License
-                    context.read<CreateAccountBloc>().add(UploadLicence(
-                        file: document.path, documentType: documentType,),);
+                    context.read<CreateAccountBloc>().add(
+                          UploadLicence(
+                            file: document.path,
+                            documentType: documentType,
+                          ),
+                        );
                     setState(() {
                       licenceDoc = document;
                     });

@@ -4,11 +4,6 @@ part of 'create_account_bloc.dart';
 @immutable
 sealed class CreateAccountEvent {}
 
-class CreateAccount extends CreateAccountEvent{
-  CreateAccount({required this.payload});
-  final Map<String, dynamic> payload;
-}
-
 
 class UploadCertificate extends CreateAccountEvent{
   UploadCertificate({required this.file, required this.documentType});

@@ -13,10 +13,10 @@ dependencies:
   flutter_bloc: ^8.1.3
   flutter_localizations:
     sdk: flutter
-  intl: ^0.18.0
+  intl:
   # google_fonts: ^5.1.0
-  syncfusion_flutter_core: ^22.2.8
-  syncfusion_flutter_datepicker: ^22.2.8
+  syncfusion_flutter_core: 
+  syncfusion_flutter_datepicker: 
   syncfusion_flutter_calendar: 
   flutter_slidable: ^3.0.0
   carousel_slider: ^4.2.1
@@ -24,7 +24,7 @@ dependencies:
   dotted_border: ^2.0.0+3
   sliding_up_panel: ^2.0.0+1
   # flutter_calendar_week: ^2.0.0
-  horizontal_week_calendar: ^0.0.11
+  horizontal_week_calendar:
   # flutter_neat_and_clean_calendar: ^0.3.11+25
   shared_preferences: ^2.2.0
   go_router: ^10.1.0

@@ -27,16 +27,13 @@ class AuthRepo {
     }
   }
 
-  Future<CognitoUserPoolTokens> fetchCognitoAuthSession() async {
+  Future<JsonWebToken> fetchCognitoAuthSession() async {
     try {
       final cognitoPlugin =
           Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
-      final result = await cognitoPlugin.fetchAuthSession();
-      final identityId = result.identityIdResult.value;
-      final token = result.userPoolTokensResult.value;
 
-      safePrint("Current user's identity ID: $identityId");
-      safePrint("Current user's token: $token");
+      final result = await cognitoPlugin.fetchAuthSession();
+      final token = result.userPoolTokensResult.value.accessToken;
       return token;
     } on AuthException catch (e) {
       safePrint('Error retrieving auth session: ${e.message}');

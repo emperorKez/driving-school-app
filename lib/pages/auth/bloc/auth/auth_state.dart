@@ -9,7 +9,7 @@ sealed class AuthState {
 
   final AuthStatus status;
   final AuthUser? user;
-  final String? token;
+  final JsonWebToken? token;
 }
 
 class AuthInitial extends AuthState {}

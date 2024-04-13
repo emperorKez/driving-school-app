@@ -48,8 +48,8 @@ class ApiService {
     String path, {
     dynamic payload,
     Map<String, dynamic>? params,
-    String? token,
   }) async {
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
@@ -70,36 +70,36 @@ class ApiService {
     }
   }
 
-  Future<DataState<Response<dynamic>?>> postReq2(
-    String path, {
-    required List<int> payload,
-    String? token,
-  }) async {
-    try {
-      final dio = Dio(baseOptions);
-      if (token != null) {
-        dio.options.headers['authorization'] = 'Bearer $token';
-      }
-      log(path);
-      final response = await dio.post<dynamic>(
-        '$baseUrl/$path',
-        data: payload,
-      );
-      log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
-      return DataSuccess(response);
-    } on DioException catch (e) {
-      return DataFailed(DataError(e.response?.statusCode, e.response?.data));
-    } catch (e) {
-      return DataFailed(DataError(null, e));
-    }
-  }
+  // Future<DataState<Response<dynamic>?>> postReq2(
+  //   String path, {
+  //   required List<int> payload,
+  //   String? token,
+  // }) async {
+  //   try {
+  //     final dio = Dio(baseOptions);
+  //     if (token != null) {
+  //       dio.options.headers['authorization'] = 'Bearer $token';
+  //     }
+  //     log(path);
+  //     final response = await dio.post<dynamic>(
+  //       '$baseUrl/$path',
+  //       data: payload,
+  //     );
+  //     log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
+  //     return DataSuccess(response);
+  //   } on DioException catch (e) {
+  //     return DataFailed(DataError(e.response?.statusCode, e.response?.data));
+  //   } catch (e) {
+  //     return DataFailed(DataError(null, e));
+  //   }
+  // }
 
   Future<DataState<Response<dynamic>?>> putReq(
     String path, {
     Map<String, dynamic>? payload,
     Map<String, dynamic>? params,
-    String? token,
   }) async {
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
@@ -121,9 +121,8 @@ class ApiService {
   }
 
   Future<DataState<Response<dynamic>?>> deleteReq(
-    String path, {
-    String? token,
-  }) async {
+    String path) async {
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
@@ -145,8 +144,8 @@ class ApiService {
   Future<DataState<Response<dynamic>?>> uploadReq(
     String path, {
     required String file,
-    String? token,
   }) async {
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
     try {
       final dio = Dio(baseOptions);
       if (token != null) {

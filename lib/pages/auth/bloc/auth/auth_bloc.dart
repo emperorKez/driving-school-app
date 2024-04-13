@@ -33,10 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final user = await _authRepo.getUser();
       final token = await _authRepo.fetchCognitoAuthSession();
-      print(token.accessToken);
-
-      print(user);
-      emit(AuthLoaded(status: AuthStatus.authenticated, user: user, token: ''));
+      emit(AuthLoaded(status: AuthStatus.authenticated, user: user, token: token));
     } catch (e) {
       emit(AuthError(error: e.toString()));
     }
@@ -49,9 +46,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await _authRepo.signIn(email: event.email, password: event.password);
       if (isSignedin) {
         final token = await _authRepo.fetchCognitoAuthSession();
+        print(token);
         emit( AuthLoaded(
           status: AuthStatus.authenticated,
-          token: token.refreshToken
+          token: token
         ));
       } else {
         emit(const AuthLoaded(

@@ -221,7 +221,7 @@ class LessonRepo {
   Future<ResponseState<List<Calender>>> getCalender(
       {required List<int> staffIds,}) async {
     final response =
-        await apiService.postReq2(ApiPaths.getCalender, payload: staffIds);
+        await apiService.postReq(ApiPaths.getCalender, payload: staffIds);
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -239,7 +239,7 @@ class LessonRepo {
 
   Future<ResponseState<List<Calender>>> getCompletedCalender(
       {required List<int> staffIds,}) async {
-    final response = await apiService.postReq2(ApiPaths.getCompletedCalender,
+    final response = await apiService.postReq(ApiPaths.getCompletedCalender,
         payload: staffIds,);
     if (response.data != null) {
       try {
