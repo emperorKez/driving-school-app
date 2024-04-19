@@ -28,6 +28,19 @@ class _CreateAccountViewState extends State<LoginView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+// Cred getCred() async{
+//   return await AuthRepo().getSavedLoginData();
+// }
+  // @override
+  // Future<void> initState() async {
+  //   super.initState();
+  //   final authState = context.read<AuthBloc>().state;
+  //   // if (authState.status == AuthStatus.authenticated && cred != null) {
+      
+  //   //   context.read<StaffBloc>().add(GetStaffByEmail(email: cred.email));
+  //   // }
+  // }
+
   Future<void> _showCreateDrivingSchoolAlert() {
     return showDialog<void>(
       context: context,
@@ -114,37 +127,48 @@ class _CreateAccountViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     // final s = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: BlocListener<StaffBloc, StaffState>(
-          listener: (context, state) {
-            if (state is StaffError) {
-              errorSnackbar(context, error: state.error);
+        child: Scaffold(
+      backgroundColor: AppColors.white,
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<AuthBloc, AuthState>(listener: (context, state) {
+            if (state.status == AuthStatus.authenticated) {
+              context
+                  .read<StaffBloc>()
+                  .add(GetStaffByEmail(email: emailController.text));
             }
-            if (state is StaffLoaded) {
-              if (state.staff != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => const AppHomePage(),
-                  ),
-                );
-              } else if (state.staff!.staffData.schoolId == 0) {
-                _showCreateDrivingSchoolAlert();
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => const CreateAccountView(),
-                  ),
-                );
+          },),
+          BlocListener<StaffBloc, StaffState>(
+            listener: (context, state) {
+              if (state is StaffError) {
+                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                    MaterialPageRoute<dynamic>(
+                        builder: (context) => const CreateAccountView(),),
+                    (route) => false,);
               }
-            }
-          },
-          child: _renderMobileBody(context),
-        ),
+              if (state is StaffLoaded) {
+                if (state.staff != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) => const AppHomePage(),
+                    ),
+                  );
+                } else if (state.staff!.staffData.schoolId == 0) {
+                  _showCreateDrivingSchoolAlert();
+                } else {
+                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                      MaterialPageRoute<dynamic>(
+                          builder: (context) => const CreateAccountView(),),
+                      (route) => false,);
+                }
+              }
+            },
+          ),
+        ],
+        child: _renderMobileBody(context),
       ),
-    );
+    ),);
   }
 
   Widget _renderMobileBody(BuildContext context) {
@@ -252,16 +276,19 @@ class _CreateAccountViewState extends State<LoginView> {
                     text: 'Login',
                     ontap: () {
                       if (_formKey.currentState!.validate()) {
-                        context.read<AuthBloc>().add(SignIn(
-                            email: emailController.text,
-                            password: passwordController.text,),);
+                        context.read<AuthBloc>().add(
+                              SignIn(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              ),
+                            );
                       }
                       print(state.status);
-                      if (state.status == AuthStatus.authenticated) {
-                        context
-                            .read<StaffBloc>()
-                            .add(GetStaffByEmail(email: emailController.text));
-                      }
+                      // if (state.status == AuthStatus.authenticated) {
+                      //   context
+                      //       .read<StaffBloc>()
+                      //       .add(GetStaffByEmail(email: emailController.text));
+                      // }
                     },
                     hm: 23,
                   );
@@ -321,12 +348,11 @@ class _CreateAccountViewState extends State<LoginView> {
                 width: 15,
               ),
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => const CreateAccountView(),
-                  ),
-                ),
+                onTap: () => Navigator.of(context, rootNavigator: true)
+                    .pushAndRemoveUntil(
+                        MaterialPageRoute<dynamic>(
+                            builder: (context) => const CreateAccountView(),),
+                        (route) => false,),
                 child: const Text(
                   'Register',
                   textAlign: TextAlign.center,
@@ -347,28 +373,28 @@ class _CreateAccountViewState extends State<LoginView> {
                   ? 50
                   : 150,
         ),
-        BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            return state is AuthLoading
-                ? kLoadingWidget(context)
-                : PrimaryBtn(
-                    text: 'Sign In',
-                    ontap: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<AuthBloc>().add(SignIn(
-                            email: emailController.text,
-                            password: passwordController.text,),);
-                      }
-                      if (state.status == AuthStatus.authenticated) {
-                        context
-                            .read<StaffBloc>()
-                            .add(GetStaffByEmail(email: emailController.text));
-                      }
-                    },
-                    hm: 23,
-                  );
-          },
-        ),
+        // BlocBuilder<AuthBloc, AuthState>(
+        //   builder: (context, state) {
+        //     return state is AuthLoading
+        //         ? kLoadingWidget(context)
+        //         : PrimaryBtn(
+        //             text: 'Sign In',
+        //             ontap: () {
+        //               if (_formKey.currentState!.validate()) {
+        //                 context.read<AuthBloc>().add(SignIn(
+        //                     email: emailController.text,
+        //                     password: passwordController.text,),);
+        //               }
+        //               if (state.status == AuthStatus.authenticated) {
+        //                 context
+        //                     .read<StaffBloc>()
+        //                     .add(GetStaffByEmail(email: emailController.text));
+        //               }
+        //             },
+        //             hm: 23,
+        //           );
+        //   },
+        // ),
       ],
     );
   }

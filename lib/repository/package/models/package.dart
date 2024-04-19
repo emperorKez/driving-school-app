@@ -10,13 +10,13 @@ class Package {
         schoolPackage: SchoolPackage.fromJson(
           json['schoolPackage'] as Map<String, dynamic>,
         ),
-        offer: json['offer'] as int,
+        offer: json['offer'] as double,
         endDate: DateTime.parse(json['endDate'] as String),
         discountedPrice: json['discountedPrice'] as int,
       );
 
   SchoolPackage schoolPackage;
-  int offer;
+  double offer;
   DateTime endDate;
   int discountedPrice;
 
@@ -48,7 +48,8 @@ class SchoolPackage {
         id: json['id'] as int,
         title: json['title'] as String,
         description: json['description'] as String,
-        details: json['details'] as String,
+        details: List<dynamic>.from(
+            json['details'].map((dynamic x) => x) as Iterable),
         timeDuration: json['timeDuration'] as int,
         price: json['price'] as int,
         isRecommended: json['isRecommended'] as bool,
@@ -65,7 +66,7 @@ class SchoolPackage {
   int id;
   String title;
   String description;
-  String details;
+  List<dynamic> details;
   int timeDuration;
   int price;
   bool isRecommended;
@@ -98,8 +99,7 @@ class PackageCourseSyllabus {
     required this.courseId,
   });
 
-  factory PackageCourseSyllabus.fromJson(Map<String, dynamic> json) =>
-      PackageCourseSyllabus(
+  factory PackageCourseSyllabus.fromJson(dynamic json) => PackageCourseSyllabus(
         id: json['id'] as int,
         courseId: json['courseId'] as int,
       );

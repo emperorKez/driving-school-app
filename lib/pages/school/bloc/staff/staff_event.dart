@@ -16,10 +16,10 @@ class CreateStaff extends StaffEvent {
   final Map<String, dynamic> payload;
  }
 
-//  class GetPendingSchoolInvite extends StaffEvent{
-//   GetPendingSchoolInvite({required this.email});
+ class GetSchoolInvite extends StaffEvent{
+  GetSchoolInvite({required this.email});
 
-//   final String email;
-//  }
+  final String email;
+ }
 
 

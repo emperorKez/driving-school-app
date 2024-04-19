@@ -212,6 +212,7 @@ class LessonRepo {
         );
         return ResponseSuccess(pastLessons);
       } catch (e) {
+        print('get past lesson error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }
@@ -231,6 +232,7 @@ class LessonRepo {
         );
         return ResponseSuccess(bookings);
       } catch (e) {
+        print('get calender error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }
@@ -250,6 +252,7 @@ class LessonRepo {
         );
         return ResponseSuccess(bookings);
       } catch (e) {
+        print('get completed calender error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }

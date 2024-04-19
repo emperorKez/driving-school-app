@@ -8,6 +8,7 @@ import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc
 import 'package:korbil_mobile/pages/auth/bloc/create_school/create_school_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/lesson/lesson_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/availability/availabilty_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/group_lesson/group_lesson_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/help_bloc/help_topic_bloc.dart';
@@ -35,11 +36,28 @@ class _AppState extends State<App> {
   final ThemeMode _themeMode = ThemeMode.system;
   final Locale? _locale = AppLocalizations.getStoredLocale();
 
+
+
+  // Future<void> initAmplify() async {
+  //   WidgetsFlutterBinding.ensureInitialized();
+  //   await AuthRepo().configureAmplify();
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // initAmplify();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(create: (context) => AuthBloc()),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc()
+          ..add(CacheSignin()),
+          // lazy: false,
+        ),
         BlocProvider<SchoolBloc>(
           create: (context) => SchoolBloc(),
         ),
@@ -94,9 +112,11 @@ class _AppState extends State<App> {
         BlocProvider(create: (context) => SearchBloc()),
         BlocProvider(
           create: (context) =>
-              SubscriptionBloc()..add(GetAllSubscriptionLevels()),
-          lazy: false,
+              SubscriptionBloc()
+          //     ..add(GetAllSubscriptionLevels()),
+          // lazy: false,
         ),
+        BlocProvider(create: (context) => AvailabiltyBloc())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -115,6 +135,7 @@ class _AppState extends State<App> {
         themeMode: _themeMode,
         navigatorKey: rootNavKey,
         initialRoute: AppRouter.getStarted,
+        // home: const ManageSchoolView(),
         onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );

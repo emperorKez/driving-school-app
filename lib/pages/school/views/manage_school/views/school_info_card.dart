@@ -131,7 +131,12 @@ class SchoolInfoCard extends StatelessWidget {
     } else {
       return Image.network(
         path,
+        width: 40, errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+        'assets/imgs/ins/school/sample_logo.png',
         width: 40,
+      );
+        },
       );
     }
   }

@@ -39,6 +39,7 @@ class StudentRepo {
       }
       return ResponseFailed(res.error!);
     } catch (e) {
+      print('get student error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }
@@ -164,7 +165,7 @@ class StudentRepo {
   Future<ResponseState<List<InvitedStudents>>> getInvitedStudents(
       int schoolId,) async {
     try {
-      final res = await apiService.getReq(ApiPaths.invitedStudents(schoolId));
+      final res = await apiService.getReq(ApiPaths.getInvitedStudents(schoolId));
       if (res.data != null) {
         final jsonList = res.data!.data['response'];
         final data = (jsonList as List).cast<Map<String, dynamic>>();

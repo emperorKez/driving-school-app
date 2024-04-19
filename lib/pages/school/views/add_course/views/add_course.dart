@@ -37,84 +37,88 @@ class _AddCourseState extends State<InstAddCourse> {
       ),
       body: BlocConsumer<CourseBloc, CourseState>(
         listener: (context, state) {
-          if (state is CourseError){
+          if (state is CourseError) {
             errorSnackbar(context, error: state.error);
           }
         },
         builder: (context, state) {
-          return state is! CourseLoaded ? kLoadingWidget(context) : ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: List.generate(
-                    state.courses!.length,
-                    (index) => InstLessonCard(
+          return state is! CourseLoaded
+              ? kLoadingWidget(context)
+              : ListView(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  children: [
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(
+                        state.courses!.length,
+                        (index) => InstLessonCard(
                           course: state.courses![index],
-                        ),),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        padding: const EdgeInsets.symmetric(vertical: 13),
-                        decoration: BoxDecoration(
-                          color: KorbilTheme.of(context).white,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                            color: KorbilTheme.of(context).secondaryColor,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Close',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: KorbilTheme.of(context).secondaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: PrimaryBtn(
-                      text: 'Add',
-                      vm: 0,
-                      hm: 0,
-                      fontSize: 14,
-                      ontap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<dynamic>(
-                            builder: (cxt) => const InstAddNewCourse(),
-                          ),
-                        );
-                      },
+                    const SizedBox(
+                      height: 50,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-            ],
-          );
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                              padding: const EdgeInsets.symmetric(vertical: 13),
+                              decoration: BoxDecoration(
+                                color: KorbilTheme.of(context).white,
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: KorbilTheme.of(context).secondaryColor,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Close',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color:
+                                        KorbilTheme.of(context).secondaryColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: PrimaryBtn(
+                            text: 'Add',
+                            vm: 0,
+                            hm: 0,
+                            fontSize: 14,
+                            ontap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<dynamic>(
+                                  builder: (cxt) => const InstAddNewCourse(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                  ],
+                );
         },
       ),
     );
@@ -181,7 +185,13 @@ class InstLessonCard extends StatelessWidget {
                 Row(
                   children: [
                     if (course.courseCategory.icon != null)
-                      Image.network(course.courseCategory.icon!)
+                      Image.network(
+                        course.courseCategory.icon!,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                              'assets/imgs/ins/school/sample_logo.png');
+                        },
+                      )
                     else
                       Image.asset(
                         'assets/imgs/ins/school/group.png',

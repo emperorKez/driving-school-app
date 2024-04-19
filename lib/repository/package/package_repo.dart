@@ -13,6 +13,7 @@ class PackageRepo {
     final params = {'schoolId': schoolId};
     try {
       final res = await apiService.getReq(ApiPaths.getPackages, params: params);
+      print('Package response: ${res.data}');
       if (res.data != null) {
         final jsonList = res.data!.data['response'];
         final data = (jsonList as List).cast<Map<String, dynamic>>();
@@ -24,6 +25,7 @@ class PackageRepo {
       }
       return ResponseFailed(res.error!);
     } catch (e) {
+      print('get package error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }

@@ -322,7 +322,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
         iconEnabledColor: KorbilTheme.of(context).secondaryColor,
         items: instructorTypes.map<DropdownMenuItem<dynamic>>((e) {
           return DropdownMenuItem<dynamic>(
-            value: e.id,
+            value: e.value,
             child: Text(e.name),
           );
         }).toList(),

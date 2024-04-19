@@ -35,8 +35,8 @@ class UpdateLocationStatusActive extends SchoolLocationEvent {
 
 class UpdateLocationStatusInactive extends SchoolLocationEvent {
   UpdateLocationStatusInactive({
-    required this.schoolLocationId,required this.schoolId,
+    required this.locationId,required this.schoolId,
   });
-  final int schoolLocationId;
+  final int locationId;
   final int schoolId;
 }

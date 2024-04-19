@@ -1,9 +1,51 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/nav/router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class Cred {
+  Cred({
+    required this.email,
+    required this.password,
+  });
+  final String email;
+  final String password;
+}
 
 class AuthRepo {
+  // AuthRepo() : savedCred = getSavedLoginData();
+
+  // final Cred savedCred;
+  // AuthRepo({CacheClient? cache}) : _cache = cache ?? CacheClient();
+  // final CacheClient _cache;
+
+  // static const userCacheKey = '__user_cache_key__';
+
+  //  _cache.write(key: userCacheKey, value: user);
+
+  // Cred? get cachedCred {
+  //   return _cache.read<Cred>(key: userCacheKey);
+  // }
+
+   Future<Cred?> getSavedLoginData() async {
+   
+     final prefs = await SharedPreferences.getInstance();
+      final email = prefs.getString('email');
+      final password = prefs.getString('password');
+      if (email != null && password != null){
+      return Cred(email: email, password: password);
+      // return null;
+      }
+      return null;
+    
+  }
+
+  // super(
+  //         authenticationRepository.currentUser.isNotEmpty
+  //             ? AuthState.authenticated(authenticationRepository.currentUser))
+
   Future<void> configureAmplify() async {
     try {
       await Amplify.addPlugin(AmplifyAuthCognito());
@@ -20,12 +62,21 @@ class AuthRepo {
       final result =
           await Amplify.Auth.signIn(username: email, password: password);
       await _handleSignInResult(result, email, password);
+
+      if (await getSavedLoginData() == null) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('email', email);
+        await prefs.setString('password', password);
+      }
+
       return result.isSignedIn;
     } on AuthException catch (e) {
       print('Error signing in: ${e.message}');
       rethrow;
     }
   }
+
+
 
   Future<JsonWebToken> fetchCognitoAuthSession() async {
     try {
@@ -130,11 +181,14 @@ class AuthRepo {
   Future<AuthUser> getUser() async {
     try {
       final user = await Amplify.Auth.getCurrentUser();
+      print('here are some user detail');
+    print(user.signInDetails);
+    print(user.userId);
+    print(user.runtimeTypeName);
       return user;
     } on AuthException catch (e) {
-      // rethrow;
-      final error = e.message as Error;
-      throw error;
+      print(e);
+      rethrow;
     }
   }
 
@@ -151,7 +205,7 @@ class AuthRepo {
   }
 
   Future<void> _handleSignInResult(
-      SignInResult result, String username, String password) async {
+      SignInResult result, String username, String password,) async {
     switch (result.nextStep.signInStep) {
       // ···
       case AuthSignInStep.confirmSignUp:
@@ -201,7 +255,7 @@ A confirmation code has been sent to ${codeDeliveryDetails.destination}.
         actions: [
           ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close')),
+              child: const Text('Close'),),
         ],
       ),
     );

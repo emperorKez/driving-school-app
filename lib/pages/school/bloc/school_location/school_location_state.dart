@@ -9,7 +9,7 @@ sealed class SchoolLocationState {
 
 final class SchoolLocationInitial extends SchoolLocationState {}
 
-final class SchoolLocationloading extends SchoolLocationState {}
+final class SchoolLocationLoading extends SchoolLocationState {}
 
 final class SchoolLocationLoaded extends SchoolLocationState {
   const SchoolLocationLoaded({required super.schoolLocations});

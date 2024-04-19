@@ -44,7 +44,7 @@ class Lesson {
         seats: json['seats'] as int,
         lessonStatus: json['lessonStatus'] as int,
         groupLessonStudentRefs: List<int>.from(
-            json['groupLessonStudentRefs'].map((int x) => x) as Iterable,),
+            json['groupLessonStudentRefs'].map((dynamic x) => x) as Iterable,),
       );
 
   int id;

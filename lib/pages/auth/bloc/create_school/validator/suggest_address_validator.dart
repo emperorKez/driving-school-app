@@ -4,6 +4,6 @@ class AddressValidator {
   });
   final String? address;
 
-  bool validate() => address!.length > 3 ? true : false;
+  bool validate() => address!.length > 3 || false;
   
 }

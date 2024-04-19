@@ -15,6 +15,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUp>(onSignUp);
     on<SignIn>(onSignIn);
     on<SignOut>(onSignOut);
+    on<UpdateUser>(onUpdateUser);
+    on<CacheSignin>(onCacheSignin);
   }
   final AuthRepo _authRepo;
 
@@ -33,7 +35,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final user = await _authRepo.getUser();
       final token = await _authRepo.fetchCognitoAuthSession();
-      emit(AuthLoaded(status: AuthStatus.authenticated, user: user, token: token));
+      emit(
+        AuthLoaded(
+          status: AuthStatus.authenticated,
+          user: user,
+          token: token,
+        ),
+      );
     } catch (e) {
       emit(AuthError(error: e.toString()));
     }
@@ -46,18 +54,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await _authRepo.signIn(email: event.email, password: event.password);
       if (isSignedin) {
         final token = await _authRepo.fetchCognitoAuthSession();
-        print(token);
-        emit( AuthLoaded(
-          status: AuthStatus.authenticated,
-          token: token
-        ));
+        await _authRepo.getUser();
+        emit(AuthLoaded(status: AuthStatus.authenticated, token: token));
       } else {
-        emit(const AuthLoaded(
-          status: AuthStatus.unauthenticated,
-        ));
+        emit(
+          const AuthLoaded(status: AuthStatus.unauthenticated, token: null),
+        );
       }
     } catch (e) {
-      print(e);
       emit(AuthError(error: e.toString()));
     }
   }
@@ -66,8 +70,47 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       await _authRepo.signOut();
-      emit(const AuthLoaded(status: AuthStatus.unauthenticated));
+      emit(const AuthLoaded(status: AuthStatus.unauthenticated, token: null));
     } catch (e) {
+      emit(AuthError(error: e.toString()));
+    }
+  }
+
+  Future<void> onUpdateUser(UpdateUser event, Emitter<AuthState> emit) async {
+    // try {
+    //   emit(AuthLoading());
+    await _authRepo.updateUserAttributes(
+      email: event.email,
+      firstname: event.firstname,
+      lastname: event.lastname,
+    );
+    // emit(const AuthLoaded(status: AuthStatus.authenticated));
+    // } catch (e) {
+    //   emit(AuthError(error: e.toString()));
+    // }
+  }
+
+  Future<void> onCacheSignin(CacheSignin event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final cred = await _authRepo.getSavedLoginData();
+      if (cred != null) {
+        final isSignedin =
+            await _authRepo.signIn(email: cred.email, password: cred.password);
+        if (isSignedin) {
+          final token = await _authRepo.fetchCognitoAuthSession();
+          print('token : $token');
+          emit(AuthLoaded(status: AuthStatus.authenticated, token: token));
+        } else {
+          emit(
+            const AuthLoaded(status: AuthStatus.unauthenticated, token: null),
+          );
+        }
+      } else {
+        emit(const AuthLoaded(status: AuthStatus.unauthenticated, token: null));
+      }
+    } catch (e) {
+      print(e);
       emit(AuthError(error: e.toString()));
     }
   }

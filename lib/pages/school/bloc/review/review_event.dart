@@ -43,4 +43,4 @@ class UpdateReviewList extends ReviewEvent {
   });
   final int schoolId;
   final Map<String, dynamic> payload;
-}
+} 

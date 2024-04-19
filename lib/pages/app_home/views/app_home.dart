@@ -10,6 +10,7 @@ import 'package:korbil_mobile/pages/app_home/views/tabs/school_tab_view.dart';
 import 'package:korbil_mobile/pages/app_home/views/tabs/student_tab_view.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/manage_school/views/manage_school.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class AppHomePage extends StatelessWidget {
@@ -17,21 +18,23 @@ class AppHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StaffBloc, StaffState>(
-      builder: (context, state) {
-        if (state is! StaffLoaded) {
-          return kLoadingWidget(context);
-        } else {
-          context
-              .read<SchoolBloc>()
-              .add(GetSchool(schoolId: state.staff!.staffData.schoolId));
+    return Material(
+      child: BlocBuilder<StaffBloc, StaffState>(
+        builder: (context, state) {
+          if (state is! StaffLoaded) {
+            return kLoadingWidget(context);
+          } else {
+            context
+                .read<SchoolBloc>()
+                .add(GetSchool(schoolId: state.staff!.staffData.schoolId));
 
-          return BlocProvider(
-            create: (context) => TabViewBloc(),
-            child: const _AppHome(),
-          );
-        }
-      },
+            return BlocProvider(
+              create: (context) => TabViewBloc(),
+              child: const _AppHome(),
+            );
+          }
+        },
+      ),
     );
   }
 }
@@ -78,7 +81,18 @@ class _AppHomeState extends State<_AppHome> {
             }
             // return Future.value(false);
           },
-          child: const _AppHomeBody(),
+          child: BlocBuilder<SchoolBloc, SchoolState>(
+            builder: (context, state) {
+              if (state is! SchoolLoaded) {
+                return kLoadingWidget(context);
+              } else {
+                return state.schoolInfo!.schoolStatus == 5
+                    ? const _AppHomeBody()
+                    : const ManageSchoolView();
+                // return const _AppHomeBody();
+              }
+            },
+          ),
         );
       },
     );

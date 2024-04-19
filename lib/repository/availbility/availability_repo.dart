@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:korbil_mobile/repository/api_service/api_service.dart';
 import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
@@ -12,6 +14,7 @@ class AvailabilityRepo {
       int schoolId,) async {
     final response =
         await apiService.getReq(ApiPaths.getAvailableDates(schoolId: schoolId));
+        print('get available date response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -21,6 +24,7 @@ class AvailabilityRepo {
         );
         return ResponseSuccess(availableDates);
       } catch (e) {
+        print('get available date error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }
@@ -34,6 +38,7 @@ class AvailabilityRepo {
     final response = await apiService.postReq(
         ApiPaths.addAvailableDates(schoolId: schoolId),
         payload: payload,);
+        print('add available data response: ${response.data}');
     if (response.data != null) {
       try {
         final availableDate = AvailableDate.fromJson(
@@ -41,6 +46,7 @@ class AvailabilityRepo {
         );
         return ResponseSuccess(availableDate);
       } catch (e) {
+        print('add available date error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }
@@ -50,6 +56,7 @@ class AvailabilityRepo {
   Future<ResponseState<List<TimeOffDay>>> getTimeOffDays(int schoolId) async {
     final response =
         await apiService.getReq(ApiPaths.getTimeOffDays(schoolId: schoolId));
+        print('get time off response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -59,6 +66,7 @@ class AvailabilityRepo {
         );
         return ResponseSuccess(timeOffDay);
       } catch (e) {
+        print('get time off error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }
@@ -86,11 +94,12 @@ class AvailabilityRepo {
 
   Future<ResponseState<List<TimeOffDay>>> addMultipleTimeOffDays({
     required int schoolId,
-    required Map<String, dynamic> payload,
+    required List<dynamic> payload,
   }) async {
     final response = await apiService.postReq(
         ApiPaths.addMultipleTimeOffDays(schoolId: schoolId),
         payload: payload,);
+        print('add time off response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -100,6 +109,7 @@ class AvailabilityRepo {
         );
         return ResponseSuccess(timeOffDay);
       } catch (e) {
+        print('add time off errro: $e');
         return ResponseFailed(DataError(null, e));
       }
     }

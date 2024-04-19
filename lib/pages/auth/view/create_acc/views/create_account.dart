@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
@@ -16,7 +17,6 @@ import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
-import 'package:korbil_mobile/pages/auth/view/login/login.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/repository/metadata/models/document_type.dart';
@@ -124,81 +124,90 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     final documentTypes =
         context.read<MetadataCubit>().state.documentTypes ?? [];
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: BlocConsumer<CreateAccountBloc, CreateAccountState>(
-          listener: (context, state) async {
-            if (state is CreateAccountError) {
-              errorSnackbar(context, error: state.error);
-            }
-            if (state is CreateAccountSuccess) {
-              final isCreateSchool = await _showCreateDrivingSchoolAlert();
-              if (isCreateSchool == false) {
-                await lc<NavigationService>()
-                    .navigateTo(rootNavKey, AppRouter.joinDrivingSchool);
-              }
-            }
-          },
-          builder: (context, state) {
-            return ListView(
-              shrinkWrap: true,
-              children: [
-                const SizedBox(height: 20),
-                Center(
-                  child: Column(
-                    children: [
-                      if (getPreferedOrientation(context) ==
-                          PreferedOrientation.landscape)
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.4,
-                          child: Center(
-                            child: Image.asset(
-                              'assets/imgs/ins/auth/splash_img.png',
-                              width: MediaQuery.sizeOf(context).height * 0.4,
-                            ),
-                          ),
-                        )
-                      else
-                        Container(),
-                      if (getPreferedOrientation(context) ==
-                          PreferedOrientation.landscape)
-                        const SizedBox(height: 15)
-                      else
-                        Container(),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Welcome to ',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: getPreferedOrientation(context) ==
-                                    PreferedOrientation.landscape
-                                ? 52
-                                : 24,
-                            color: AppColors.black,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'körbil',
+        child: Scaffold(
+            backgroundColor: AppColors.white,
+            body: BlocListener<StaffBloc, StaffState>(
+                listener: (context, state) async {
+                  if (state is StaffError) {
+                    await _noSchoolInviteAlert();
+                  }
+                },
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Column(
+                        children: [
+                          if (getPreferedOrientation(context) ==
+                              PreferedOrientation.landscape)
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.4,
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/imgs/ins/auth/splash_img.png',
+                                  width:
+                                      MediaQuery.sizeOf(context).height * 0.4,
+                                ),
+                              ),
+                            )
+                          else
+                            Container(),
+                          if (getPreferedOrientation(context) ==
+                              PreferedOrientation.landscape)
+                            const SizedBox(height: 15)
+                          else
+                            Container(),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Welcome to ',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
                                 fontSize: getPreferedOrientation(context) ==
                                         PreferedOrientation.landscape
-                                    ? 60
-                                    : 32,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.green,
+                                    ? 52
+                                    : 24,
+                                color: AppColors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'körbil',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: getPreferedOrientation(context) ==
+                                            PreferedOrientation.landscape
+                                        ? 60
+                                        : 32,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.green,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          if (getPreferedOrientation(context) ==
+                              PreferedOrientation.landscape)
+                            Container()
+                          else
+                            const Text(
+                              'Create Account',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                                color: AppColors.black,
                               ),
                             ),
-                          ],
-                        ),
+                        ],
                       ),
-                      const SizedBox(height: 15),
-                      if (getPreferedOrientation(context) ==
-                          PreferedOrientation.landscape)
-                        Container()
-                      else
-                        const Text(
+                    ),
+                    if (getPreferedOrientation(context) ==
+                        PreferedOrientation.landscape)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 22),
+                        child: Text(
                           'Create Account',
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -207,528 +216,519 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             color: AppColors.black,
                           ),
                         ),
-                    ],
-                  ),
-                ),
-                if (getPreferedOrientation(context) ==
-                    PreferedOrientation.landscape)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 22),
-                    child: Text(
-                      'Create Account',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: AppColors.black,
-                      ),
-                    ),
-                  )
-                else
-                  Container(),
-                const SizedBox(height: 30),
-                Center(
-                  child: Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        children: [
-                          Row(
+                      )
+                    else
+                      Container(),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: Form(
+                        key: _formKey,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: _renderFormField(
-                                  hint: 'First Name',
-                                  ctrl: firstnameController,
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return 'Please enter Your First Name';
-                                    }
-                                    return null;
-                                  },
-                                  icon: 'assets/imgs/ins/auth/profile_icon.png',
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _renderFormField(
+                                      hint: 'First Name',
+                                      ctrl: firstnameController,
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'Please enter Your First Name';
+                                        }
+                                        return null;
+                                      },
+                                      icon:
+                                          'assets/imgs/ins/auth/profile_icon.png',
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: _renderFormField(
+                                      hint: 'Last Name',
+                                      ctrl: lastnameController,
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'Please enter Your Last Name';
+                                        }
+                                        return null;
+                                      },
+                                      icon:
+                                          'assets/imgs/ins/auth/profile_icon.png',
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                child: _renderFormField(
-                                  hint: 'Last Name',
-                                  ctrl: lastnameController,
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return 'Please enter Your Last Name';
-                                    }
-                                    return null;
-                                  },
-                                  icon: 'assets/imgs/ins/auth/profile_icon.png',
+                              if (getPreferedOrientation(context) ==
+                                  PreferedOrientation.landscape)
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: _renderFormField(
+                                        hint: 'Enter your phone no',
+                                        ctrl: phoneController,
+                                        inputType: TextInputType.phone,
+                                        validator: (val) {
+                                          if (val == null || val.isEmpty) {
+                                            return 'Please enter Your Phone Number';
+                                          }
+                                          return null;
+                                        },
+                                        icon:
+                                            'assets/imgs/ins/auth/call_green.png',
+                                        iconSize: 18,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: _renderFormField(
+                                        hint: 'Enter your email',
+                                        ctrl: emailController,
+                                        inputType: TextInputType.emailAddress,
+                                        validator: (val) {
+                                          if (val == null || val.isEmpty) {
+                                            return 'Please enter Your Email Address';
+                                          }
+                                          return null;
+                                        },
+                                        icon: 'assets/imgs/ins/auth/email.png',
+                                        iconSize: 18,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              else
+                                Column(
+                                  children: [
+                                    _renderFormField(
+                                      hint: 'Enter your phone no',
+                                      ctrl: phoneController,
+                                      inputType: TextInputType.phone,
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'Please enter Your Phone Number';
+                                        }
+                                        return null;
+                                      },
+                                      icon:
+                                          'assets/imgs/ins/auth/call_green.png',
+                                      iconSize: 18,
+                                    ),
+                                    _renderFormField(
+                                      hint: 'Enter your email',
+                                      ctrl: emailController,
+                                      inputType: TextInputType.emailAddress,
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'Please enter Your Email Address';
+                                        }
+                                        return null;
+                                      },
+                                      icon: 'assets/imgs/ins/auth/email.png',
+                                      iconSize: 18,
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              if (getPreferedOrientation(context) ==
+                                  PreferedOrientation.landscape)
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: _renderFormField(
+                                        hint: 'Password',
+                                        ctrl: passwordController,
+                                        validator: (val) {
+                                          if (val == null || val.isEmpty) {
+                                            return 'Please enter Your Password';
+                                          }
+                                          return null;
+                                        },
+                                        icon:
+                                            'assets/imgs/ins/auth/lock_green.png',
+                                        iconSize: 18,
+                                        obscure: true,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: _renderFormField(
+                                        hint: 'Confirm Password',
+                                        ctrl: confirmPasswordController,
+                                        validator: (val) {
+                                          if (val == null || val.isEmpty) {
+                                            return 'Confirm Your Password';
+                                          } else if (val !=
+                                              passwordController.text) {
+                                            return 'Password does not match';
+                                          }
+                                          return null;
+                                        },
+                                        icon:
+                                            'assets/imgs/ins/auth/lock_green.png',
+                                        iconSize: 18,
+                                        obscure: true,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              else
+                                Column(
+                                  children: [
+                                    _renderFormField(
+                                      hint: 'Password',
+                                      ctrl: passwordController,
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'Please enter Your Password';
+                                        }
+                                        return null;
+                                      },
+                                      icon:
+                                          'assets/imgs/ins/auth/lock_green.png',
+                                      iconSize: 18,
+                                      obscure: true,
+                                    ),
+                                    _renderFormField(
+                                      hint: 'Confirm Password',
+                                      ctrl: confirmPasswordController,
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'Confirm Your Password';
+                                        } else if (val !=
+                                            passwordController.text) {
+                                          return 'Password does not match';
+                                        }
+                                        return null;
+                                      },
+                                      icon:
+                                          'assets/imgs/ins/auth/lock_green.png',
+                                      iconSize: 18,
+                                      obscure: true,
+                                    ),
+                                  ],
+                                ),
+                              selectUserRole(),
+                              if (getPreferedOrientation(context) ==
+                                  PreferedOrientation.landscape)
+                                Row(
+                                  children: [
+                                    if (certificateDoc != null)
+                                      SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: Image.file(
+                                          certificateDoc!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    Expanded(
+                                      child: _renderUploadInputField(
+                                        icon: 'assets/imgs/ins/auth/circle.png',
+                                        hint: 'Instructor Certification',
+                                        documentType: documentTypes[0],
+                                      ),
+                                    ),
+                                    if (licenceDoc != null)
+                                      SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: Image.file(
+                                          licenceDoc!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    Expanded(
+                                      child: _renderUploadInputField(
+                                        icon:
+                                            'assets/imgs/ins/auth/drivers_licence.png',
+                                        hint: 'Upload Driving license',
+                                        documentType: documentTypes[1],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              else
+                                Column(
+                                  children: [
+                                    if (certificateDoc != null)
+                                      SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: Image.file(
+                                          certificateDoc!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    _renderUploadInputField(
+                                      icon: 'assets/imgs/ins/auth/circle.png',
+                                      hint: 'Instructor Certification',
+                                      documentType: documentTypes[0],
+                                    ),
+                                    if (licenceDoc != null)
+                                      SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: Image.file(
+                                          licenceDoc!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    _renderUploadInputField(
+                                      icon:
+                                          'assets/imgs/ins/auth/drivers_licence.png',
+                                      hint: 'Upload Driving license',
+                                      documentType: documentTypes[1],
+                                    ),
+                                  ],
+                                ),
                             ],
                           ),
-                          if (getPreferedOrientation(context) ==
-                              PreferedOrientation.landscape)
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _renderFormField(
-                                    hint: 'Enter your phone no',
-                                    ctrl: phoneController,
-                                    inputType: TextInputType.phone,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return 'Please enter Your Phone Number';
-                                      }
-                                      return null;
-                                    },
-                                    icon: 'assets/imgs/ins/auth/call_green.png',
-                                    iconSize: 18,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: _renderFormField(
-                                    hint: 'Enter your email',
-                                    ctrl: emailController,
-                                    inputType: TextInputType.emailAddress,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return 'Please enter Your Email Address';
-                                      }
-                                      return null;
-                                    },
-                                    icon: 'assets/imgs/ins/auth/email.png',
-                                    iconSize: 18,
-                                  ),
-                                ),
-                              ],
-                            )
-                          else
-                            Column(
-                              children: [
-                                _renderFormField(
-                                  hint: 'Enter your phone no',
-                                  ctrl: phoneController,
-                                  inputType: TextInputType.phone,
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return 'Please enter Your Phone Number';
-                                    }
-                                    return null;
-                                  },
-                                  icon: 'assets/imgs/ins/auth/call_green.png',
-                                  iconSize: 18,
-                                ),
-                                _renderFormField(
-                                  hint: 'Enter your email',
-                                  ctrl: emailController,
-                                  inputType: TextInputType.emailAddress,
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return 'Please enter Your Email Address';
-                                    }
-                                    return null;
-                                  },
-                                  icon: 'assets/imgs/ins/auth/email.png',
-                                  iconSize: 18,
-                                ),
-                              ],
-                            ),
-                          if (getPreferedOrientation(context) ==
-                              PreferedOrientation.landscape)
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _renderFormField(
-                                    hint: 'Enter your phone no',
-                                    ctrl: phoneController,
-                                    inputType: TextInputType.phone,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return 'Please enter Your Phone Number';
-                                      }
-                                      return null;
-                                    },
-                                    icon: 'assets/imgs/ins/auth/call_green.png',
-                                    iconSize: 18,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: _renderFormField(
-                                    hint: 'Enter your email',
-                                    ctrl: emailController,
-                                    inputType: TextInputType.emailAddress,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return 'Please enter Your Email Address';
-                                      }
-                                      return null;
-                                    },
-                                    icon: 'assets/imgs/ins/auth/email.png',
-                                    iconSize: 18,
-                                  ),
-                                ),
-                              ],
-                            )
-                          else
-                            Column(
-                              children: [
-                                _renderFormField(
-                                  hint: 'Enter your phone no',
-                                  ctrl: phoneController,
-                                  inputType: TextInputType.phone,
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return 'Please enter Your Phone Number';
-                                    }
-                                    return null;
-                                  },
-                                  icon: 'assets/imgs/ins/auth/call_green.png',
-                                  iconSize: 18,
-                                ),
-                                _renderFormField(
-                                  hint: 'Enter your email',
-                                  ctrl: emailController,
-                                  inputType: TextInputType.emailAddress,
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return 'Please enter Your Email Address';
-                                    }
-                                    return null;
-                                  },
-                                  icon: 'assets/imgs/ins/auth/email.png',
-                                  iconSize: 18,
-                                ),
-                              ],
-                            ),
-                          if (getPreferedOrientation(context) ==
-                              PreferedOrientation.landscape)
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _renderFormField(
-                                    hint: 'Password',
-                                    ctrl: passwordController,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return 'Please enter Your Password';
-                                      }
-                                      return null;
-                                    },
-                                    icon: 'assets/imgs/ins/auth/lock_green.png',
-                                    iconSize: 18,
-                                    obscure: true,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: _renderFormField(
-                                    hint: 'Confirm Password',
-                                    ctrl: confirmPasswordController,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return 'Confirm Your Password';
-                                      } else if (val !=
-                                          passwordController.text) {
-                                        return 'Password does not match';
-                                      }
-                                      return null;
-                                    },
-                                    icon: 'assets/imgs/ins/auth/lock_green.png',
-                                    iconSize: 18,
-                                    obscure: true,
-                                  ),
-                                ),
-                              ],
-                            )
-                          else
-                            Column(
-                              children: [
-                                _renderFormField(
-                                  hint: 'Password',
-                                  ctrl: passwordController,
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return 'Please enter Your Password';
-                                    }
-                                    return null;
-                                  },
-                                  icon: 'assets/imgs/ins/auth/lock_green.png',
-                                  iconSize: 18,
-                                  obscure: true,
-                                ),
-                                _renderFormField(
-                                  hint: 'Confirm Password',
-                                  ctrl: confirmPasswordController,
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return 'Confirm Your Password';
-                                    } else if (val != passwordController.text) {
-                                      return 'Password does not match';
-                                    }
-                                    return null;
-                                  },
-                                  icon: 'assets/imgs/ins/auth/lock_green.png',
-                                  iconSize: 18,
-                                  obscure: true,
-                                ),
-                              ],
-                            ),
-                          if (getPreferedOrientation(context) ==
-                              PreferedOrientation.landscape)
-                            Row(
-                              children: [
-                                if (certificateDoc != null)
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Image.file(
-                                      certificateDoc!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                Expanded(
-                                  child: _renderUploadInputField(
-                                    icon: 'assets/imgs/ins/auth/circle.png',
-                                    hint: 'Instructor Certification',
-                                    documentType: documentTypes[0],
-                                  ),
-                                ),
-                                if (licenceDoc != null)
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Image.file(
-                                      licenceDoc!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                Expanded(
-                                  child: _renderUploadInputField(
-                                    icon:
-                                        'assets/imgs/ins/auth/drivers_licence.png',
-                                    hint: 'Upload Driving license',
-                                    documentType: documentTypes[1],
-                                  ),
-                                ),
-                              ],
-                            )
-                          else
-                            Column(
-                              children: [
-                                if (certificateDoc != null)
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Image.file(
-                                      certificateDoc!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                _renderUploadInputField(
-                                  icon: 'assets/imgs/ins/auth/circle.png',
-                                  hint: 'Instructor Certification',
-                                  documentType: documentTypes[0],
-                                ),
-                                if (licenceDoc != null)
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Image.file(
-                                      licenceDoc!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                _renderUploadInputField(
-                                  icon:
-                                      'assets/imgs/ins/auth/drivers_licence.png',
-                                  hint: 'Upload Driving license',
-                                  documentType: documentTypes[1],
-                                ),
-                              ],
-                            ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 35),
-                if (getPreferedOrientation(context) ==
-                    PreferedOrientation.landscape)
-                  Row(
-                    children: [
-                      BlocConsumer<AuthBloc, AuthState>(
-                        listener: (context, state) {
-                          if (state is AuthError) {
-                            errorSnackbar(context, error: state.error);
-                          }
-                        },
-                        builder: (context, state) {
-                          final createAccountState =
-                              context.read<CreateAccountBloc>().state;
-                          if (state is AuthLoading) {
-                            return kLoadingWidget(context);
-                          } else {
-                            if (state.status == AuthStatus.authenticated) {
-                              context.read<StaffBloc>().add(
-                                    CreateStaff(
-                                        payload:
-                                            getPayLoad(createAccountState)),
-                                  );
-                            }
-
-                            return PrimaryBtn(
-                              text: 'Sign Up',
-                              ontap: () {
-                                if (_formKey.currentState!.validate()) {
-                                  if (createAccountState.certificate == null) {
-                                    errorSnackbar(
-                                      context,
-                                      error:
-                                          'Upload Instructor Certificate to Continue',
+                    const SizedBox(height: 35),
+                    if (getPreferedOrientation(context) ==
+                        PreferedOrientation.landscape)
+                      Row(
+                        children: [
+                          BlocConsumer<AuthBloc, AuthState>(
+                            listener: (context, state) {
+                              if (state is AuthError) {
+                                errorSnackbar(context, error: state.error);
+                              }
+                              if (state is AuthLoaded &&
+                                  state.status == AuthStatus.authenticated &&
+                                  selectedStaffRole < 3) {
+                                context.read<StaffBloc>().add(
+                                      GetSchoolInvite(
+                                          email: emailController.text,),
                                     );
-                                  } else if (createAccountState.licence ==
-                                      null) {
-                                    errorSnackbar(
-                                      context,
-                                      error:
-                                          'Upload Driving Licence to Continue',
-                                    );
-                                  } else {
-                                    context.read<AuthBloc>().add(SignUp(
-                                        email: emailController.text,
-                                        password: passwordController.text,
-                                        firstname: firstnameController.text,
-                                        lastname: lastnameController.text,
-                                        phoneNumber: phoneController.text));
-                                  }
-                                }
-                              },
-                              hm: 23,
-                              phm: getPreferedOrientation(context) ==
-                                      PreferedOrientation.landscape
-                                  ? 80
-                                  : 0,
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(width: 12),
-                      Center(
-                        child: RichText(
-                          text: TextSpan(
-                            text: 'I have an account?  ',
-                            style: const TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              color: AppColors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: 'Sign In here',
+                              }
+                            },
+                            builder: (context, state) {
+                              final createAccountState =
+                                  context.read<CreateAccountBloc>().state;
+                              if (state is AuthLoading) {
+                                return kLoadingWidget(context);
+                              } else {
+                                return PrimaryBtn(
+                                  text: 'Sign Up',
+                                  ontap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      if (createAccountState.certificate ==
+                                          null) {
+                                        errorSnackbar(
+                                          context,
+                                          error:
+                                              'Upload Instructor Certificate to Continue',
+                                        );
+                                      } else if (createAccountState.licence ==
+                                          null) {
+                                        errorSnackbar(
+                                          context,
+                                          error:
+                                              'Upload Driving Licence to Continue',
+                                        );
+                                      } else {
+                                        if (state.status ==
+                                            AuthStatus.authenticated) {
+                                          context.read<AuthBloc>().add(
+                                              UpdateUser(
+                                                  email: emailController.text,
+                                                  firstname:
+                                                      firstnameController.text,
+                                                  lastname:
+                                                      lastnameController.text,
+                                                  phoneNumber:
+                                                      phoneController.text,),);
+                                        } else {
+                                          context.read<AuthBloc>().add(SignUp(
+                                              email: emailController.text,
+                                              password: passwordController.text,
+                                              firstname:
+                                                  firstnameController.text,
+                                              lastname: lastnameController.text,
+                                              phoneNumber:
+                                                  phoneController.text,),);
+                                        }
+                                        if (selectedStaffRole == 3) {
+                                          context.read<CreateAccountBloc>().add(
+                                              CreateAccount(
+                                                  payload: getPayLoad(context
+                                                      .read<CreateAccountBloc>()
+                                                      .state,),),);
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute<dynamic>(
+                                                  builder: (context) =>
+                                                      const CreateDrivingSchoolView(),),);
+                                        } else {
+                                          context.read<StaffBloc>().add(
+                                              GetSchoolInvite(
+                                                  email: emailController.text,),);
+                                        }
+                                      }
+                                    }
+                                  },
+                                  hm: 23,
+                                  phm: getPreferedOrientation(context) ==
+                                          PreferedOrientation.landscape
+                                      ? 80
+                                      : 0,
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          Center(
+                            child: RichText(
+                              text: TextSpan(
+                                text: 'I have an account?  ',
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.green,
+                                  color: AppColors.black,
                                 ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap =
-                                      () => lc<NavigationService>().navigateTo(
+                                children: [
+                                  TextSpan(
+                                    text: 'Sign In here',
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.green,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () =>
+                                          lc<NavigationService>().navigateTo(
                                             rootNavKey,
                                             AppRouter.login,
                                           ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )
-                else
-                  Column(
-                    children: [
-                      BlocConsumer<AuthBloc, AuthState>(
-                        listener: (context, state) {
-                          if (state is AuthError) {
-                            errorSnackbar(context, error: state.error);
-                          }
-                        },
-                        builder: (context, state) {
-                          final createAccountState =
-                              context.read<CreateAccountBloc>().state;
-                          if (state is AuthLoading) {
-                            return kLoadingWidget(context);
-                          } else {
-                            if (state.status == AuthStatus.authenticated) {
-                              context.read<StaffBloc>().add(
-                                    CreateStaff(
-                                        payload:
-                                            getPayLoad(createAccountState)),
-                                  );
-                            }
-                          return PrimaryBtn(
-                            text: 'Sign Up',
-                            ontap: () {
-                              if (_formKey.currentState!.validate()) {
-                                if (createAccountState.certificate == null) {
-                                  errorSnackbar(
-                                    context,
-                                    error:
-                                        'Upload Instructor Certificate to Continue',
-                                  );
-                                } else if (createAccountState.licence == null) {
-                                  errorSnackbar(
-                                    context,
-                                    error: 'Upload Driving Licence to Continue',
-                                  );
-                                } else {
-                                  context.read<AuthBloc>().add(SignUp(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                      firstname: firstnameController.text,
-                                      lastname: lastnameController.text,
-                                      phoneNumber: phoneController.text));
-                                }
+                        ],
+                      )
+                    else
+                      Column(
+                        children: [
+                          BlocConsumer<AuthBloc, AuthState>(
+                            listener: (context, state) {
+                              if (state is AuthError) {
+                                errorSnackbar(context, error: state.error);
+                              }
+                              if (state is AuthLoaded &&
+                                  state.status == AuthStatus.authenticated &&
+                                  selectedStaffRole < 3) {
+                                context.read<StaffBloc>().add(
+                                      GetSchoolInvite(
+                                          email: emailController.text,),
+                                    );
                               }
                             },
-                            hm: 23,
-                          );}
-                        },
+                            builder: (context, state) {
+                              final createAccountState =
+                                  context.read<CreateAccountBloc>().state;
+                              if (state is AuthLoading) {
+                                return kLoadingWidget(context);
+                              } else {
+                                return PrimaryBtn(
+                                  text: 'Sign Up',
+                                  ontap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      if (createAccountState.certificate ==
+                                          null) {
+                                        errorSnackbar(
+                                          context,
+                                          error:
+                                              'Upload Instructor Certificate to Continue',
+                                        );
+                                      } else if (createAccountState.licence ==
+                                          null) {
+                                        errorSnackbar(
+                                          context,
+                                          error:
+                                              'Upload Driving Licence to Continue',
+                                        );
+                                      } else {
+                                        if (state.status ==
+                                            AuthStatus.authenticated) {
+                                          context.read<AuthBloc>().add(
+                                              UpdateUser(
+                                                  email: emailController.text,
+                                                  firstname:
+                                                      firstnameController.text,
+                                                  lastname:
+                                                      lastnameController.text,
+                                                  phoneNumber:
+                                                      phoneController.text,),);
+                                        } else {
+                                          context.read<AuthBloc>().add(SignUp(
+                                              email: emailController.text,
+                                              password: passwordController.text,
+                                              firstname:
+                                                  firstnameController.text,
+                                              lastname: lastnameController.text,
+                                              phoneNumber:
+                                                  phoneController.text,),);
+                                        }
+                                        if (selectedStaffRole == 3) {
+                                          context.read<CreateAccountBloc>().add(
+                                              CreateAccount(
+                                                  payload: getPayLoad(context
+                                                      .read<CreateAccountBloc>()
+                                                      .state,),),);
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute<dynamic>(
+                                                  builder: (context) =>
+                                                      const CreateDrivingSchoolView(),),);
+                                        } else {
+                                          context.read<StaffBloc>().add(
+                                              GetSchoolInvite(
+                                                  email: emailController.text,),);
+                                        }
+                                      }
+                                    }
+                                  },
+                                  hm: 23,
+                                );
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                Center(
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'I have an account?  ',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                        color: AppColors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Sign In here',
+                    Center(
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'I have an account?  ',
                           style: const TextStyle(
                             fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.green,
+                            color: AppColors.black,
                           ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => lc<NavigationService>()
-                                .navigateTo(rootNavKey, AppRouter.login),
+                          children: [
+                            TextSpan(
+                              text: 'Sign In here',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.green,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => lc<NavigationService>()
+                                    .navigateTo(rootNavKey, AppRouter.login),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 50),
-              ],
-            );
-          },
-        ),
-      ),
-    );
+                    const SizedBox(height: 50),
+                  ],
+                ),),),);
   }
 
   Container _renderUploadInputField({
@@ -938,9 +938,9 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 label: const Text('Select User Type'),
                 contentPadding: EdgeInsets.zero,
                 enabledBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                 focusedBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
               ),
               items: items.map<DropdownMenuItem<int>>((e) {
                 return DropdownMenuItem<int>(
@@ -987,7 +987,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
         'firstName': firstnameController.text,
         'lastName': lastnameController.text,
         'phoneNumber': phoneController.text,
-        'email': emailController.value,
+        'email': emailController.text,
         'avatar': 'string',
       },
       'staffData': {
@@ -1004,5 +1004,30 @@ class _CreateAccountViewState extends State<CreateAccountView> {
         'staffRole': selectedStaffRole,
       },
     };
+  }
+
+  Future<bool?> _noSchoolInviteAlert() {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: Text('Dialog Title'),
+          content: const Text('You do not have a pending school invite'),
+          actions: [
+            SecondaryBtn(
+              text: 'Close',
+              ontap: () {
+                SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop', true);
+              },
+              vm: 3,
+              hm: 0,
+            ),
+          ],
+          actionsAlignment: MainAxisAlignment.center,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        );
+      },
+    );
   }
 }

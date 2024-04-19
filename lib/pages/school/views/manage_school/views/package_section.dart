@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
@@ -16,57 +17,56 @@ class PackageSection extends StatelessWidget {
     final s = MediaQuery.sizeOf(context);
     return BlocBuilder<PackageBloc, PackageState>(
       builder: (context, state) {
-        return Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Packages',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: KorbilTheme.of(context).secondaryColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+        if (state is PackageInitial) {
+          context.read<PackageBloc>().add(GetPackages(
+              schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+        }
+        if (state is! PackageLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          return Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Packages',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  for (final element in state.packages!)
-                    Text(element.schoolPackage.title), //todo Package card
 
-                  PrimaryBtn(
-                    text: '+ Add New Package',
-                    fontSize: 14,
-                    vm: 0,
-                    hm: 0,
-                    pvm: 8,
-                    phm: 10,
-                    ontap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (ctx) => const InstCreateNewPackageView(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            if (state is SchoolLoading)
-              Center(
-                child: CircularProgressIndicator(
-                  color: KorbilTheme.of(context).primaryColor,
+                    PrimaryBtn(
+                      text: '+ Add New Package',
+                      fontSize: 14,
+                      vm: 0,
+                      hm: 0,
+                      pvm: 8,
+                      phm: 10,
+                      ontap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (ctx) => const InstCreateNewPackageView(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              )
-            else
-              _buildPackagesCarousel(s, context, state),
-          ],
-        );
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+                _buildPackagesCarousel(s, context, state),
+            ],
+          );
+        }
       },
     );
   }
@@ -81,7 +81,7 @@ class PackageSection extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 30),
         child: Center(
           child: Text(
-            'No packages',
+            'You do not have any package',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,

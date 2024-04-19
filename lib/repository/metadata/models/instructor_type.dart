@@ -3,19 +3,19 @@
 class InstructorType {
 
     InstructorType({
-       required this.id,
+       required this.value,
        required this.name,
     });
 
     factory InstructorType.fromJson(Map<String, dynamic> json) => InstructorType(
-        id: json['id'] as int,
+        value: json['value'] as int,
         name: json['name'] as String,
     );
-    int id;
+    int value;
     String name;
 
     Map<String, dynamic> toJson() => {
-        'id': id,
+        'value': value,
         'name': name,
     };
 }

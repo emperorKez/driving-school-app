@@ -54,13 +54,16 @@ class SchoolRepo {
     required int schoolId,
   }) async {
     final response = await apiService.getReq(ApiPaths.getSchool(schoolId));
+    print('get school response');
+    print(response.data!.data['response']);
     if (response.data != null) {
       try {
-        final drivingSchool = SchoolInfo.fromJson(
+        final schoolInfo = SchoolInfo.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
         );
-        return ResponseSuccess(drivingSchool);
+        return ResponseSuccess(schoolInfo);
       } catch (e) {
+        print('here we go : $e');
         return ResponseFailed(DataError(null, e));
       }
     }
@@ -108,6 +111,7 @@ class SchoolRepo {
   ) async {
     final response =
         await apiService.postReq(ApiPaths.createNewSchool, payload: payload);
+        print('this is school creation response: ${response.data}');
     if (response.data != null) {
       try {
         final school = SchoolInfo.fromJson(
@@ -115,27 +119,24 @@ class SchoolRepo {
         );
         return ResponseSuccess(school);
       } catch (e) {
+        print('school creation error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }
     return ResponseFailed(response.error!);
   }
 
-  Future<ResponseState<String>> validateName(
+  Future<ResponseState<bool>> validateName(
     String name,
   ) async {
     final params = {'name': name};
     final response =
         await apiService.postReq(ApiPaths.validateName, params: params);
     if (response.data != null) {
-      try {
-        final data = response.data!.data as String;
-        return ResponseSuccess(data);
-      } catch (e) {
-        return ResponseFailed(DataError(null, e));
-      }
+      return const ResponseSuccess(true);
+    } else {
+      return const ResponseSuccess(false);
     }
-    return ResponseFailed(response.error!);
   }
 
   Future<ResponseState<dynamic>> updateSchoolConfig({
@@ -156,14 +157,30 @@ class SchoolRepo {
     }
   }
 
-  Future<ResponseState<dynamic>> inviteStudentToSchool({
+  Future<ResponseState<dynamic>> getInvitedStudents({
+    required int schoolId,
+  }) async {
+    try {
+      final response = await apiService
+          .getReq(ApiPaths.getInvitedStudents(schoolId));
+      if (response.data != null) {
+        return ResponseSuccess(response.data!.data['response']);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      print('get invited students error: $e');
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+  
+  Future<ResponseState<dynamic>> inviteStudent({
     required int schoolId,
     required String email,
   }) async {
     final params = {'email': email};
     try {
       final response = await apiService
-          .putReq(ApiPaths.inviteStudentToSchool(schoolId), params: params);
+          .putReq(ApiPaths.inviteStudent(schoolId), params: params);
       if (response.data != null) {
         return ResponseSuccess(response.data!.data['response']);
       }
@@ -183,6 +200,43 @@ class SchoolRepo {
           .putReq(ApiPaths.inviteStaffToSchool(schoolId), params: params);
       if (response.data != null) {
         return ResponseSuccess(response.data!.data['response']);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+  Future<ResponseState<dynamic>> removeInviteStaff({
+    required int schoolId,
+    required String email,
+  }) async {
+    final params = {'email': email};
+    try {
+      final response = await apiService
+          .putReq(ApiPaths.removeInvitedStaff(schoolId), params: params);
+      if (response.data != null) {
+        return ResponseSuccess(response.data!.data['response']);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+
+  Future<ResponseState<SchoolInfo>> publishSchool({
+    required int schoolId, 
+  }) async {
+    try {
+      final response = await apiService.putReq(
+        ApiPaths.publishSchool(schoolId),
+      );
+      if (response.data != null) {
+        final schoolInfo = SchoolInfo.fromJson(
+          response.data!.data['response'] as Map<String, dynamic>,
+        );
+        return ResponseSuccess(schoolInfo);
       }
       return ResponseFailed(response.error!);
     } catch (e) {

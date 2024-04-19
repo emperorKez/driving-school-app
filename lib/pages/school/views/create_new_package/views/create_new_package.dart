@@ -5,7 +5,7 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
-import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_course/views/add_course.dart';
 import 'package:korbil_mobile/pages/school/views/create_new_package/views/price_breakdown_summary.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -147,7 +147,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Time Duration (Minutes)',
+                            'Duration (Hours)',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: KorbilTheme.of(context).secondaryColor,
@@ -359,16 +359,17 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                         : PrimaryBtn(
                             ontap: () {
                               final schoolId = context
-                                  .read<StaffBloc>()
+                                  .read<SchoolBloc>()
                                   .state
-                                  .staff!
-                                  .staffData
-                                  .schoolId;
+                                  .schoolInfo!
+                                  .id;
                               if (_formKey.currentState!.validate()) {
                                 final payload = {
                                   'title': titleController.text,
                                   'description': descriptionController.text,
-                                  'details': detailController.text,
+                                  'details': [
+                                    {'name': detailController.text}
+                                  ],
                                   'timeDuration':
                                       int.parse(durationController.text),
                                   'price': int.parse(priceController.text),

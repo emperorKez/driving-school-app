@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 SnackBar buildTopSnackbar(BuildContext context, String text) {
   return SnackBar(
     behavior: SnackBarBehavior.floating,

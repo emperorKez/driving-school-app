@@ -17,7 +17,7 @@ class PackageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: KorbilTheme.of(context).white,
@@ -39,7 +39,7 @@ class PackageCard extends StatelessWidget {
           Column(
             children: [
               SizedBox(
-                height: size.height * 0.3 - 12,
+                height: size.height * 0.3 - 10,
               ),
               Image.asset(
                 'assets/imgs/ins/school/elp_left.png',
@@ -49,8 +49,8 @@ class PackageCard extends StatelessWidget {
           ),
           // middle
           Container(
-            width: size.width * 0.6,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            width: size.width * 0.65,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
               border: Border.symmetric(
                 vertical: BorderSide(
@@ -62,8 +62,9 @@ class PackageCard extends StatelessWidget {
               children: [
                 //package 10 hours
                 SizedBox(
-                  height: size.height * 0.3,
+                  height: size.height * 0.28,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,6 +78,9 @@ class PackageCard extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                const SizedBox(
+                                  height: 5,
+                                ),
                                 Text(
                                   'Package',
                                   style: TextStyle(
@@ -101,7 +105,7 @@ class PackageCard extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(6),
@@ -110,8 +114,9 @@ class PackageCard extends StatelessWidget {
                               color: KorbilTheme.of(context).primaryColor,
                             ),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const SizedBox(height: 12),
                                 Text(
                                   'Offer',
                                   style: TextStyle(
@@ -122,7 +127,7 @@ class PackageCard extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '50%',
+                                  '${package.offer}',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     color: KorbilTheme.of(context).white,
@@ -169,7 +174,7 @@ class PackageCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 25,
+                        height: 20,
                       ),
                     ],
                   ),
@@ -206,7 +211,7 @@ class PackageCard extends StatelessWidget {
           Column(
             children: [
               SizedBox(
-                height: size.height * 0.3 - 12,
+                height: size.height * 0.3 - 10,
               ),
               Image.asset(
                 'assets/imgs/ins/school/elp_right.png',

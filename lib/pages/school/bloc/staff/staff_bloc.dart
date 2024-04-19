@@ -14,41 +14,48 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
         super(StaffInitial()) {
     on<GetStaffByEmail>(onGetStaffByEmail);
     on<CreateStaff>(onCreateStaff);
-    // on<GetPendingSchoolInvite>(onGetPendingSchoolInvite);
+    on<GetSchoolInvite>(onGetSchoolInvite);
   }
   final StaffRepo _staffRepo;
 
   Future<void> onGetStaffByEmail(
-      GetStaffByEmail event, Emitter<StaffState> emit,) async {
+    GetStaffByEmail event,
+    Emitter<StaffState> emit,
+  ) async {
     emit(StaffLoading());
     try {
       final response = await _staffRepo.getStaffByEmail(event.email);
-      final schoolInvite = await _staffRepo.getStaffSchoolInvite(event.email);
-      emit(StaffLoaded(staff: response.data, schoolInvite: schoolInvite.data));
+      // final schoolInvite = await _staffRepo.getStaffSchoolInvite(event.email);
+      emit(StaffLoaded(
+        staff: response.data,
+      ),);
     } catch (e) {
       emit(StaffError(error: e.toString()));
     }
   }
 
   Future<void> onCreateStaff(
-      CreateStaff event, Emitter<StaffState> emit,) async {
+    CreateStaff event,
+    Emitter<StaffState> emit,
+  ) async {
     emit(StaffLoading());
     try {
       final response = await _staffRepo.createStaff(event.payload);
       emit(StaffLoaded(staff: response.data));
     } catch (e) {
+      print('create staff error: $e');
       emit(StaffError(error: e.toString()));
     }
   }
 
-  // Future<void> onGetPendingSchoolInvite(
-  //     GetPendingSchoolInvite event, Emitter<StaffState> emit) async {
-  //   emit(StaffLoading());
-  //   try {
-  //     final response = await _staffRepo.getStaffSchoolInvite(event.email);
-  //     emit(StaffLoaded(staff: null, schoolInvite: response.data));
-  //   } catch (e) {
-  //     emit(StaffError(error: e.toString()));
-  //   }
-  // }
+  Future<void> onGetSchoolInvite(
+      GetSchoolInvite event, Emitter<StaffState> emit,) async {
+    emit(StaffLoading());
+    try {
+      final response = await _staffRepo.getStaffSchoolInvite(event.email);
+      emit(StaffLoaded(staff: null, schoolInvite: response.data));
+    } catch (e) {
+      emit(StaffError(error: e.toString()));
+    }
+  }
 }

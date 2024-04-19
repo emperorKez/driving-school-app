@@ -5,24 +5,28 @@ enum AuthStatus { authenticated, unauthenticated }
 @immutable
 sealed class AuthState {
   const AuthState(
-      {this.status = AuthStatus.unauthenticated, this.user, this.token});
+      {this.status = AuthStatus.unauthenticated, this.user, required this.token,});
 
   final AuthStatus status;
   final AuthUser? user;
   final JsonWebToken? token;
 }
 
-class AuthInitial extends AuthState {}
+class AuthInitial extends AuthState {
+  AuthInitial(): super(token: null);
+}
 
-class AuthLoading extends AuthState {}
+class AuthLoading extends AuthState {
+  AuthLoading(): super(token: null);
+}
 
 class AuthLoaded extends AuthState {
-  const AuthLoaded({required super.status, super.user, super.token});
+  const AuthLoaded({required super.status, required super.token, super.user});
 }
 
 class AuthError extends AuthState {
   const AuthError(
-      {required this.error, super.status = AuthStatus.unauthenticated});
+      {required this.error, super.status = AuthStatus.unauthenticated, super.token = null,});
 
   final String error;
 }

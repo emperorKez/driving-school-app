@@ -19,6 +19,7 @@ class StaffRepo {
         final staff = Staff.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
         );
+
         return ResponseSuccess(staff);
       }
       return ResponseFailed(response.error!);
@@ -27,22 +28,25 @@ class StaffRepo {
     }
   }
 
-  Future<ResponseState<SchoolInfo>> getStaffSchoolInvite(
+  Future<ResponseState<SchoolInfo?>> getStaffSchoolInvite(
     String email,
   ) async {
     final params = {'email': email};
+    final response = await apiService.getReq(
+      ApiPaths.getStaffSchoolInvite,
+      params: params,
+    );
     try {
-      final response = await apiService.getReq(ApiPaths.getStaffSchoolInvite,
-          params: params,);
-      if (response.data != null && response.data!.data['code'] == 200) {
+      if (response.data != null) {
         final invite = SchoolInfo.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
         );
         return ResponseSuccess(invite);
       }
-      return ResponseFailed(response.error!);
+      return const ResponseSuccess(null);
+      // return ResponseFailed(response.error!);
     } catch (e) {
-      return ResponseFailed(DataError(null, e));
+      rethrow;
     }
   }
 
@@ -50,10 +54,11 @@ class StaffRepo {
     String email,
   ) async {
     final params = {'email': email};
+    final response =
+        await apiService.getReq(ApiPaths.getStaffbyEmail, params: params);
+    print(response.data);
     try {
-      final response =
-          await apiService.getReq(ApiPaths.getStaffbyEmail, params: params);
-      if (response.data != null && response.data!.data['code'] == 200) {
+      if (response.data != null) {
         final staff = Staff.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
         );
@@ -61,6 +66,30 @@ class StaffRepo {
       }
       return ResponseFailed(response.error!);
     } catch (e) {
+      print(e);
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+
+  Future<ResponseState<List<Staff>>> getStaffBySchool(
+    int schoolId,
+  ) async {
+    final params = {'id': schoolId};
+    final response =
+        await apiService.getReq(ApiPaths.getStaffBySchool, params: params);
+    try {
+      if (response.data != null) {
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final staffs = List<Staff>.from(
+          data.map(Staff.fromJson),
+        );
+        return ResponseSuccess(staffs);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      print('get staff by school error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }

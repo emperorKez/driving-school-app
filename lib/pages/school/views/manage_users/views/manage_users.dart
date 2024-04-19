@@ -45,9 +45,12 @@ class _InstManageUsersState extends State<InstManageUsers> {
           if (state is! SchoolLoaded) {
             return kLoadingWidget(context);
           } else {
+            if (state.schoolStaffs == null){
+              context.read<SchoolBloc>().add(GetSchool(schoolId: state.schoolInfo!.id));
+            }
             final users = <Staff>[];
             final pendingUsers = <Staff>[];
-            for (final element in state.schoolInfo!.staff) {
+            for (final element in state.schoolStaffs!) {
               if (element.profile.userStatus == 1) {
                 pendingUsers.add(element);
               } else {

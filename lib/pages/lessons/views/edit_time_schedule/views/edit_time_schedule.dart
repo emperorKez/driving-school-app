@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/schedule_status_types/default.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type1.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type2.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type3.dart';
 import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/schedule_status_types.dart';
 import 'package:korbil_mobile/pages/lessons/views/add_exception/views/add_exception.dart';
 import 'package:korbil_mobile/pages/school/bloc/availability/availabilty_bloc.dart';
@@ -41,7 +43,7 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
   final endTimeController5 = TextEditingController();
   final endTimeController6 = TextEditingController();
 
-  final selectedWeekdays = <int>[0, 1, 2, 3, 4, 5, 6];
+  final selectedWeekdays = <int>[];
 
   final List<_DateDetails> _schedule = [
     _DateDetails(
@@ -103,121 +105,242 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: CustomScreenPadding(
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Row(
-              children: [
-                const Spacer(),
-                Image.asset(
-                  'assets/imgs/ins/lessons/recycle_green.png',
-                  width: 20,
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) => const AddExceptionView(),
+      body: BlocConsumer<AvailabiltyBloc, AvailabiltyState>(
+        listener: (context, state) {
+          if (state is AvailabiltyError) {
+            errorSnackbar(context, error: state.error);
+          }
+        },
+        builder: (context, state) {
+          if (state is AvailabiltyInitial) {
+            context.read<AvailabiltyBloc>().add(GetAvailableDates(
+                context.read<SchoolBloc>().state.schoolInfo!.id));
+          }
+          if (state is! AvailabiltyLoaded) {
+            return kLoadingWidget(context);
+          } else {
+            if (state.availableDates!.indexWhere((e) => e.weekday == 0) >= 0) {
+              final sun = state
+                  .availableDates![
+                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                  .availableHours[0];
+              startTimeController0.text =
+                  '${sun.startTime.hour}:${sun.startTime.minute}';
+              endTimeController0.text =
+                  '${sun.endTime.hour}:${sun.endTime.minute}';
+              selectedWeekdays.add(0);
+            }
+
+            if (state.availableDates!.indexWhere((e) => e.weekday == 1) >= 0) {
+              final mon = state
+                  .availableDates![
+                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                  .availableHours[0];
+              startTimeController1.text =
+                  '${mon.startTime.hour}:${mon.startTime.minute}';
+              endTimeController1.text =
+                  '${mon.endTime.hour}:${mon.endTime.minute}';
+              selectedWeekdays.add(1);
+            }
+            if (state.availableDates!.indexWhere((e) => e.weekday == 2) >= 0) {
+              final tue = state
+                  .availableDates![
+                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                  .availableHours[0];
+              startTimeController2.text =
+                  '${tue.startTime.hour}:${tue.startTime.minute}';
+              endTimeController2.text =
+                  '${tue.endTime.hour}:${tue.endTime.minute}';
+              selectedWeekdays.add(2);
+            }
+            if (state.availableDates!.indexWhere((e) => e.weekday == 3) >= 0) {
+              final wed = state
+                  .availableDates![
+                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                  .availableHours[0];
+              startTimeController3.text =
+                  '${wed.startTime.hour}:${wed.startTime.minute}';
+              endTimeController3.text =
+                  '${wed.endTime.hour}:${wed.endTime.minute}';
+              selectedWeekdays.add(3);
+            }
+            if (state.availableDates!.indexWhere((e) => e.weekday == 4) >= 0) {
+              final thu = state
+                  .availableDates![
+                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                  .availableHours[0];
+              startTimeController4.text =
+                  '${thu.startTime.hour}:${thu.startTime.minute}';
+              endTimeController4.text =
+                  '${thu.endTime.hour}:${thu.endTime.minute}';
+              selectedWeekdays.add(4);
+            }
+            if (state.availableDates!.indexWhere((e) => e.weekday == 5) >= 0) {
+              final fri = state
+                  .availableDates![
+                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                  .availableHours[0];
+              startTimeController5.text =
+                  '${fri.startTime.hour}:${fri.startTime.minute}';
+              endTimeController5.text =
+                  '${fri.endTime.hour}:${fri.endTime.minute}';
+              selectedWeekdays.add(5);
+            }
+            if (state.availableDates!.indexWhere((e) => e.weekday == 6) >= 0) {
+              final sat = state
+                  .availableDates![
+                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                  .availableHours[0];
+              startTimeController6.text =
+                  '${sat.startTime.hour}:${sat.startTime.minute}';
+              endTimeController6.text =
+                  '${sat.endTime.hour}:${sat.endTime.minute}';
+              selectedWeekdays.add(6);
+            }
+
+            return CustomScreenPadding(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Row(
+                    children: [
+                      const Spacer(),
+                      Image.asset(
+                        'assets/imgs/ins/lessons/recycle_green.png',
+                        width: 20,
                       ),
-                    );
-                  },
-                  child: Text(
-                    'ADD EXCEPTIONS',
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<dynamic>(
+                              builder: (_) => const AddExceptionView(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'ADD EXCEPTIONS',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: KorbilTheme.of(context).primaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  _Calendar(context: context, schedule: _schedule),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Text(
+                    'Set your weekly available hours?',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      color: KorbilTheme.of(context).primaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            _Calendar(context: context, schedule: _schedule),
-            const SizedBox(
-              height: 25,
-            ),
-            Text(
-              'Set your weekly available hours?',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: KorbilTheme.of(context).secondaryColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _availableTimeSlotCard(
-                    day: 'SUN',
-                    weekday: 0,
-                    controller: [startTimeController0, endTimeController0],
+                  const SizedBox(
+                    height: 10,
                   ),
-                  _availableTimeSlotCard(
-                    day: 'MON',
-                    weekday: 1,
-                    controller: [startTimeController1, endTimeController1],
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _availableTimeSlotCard(
+                          day: 'SUN',
+                          weekday: 0,
+                          controller: [
+                            startTimeController0,
+                            endTimeController0,
+                          ],
+                        ),
+                        _availableTimeSlotCard(
+                          day: 'MON',
+                          weekday: 1,
+                          controller: [
+                            startTimeController1,
+                            endTimeController1,
+                          ],
+                        ),
+                        _availableTimeSlotCard(
+                          day: 'TUE',
+                          weekday: 2,
+                          controller: [
+                            startTimeController2,
+                            endTimeController2,
+                          ],
+                        ),
+                        _availableTimeSlotCard(
+                          day: 'WED',
+                          weekday: 3,
+                          controller: [
+                            startTimeController3,
+                            endTimeController3,
+                          ],
+                        ),
+                        _availableTimeSlotCard(
+                          day: 'THU',
+                          weekday: 4,
+                          controller: [
+                            startTimeController4,
+                            endTimeController4,
+                          ],
+                        ),
+                        _availableTimeSlotCard(
+                          day: 'FRI',
+                          weekday: 5,
+                          controller: [
+                            startTimeController5,
+                            endTimeController5,
+                          ],
+                        ),
+                        _availableTimeSlotCard(
+                          day: 'SAT',
+                          weekday: 6,
+                          controller: [
+                            startTimeController6,
+                            endTimeController6,
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  _availableTimeSlotCard(
-                    day: 'TUE',
-                    weekday: 2,
-                    controller: [startTimeController2, endTimeController2],
+                  const SizedBox(
+                    height: 50,
                   ),
-                  _availableTimeSlotCard(
-                    day: 'WED',
-                    weekday: 3,
-                    controller: [startTimeController3, endTimeController3],
-                  ),
-                  _availableTimeSlotCard(
-                    day: 'THU',
-                    weekday: 4,
-                    controller: [startTimeController4, endTimeController4],
-                  ),
-                  _availableTimeSlotCard(
-                    day: 'FRI',
-                    weekday: 5,
-                    controller: [startTimeController5, endTimeController5],
-                  ),
-                  _availableTimeSlotCard(
-                    day: 'SAT',
-                    weekday: 6,
-                    controller: [startTimeController6, endTimeController6],
+                  PrimaryBtn(
+                    ontap: () {
+                      if (_formKey.currentState!.validate()) {
+                        final schoolId =
+                            context.read<SchoolBloc>().state.schoolInfo!.id;
+                        context.read<AvailabiltyBloc>().add(
+                              AddAvailableDates(
+                                schoolId: schoolId,
+                                payload: getPayload(),
+                              ),
+                            );
+                      }
+                    },
+                    text: 'Save',
+                    fontSize: 14,
+                    hm: 0,
                   ),
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            PrimaryBtn(
-              ontap: () {
-                if (_formKey.currentState!.validate()) {
-                  final schoolId =
-                      context.read<SchoolBloc>().state.schoolInfo!.id;
-                  context.read<AvailabiltyBloc>().add(AddAvailableDates(
-                      schoolId: schoolId, payload: getPayload(),),);
-                }
-              },
-              text: 'Save',
-              fontSize: 14,
-              hm: 0,
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }
@@ -248,7 +371,7 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
             activeColor: KorbilTheme.of(context).primaryColor,
           ),
           SizedBox(
-            width: 35,
+            width: 30,
             child: Text(
               day,
               style: TextStyle(
@@ -260,7 +383,7 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
           SizedBox(
             width: 90,
@@ -416,27 +539,50 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
       }
     }
 
-    for (final item in selectedWeekdays) {
-      availableTime.add(
-        AvailableTime(
-          weekday: item,
-          availableHours: [
-            AvailableHour(
-              startTime: Time(
-                hour: getTime(item).startTime.hour,
-                minute: getTime(item).startTime.minute,
-              ),
-              endTime: Time(
-                hour: getTime(item).endTime.hour,
-                minute: getTime(item).endTime.minute,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // for (final item in selectedWeekdays) {
+    //   availableTime.add(
+    //     AvailableTime(
+    //       weekday: item,
+    //       availableHours: [
+    //         AvailableHour(
+    //           startTime: Time(
+    //             hour: getTime(item).startTime.hour,
+    //             minute: getTime(item).startTime.minute,
+    //           ),
+    //           endTime: Time(
+    //             hour: getTime(item).endTime.hour,
+    //             minute: getTime(item).endTime.minute,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    return {'availableDays': availableTime};
+    return {
+      'availableDays': [
+        for (final item in selectedWeekdays)
+          {
+            'weekday': item,
+            'availableHours': [
+              {
+                'startTime': {
+                  'hour': getTime(item).startTime.hour,
+                  'minute': getTime(item).startTime.minute,
+                  'second': 0,
+                  'nano': 0
+                },
+                'endTime': {
+                  'hour': getTime(item).endTime.hour,
+                  'minute': getTime(item).endTime.minute,
+                  'second': 0,
+                  'nano': 0
+                }
+              }
+            ]
+          }
+      ],
+    };
   }
 }
 

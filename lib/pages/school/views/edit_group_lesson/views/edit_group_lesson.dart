@@ -87,11 +87,10 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
                 items: context
                     .read<SchoolBloc>()
                     .state
-                    .schoolInfo!
-                    .staff
+                    .schoolStaffs!
                     .map<DropdownMenuItem<dynamic>>((e) {
                   return DropdownMenuItem<dynamic>(
-                    value: e.staffData.id,
+                    value: e.profile.id,
                     child:
                         Text('${e.profile.firstName} ${e.profile.firstName}'),
                   );
@@ -267,10 +266,12 @@ class _EditGroupLessonViewState extends State<EditGroupLessonView> {
                                     'seats': int.parse(seatController.text),
                                   };
                                   context.read<GroupLessonBloc>().add(
-                                      UpdateGroupLesson(
+                                        UpdateGroupLesson(
                                           groupLessonId: widget.lesson.id,
                                           payload: payload,
-                                          schoolId: schoolId,),);
+                                          schoolId: schoolId,
+                                        ),
+                                      );
                                 }
                               },
                               text: 'Add',

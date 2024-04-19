@@ -94,13 +94,15 @@ class ApiPaths {
   static String deleteSchool(int schoolId) => 'school/$schoolId';
   static String updateSchoolConfig(int schoolId) =>
       'school/$schoolId/configurations';
-  static String inviteStudentToSchool(int schoolId) =>
-      'school/$schoolId/invite-student';
+  static String getInvitedStudents(int schoolId) =>
+      'school/$schoolId/invited-students';
   static String inviteStaffToSchool(int schoolId) =>
       'school/$schoolId/invite-staff';
-  static String invitedStudents(int schoolId) =>
-      'school/$schoolId/invited-students';
-  static String invitedStaffs(int schoolId) => 'school/$schoolId/invited-staff';
+  static String inviteStudent(int schoolId) =>
+      'school/$schoolId/invite-student';
+  static String removeInvitedStaff(int schoolId) => 'school/$schoolId/remove-invited-staff';
+  static String publishSchool(int schoolId) => 'school/$schoolId/publish';
+
 
   //driving school page info
   static String getDrivingSchoolPage(int schoolId) =>
@@ -240,9 +242,9 @@ class ApiPaths {
   static const getSchoolLocations = 'school-location';
   static const addLocation = 'school-location';
   static String updateLocationStatusActive(int locationId) =>
-      'school-location/$locationId/active';
+      'school-location/$locationId/select';
   static String updateLocationStatusInactive(int locationId) =>
-      'school-location/$locationId/inactive';
+      'school-location/$locationId/deselect';
 
   //promotion
   static String getPromotion(

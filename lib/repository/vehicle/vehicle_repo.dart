@@ -9,7 +9,9 @@ import 'package:korbil_mobile/repository/vehicle/model/vehicle.dart';
 class VehicleRepo {
   final ApiService apiService = ApiService();
 
-  Future<ResponseState<List<Vehicle>>> getVehicles(int schoolId,) async {
+  Future<ResponseState<List<Vehicle>>> getVehicles(
+    int schoolId,
+  ) async {
     final params = {'schoolId': schoolId};
     try {
       final res = await apiService.getReq(ApiPaths.getVehicles, params: params);
@@ -28,18 +30,17 @@ class VehicleRepo {
     }
   }
 
-  Future<ResponseState<List<Vehicle>>> addVehicle({
+  Future<ResponseState<Vehicle>> addVehicle({
     required Map<String, dynamic> payload,
   }) async {
-    final response = await apiService.postReq(ApiPaths.addVehicle);
+    final response =
+        await apiService.postReq(ApiPaths.addVehicle, payload: payload);
     if (response.data != null) {
       try {
-        final jsonList = response.data!.data['response'];
-        final data = (jsonList as List).cast<Map<String, dynamic>>();
-        final vehicles = List<Vehicle>.from(
-          data.map(Vehicle.fromJson),
+        final vehicle = Vehicle.fromJson(
+          response.data!.data['response'] as Map<String, dynamic>,
         );
-        return ResponseSuccess(vehicles);
+        return ResponseSuccess(vehicle);
       } catch (e) {
         return ResponseFailed(DataError(null, e));
       }

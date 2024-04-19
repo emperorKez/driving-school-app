@@ -32,15 +32,15 @@ class _InstHomeState extends State<LessonsHomeView> {
         },
         builder: (context, state) {
           final staff = context.read<StaffBloc>().state.staff;
-          final schoolStaffs = context.read<SchoolBloc>().state.schoolInfo!.staff;
+          final staffs = context.read<SchoolBloc>().state.schoolStaffs!;
           final staffIds = <int>[];
           if (staff!.staffData.staffRole != 1){
-            for (final e in schoolStaffs){
-              staffIds.add(e.staffData.id);
+            for (final e in staffs){
+              staffIds.add(e.profile.id);
             }
 
           } else{
-            staffIds.add(staff.staffData.id);
+            staffIds.add(staff.profile.id);
           }
           if (state is CalenderInitial){
             context.read<CalenderCubit>().getCalender(staffIds: staffIds);

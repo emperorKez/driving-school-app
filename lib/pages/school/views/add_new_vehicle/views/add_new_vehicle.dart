@@ -30,7 +30,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
   TextEditingController descriptionController = TextEditingController();
 
   List<File> imageFiles = [];
-  String selectedTransmissionType = '';
+  String selectedTransmissionType = 'AUTO';
   int selectedYear = 2015;
 
   @override
@@ -51,13 +51,23 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: BlocListener<VehicleBloc, VehicleState>(
+      body: BlocConsumer<VehicleBloc, VehicleState>(
         listener: (context, state) {
           if (state is VehicleError) {
             errorSnackbar(context, error: state.error);
           }
         },
-        child: _renderAddNewVehicleMobileBody(),
+        builder: (context, state) {
+          if (state is VehicleInitial) {
+            context.read<VehicleBloc>().add(GetVehicles(
+                schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+          }
+          if (state is! VehicleLoaded) {
+            return kLoadingWidget(context);
+          } else {
+            return _renderAddNewVehicleMobileBody();
+          }
+        },
       ),
     );
   }
@@ -84,88 +94,97 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
           const SizedBox(
             height: 15,
           ),
-          Text(
-            'Vehicle Name',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: KorbilTheme.of(context).secondaryColor,
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          _entryField(hintText: 'Location Name', controller: nameController),
-          const SizedBox(
-            height: 15,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Transmission',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: KorbilTheme.of(context).secondaryColor,
+          Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Vehicle Name',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: KorbilTheme.of(context).secondaryColor,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _entryField(
+                      hintText: 'Vehicle Name', controller: nameController),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Transmission',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: KorbilTheme.of(context).secondaryColor,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            _selectTransmissionType(),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _selectTransmissionType(),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Year',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: KorbilTheme.of(context).secondaryColor,
+                      const SizedBox(
+                        width: 8,
                       ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Year',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: KorbilTheme.of(context).secondaryColor,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            _selectYear(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Description',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: KorbilTheme.of(context).secondaryColor,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _selectYear(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Text(
-            'Description',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: KorbilTheme.of(context).secondaryColor,
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          _entryField(
-            hintText: 'Description',
-            controller: descriptionController,
-          ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _entryField(
+                    hintText: 'Description',
+                    controller: descriptionController,
+                  ),
+                ],
+              )),
           const SizedBox(
             height: 15,
           ),
@@ -241,27 +260,20 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                         : PrimaryBtn(
                             ontap: () async {
                               if (_formKey.currentState!.validate()) {
-                                final payload = {
-                                  'name': nameController.text,
-                                  'description': descriptionController.text,
-                                  'transmission': selectedTransmissionType,
-                                  'year': selectedYear.toString(),
-                                  'schoolId': schoolId,
-                                  'images': [
-                                    for (final element in imageFiles)
-                                      {
-                                        'imageKey': (await StorageRepo()
-                                                .uploadDocument(element.path))
-                                            .data!
-                                            .key,
-                                      },
-                                  ],
-                                };
-                                if (!mounted) return;
-                                context.read<VehicleBloc>().add(AddVehicle(
-                                      payload: payload,
-                                      schoolId: schoolId,
-                                    ),);
+                                if (imageFiles.isEmpty) {
+                                  errorSnackbar(context,
+                                      error: 'Add vehicle Images');
+                                } else {
+                                  context.read<VehicleBloc>().add(
+                                        AddVehicle(
+                                          payload: await getPayload(),
+                                          schoolId: schoolId,
+                                        ),
+                                      );
+                                  imageFiles.clear();
+                                  nameController.clear();
+                                  descriptionController.clear();
+                                }
                               }
                             },
                             text: 'Add',
@@ -280,6 +292,24 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
         ],
       ),
     );
+  }
+
+  Future<Map<String, Object>> getPayload() async {
+    final schoolId = context.read<SchoolBloc>().state.schoolInfo!.id;
+    return {
+      'name': nameController.text,
+      'description': descriptionController.text,
+      'transmission': selectedTransmissionType,
+      'year': selectedYear.toString(),
+      'schoolId': schoolId,
+      'images': [
+        for (final element in imageFiles)
+          {
+            'imageKey':
+                (await StorageRepo().uploadDocument(element.path)).data!.key,
+          },
+      ],
+    };
   }
 
   Widget _entryField({
@@ -341,44 +371,44 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
     );
   }
 
-  Container _buildPredefinedLocation(bool selected) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 7),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: selected
-                ? Image.asset(
-                    'assets/imgs/ins/school/tick_on.png',
-                    width: 16,
-                  )
-                : Image.asset(
-                    'assets/imgs/ins/school/tick_off.png',
-                    width: 16,
-                  ),
-          ),
-          Text(
-            'Bergmansgatan 20, 431 30 Mölndal',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: KorbilTheme.of(context).secondaryColor,
-            ),
-          ),
-          const Spacer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Icon(
-              Icons.delete_outlined,
-              color: KorbilTheme.of(context).secondaryColor,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Container _buildPredefinedLocation(bool selected) {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(vertical: 7),
+  //     child: Row(
+  //       children: [
+  //         Container(
+  //           padding: const EdgeInsets.symmetric(horizontal: 10),
+  //           child: selected
+  //               ? Image.asset(
+  //                   'assets/imgs/ins/school/tick_on.png',
+  //                   width: 16,
+  //                 )
+  //               : Image.asset(
+  //                   'assets/imgs/ins/school/tick_off.png',
+  //                   width: 16,
+  //                 ),
+  //         ),
+  //         Text(
+  //           'Bergmansgatan 20, 431 30 Mölndal',
+  //           style: TextStyle(
+  //             fontFamily: 'Poppins',
+  //             fontSize: 12,
+  //             fontWeight: FontWeight.w400,
+  //             color: KorbilTheme.of(context).secondaryColor,
+  //           ),
+  //         ),
+  //         const Spacer(),
+  //         Container(
+  //           padding: const EdgeInsets.symmetric(horizontal: 10),
+  //           child: Icon(
+  //             Icons.delete_outlined,
+  //             color: KorbilTheme.of(context).secondaryColor,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _selectTransmissionType() {
     final transmissionTypes =
@@ -400,6 +430,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
       child: DropdownButton<String>(
         isExpanded: true,
         underline: Container(),
+        value: selectedTransmissionType,
         iconSize: 25,
         hint: Text(
           'Select Transmission',
@@ -429,8 +460,8 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
 
   Widget _selectYear() {
     final items = List.generate(
-      15,
-      (index) => {'key': 2000 + index, 'value': 2000 + index},
+      14,
+      (index) => {'key': 2010 + index, 'value': 2010 + index},
     );
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -444,6 +475,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
       child: DropdownButton<int>(
         isExpanded: true,
         underline: Container(),
+        value: selectedYear,
         iconSize: 25,
         hint: Text(
           'Select Year',
@@ -459,7 +491,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
         items: items.map<DropdownMenuItem<int>>((e) {
           return DropdownMenuItem<int>(
             value: e['value'],
-            child: Text(e['key']! as String),
+            child: Text('${e['key']!}'),
           );
         }).toList(),
         onChanged: (val) {
@@ -562,10 +594,10 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
   }
 
   Widget _showCurrentVehicles() {
-    final schoolId = context.read<StaffBloc>().state.staff!.staffData.schoolId;
+    final schoolId = context.read<SchoolBloc>().state.schoolInfo!.id;
     return BlocBuilder<VehicleBloc, VehicleState>(
       builder: (context, state) {
-        if (state is! SchoolLoaded) {
+        if (state is! VehicleLoaded) {
           return kLoadingWidget(context);
         } else {
           return state.vehicles!.isEmpty
@@ -602,6 +634,10 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                   '${state.vehicles![index].images[0]}',
                                 ),
                                 fit: BoxFit.cover,
+                                onError: (exception, stackTrace) {
+                                  const AssetImage(
+                                      'assets/imgs/ins/school/car.png');
+                                },
                               ),
                             ),
                           ),
@@ -618,7 +654,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            nameController.text,
+                                            state.vehicles![index].name,
                                             style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 12,

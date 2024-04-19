@@ -7,13 +7,13 @@ class CreateSchoolState {
     this.suggestedLocations,
     this.logo,
     this.companyRegistration,
-    this.isNameValid = 'no',
+    this.isNameValid = false,
   });
   final String address;
   final UploadFile? logo;
   final UploadDocument? companyRegistration;
   final List<Location>? suggestedLocations;
-  final String isNameValid;
+  final bool isNameValid;
   bool get isValidAddress => AddressValidator(address: address).validate();
 
   CreateSchoolState copyWith({
@@ -21,7 +21,7 @@ class CreateSchoolState {
     List<Location>? suggestedLocations,
     UploadFile? logo,
     UploadDocument? companyRegistration,
-    String? isNameValid,
+    bool? isNameValid,
   }) {
     return CreateSchoolState(
         address: address ?? this.address,
@@ -35,8 +35,6 @@ class CreateSchoolState {
 final class CreateSchoolInitial extends CreateSchoolState {}
 
 final class CreateSchoolLoading extends CreateSchoolState {}
-
-final class CreateSchoolSuccess extends CreateSchoolState {}
 
 final class CreateSchoolError extends CreateSchoolState {
   CreateSchoolError({this.error = 'Something went wrong'});

@@ -112,7 +112,8 @@ class _InstStudentListViewState extends State<InstStudentListView> {
                 builder: (context, state) {
                   if (state is StudentInitial) {
                     context.read<StudentBloc>().add(
-                        GetAllStudent(schoolId: schoolState.schoolInfo!.id),);
+                          GetAllStudent(schoolId: schoolState.schoolInfo!.id),
+                        );
                   }
                   return state is! StudentLoaded
                       ? kLoadingWidget(context)
@@ -301,6 +302,10 @@ class _InstStudentListViewState extends State<InstStudentListView> {
                       return ListTile(
                         leading: Image.network(
                           state.searchResult![index].student.profile.avatar,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                                'assets/imgs/ins/lessons/avatar3.png');
+                          },
                         ),
                         title: Text(
                           '${state.searchResult![index].student.profile.firstName} ${state.searchResult![index].student.profile.lastName}',

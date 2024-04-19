@@ -26,3 +26,18 @@ class SignIn extends AuthEvent {
 }
 
 class SignOut extends AuthEvent {}
+
+class UpdateUser extends AuthEvent {
+  UpdateUser(
+      {required this.email,
+      required this.firstname,
+      required this.lastname,
+      required this.phoneNumber,});
+
+  final String email;
+  final String firstname;
+  final String lastname;
+  final String phoneNumber;
+}
+
+ class CacheSignin extends AuthEvent{}

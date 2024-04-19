@@ -302,7 +302,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                                   .state
                                                   .staff!
                                                   .staffData
-                                                  .id,
+                                                  .schoolId,
                                             ),
                                           );
                                     }

@@ -3,19 +3,19 @@
 class LocationType {
 
     LocationType({
-       required this.id,
+       required this.value,
        required this.name,
     });
 
     factory LocationType.fromJson(Map<String, dynamic> json) => LocationType(
-        id: json['id'] as int,
+        value: json['value'] as int,
         name: json['name'] as String,
     );
-    int id;
+    int value;
     String name;
 
     Map<String, dynamic> toJson() => {
-        'id': id,
+        'value': value,
         'name': name,
     };
 }

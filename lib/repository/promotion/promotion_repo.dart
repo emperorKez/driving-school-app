@@ -13,6 +13,7 @@ class PromotionRepo {
     final params = {'schoolId': schoolId};
     final response =
         await apiService.getReq(ApiPaths.getAllPromotion, params: params);
+        print('promotion response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -22,6 +23,7 @@ class PromotionRepo {
         );
         return ResponseSuccess(promotions);
       } catch (e) {
+        print('get promotion error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }

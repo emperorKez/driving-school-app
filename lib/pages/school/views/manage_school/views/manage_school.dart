@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
+import 'package:korbil_mobile/nav/router.dart';
+import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
+import 'package:korbil_mobile/pages/lessons/views/edit_time_schedule/views/edit_time_schedule.dart';
+import 'package:korbil_mobile/pages/school/bloc/availability/availabilty_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_location/school_location_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/vehicle/vehicle_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_vehicle/views/add_new_vehicle.dart';
 import 'package:korbil_mobile/pages/school/views/configuration_view/views/configuration_view.dart';
 import 'package:korbil_mobile/pages/school/views/manage_pickup_location/views/manage_pickup_location.dart';
@@ -14,7 +25,7 @@ class ManageSchoolView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const _ManageSchool();
+    return const _ManageSchool();
   }
 }
 
@@ -28,6 +39,9 @@ class _ManageSchool extends StatefulWidget {
 class _ManageSchoolViewState extends State<_ManageSchool> {
   @override
   Widget build(BuildContext context) {
+    print('manage School: ${context.read<AuthBloc>().state.token}');
+    print('auth state: ${context.read<AuthBloc>().state}');
+    print('auth status: ${context.read<AuthBloc>().state.status}');
     return Scaffold(
       extendBody: true,
       appBar: getPreferedOrientation(context) == PreferedOrientation.landscape
@@ -58,7 +72,14 @@ class _ManageSchoolViewState extends State<_ManageSchool> {
             child: _buildItem(
               'assets/imgs/ins/school/calendar_green.png',
               'Set Available Dates',
-              () {},
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (cxt) => const EditTimeSchedule(),
+                  ),
+                );
+              },
             ),
           ),
           Container(
@@ -111,6 +132,7 @@ class _ManageSchoolViewState extends State<_ManageSchool> {
           const SizedBox(
             height: 40,
           ),
+          publishSchool(),
         ],
       ),
     );
@@ -144,6 +166,67 @@ class _ManageSchoolViewState extends State<_ManageSchool> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget publishSchool() {
+    return BlocConsumer<SchoolBloc, SchoolState>(
+      listener: (context, state) {
+        if (state is SchoolLoaded) {
+          Navigator.pop(context);
+        }
+        if (state is SchoolError) {
+          errorSnackbar(context, error: state.error);
+        }
+      },
+      builder: (context, state) {
+        if (state is! SchoolLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          return state.schoolInfo!.schoolStatus == 5
+              ? const SizedBox()
+              : Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: PrimaryBtn(
+                    ontap: () {
+                      final schoolLocation = context
+                          .read<SchoolLocationBloc>()
+                          .state
+                          .schoolLocations;
+                      final vehicles =
+                          context.read<VehicleBloc>().state.vehicles;
+                      final availableTime =
+                          context.read<AvailabiltyBloc>().state.availableDates;
+                      if (schoolLocation == null || schoolLocation.isEmpty) {
+                        errorSnackbar(
+                          context,
+                          error: 'Configure School Pickup Locations',
+                        );
+                      } else if (vehicles == null || vehicles.isEmpty) {
+                        errorSnackbar(
+                          context,
+                          error: 'Configure School Vehicles',
+                        );
+                      } else if (availableTime == null ||
+                          availableTime.isEmpty) {
+                        errorSnackbar(
+                          context,
+                          error: 'Configure School Available Dates',
+                        );
+                      } else {
+                        context
+                            .read<SchoolBloc>()
+                            .add(PublishSchool(schoolId: state.schoolInfo!.id));
+                      }
+                    },
+                    text: 'Publish School',
+                    vm: 0,
+                    hm: 0,
+                    fontSize: 14,
+                  ),
+                );
+        }
+      },
     );
   }
 }

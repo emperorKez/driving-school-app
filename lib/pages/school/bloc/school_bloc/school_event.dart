@@ -48,6 +48,12 @@ class InviteStudent extends SchoolEvent {
   final int schoolId;
   final String email;
 }
+class GetInvitedStudent extends SchoolEvent {
+  GetInvitedStudent({
+    required this.schoolId,
+  });
+  final int schoolId;
+}
 
 class InviteStaff extends SchoolEvent {
   InviteStaff({
@@ -56,4 +62,11 @@ class InviteStaff extends SchoolEvent {
   });
   final int schoolId;
   final String email;
+}
+
+class PublishSchool extends SchoolEvent {
+  PublishSchool({
+    required this.schoolId,
+  });
+  final int schoolId;
 }

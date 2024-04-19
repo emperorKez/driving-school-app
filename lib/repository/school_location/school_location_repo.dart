@@ -10,7 +10,8 @@ class SchoolLocationRepo {
   final ApiService apiService = ApiService();
 
   Future<ResponseState<List<SchoolLocation>>> getSchoolLocations(
-      int schoolId,) async {
+    int schoolId,
+  ) async {
     final params = {'schoolId': schoolId};
     try {
       final res =
@@ -30,19 +31,15 @@ class SchoolLocationRepo {
     }
   }
 
-  Future<ResponseState<List<SchoolLocation>>> addLocation({
+  Future<ResponseState<dynamic>> addLocation({
     required Map<String, dynamic> payload,
   }) async {
     try {
       final response =
           await apiService.postReq(ApiPaths.addLocation, payload: payload);
       if (response.data != null) {
-        final jsonList = response.data!.data['response'];
-        final data = (jsonList as List).cast<Map<String, dynamic>>();
-        final locations = List<SchoolLocation>.from(
-          data.map(SchoolLocation.fromJson),
-        );
-        return ResponseSuccess(locations);
+        final data = response.data!.data['response'];
+        return ResponseSuccess(data);
       }
       return ResponseFailed(response.error!);
     } catch (e) {

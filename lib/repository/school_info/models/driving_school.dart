@@ -119,7 +119,7 @@ class GroupLesson {
         seats: json['seats'] as int,
         lessonStatus: json['lessonStatus'] as int,
         groupLessonStudentRefs: List<int>.from(
-          json['groupLessonStudentRefs']!.map((int x) => x) as Iterable,
+          json['groupLessonStudentRefs']!.map((dynamic x) => x) as Iterable,
         ),
       );
 
@@ -370,7 +370,7 @@ class SchoolInfo {
         isFeatured: json['isFeatured'] as bool,
         languages: json['languages'] == null
             ? []
-            : List<int>.from(json['languages']!.map((int x) => x) as Iterable),
+            : List<int>.from(json['languages']!.map((dynamic x) => x) as Iterable),
         staff: List<Staff>.from(
                 json['staff'].map(Staff.fromJson) as Iterable,
               ),

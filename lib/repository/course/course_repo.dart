@@ -13,6 +13,7 @@ class CourseRepo{
     final params = {'schoolId': schoolId};
     final response =
         await apiService.getReq(ApiPaths.getCourses, params: params);
+        print('Course response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -22,6 +23,7 @@ class CourseRepo{
         );
         return ResponseSuccess(courses);
       } catch (e) {
+        print('get course error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }

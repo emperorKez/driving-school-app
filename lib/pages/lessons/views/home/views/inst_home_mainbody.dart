@@ -250,71 +250,75 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 const SizedBox(height: 15),
-                BlocBuilder<StaffBloc, StaffState>(builder: (context, state) {
-                  return state is! StaffLoaded
-                      ? kLoadingWidget(context)
-                      : Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        state.staff!.profile.avatar,),),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  DateTime.now().hour < 12.00
-                                      ? 'Hello Good Morning'
-                                      : (DateTime.now().hour >= 12.00 &&
-                                              DateTime.now().hour < 19.00)
-                                          ? 'Hello Good Afternoon'
-                                          : 'Hello Good Evening',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: getPreferedOrientation(context) ==
-                                            PreferedOrientation.landscape
-                                        ? 24
-                                        : 14,
-                                    color: th.secondaryColor,
-                                  ),
+                BlocBuilder<StaffBloc, StaffState>(
+                  builder: (context, state) {
+                    return state is! StaffLoaded
+                        ? kLoadingWidget(context)
+                        : Row(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/imgs/ins/lessons/avatar1.png',),),
                                 ),
-                                Text(
-                                  '${state.staff!.profile.firstName} ${state.staff!.profile.firstName}',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: getPreferedOrientation(context) ==
-                                            PreferedOrientation.landscape
-                                        ? 24
-                                        : 16,
-                                    color: th.secondaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            SizedBox(
-                              width: 55,
-                              height: 55,
-                              child: Image.asset(
-                                'assets/imgs/ins/global/bell.png',
-                                fit: BoxFit.cover,
                               ),
-                            ),
-                          ],
-                        );
-                },),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    DateTime.now().hour < 12.00
+                                        ? 'Hello Good Morning'
+                                        : (DateTime.now().hour >= 12.00 &&
+                                                DateTime.now().hour < 19.00)
+                                            ? 'Hello Good Afternoon'
+                                            : 'Hello Good Evening',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize:
+                                          getPreferedOrientation(context) ==
+                                                  PreferedOrientation.landscape
+                                              ? 24
+                                              : 14,
+                                      color: th.secondaryColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${state.staff!.profile.firstName} ${state.staff!.profile.lastName}',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize:
+                                          getPreferedOrientation(context) ==
+                                                  PreferedOrientation.landscape
+                                              ? 24
+                                              : 16,
+                                      color: th.secondaryColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              SizedBox(
+                                width: 55,
+                                height: 55,
+                                child: Image.asset(
+                                  'assets/imgs/ins/global/bell.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ],
+                          );
+                  },
+                ),
                 const SizedBox(height: 25),
                 if (getPreferedOrientation(context) ==
                     PreferedOrientation.landscape)
@@ -387,8 +391,12 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.ease,
                         child: widget.showMainCal
-                            ?  MainCalendarWidget(category: selectedCategory,)
-                            :  InstWeeklyCalendar(category: selectedCategory,),
+                            ? MainCalendarWidget(
+                                category: selectedCategory,
+                              )
+                            : InstWeeklyCalendar(
+                                category: selectedCategory,
+                              ),
                       ),
                     ),
                   ],
@@ -431,7 +439,7 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
               selected: selectedCategory == 'individual' || false,
             ),
           ),
-          const SizedBox(height: 7), 
+          const SizedBox(height: 7),
           GestureDetector(
             onTap: () => setState(() {
               selectedCategory = 'group';

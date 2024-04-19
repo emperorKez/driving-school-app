@@ -23,6 +23,7 @@ class StorageRepo {
       }
       return ResponseFailed(response.error!);
     } catch (e) {
+      print('upload error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }

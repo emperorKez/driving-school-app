@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/school/bloc/availability/availabilty_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/repository/availbility/model/time_off_day.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -23,7 +25,8 @@ class _AddExceptionViewState extends State<AddExceptionView> {
   final startTimeController = TextEditingController();
   final endTimeController = TextEditingController();
 
-  final timeOffs = <TimeOff>[];
+  List<TimeOff> timeOffs = <TimeOff>[];
+  List<TimeOffDay> timeOffDay = <TimeOffDay>[];
 
   // final List<_DateDetails> _schedule = [
   //   _DateDetails(
@@ -86,39 +89,75 @@ class _AddExceptionViewState extends State<AddExceptionView> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: CustomScreenPadding(
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            _mainCalendarWidget(
-              context: context,
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Text(
-              'Change available hours',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: th.secondaryColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(
-                  timeOffs.length,
-                  (index) => Row(
+      body: BlocBuilder<AvailabiltyBloc, AvailabiltyState>(
+        builder: (context, state) {
+          if (state is! AvailabiltyLoaded) {
+            return kLoadingWidget(context);
+          } else {
+            if (state.timeOffDays != null) {
+              for (final e in state.timeOffDays!) {
+                if (e.date == selectedDate) {
+                  timeOffDay.add(e);
+                }
+              }
+            }
+            return CustomScreenPadding(
+              child: ListView(
+                children: [
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  _mainCalendarWidget(
+                    context: context,
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Text(
+                    'Change available hours',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: th.secondaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                      timeOffDay.length,
+                      (index) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                              '${timeOffs[index].startTime.hour}:${timeOffs[index].startTime.minute} - ${timeOffs[index].endTime.hour}:${timeOffs[index].endTime.minute}',),
+                            '${timeOffDay[index].startTime.hour}:${timeOffDay[index].startTime.minute} - ${timeOffDay[index].endTime.hour}:${timeOffDay[index].endTime.minute}',
+                          ),
+                          GestureDetector(
+                            onTap: () => context.read<AvailabiltyBloc>().add(
+                                DeleteTimeOffDays(timeOffDay[index].schoolId,
+                                    timeOffDay[index].id)),
+                            child: Image.asset(
+                              'assets/imgs/ins/lessons/bin.png',
+                              width: 24,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                      timeOffs.length,
+                      (index) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${timeOffs[index].startTime.hour}:${timeOffs[index].startTime.minute} - ${timeOffs[index].endTime.hour}:${timeOffs[index].endTime.minute}',
+                          ),
                           GestureDetector(
                             onTap: () => setState(() {
                               timeOffs.remove(timeOffs[index]);
@@ -129,32 +168,56 @@ class _AddExceptionViewState extends State<AddExceptionView> {
                             ),
                           ),
                         ],
-                      ),),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            _exceptionTimeSlotCard(date: selectedDate),
-            const SizedBox(
-              height: 40,
-            ),
-            PrimaryBtn(
-              ontap: () {
-                final payload = timeOffs;
-                final schoolId =
-                    context.read<SchoolBloc>().state.schoolInfo!.id;
-                context.read<AvailabiltyBloc>().add(
-                    AddTimeOffDays( schoolId: schoolId, payload: payload),);
-              },
-              text: 'Save',
-              fontSize: 14,
-              hm: 0,
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-          ],
-        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  _exceptionTimeSlotCard(date: selectedDate),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  PrimaryBtn(
+                    ontap: () {
+                      final payload = [
+                        for (final item in timeOffs)
+                          {
+                            'date': item.date.toIso8601String(),
+                            'name': item.name,
+                            'startTime': {
+                              'hour': item.startTime.hour,
+                              'minute': item.startTime.minute,
+                              'second': 0,
+                              'nano': 0
+                            },
+                            'endTime': {
+                              'hour': item.endTime.hour,
+                              'minute': item.endTime.minute,
+                              'second': 0,
+                              'nano': 0
+                            }
+                          }
+                      ];
+                      final schoolId =
+                          context.read<SchoolBloc>().state.schoolInfo!.id;
+                      context.read<AvailabiltyBloc>().add(
+                            AddMultipleTimeOffDays(
+                                schoolId: schoolId, payload: payload),
+                          );
+                    },
+                    text: 'Save',
+                    fontSize: 14,
+                    hm: 0,
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -246,8 +309,11 @@ class _AddExceptionViewState extends State<AddExceptionView> {
           children: [
             SizedBox(
               width: 90,
-              child: _entryForm(context,
-                  controller: startTimeController, label: 'Start time',),
+              child: _entryForm(
+                context,
+                controller: startTimeController,
+                label: 'Start time',
+              ),
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 12),
@@ -263,8 +329,11 @@ class _AddExceptionViewState extends State<AddExceptionView> {
             ),
             SizedBox(
               width: 90,
-              child: _entryForm(context,
-                  controller: endTimeController, label: 'End time',),
+              child: _entryForm(
+                context,
+                controller: endTimeController,
+                label: 'End time',
+              ),
             ),
             const Spacer(),
             GestureDetector(
@@ -272,15 +341,16 @@ class _AddExceptionViewState extends State<AddExceptionView> {
                 if (_formKey.currentState!.validate()) {
                   final startTime =
                       DateFormat.Hm().parse(startTimeController.text);
-                  final endTime =
-                      DateFormat.Hm().parse(startTimeController.text);
-                  timeOffs.add(TimeOff(
+                  final endTime = DateFormat.Hm().parse(endTimeController.text);
+                  timeOffs.add(
+                    TimeOff(
                       date: date,
                       name: 'Time off',
                       startTime:
                           Time(hour: startTime.hour, minute: startTime.minute),
-                      endTime:
-                          Time(hour: endTime.hour, minute: endTime.minute),),);
+                      endTime: Time(hour: endTime.hour, minute: endTime.minute),
+                    ),
+                  );
                   startTimeController.clear();
                   endTimeController.clear();
                 }
@@ -307,8 +377,11 @@ class _AddExceptionViewState extends State<AddExceptionView> {
     );
   }
 
-  Widget _entryForm(BuildContext context,
-      {required TextEditingController controller, required String label,}) {
+  Widget _entryForm(
+    BuildContext context, {
+    required TextEditingController controller,
+    required String label,
+  }) {
     final th = KorbilTheme.of(context);
     final regExp = RegExp(r'^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$');
     return TextFormField(

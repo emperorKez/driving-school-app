@@ -28,4 +28,3 @@ class AddressChanged extends CreateSchoolEvent {
   final String address;
 }
 
-class ClearAddress extends CreateSchoolEvent {}

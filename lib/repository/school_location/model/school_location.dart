@@ -8,7 +8,7 @@ class SchoolLocation {
     required this.locationType,
     required this.landmark,
     required this.schoolId,
-    required this.isActive,
+    required this.isSelected,
   });
 
   factory SchoolLocation.fromJson(Map<String, dynamic> json) => SchoolLocation(
@@ -20,7 +20,7 @@ class SchoolLocation {
         locationType: json['locationType'] as int,
         landmark: json['landmark'] as String,
         schoolId: json['schoolId'] as int,
-        isActive: json['isActive'] as bool,
+        isSelected: json['isSelected'] as bool,
       );
 
   int id;
@@ -31,7 +31,7 @@ class SchoolLocation {
   int locationType;
   String landmark;
   int schoolId;
-  bool isActive;
+  bool isSelected;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -42,6 +42,6 @@ class SchoolLocation {
         'locationType': locationType,
         'landmark': landmark,
         'schoolId': schoolId,
-        'isActive': isActive,
+        'isActive': isSelected,
       };
 }

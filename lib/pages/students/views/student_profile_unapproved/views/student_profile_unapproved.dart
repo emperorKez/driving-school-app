@@ -504,6 +504,7 @@ class _ProfileDetails extends StatelessWidget {
               shape: BoxShape.circle,
               image: DecorationImage(
                 image: NetworkImage(student.profile.avatar),
+                onError: (exception, stackTrace) => AssetImage('assets/imgs/ins/lessons/avatar2.png'),
                 fit: BoxFit.cover,
               ),
             ),

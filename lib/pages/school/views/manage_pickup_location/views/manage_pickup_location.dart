@@ -6,8 +6,10 @@ import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_location/school_location_bloc.dart';
-import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/repository/school_location/model/school_location.dart';
+import 'package:korbil_mobile/theme/theme.dart';
 
 class ManagePickupLocationView extends StatefulWidget {
   const ManagePickupLocationView({super.key});
@@ -26,7 +28,7 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
   TextEditingController searchController = TextEditingController();
   TextEditingController landmarkController = TextEditingController();
 
-  int selectedLocationType = 0;
+  int selectedLocationType = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +48,20 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
         ),
         leading: const InstAppBarBackBtn(),
       ),
-      body: BlocListener<SchoolLocationBloc, SchoolLocationState>(
+      body: BlocConsumer<SchoolLocationBloc, SchoolLocationState>(
         listener: (context, state) {
           if (state is SchoolLocationError) {
             errorSnackbar(context, error: state.error);
           }
         },
-        child: _renderAddNewLocationMobileBody(),
+        builder: (context, state) {
+          if (state is SchoolLocationInitial) {
+            context.read<SchoolLocationBloc>().add(GetLocations(
+                schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+          }
+          return _renderAddNewLocationMobileBody();
+        },
+        // child: _renderAddNewLocationMobileBody(),
       ),
     );
   }
@@ -108,8 +117,9 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
             height: 10,
           ),
           _entryField(
-              controller: addressController,
-              hintText: 'Enter Location Address',),
+            controller: addressController,
+            hintText: 'Enter Location Address',
+          ),
           const SizedBox(
             height: 15,
           ),
@@ -133,7 +143,9 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
                     ),
                     // _buildDropDown('Select City'),
                     _entryField(
-                        controller: cityController, hintText: 'Enter City',),
+                      controller: cityController,
+                      hintText: 'Enter City',
+                    ),
                   ],
                 ),
               ),
@@ -157,9 +169,10 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
                       height: 10,
                     ),
                     _entryField(
-                        controller: postalCodeController,
-                        hintText: 'Enter Postal code',
-                        inputType: TextInputType.number,),
+                      controller: postalCodeController,
+                      hintText: 'Enter Postal code',
+                      inputType: TextInputType.number,
+                    ),
                   ],
                 ),
               ),
@@ -264,10 +277,22 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
             height: 10,
           ),
 
-          _buildPredefinedLocation(false),
-          _buildPredefinedLocation(true),
-          _buildPredefinedLocation(true),
-          _buildPredefinedLocation(true),
+          BlocBuilder<SchoolLocationBloc, SchoolLocationState>(
+            builder: (context, state) {
+              if (state.schoolLocations == null ||
+                  state.schoolLocations!.isEmpty) {
+                return const SizedBox();
+              } else {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(
+                      state.schoolLocations!.length,
+                      (index) => _buildPredefinedLocation(
+                          state.schoolLocations![index])),
+                );
+              }
+            },
+          ),
           const SizedBox(
             height: 45,
           ),
@@ -306,34 +331,38 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
               Expanded(
                 child: BlocBuilder<SchoolLocationBloc, SchoolLocationState>(
                   builder: (context, state) {
-                    return PrimaryBtn(
-                      ontap: () {
-                        final schoolId = context
-                            .read<StaffBloc>()
-                            .state
-                            .staff!
-                            .staffData
-                            .schoolId;
-                        if (_formKey.currentState!.validate()) {
-                          final payload = {
-                            'name': nameController.text,
-                            'address': addressController.text,
-                            'city': cityController.text,
-                            'postalCode': postalCodeController.text,
-                            'locationType': selectedLocationType,
-                            'landmark': landmarkController.text,
-                            'schoolId': schoolId,
-                          };
-
-                          context.read<SchoolLocationBloc>().add(AddLocation(
-                              payload: payload, schoolId: schoolId,),);
-                        }
-                      },
-                      text: 'Add',
-                      vm: 0,
-                      hm: 0,
-                      fontSize: 14,
-                    );
+                    return state is SchoolLocationLoading
+                        ? kLoadingWidget(context)
+                        : PrimaryBtn(
+                            ontap: () {
+                              final schoolId = context
+                                  .read<SchoolBloc>()
+                                  .state
+                                  .schoolInfo!
+                                  .id;
+                              if (_formKey.currentState!.validate()) {
+                                final payload = {
+                                  'name': nameController.text,
+                                  'address': addressController.text,
+                                  'city': cityController.text,
+                                  'postalCode': postalCodeController.text,
+                                  'locationType': selectedLocationType,
+                                  'landmark': landmarkController.text,
+                                  'schoolId': schoolId,
+                                };
+                                context.read<SchoolLocationBloc>().add(
+                                      AddLocation(
+                                        payload: payload,
+                                        schoolId: schoolId,
+                                      ),
+                                    );
+                              }
+                            },
+                            text: 'Add',
+                            vm: 0,
+                            hm: 0,
+                            fontSize: 14,
+                          );
                   },
                 ),
               ),
@@ -347,86 +376,90 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
     );
   }
 
-  Container _buildPredefinedLocation(bool selected) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 7),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: selected
-                ? Image.asset(
-                    'assets/imgs/ins/school/tick_on.png',
-                    width: 16,
-                  )
-                : Image.asset(
-                    'assets/imgs/ins/school/tick_off.png',
-                    width: 16,
-                  ),
-          ),
-          const Text(
-            'Bergmansgatan 20, 431 30 Mölndal',
-            style: TextStyle(
+  Widget _buildPredefinedLocation(SchoolLocation location) {
+    final schoolId = context.read<SchoolBloc>().state.schoolInfo!.id;
+    return Row(
+      children: [
+        Checkbox(
+          value: location.isSelected,
+          onChanged: (val) {
+            val!
+                ? context.read<SchoolLocationBloc>().add(
+                    UpdateLocationStatusActive(
+                        locationId: location.id, schoolId: schoolId))
+                : context.read<SchoolLocationBloc>().add(
+                    UpdateLocationStatusInactive(
+                        locationId: location.id, schoolId: schoolId));
+          },
+          activeColor: KorbilTheme.of(context).primaryColor,
+          checkColor: Colors.white,
+        ),
+        Text(
+          location.address,
+          style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               fontWeight: FontWeight.w400,
               color: AppColors.black,
-            ),
-          ),
-          const Spacer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: const Icon(
+              overflow: TextOverflow.ellipsis),
+        ),
+        const Spacer(),
+        IconButton(
+            onPressed: () => context.read<SchoolLocationBloc>().add(
+                DeleteLocation(locationId: location.id, schoolId: schoolId)),
+            icon: const Icon(
               Icons.delete_outlined,
               color: AppColors.black,
-            ),
-          ),
-        ],
-      ),
+            )),
+      ],
     );
   }
 
   Widget _buildLocationTypeDropDown() {
     return BlocBuilder<MetadataCubit, MetadataState>(
       builder: (context, state) {
-        return state is! MetadataLoaded
-            ? kLoadingWidget(context)
-            : Container(
-                margin: const EdgeInsets.symmetric(vertical: 4),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
+        if (state is! MetadataLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.grey1),
+            ),
+            child: DropdownButton<dynamic>(
+              isExpanded: true,
+              value: selectedLocationType,
+              underline: Container(),
+              iconSize: 25,
+              hint: const Text(
+                'Select Location type',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.grey1,
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.grey1),
-                ),
-                child: DropdownButton<dynamic>(
-                  isExpanded: true,
-                  underline: Container(),
-                  iconSize: 25,
-                  hint: const Text(
-                    'Select Location type',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.grey1,
-                    ),
-                  ),
-                  iconDisabledColor: AppColors.black,
-                  iconEnabledColor: AppColors.black,
-                  items:
-                      state.locationTypes!.map<DropdownMenuItem<dynamic>>((e) {
-                    return DropdownMenuItem<dynamic>(
-                      value: e.id,
-                      child: Text(e.name),
-                    );
-                  }).toList(),
-                  onChanged: (val) {
-                    selectedLocationType = val as int;
-                  },
-                ),
-              );
+              ),
+              iconDisabledColor: AppColors.black,
+              iconEnabledColor: AppColors.black,
+              items: state.locationTypes!.map<DropdownMenuItem<dynamic>>((e) {
+                return DropdownMenuItem<dynamic>(
+                  value: e.value,
+                  child: Text(e.name),
+                );
+              }).toList(),
+              onChanged: (val) {
+                setState(() {
+                  selectedLocationType = val as int;
+                });
+              },
+            ),
+          );
+        }
       },
     );
   }

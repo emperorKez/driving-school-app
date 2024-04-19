@@ -18,14 +18,14 @@ class ApiService {
 
   Future<DataState<Response<dynamic>?>> getReq(
     String path, {
-    // String? token,
     Map<String, dynamic>? params,
   }) async {
-    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token;
+
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
-        dio.options.headers['authorization'] = 'Bearer $token';
+        dio.options.headers['authorization'] = 'Bearer ${token.encode()}';
       }
       log(path);
       final response = await dio.get<dynamic>(
@@ -49,13 +49,18 @@ class ApiService {
     dynamic payload,
     Map<String, dynamic>? params,
   }) async {
-    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token;
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
-        dio.options.headers['authorization'] = 'Bearer $token';
+        dio.options.headers['authorization'] = 'Bearer ${token.encode()}';
       }
+      print(dio.options.headers);
+      print('current context: ${rootNavKey.currentContext}');
+
+      print('token: $token');
       log(path);
+      print('payload: $payload');
       final response = await dio.post<dynamic>(
         '$baseUrl/$path',
         data: payload,
@@ -64,46 +69,23 @@ class ApiService {
       log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
+      print('post request exception: $e');
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
     } catch (e) {
       return DataFailed(DataError(null, e));
     }
   }
 
-  // Future<DataState<Response<dynamic>?>> postReq2(
-  //   String path, {
-  //   required List<int> payload,
-  //   String? token,
-  // }) async {
-  //   try {
-  //     final dio = Dio(baseOptions);
-  //     if (token != null) {
-  //       dio.options.headers['authorization'] = 'Bearer $token';
-  //     }
-  //     log(path);
-  //     final response = await dio.post<dynamic>(
-  //       '$baseUrl/$path',
-  //       data: payload,
-  //     );
-  //     log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
-  //     return DataSuccess(response);
-  //   } on DioException catch (e) {
-  //     return DataFailed(DataError(e.response?.statusCode, e.response?.data));
-  //   } catch (e) {
-  //     return DataFailed(DataError(null, e));
-  //   }
-  // }
-
   Future<DataState<Response<dynamic>?>> putReq(
     String path, {
     Map<String, dynamic>? payload,
     Map<String, dynamic>? params,
   }) async {
-    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token;
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
-        dio.options.headers['authorization'] = 'Bearer $token';
+        dio.options.headers['authorization'] = 'Bearer ${token.encode()}';
       }
       log(path);
       final response = await dio.put<dynamic>(
@@ -120,16 +102,15 @@ class ApiService {
     }
   }
 
-  Future<DataState<Response<dynamic>?>> deleteReq(
-    String path) async {
-    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
+  Future<DataState<Response<dynamic>?>> deleteReq(String path) async {
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token;
     try {
       final dio = Dio(baseOptions);
       if (token != null) {
-        dio.options.headers['authorization'] = 'Bearer $token';
+        dio.options.headers['authorization'] = 'Bearer ${token.encode()}';
       }
       log(path);
-      final response = await dio.put<dynamic>(
+      final response = await dio.delete<dynamic>(
         '$baseUrl/$path',
       );
       log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
@@ -145,21 +126,34 @@ class ApiService {
     String path, {
     required String file,
   }) async {
-    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token; 
+    final token = rootNavKey.currentContext!.read<AuthBloc>().state.token;
     try {
-      final dio = Dio(baseOptions);
+      final dio = Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 5),
+          validateStatus: (status) => status! < 400,
+        ),
+      );
+
       if (token != null) {
-        dio.options.headers['authorization'] = 'Bearer $token';
+        dio.options.headers['authorization'] = 'Bearer ${token.encode()}';
       }
-      final formData = FormData.fromMap({
-        'file': MultipartFile.fromString(file),
-      });
+      final formData = FormData();
+      formData.files.add(
+        MapEntry(
+          'file',
+          MultipartFile.fromFileSync(
+            file,
+          ),
+        ),
+      );
       log(path);
       final response =
           await dio.post<dynamic>('$baseUrl/$path', data: formData);
       log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
+      print('dio exceprion: $e');
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
     } catch (e) {
       return DataFailed(DataError(null, e));

@@ -39,6 +39,8 @@ class _SchoolSettingsViewState extends State<_SchoolSettingsView> {
     return Scaffold(
       body: BlocConsumer<SchoolBloc, SchoolState>(
         listener: (context, state) {
+          
+
           if (state is SchoolError) {
             errorSnackbar(context, error: state.error);
           }
@@ -48,23 +50,31 @@ class _SchoolSettingsViewState extends State<_SchoolSettingsView> {
             return kLoadingWidget(context);
           } else {
             context
+                .read<PackageBloc>()
+                .add(GetPackages(schoolId: state.schoolInfo!.id));
+                context
+                .read<ReviewBloc>()
+                .add(GetReviews(schoolId: state.schoolInfo!.id));
+                context
+                .read<SchoolLocationBloc>()
+                .add(GetLocations(schoolId: state.schoolInfo!.id));
+                context
+                .read<VehicleBloc>()
+                .add(GetVehicles(schoolId: state.schoolInfo!.id));
+
+                //check if school is active
+            if (state.schoolInfo!.schoolStatus == 5){
+            context
                 .read<CourseBloc>()
                 .add(GetCourses(schoolId: state.schoolInfo!.id));
             context
                 .read<PromotionBloc>()
                 .add(GetPromotions(schoolId: state.schoolInfo!.id));
-            context
-                .read<VehicleBloc>()
-                .add(GetVehicles(schoolId: state.schoolInfo!.id));
-            context
-                .read<SchoolLocationBloc>()
-                .add(GetLocations(schoolId: state.schoolInfo!.id));
-            context
-                .read<ReviewBloc>()
-                .add(GetReviews(schoolId: state.schoolInfo!.id));
-            context
-                .read<PackageBloc>()
-                .add(GetPackages(schoolId: state.schoolInfo!.id));
+            
+            
+            
+            
+            }
 
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),

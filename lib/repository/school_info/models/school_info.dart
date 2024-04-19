@@ -11,7 +11,7 @@ class SchoolInfo {
     required this.email,
     required this.isFeatured,
     required this.languages,
-    required this.staff,
+    // required this.staff,
     required this.scheduleFlow,
     required this.schoolStatus,
     required this.primaryContact,
@@ -33,10 +33,10 @@ class SchoolInfo {
         email: json['email'] as String,
         isFeatured: json['isFeatured'] as bool,
         languages:
-            List<int>.from(json['languages'].map((int x) => x) as Iterable),
-        staff: List<Staff>.from(
-          json['staff'].map(Staff.fromJson) as Iterable,
-        ),
+            List<int>.from(json['languages'].map((dynamic x) => x) as Iterable),
+        // staff: List<Staff>.from(
+        //   json['staff'].map(Staff.fromJson) as Iterable,
+        // ),
         scheduleFlow: json['scheduleFlow'] as int,
         schoolStatus: json['schoolStatus'] as int,
         primaryContact: json['primaryContact'] as int,
@@ -59,7 +59,7 @@ class SchoolInfo {
   String email;
   bool isFeatured;
   List<int> languages;
-  List<Staff> staff;
+  // List<Staff> staff;
   int scheduleFlow;
   int schoolStatus;
   int primaryContact;
@@ -79,8 +79,8 @@ class SchoolInfo {
         'phoneNumber': phoneNumber,
         'email': email,
         'isFeatured': isFeatured,
-        'languages': List<dynamic>.from(languages.map((x) => x)),
-        'staff': List<dynamic>.from(staff.map((x) => x.toJson())),
+        'languages': List<int>.from(languages.map((x) => x)),
+        // 'staff': List<dynamic>.from(staff.map((x) => x.toJson())),
         'scheduleFlow': scheduleFlow,
         'schoolStatus': schoolStatus,
         'primaryContact': primaryContact,
@@ -100,7 +100,8 @@ class Document {
     required this.type,
   });
 
-  factory Document.fromJson(Map<String, dynamic> json) => Document(
+  // factory Document.fromJson(Map<String, dynamic> json) => Document(
+  factory Document.fromJson( dynamic json) => Document(
         id: json['id'] as int,
         key: json['key'] as String,
         type: json['type'] as int,
@@ -118,23 +119,26 @@ class Document {
 }
 
 class Staff {
-  Staff({
-    required this.profile,
-    required this.staffData,
-  });
+  Staff(
+      {required this.profile,
+      required this.staffData,
+      required this.staffRoleName,});
 
   factory Staff.fromJson(Map<String, dynamic> json) => Staff(
         profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
         staffData:
             StaffData.fromJson(json['staffData'] as Map<String, dynamic>),
+        staffRoleName: json['staffRoleName'] as String,
       );
 
   Profile profile;
   StaffData staffData;
+  String staffRoleName;
 
   Map<String, dynamic> toJson() => {
         'profile': profile.toJson(),
         'staffData': staffData.toJson(),
+        'staffRoleName': staffRoleName,
       };
 }
 
@@ -147,8 +151,6 @@ class Profile {
     required this.email,
     required this.userStatus,
     required this.userType,
-    required this.createdAt,
-    required this.updatedAt,
     required this.avatar,
   });
 
@@ -161,8 +163,6 @@ class Profile {
         avatar: json['avatar'] as String,
         userStatus: json['userStatus'] as int,
         userType: json['userType'] as int,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
   int id;
@@ -173,8 +173,6 @@ class Profile {
   String avatar;
   int userStatus;
   int userType;
-  DateTime createdAt;
-  DateTime updatedAt;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -185,40 +183,24 @@ class Profile {
         'avatar': avatar,
         'userStatus': userStatus,
         'userType': userType,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
       };
 }
 
 class StaffData {
   StaffData({
-    required this.id,
-    required this.refId,
-    required this.documents,
     required this.staffRole,
     required this.schoolId,
   });
 
   factory StaffData.fromJson(Map<String, dynamic> json) => StaffData(
-        id: json['id'] as int,
-        refId: json['refId'] as int,
-        documents: List<Document>.from(
-          json['documents'].map(Document.fromJson) as Iterable,
-        ),
         staffRole: json['staffRole'] as int,
         schoolId: json['schoolId'] as int,
       );
 
-  int id;
-  int refId;
-  List<Document> documents;
   int staffRole;
   int schoolId;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'refId': refId,
-        'documents': List<dynamic>.from(documents.map((x) => x.toJson())),
         'staffRole': staffRole,
         'schoolId': schoolId,
       };

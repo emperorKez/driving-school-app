@@ -23,7 +23,7 @@ class AvailabiltyState {
 final class AvailabiltyInitial extends AvailabiltyState {}
 final class AvailabiltyLoading extends AvailabiltyState {}
 final class AvailabiltyLoaded extends AvailabiltyState {
-  AvailabiltyLoaded({super.availableDates, super.timeOffDays});
+  AvailabiltyLoaded({required super.availableDates, required super.timeOffDays});
 }
 final class AvailabiltyError extends AvailabiltyState {
   AvailabiltyError({this.error = 'Something went erong'});

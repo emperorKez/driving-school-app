@@ -51,7 +51,7 @@ class VehicleImage {
     required this.imageKey,
   });
 
-  factory VehicleImage.fromJson(Map<String, dynamic> json) => VehicleImage(
+  factory VehicleImage.fromJson(dynamic json) => VehicleImage(
         id: json['id'] as int,
         imageKey: json['imageKey'] as String,
       );
