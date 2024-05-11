@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
+import 'package:korbil_mobile/repository/student/models/student_package.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
-class Stats extends StatelessWidget {
-  const Stats({
+class StatsView extends StatelessWidget {
+  const StatsView({
+    required this.stats,
     super.key,
   });
+
+  final Stats stats;
 
   @override
   Widget build(BuildContext context) {

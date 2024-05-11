@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/pages/school/bloc/payment/payment_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class PaymentDataTable extends StatelessWidget {
@@ -14,6 +15,9 @@ class PaymentDataTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PaymentBloc, PaymentState>(
       builder: (context, state) {
+        if (state is PaymentInitial){
+          context.read<PaymentBloc>().add(GetPaymentHistory(schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+        }
         if (state is! PaymentLoaded) {
           return kLoadingWidget(context);
         } else {

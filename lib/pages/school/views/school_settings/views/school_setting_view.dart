@@ -4,6 +4,7 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/payment/payment_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/promotion/promotion_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/review/review_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
@@ -70,9 +71,7 @@ class _SchoolSettingsViewState extends State<_SchoolSettingsView> {
             context
                 .read<PromotionBloc>()
                 .add(GetPromotions(schoolId: state.schoolInfo!.id));
-            
-            
-            
+                context.read<PaymentBloc>().add(GetPaymentHistory(schoolId: state.schoolInfo!.id));
             
             }
 

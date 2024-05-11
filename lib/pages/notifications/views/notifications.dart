@@ -19,35 +19,40 @@ class _InstNotificationsViewState extends State<InstNotificationsView> {
       detail: '10 Hours Packege',
     ),
     NotificationDetails(
-        icon: 'assets/imgs/ins/notifications/notification_type2.png',
-        hasAction: false,
-        title: 'Completed',
-        subTitle: '',
-        desc: 'Isaiah Richardson Completed 90 Min Traffic Light Drive',),
+      icon: 'assets/imgs/ins/notifications/notification_type2.png',
+      hasAction: false,
+      title: 'Completed',
+      subTitle: '',
+      desc: 'Isaiah Richardson Completed 90 Min Traffic Light Drive',
+    ),
     NotificationDetails(
-        icon: 'assets/imgs/ins/notifications/notification_type2.png',
-        hasAction: false,
-        title: 'Completed',
-        subTitle: '',
-        desc: 'Glenn Musa Completed Safety Courses on Road',),
+      icon: 'assets/imgs/ins/notifications/notification_type2.png',
+      hasAction: false,
+      title: 'Completed',
+      subTitle: '',
+      desc: 'Glenn Musa Completed Safety Courses on Road',
+    ),
     NotificationDetails(
-        icon: 'assets/imgs/ins/notifications/notification_type1.png',
-        hasAction: false,
-        title: 'Richardson Massage',
-        subTitle: '',
-        desc: 'Lorem ipsum dolor sit amet, con...',),
+      icon: 'assets/imgs/ins/notifications/notification_type1.png',
+      hasAction: false,
+      title: 'Richardson Massage',
+      subTitle: '',
+      desc: 'Lorem ipsum dolor sit amet, con...',
+    ),
     NotificationDetails(
-        icon: 'assets/imgs/ins/notifications/notification_type1.png',
-        hasAction: false,
-        title: 'Bella Yasmin Massage',
-        subTitle: '',
-        desc: 'Lorem ipsum dolor sit amet, con...',),
+      icon: 'assets/imgs/ins/notifications/notification_type1.png',
+      hasAction: false,
+      title: 'Bella Yasmin Massage',
+      subTitle: '',
+      desc: 'Lorem ipsum dolor sit amet, con...',
+    ),
     NotificationDetails(
-        icon: 'assets/imgs/ins/notifications/notification_type2.png',
-        hasAction: false,
-        title: 'Tyler Sienna Massage',
-        subTitle: '',
-        desc: 'Lorem ipsum dolor sit amet, con...',),
+      icon: 'assets/imgs/ins/notifications/notification_type2.png',
+      hasAction: false,
+      title: 'Tyler Sienna Massage',
+      subTitle: '',
+      desc: 'Lorem ipsum dolor sit amet, con...',
+    ),
   ];
 
   @override
@@ -201,6 +206,8 @@ class NotificationCard extends StatelessWidget {
                             : MediaQuery.of(context).size.width * 0.6,
                         child: Text(
                           not.desc,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -226,10 +233,7 @@ class NotificationCard extends StatelessWidget {
           ),
           if (not.hasAction)
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 8,
-              ),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 color: KorbilTheme.of(context).primaryColor,
@@ -239,7 +243,7 @@ class NotificationCard extends StatelessWidget {
                   'Approval',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 12,
+                    fontSize: 10,
                     fontWeight: FontWeight.w500,
                     color: KorbilTheme.of(context).white,
                   ),

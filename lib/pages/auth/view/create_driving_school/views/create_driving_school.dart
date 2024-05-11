@@ -7,6 +7,9 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/locator.dart';
+import 'package:korbil_mobile/nav/nav_service.dart';
+import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_school/create_school_bloc.dart';
@@ -28,6 +31,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
@@ -241,6 +245,23 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             ),
                           ],
                         ),
+                        _renderFormField(
+                              hint: 'About Us',
+                              ctrl: nameController,
+                              isMultiline: true,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Enter About Us';
+                                } else if (val.characters.length < 50) {
+                                  return 'Enter At least 20 words about your school';
+                                }
+                                return null;
+                              },
+                              icon: 'assets/imgs/ins/auth/school.png',
+                            ),
+
+
+                      
                       if (getPreferedOrientation(context) ==
                           PreferedOrientation.landscape)
                         Row(
@@ -537,8 +558,8 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
             BlocConsumer<SchoolBloc, SchoolState>(
               listener: (context, state) {
                 if (state is SchoolLoaded) {
-                  // lc<NavigationService>()
-                  //     .navigateTo(rootNavKey, AppRouter.appHome);
+                  lc<NavigationService>()
+                      .navigateTo(rootNavKey, AppRouter.appHome);
                 }
                 if (state is SchoolError) {
                   errorSnackbar(context, error: state.error);
@@ -691,6 +712,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
       double iconSize = 24,
       TextInputType inputType = TextInputType.text,
       Widget? suffixIcon,
+      bool isMultiline = false,
       void Function(String)? onChanged,
       void Function()? onEditingComplete,
       void Function(bool)? onFocusChange,}) {
@@ -704,6 +726,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
           onChanged: onChanged,
           onEditingComplete: onEditingComplete,
           keyboardType: inputType,
+          minLines: isMultiline ? 4 : 1,
           style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
+import 'package:korbil_mobile/repository/staff/model/top_students.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class StudentCard extends StatelessWidget {
-  const StudentCard({
-    super.key,
+  const StudentCard({ required this.student,
+    super.key, 
   });
+  final TopStudent student;
 
   @override
   Widget build(BuildContext context) {

@@ -49,9 +49,10 @@ class DeclineStudent extends StudentEvent {
 }
 
 class ApproveStudent extends StudentEvent {
-  ApproveStudent({required this.schoolId, required this.studentId});
+  ApproveStudent({required this.schoolId, required this.studentId, required this.packageId});
   final int studentId;
   final int schoolId;
+  final int packageId;
 }
 // class GetInvitedStudents extends StudentEvent {
 //   GetInvitedStudents({required this.schoolId});

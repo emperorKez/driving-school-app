@@ -1,27 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/repository/student/models/student.dart';
+import 'package:korbil_mobile/pages/students/bloc/profile_cubit/profile_cubit.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class ProfileSection extends StatelessWidget {
   const ProfileSection({
-    required this.student,
+    required this.studentId,
     super.key,
   });
-  final Student student;
+  final int studentId;
 
   @override
   Widget build(BuildContext context) {
-    return CustomScreenPadding(
-      child: getPreferedOrientation(context) == PreferedOrientation.landscape
-          ? _buildLandscape(context)
-          : _buildPortrait(context),
+    return BlocProvider(
+      create: (context) => ProfileCubit(),
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          context.read<ProfileCubit>().getProfile(studentId);
+          return state is! ProfileLoaded
+              ? kLoadingWidget(context)
+              : CustomScreenPadding(
+                  child: getPreferedOrientation(context) ==
+                          PreferedOrientation.landscape
+                      ? _buildLandscape(context, state: state)
+                      : _buildPortrait(context, state: state),
+                );
+        },
+      ),
     );
   }
 
-  Widget _buildLandscape(BuildContext context) {
+  Widget _buildLandscape(BuildContext context, {required ProfileState state}) {
     return Column(
       children: [
         Container(
@@ -40,7 +53,7 @@ class ProfileSection extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '${student.profile.firstName} ${student.profile.lastName}',
+              '${state.student!.profile.firstName} ${state.student!.profile.lastName}',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -49,7 +62,7 @@ class ProfileSection extends StatelessWidget {
               ),
             ),
             Text(
-              student.profile.phoneNumber,
+              state.student!.profile.phoneNumber,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -58,7 +71,7 @@ class ProfileSection extends StatelessWidget {
               ),
             ),
             Text(
-              student.profile.email,
+              state.student!.profile.email,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -87,7 +100,7 @@ class ProfileSection extends StatelessWidget {
     );
   }
 
-  Row _buildPortrait(BuildContext context) {
+  Row _buildPortrait(BuildContext context, {required ProfileState state}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,7 +121,7 @@ class ProfileSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${student.profile.firstName} ${student.profile.lastName}',
+                '${state.student!.profile.firstName} ${state.student!.profile.lastName}',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -117,7 +130,7 @@ class ProfileSection extends StatelessWidget {
                 ),
               ),
               Text(
-                student.profile.phoneNumber,
+                state.student!.profile.phoneNumber,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -126,7 +139,7 @@ class ProfileSection extends StatelessWidget {
                 ),
               ),
               Text(
-                student.profile.email,
+                state.student!.profile.email,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,

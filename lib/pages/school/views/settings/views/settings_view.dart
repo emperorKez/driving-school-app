@@ -19,7 +19,7 @@ class _InstAppSettingsViewState extends State<InstAppSettingsView> {
       appBar: getPreferedOrientation(context) == PreferedOrientation.landscape
           ? null
           : AppBar(
-              backgroundColor: Colors.white, 
+              backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
                 'Settings',
@@ -33,8 +33,9 @@ class _InstAppSettingsViewState extends State<InstAppSettingsView> {
               leading: const InstAppBarBackBtn(),
             ),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: ListView(
+          shrinkWrap: true,
           children: [
             _buildItem(
               'assets/imgs/ins/school/simple_bell.png',
@@ -130,7 +131,7 @@ class _InstAppSettingsViewState extends State<InstAppSettingsView> {
           Text(
             text,
             style: TextStyle(
-              fontFamily: 'Poppins', 
+              fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,
               fontSize: 16,
               fontWeight: FontWeight.w500,

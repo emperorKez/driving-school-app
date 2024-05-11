@@ -54,6 +54,14 @@ class GetInvitedStudent extends SchoolEvent {
   });
   final int schoolId;
 }
+class RemoveInvitedStudent extends SchoolEvent {
+  RemoveInvitedStudent({
+    required this.schoolId,
+    required this.email,
+  });
+  final int schoolId;
+  final String email;
+}
 
 class InviteStaff extends SchoolEvent {
   InviteStaff({

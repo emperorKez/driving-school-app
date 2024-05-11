@@ -11,10 +11,11 @@ class AvailabilityRepo {
   final ApiService apiService = ApiService();
 
   Future<ResponseState<List<AvailableDate>>> getAvailableDates(
-      int schoolId,) async {
+    int schoolId,
+  ) async {
     final response =
         await apiService.getReq(ApiPaths.getAvailableDates(schoolId: schoolId));
-        print('get available date response: ${response.data}');
+    print('get available date response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -31,20 +32,23 @@ class AvailabilityRepo {
     return ResponseFailed(response.error!);
   }
 
-  Future<ResponseState<AvailableDate>> addAvailableDates({
+  Future<ResponseState<List<AvailableDate>>> addAvailableDates({
     required int schoolId,
     required Map<String, dynamic> payload,
   }) async {
     final response = await apiService.postReq(
-        ApiPaths.addAvailableDates(schoolId: schoolId),
-        payload: payload,);
-        print('add available data response: ${response.data}');
+      ApiPaths.addAvailableDates(schoolId: schoolId),
+      payload: payload,
+    );
+    print('add available data response: ${response.data}');
     if (response.data != null) {
       try {
-        final availableDate = AvailableDate.fromJson(
-          response.data!.data['response'] as Map<String, dynamic>,
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final availableDates = List<AvailableDate>.from(
+          data.map(AvailableDate.fromJson),
         );
-        return ResponseSuccess(availableDate);
+        return ResponseSuccess(availableDates);
       } catch (e) {
         print('add available date error: $e');
         return ResponseFailed(DataError(null, e));
@@ -56,7 +60,7 @@ class AvailabilityRepo {
   Future<ResponseState<List<TimeOffDay>>> getTimeOffDays(int schoolId) async {
     final response =
         await apiService.getReq(ApiPaths.getTimeOffDays(schoolId: schoolId));
-        print('get time off response: ${response.data}');
+    print('get time off response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -97,9 +101,10 @@ class AvailabilityRepo {
     required List<dynamic> payload,
   }) async {
     final response = await apiService.postReq(
-        ApiPaths.addMultipleTimeOffDays(schoolId: schoolId),
-        payload: payload,);
-        print('add time off response: ${response.data}');
+      ApiPaths.addMultipleTimeOffDays(schoolId: schoolId),
+      payload: payload,
+    );
+    print('add time off response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -122,8 +127,9 @@ class AvailabilityRepo {
     required Map<String, dynamic> payload,
   }) async {
     final response = await apiService.putReq(
-        ApiPaths.updateTimeOffDays(schoolId: schoolId, offDayId: offDayId),
-        payload: payload,);
+      ApiPaths.updateTimeOffDays(schoolId: schoolId, offDayId: offDayId),
+      payload: payload,
+    );
     if (response.data != null) {
       try {
         final timeOffDay = TimeOffDay.fromJson(
@@ -142,7 +148,8 @@ class AvailabilityRepo {
     required int offDayId,
   }) async {
     final response = await apiService.putReq(
-        ApiPaths.deleteTimeOffDays(schoolId: schoolId, offDayId: offDayId),);
+      ApiPaths.deleteTimeOffDays(schoolId: schoolId, offDayId: offDayId),
+    );
     if (response.data != null) {
       try {
         final timeOffDay =

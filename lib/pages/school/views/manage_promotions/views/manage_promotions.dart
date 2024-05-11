@@ -73,7 +73,7 @@ class _InstManagePromotionsState extends State<InstManagePromotions> {
                       ),
                     ),
                   const SizedBox(
-                    height: 30,
+                    height: 30, 
                   ),
                   PrimaryBtn(
                     text: 'Create New Promo',

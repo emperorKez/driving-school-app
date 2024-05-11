@@ -67,6 +67,7 @@ class PaymentRepo {
   Future<ResponseState<List<PaymentHistory>>> getPaymentHistory(int schoolId) async {
     final params = {'schoolId': schoolId };
     final response = await apiService.getReq(ApiPaths.getPaymentHistory, params: params);
+    print('get payment history: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -76,6 +77,7 @@ class PaymentRepo {
         );
         return ResponseSuccess(history);
       } catch (e) {
+        print('get payment history error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }
@@ -84,13 +86,15 @@ class PaymentRepo {
   Future<ResponseState<Earning>> getSchoolEarnings(int schoolId) async {
     final params = {'schoolId': schoolId };
     final response = await apiService.getReq(ApiPaths.getSchoolEarnings, params: params);
+    print('get earnings: ${response.data}');
     if (response.data != null) {
       try {
-        final data = response.data!.data['response'];
-        final earnings = 
-          data.map(Earning.fromJson);
-        return ResponseSuccess(earnings as Earning);
+        final earnings = Earning.fromJson(
+          response.data!.data['response'] as Map<String, dynamic>,
+        );
+        return ResponseSuccess(earnings);
       } catch (e) {
+        print('get earnings error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }

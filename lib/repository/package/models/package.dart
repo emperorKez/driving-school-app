@@ -40,8 +40,6 @@ class SchoolPackage {
     required this.schoolId,
     required this.packageCourseSyllabus,
     required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory SchoolPackage.fromJson(Map<String, dynamic> json) => SchoolPackage(
@@ -49,7 +47,7 @@ class SchoolPackage {
         title: json['title'] as String,
         description: json['description'] as String,
         details: List<dynamic>.from(
-            json['details'].map((dynamic x) => x) as Iterable),
+            json['details'].map((dynamic x) => x) as Iterable,),
         timeDuration: json['timeDuration'] as int,
         price: json['price'] as int,
         isRecommended: json['isRecommended'] as bool,
@@ -59,8 +57,6 @@ class SchoolPackage {
               as Iterable,
         ),
         isActive: json['isActive'] as bool,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
   int id;
@@ -73,8 +69,6 @@ class SchoolPackage {
   int schoolId;
   List<PackageCourseSyllabus> packageCourseSyllabus;
   bool isActive;
-  DateTime createdAt;
-  DateTime updatedAt;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -88,8 +82,6 @@ class SchoolPackage {
         'packageCourseSyllabus':
             List<dynamic>.from(packageCourseSyllabus.map((x) => x.toJson())),
         'isActive': isActive,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
       };
 }
 

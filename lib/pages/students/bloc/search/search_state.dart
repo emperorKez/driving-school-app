@@ -7,7 +7,7 @@ sealed class SearchState {
     this.searchResult,
   });
   final String keyword;
-  final List<CustomStudent>? searchResult;
+  final SchoolStudent? searchResult;
 
   bool get isValidKeyword =>
       KeywordValidator(keyword: keyword).validateKeyword();

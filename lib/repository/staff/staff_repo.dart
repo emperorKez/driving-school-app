@@ -5,6 +5,9 @@ import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
 import 'package:korbil_mobile/repository/school_info/models/school_info.dart';
+import 'package:korbil_mobile/repository/staff/model/staff_student.dart';
+import 'package:korbil_mobile/repository/staff/model/stat.dart';
+import 'package:korbil_mobile/repository/staff/model/top_students.dart';
 
 class StaffRepo {
   final ApiService apiService = ApiService();
@@ -71,7 +74,6 @@ class StaffRepo {
     }
   }
 
-
   Future<ResponseState<List<Staff>>> getStaffBySchool(
     int schoolId,
   ) async {
@@ -90,6 +92,68 @@ class StaffRepo {
       return ResponseFailed(response.error!);
     } catch (e) {
       print('get staff by school error: $e');
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+  Future<ResponseState<StaffStat>> getStaffStat(
+    int staffId,
+  ) async {
+    final response = await apiService.getReq(ApiPaths.getStaffStats(staffId));
+    print('get staff stat response : ${response.data}');
+    try {
+      if (response.data != null) {
+        final stat = StaffStat.fromJson(
+          response.data!.data['response'] as Map<String, dynamic>,
+        );
+        return ResponseSuccess(stat);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      print('get stat error : $e');
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+  Future<ResponseState<List<TopStudent>>> getTopStudents(
+      int staffId, int limit) async {
+    final params = {'limit': limit};
+    final response = await apiService.getReq(ApiPaths.getTopStudents(staffId),
+        params: params);
+    print('get top student data: ${response.data}');
+    try {
+      if (response.data != null) {
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final topStudents = List<TopStudent>.from(
+          data.map(TopStudent.fromJson),
+        );
+        return ResponseSuccess(topStudents);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      print('get top students error: $e');
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+
+  Future<ResponseState<List<StaffStudent>>> getStaffStudents(
+    int staffId,
+  ) async {
+    final response =
+        await apiService.getReq(ApiPaths.getStaffStudents(staffId));
+    try {
+      if (response.data != null) {
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final students = List<StaffStudent>.from(
+          data.map(StaffStudent.fromJson),
+        );
+        return ResponseSuccess(students);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      print('get top students error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }

@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
@@ -43,7 +42,7 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
   final endTimeController5 = TextEditingController();
   final endTimeController6 = TextEditingController();
 
-  final selectedWeekdays = <int>[];
+  final selectedWeekdays = <int>{};
 
   final List<_DateDetails> _schedule = [
     _DateDetails(
@@ -114,7 +113,7 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
         builder: (context, state) {
           if (state is AvailabiltyInitial) {
             context.read<AvailabiltyBloc>().add(GetAvailableDates(
-                context.read<SchoolBloc>().state.schoolInfo!.id));
+                context.read<SchoolBloc>().state.schoolInfo!.id,),);
           }
           if (state is! AvailabiltyLoaded) {
             return kLoadingWidget(context);
@@ -124,77 +123,63 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
                   .availableDates![
                       state.availableDates!.indexWhere((e) => e.weekday == 0)]
                   .availableHours[0];
-              startTimeController0.text =
-                  '${sun.startTime.hour}:${sun.startTime.minute}';
-              endTimeController0.text =
-                  '${sun.endTime.hour}:${sun.endTime.minute}';
+              startTimeController0.text = sun.startTime.substring(0, 5);
+              endTimeController0.text = sun.endTime.substring(0, 5);
               selectedWeekdays.add(0);
             }
 
             if (state.availableDates!.indexWhere((e) => e.weekday == 1) >= 0) {
               final mon = state
                   .availableDates![
-                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                      state.availableDates!.indexWhere((e) => e.weekday == 1)]
                   .availableHours[0];
-              startTimeController1.text =
-                  '${mon.startTime.hour}:${mon.startTime.minute}';
-              endTimeController1.text =
-                  '${mon.endTime.hour}:${mon.endTime.minute}';
+              startTimeController1.text = mon.startTime.substring(0, 5);
+              endTimeController1.text = mon.endTime.substring(0, 5);
               selectedWeekdays.add(1);
             }
             if (state.availableDates!.indexWhere((e) => e.weekday == 2) >= 0) {
               final tue = state
                   .availableDates![
-                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                      state.availableDates!.indexWhere((e) => e.weekday == 2)]
                   .availableHours[0];
-              startTimeController2.text =
-                  '${tue.startTime.hour}:${tue.startTime.minute}';
-              endTimeController2.text =
-                  '${tue.endTime.hour}:${tue.endTime.minute}';
+              startTimeController2.text = tue.startTime.substring(0, 5);
+              endTimeController2.text = tue.endTime.substring(0, 5);
               selectedWeekdays.add(2);
             }
             if (state.availableDates!.indexWhere((e) => e.weekday == 3) >= 0) {
               final wed = state
                   .availableDates![
-                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                      state.availableDates!.indexWhere((e) => e.weekday == 3)]
                   .availableHours[0];
-              startTimeController3.text =
-                  '${wed.startTime.hour}:${wed.startTime.minute}';
-              endTimeController3.text =
-                  '${wed.endTime.hour}:${wed.endTime.minute}';
+              startTimeController3.text = wed.startTime.substring(0, 5);
+              endTimeController3.text = wed.endTime.substring(0, 5);
               selectedWeekdays.add(3);
             }
             if (state.availableDates!.indexWhere((e) => e.weekday == 4) >= 0) {
               final thu = state
                   .availableDates![
-                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                      state.availableDates!.indexWhere((e) => e.weekday == 4)]
                   .availableHours[0];
-              startTimeController4.text =
-                  '${thu.startTime.hour}:${thu.startTime.minute}';
-              endTimeController4.text =
-                  '${thu.endTime.hour}:${thu.endTime.minute}';
+              startTimeController4.text = thu.startTime.substring(0, 5);
+              endTimeController4.text = thu.endTime.substring(0, 5);
               selectedWeekdays.add(4);
             }
             if (state.availableDates!.indexWhere((e) => e.weekday == 5) >= 0) {
               final fri = state
                   .availableDates![
-                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                      state.availableDates!.indexWhere((e) => e.weekday == 5)]
                   .availableHours[0];
-              startTimeController5.text =
-                  '${fri.startTime.hour}:${fri.startTime.minute}';
-              endTimeController5.text =
-                  '${fri.endTime.hour}:${fri.endTime.minute}';
+              startTimeController5.text = fri.startTime.substring(0, 5);
+              endTimeController5.text = fri.endTime.substring(0, 5);
               selectedWeekdays.add(5);
             }
             if (state.availableDates!.indexWhere((e) => e.weekday == 6) >= 0) {
               final sat = state
                   .availableDates![
-                      state.availableDates!.indexWhere((e) => e.weekday == 0)]
+                      state.availableDates!.indexWhere((e) => e.weekday == 6)]
                   .availableHours[0];
-              startTimeController6.text =
-                  '${sat.startTime.hour}:${sat.startTime.minute}';
-              endTimeController6.text =
-                  '${sat.endTime.hour}:${sat.endTime.minute}';
+              startTimeController6.text = sat.startTime.substring(0, 5);
+              endTimeController6.text = sat.endTime.substring(0, 5);
               selectedWeekdays.add(6);
             }
 
@@ -321,6 +306,7 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
                   ),
                   PrimaryBtn(
                     ontap: () {
+                      print(selectedWeekdays);
                       if (_formKey.currentState!.validate()) {
                         final schoolId =
                             context.read<SchoolBloc>().state.schoolInfo!.id;
@@ -484,80 +470,53 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
   }
 
   Map<String, dynamic> getPayload() {
-    final availableTime = <AvailableTime>[];
+    // final availableTime = <AvailableTime>[];
 
     InputData getTime(int weekday) {
       switch (weekday) {
         case 0:
           return InputData(
-            weekday: weekday,
-            startTime: DateFormat.Hm().parse(startTimeController0.text),
-            endTime: DateFormat.Hm().parse(endTimeController0.text),
-          );
+              weekday: weekday,
+              startTime: '${startTimeController0.text}:00',
+              endTime: '${endTimeController0.text}:00',);
         case 1:
           return InputData(
-            weekday: weekday,
-            startTime: DateFormat.Hm().parse(startTimeController1.text),
-            endTime: DateFormat.Hm().parse(endTimeController1.text),
-          );
+              weekday: weekday,
+              startTime: '${startTimeController1.text}:00',
+              endTime: '${endTimeController1.text}:00',);
         case 2:
           return InputData(
-            weekday: weekday,
-            startTime: DateFormat.Hm().parse(startTimeController2.text),
-            endTime: DateFormat.Hm().parse(endTimeController2.text),
-          );
+              weekday: weekday,
+              startTime: '${startTimeController2.text}:00',
+              endTime: '${endTimeController2.text}:00',);
         case 3:
           return InputData(
-            weekday: weekday,
-            startTime: DateFormat.Hm().parse(startTimeController3.text),
-            endTime: DateFormat.Hm().parse(endTimeController3.text),
-          );
+              weekday: weekday,
+              startTime: '${startTimeController3.text}:00',
+              endTime: '${endTimeController3.text}:00',);
         case 4:
           return InputData(
-            weekday: weekday,
-            startTime: DateFormat.Hm().parse(startTimeController4.text),
-            endTime: DateFormat.Hm().parse(endTimeController4.text),
-          );
+              weekday: weekday,
+              startTime: '${startTimeController4.text}:00',
+              endTime: '${endTimeController4.text}:00',);
         case 5:
           return InputData(
-            weekday: weekday,
-            startTime: DateFormat.Hm().parse(startTimeController5.text),
-            endTime: DateFormat.Hm().parse(endTimeController5.text),
-          );
+              weekday: weekday,
+              startTime: '${startTimeController5.text}:00',
+              endTime: '${endTimeController5.text}:00',);
         case 6:
           return InputData(
-            weekday: weekday,
-            startTime: DateFormat.Hm().parse(startTimeController6.text),
-            endTime: DateFormat.Hm().parse(endTimeController6.text),
-          );
+              weekday: weekday,
+              startTime: '${startTimeController6.text}:00',
+              endTime: '${endTimeController6.text}:00',);
         default:
           return InputData(
             weekday: weekday,
-            startTime: DateFormat.Hm().parse(startTimeController0.text),
-            endTime: DateFormat.Hm().parse(endTimeController0.text),
+            startTime: '${startTimeController0.text}:00',
+            endTime: '${endTimeController0.text}:00',
           );
       }
     }
-
-    // for (final item in selectedWeekdays) {
-    //   availableTime.add(
-    //     AvailableTime(
-    //       weekday: item,
-    //       availableHours: [
-    //         AvailableHour(
-    //           startTime: Time(
-    //             hour: getTime(item).startTime.hour,
-    //             minute: getTime(item).startTime.minute,
-    //           ),
-    //           endTime: Time(
-    //             hour: getTime(item).endTime.hour,
-    //             minute: getTime(item).endTime.minute,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
 
     return {
       'availableDays': [
@@ -566,21 +525,11 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
             'weekday': item,
             'availableHours': [
               {
-                'startTime': {
-                  'hour': getTime(item).startTime.hour,
-                  'minute': getTime(item).startTime.minute,
-                  'second': 0,
-                  'nano': 0
-                },
-                'endTime': {
-                  'hour': getTime(item).endTime.hour,
-                  'minute': getTime(item).endTime.minute,
-                  'second': 0,
-                  'nano': 0
-                }
+                'startTime': getTime(item).startTime,
+                'endTime': getTime(item).endTime,
               }
-            ]
-          }
+            ],
+          },
       ],
     };
   }
@@ -666,25 +615,25 @@ class _Calendar extends StatelessWidget {
   }
 }
 
-class AvailableTime {
-  AvailableTime({
-    required this.weekday,
-    required this.availableHours,
-  });
+// class AvailableTime {
+//   AvailableTime({
+//     required this.weekday,
+//     required this.availableHours,
+//   });
 
-  int weekday;
-  List<AvailableHour> availableHours;
-}
+//   int weekday;
+//   List<AvailableHour> availableHours;
+// }
 
-class AvailableHour {
-  AvailableHour({
-    required this.startTime,
-    required this.endTime,
-  });
+// class AvailableHour {
+//   AvailableHour({
+//     required this.startTime,
+//     required this.endTime,
+//   });
 
-  Time startTime;
-  Time endTime;
-}
+//   Time startTime;
+//   Time endTime;
+// }
 
 class InputData {
   InputData({
@@ -693,8 +642,8 @@ class InputData {
     required this.endTime,
   });
   int weekday;
-  DateTime startTime;
-  DateTime endTime;
+  String startTime;
+  String endTime;
 }
 
 class _DateDetails {

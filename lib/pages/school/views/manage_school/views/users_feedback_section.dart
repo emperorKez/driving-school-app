@@ -24,7 +24,7 @@ class UsersFeedbackSection extends StatelessWidget {
       builder: (context, state) {
         if (state is ReviewInitial) {
           context.read<ReviewBloc>().add(GetReviews(
-              schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+              schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,),);
         }
         if (state is! ReviewLoaded) {
           return kLoadingWidget(context);

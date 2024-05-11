@@ -3,20 +3,20 @@ part of 'student_bloc.dart';
 
 class StudentState {
   const StudentState({
-    this.studentList,
+    this.allStudent,
     this.invitedStudents,
   });
-  final List<CustomStudent>? studentList;
+  final SchoolStudent? allStudent;
   // final List<Student>? studentList;
 
   final List<InvitedStudents>? invitedStudents;
 
   StudentState copyWith({
-    List<CustomStudent>? studentList,
+    SchoolStudent? allStudent,
     List<InvitedStudents>? invitedStudents,
   }) {
     return StudentState(
-      studentList: studentList ?? this.studentList,
+      allStudent: allStudent ?? this.allStudent,
       invitedStudents: invitedStudents ?? this.invitedStudents,
     );
   }
@@ -28,7 +28,7 @@ final class StudentLoading extends StudentState {}
 
 final class StudentLoaded extends StudentState {
   const StudentLoaded(
-      {required super.studentList, required super.invitedStudents});
+      {required super.allStudent, required super.invitedStudents});
 }
 
 final class StudentError extends StudentState {

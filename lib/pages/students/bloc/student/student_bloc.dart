@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:korbil_mobile/repository/student/models/custom_student.dart';
 import 'package:korbil_mobile/repository/student/models/invited_student.dart';
+import 'package:korbil_mobile/repository/student/models/school_student.dart';
 import 'package:korbil_mobile/repository/student/student_repo.dart';
 
 part 'student_event.dart';
@@ -31,23 +31,25 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   ) async {
     emit(StudentLoading());
     try {
-      final allStudent = <CustomStudent>[];
       final studentRes = await _studentRepo.getAllStudent(event.schoolId);
-      final invitedStudentRes = await _studentRepo.getInvitedStudents(event.schoolId);
-      if (studentRes.data != null) {
-        for (final e in studentRes.data!) {
-          final studentPackageRes = await _studentRepo.getStudentCurrentPackage(
-              e
-                  .studentData
-                  .schoolRefs[e.studentData.schoolRefs.indexWhere(
-                      (element) => element.schoolId == event.schoolId,)]
-                  .studentId,);
-          allStudent.add(CustomStudent(
-              student: e, studentPackage: studentPackageRes.data!,),);
-        }
-      }
+      final invitedStudentRes =
+          await _studentRepo.getInvitedStudents(event.schoolId);
+      // if (studentRes.data != null) {
+        // for (final e in studentRes.data!) {
+        //   final studentPackageRes =
+        //       await _studentRepo.getStudentCurrentPackage(e.profile.id);
+        //   print('student package: ${studentPackageRes.data}');
+        //   allStudent.add(
+        //     CustomStudent(
+        //       student: e,
+        //       studentPackage: studentPackageRes.data,
+        //     ),
+        //   );
+        // }
+      // }
 
-      emit(StudentLoaded(studentList: allStudent, invitedStudents: invitedStudentRes.data));
+      emit(StudentLoaded(
+          allStudent: studentRes.data, invitedStudents: invitedStudentRes.data));
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
@@ -83,8 +85,9 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     emit(StudentLoading());
     try {
       await _studentRepo.createSudent(
-          schoolId: event.schoolId, payload: event.payload,);
-      
+        schoolId: event.schoolId,
+        payload: event.payload,
+      );
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
@@ -97,7 +100,9 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     emit(StudentLoading());
     try {
       await _studentRepo.updateStudent(
-          studentId: event.studentId, payload: event.payload,);
+        studentId: event.studentId,
+        payload: event.payload,
+      );
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
@@ -122,7 +127,9 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     emit(StudentLoading());
     try {
       await _studentRepo.updateStudentAvatar(
-          studentId: event.studentId, avatar: event.avatar,);
+        studentId: event.studentId,
+        avatar: event.avatar,
+      );
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
@@ -147,11 +154,12 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     emit(StudentLoading());
     try {
       await _studentRepo.approveStudent(
-          studentId: event.studentId, schoolId: event.schoolId,);
+        studentId: event.studentId,
+        schoolId: event.schoolId,
+        packageId: event.packageId,
+      );
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }
   }
-
-
 }

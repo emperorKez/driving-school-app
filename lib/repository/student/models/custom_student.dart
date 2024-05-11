@@ -6,7 +6,7 @@ import 'package:korbil_mobile/repository/student/models/student_package.dart';
 class CustomStudent {
   CustomStudent({
     required this.student,
-    required this.studentPackage,
+    this.studentPackage,
   });
 
   factory CustomStudent.fromJson(Map<String, dynamic> json) => CustomStudent(
@@ -16,10 +16,10 @@ class CustomStudent {
       );
 
   Student student;
-  StudentPackage studentPackage;
+  StudentPackage? studentPackage;
 
   Map<String, dynamic> toJson() => {
         'student': student.toJson(),
-        'studentPackage': studentPackage.toJson(),
+        'studentPackage': studentPackage!.toJson(),
       };
 }

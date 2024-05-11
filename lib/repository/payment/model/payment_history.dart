@@ -26,12 +26,12 @@ class Payment {
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) => Payment(
-        amount: json['amount'] as int,
+        amount: json['amount'] as double,
         status: json['status'] as String,
         date: DateTime.parse(json['date'] as String),
       );
 
-  int amount;
+  double amount;
   String status;
   DateTime date;
 
@@ -51,8 +51,6 @@ class Student {
     required this.email,
     required this.userStatus,
     required this.userType,
-    required this.createdAt,
-    required this.updatedAt,
     this.avatar,
   });
 
@@ -65,8 +63,6 @@ class Student {
         avatar: json['avatar'] as String?,
         userStatus: json['userStatus'] as int,
         userType: json['userType'] as int,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
   int id;
@@ -77,8 +73,6 @@ class Student {
   String? avatar;
   int userStatus;
   int userType;
-  DateTime createdAt;
-  DateTime updatedAt;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -89,7 +83,5 @@ class Student {
         'avatar': avatar,
         'userStatus': userStatus,
         'userType': userType,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
       };
 }

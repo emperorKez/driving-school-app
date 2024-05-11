@@ -23,7 +23,7 @@ class SchoolLocationBloc
   final SchoolLocationRepo _schooLocationRepo;
 
   Future<void> onGetLocations(
-      GetLocations event, Emitter<SchoolLocationState> emit) async {
+      GetLocations event, Emitter<SchoolLocationState> emit,) async {
     emit(SchoolLocationLoading());
     try {
       final response =
@@ -35,7 +35,7 @@ class SchoolLocationBloc
   }
 
   Future<void> onAddLocation(
-      AddLocation event, Emitter<SchoolLocationState> emit) async {
+      AddLocation event, Emitter<SchoolLocationState> emit,) async {
     emit(SchoolLocationLoading());
     try {
       final res = await _schooLocationRepo.addLocation(payload: event.payload);
@@ -49,7 +49,7 @@ class SchoolLocationBloc
   }
 
   Future<void> onDeleteLocation(
-      DeleteLocation event, Emitter<SchoolLocationState> emit) async {
+      DeleteLocation event, Emitter<SchoolLocationState> emit,) async {
     emit(SchoolLocationLoading());
     try {
       await _schooLocationRepo.deleteLocation(locationId: event.locationId);
@@ -62,11 +62,11 @@ class SchoolLocationBloc
   }
 
   Future<void> onUpdateLocationStatusActive(UpdateLocationStatusActive event,
-      Emitter<SchoolLocationState> emit) async {
+      Emitter<SchoolLocationState> emit,) async {
     emit(SchoolLocationLoading());
     try {
       await _schooLocationRepo.updateLocationStatusActive(
-          locationId: event.locationId);
+          locationId: event.locationId,);
       final response =
           await _schooLocationRepo.getSchoolLocations(event.schoolId);
       emit(SchoolLocationLoaded(schoolLocations: response.data));
@@ -77,11 +77,11 @@ class SchoolLocationBloc
 
   Future<void> onUpdateLocationStatusInactive(
       UpdateLocationStatusInactive event,
-      Emitter<SchoolLocationState> emit) async {
+      Emitter<SchoolLocationState> emit,) async {
     emit(SchoolLocationLoading());
     try {
       await _schooLocationRepo.updateLocationStatusInactive(
-          locationId: event.locationId);
+          locationId: event.locationId,);
       final response =
           await _schooLocationRepo.getSchoolLocations(event.schoolId);
       emit(SchoolLocationLoaded(schoolLocations: response.data));

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 class StudentPackage {
   StudentPackage({
     required this.studentPackageId,

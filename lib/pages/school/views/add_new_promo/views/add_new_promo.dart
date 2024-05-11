@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
@@ -7,7 +8,6 @@ import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/promotion/promotion_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
-import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_promo/views/alert_content.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -88,7 +88,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                     ),
                     selectPackage(context),
                     const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
                     Text(
                       'Add an Offer',
@@ -125,10 +125,9 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              _entryField(
+                              _dateEntryField(
                                 controller: startDateController,
                                 hintText: 'Enter Date',
-                                inputType: TextInputType.datetime,
                               ),
                             ],
                           ),
@@ -152,10 +151,9 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              _entryField(
+                              _dateEntryField(
                                 controller: endDateController,
                                 hintText: 'Enter Date',
-                                inputType: TextInputType.datetime,
                               ),
                             ],
                           ),
@@ -165,24 +163,24 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                     const SizedBox(
                       height: 15,
                     ),
+                    Text(
+                      'Promotion Details',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: KorbilTheme.of(context).secondaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _entryWideField(
+                      controller: detailController,
+                      hint: 'Promotion Detail',
+                    ),
                   ],
                 ),
-              ),
-              Text(
-                'Promotion Details',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: KorbilTheme.of(context).secondaryColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              _entryWideField(
-                controller: detailController,
-                hint: 'Promotion Detail',
               ),
               const SizedBox(
                 height: 25,
@@ -202,8 +200,10 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                     width: 10,
                   ),
                   Switch(
-                    value: true,
-                    onChanged: (val) => promoteInHome = val,
+                    value: promoteInHome,
+                    onChanged: (val) => setState(() {
+                      promoteInHome = val;
+                    }),
                     activeColor: KorbilTheme.of(context).primaryColor,
                   ),
                 ],
@@ -226,7 +226,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                     width: 7,
                   ),
                   Text(
-                    r'25$ One-time',
+                    r'$25 One-time',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: KorbilTheme.of(context).secondaryColor,
@@ -274,6 +274,8 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                   Expanded(
                     child: BlocBuilder<PromotionBloc, PromotionState>(
                       builder: (context, state) {
+                        final schoolId =
+                            context.read<SchoolBloc>().state.schoolInfo!.id;
                         return state is! PromotionLoaded
                             ? kLoadingWidget(context)
                             : PrimaryBtn(
@@ -285,6 +287,7 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                   if (_formKey.currentState!.validate()) {
                                     final payloadData = <String, dynamic>{
                                       'schoolPackageId': selectedPackageId,
+                                      'schoolId': schoolId,
                                       'offer': packageTitleController.text,
                                       'startDate': startDateController.text,
                                       'endDate': endDateController.text,
@@ -293,18 +296,13 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                     };
                                     if (await _showConfirmFinishLessonAlert() ??
                                         true) {
-                                      if (!mounted) return;
+                                      if (!context.mounted) return;
                                       context.read<PromotionBloc>().add(
                                             AddPromotion(
-                                              payload: payloadData,
-                                              schoolId: context
-                                                  .read<StaffBloc>()
-                                                  .state
-                                                  .staff!
-                                                  .staffData
-                                                  .schoolId,
-                                            ),
+                                                payload: payloadData,
+                                                schoolId: schoolId),
                                           );
+                                      Navigator.pop(context);
                                     }
                                   }
                                 },
@@ -327,50 +325,55 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
   Widget selectPackage(BuildContext context) {
     return BlocBuilder<PackageBloc, PackageState>(
       builder: (context, state) {
-        final packages = state.packages;
-        final items = List.generate(
-          packages!.length,
-          (index) => {
-            'key': packages[index].schoolPackage.price,
-            'value': packages[index].schoolPackage.id,
-          },
-        );
-        return state is! SchoolLoaded
-            ? const SizedBox()
-            : Padding(
-                padding: const EdgeInsets.all(10),
-                child: ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButtonFormField<int>(
-                    value: selectedPackageId,
-                    isExpanded: true,
-                    decoration: InputDecoration(
-                      label: const Text('Select the Package'),
-                      contentPadding: EdgeInsets.zero,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    items: items.map<DropdownMenuItem<int>>((e) {
-                      return DropdownMenuItem<int>(
-                        value: e['value'],
-                        child: Text(e['key'].toString()),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedPackageId = value!;
-                      });
-                    },
-                    hint: const Text('Select the Package'),
-                    menuMaxHeight: 300,
+        if (state is! PackageLoaded) {
+          return const SizedBox();
+        } else {
+          final packages = state.packages;
+          if (selectedPackageId == 0) {
+            selectedPackageId = state.packages!.first.schoolPackage.id;
+          }
+          final items = List.generate(
+            packages!.length,
+            (index) => {
+              'key': packages[index].schoolPackage.title,
+              'value': packages[index].schoolPackage.id.toString(),
+            },
+          );
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: ButtonTheme(
+              alignedDropdown: true,
+              child: DropdownButtonFormField<String>(
+                value: selectedPackageId.toString(),
+                isExpanded: true,
+                decoration: InputDecoration(
+                  // label: const Text('Select the Package'),
+                  contentPadding: EdgeInsets.zero,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-              );
+                items: items.map<DropdownMenuItem<String>>((e) {
+                  return DropdownMenuItem<String>(
+                    value: e['value'],
+                    child: Text(e['key']!),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedPackageId = int.parse(value!);
+                  });
+                },
+                hint: const Text('Select Package'),
+                menuMaxHeight: 300,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          );
+        }
       },
     );
   }
@@ -385,9 +388,77 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
       keyboardType: inputType,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter $hintText';
+          return 'Enter $hintText';
         }
         return null;
+      },
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: KorbilTheme.of(context).secondaryColor,
+      ),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).alternate1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).primaryColor,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: KorbilTheme.of(context).warningColor,
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(
+          left: 15,
+          right: 10,
+          top: 5,
+          bottom: 5,
+        ),
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: KorbilTheme.of(context).alternate1,
+        ),
+      ),
+    );
+  }
+
+  Widget _dateEntryField({
+    required TextEditingController controller,
+    required String hintText,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Enter $hintText';
+        }
+        return null;
+      },
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode());
+        // DateTime date = DateTime.now();
+        final pickedDate = await showDatePicker(
+            context: context,
+            firstDate: DateTime.now(),
+            lastDate: DateTime(2026));
+        if (pickedDate != null) {
+          setState(() {
+            controller.text = DateFormat.yMd().format(pickedDate);
+          });
+        }
       },
       style: TextStyle(
         fontFamily: 'Poppins',

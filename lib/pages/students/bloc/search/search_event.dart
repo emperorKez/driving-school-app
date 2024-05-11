@@ -6,5 +6,5 @@ sealed class SearchEvent {}
 class KeywordChanged extends SearchEvent {
   KeywordChanged({required this.students, this.keyword = ''});
   final String keyword;
-  final List<CustomStudent> students;
+  final SchoolStudent students;
 }

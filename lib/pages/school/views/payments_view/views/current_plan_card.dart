@@ -15,31 +15,40 @@ class CurrentPlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SubscriptionBloc, SubscriptionState>(
-      listener: (context, state) { 
-        if (state is SubscriptionError){
+      listener: (context, state) {
+        if (state is SubscriptionError) {
           errorSnackbar(context, error: state.error);
         }
-       },
+      },
       builder: (context, state) {
-        return state is! SubscriptionLoaded ? kLoadingWidget(context):
-         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          decoration: BoxDecoration(
-            color: KorbilTheme.of(context).primaryColor.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: KorbilTheme.of(context).primaryColor),
-          ),
-          child: Text(
-            state.subscriptionLevels![state.subscriptionLevels!.indexWhere((e) => e.id == subscriptionLevel)].name,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: KorbilTheme.of(context).secondaryColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        );
-      }, 
+        if (state is SubscriptionInitial) {
+          context.read<SubscriptionBloc>().add(GetAllSubscriptionLevels());
+        }
+        return state is! SubscriptionLoaded
+            ? kLoadingWidget(context)
+            : Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: BoxDecoration(
+                  color: KorbilTheme.of(context).primaryColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(6),
+                  border:
+                      Border.all(color: KorbilTheme.of(context).primaryColor),
+                ),
+                child: Text(
+                  state
+                      .subscriptionLevels![state.subscriptionLevels!
+                          .indexWhere((e) => e.id == subscriptionLevel)]
+                      .name,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: KorbilTheme.of(context).secondaryColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
+      },
     );
   }
 }

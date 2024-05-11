@@ -35,7 +35,7 @@ class ApiService {
       log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
-      print('dio error: $e');
+      print('$path get req dio error: $e'); 
       throw Exception((e.response?.statusCode, e.response?.data));
       // final errMsg = e.response?.data['response'] as String;
       // return DataFailed(DataError(e.response?.statusCode, e.response?.data));
@@ -56,9 +56,6 @@ class ApiService {
         dio.options.headers['authorization'] = 'Bearer ${token.encode()}';
       }
       print(dio.options.headers);
-      print('current context: ${rootNavKey.currentContext}');
-
-      print('token: $token');
       log(path);
       print('payload: $payload');
       final response = await dio.post<dynamic>(
@@ -69,7 +66,7 @@ class ApiService {
       log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
-      print('post request exception: $e');
+      print('$path post request exception: $e');
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
     } catch (e) {
       return DataFailed(DataError(null, e));
@@ -78,7 +75,7 @@ class ApiService {
 
   Future<DataState<Response<dynamic>?>> putReq(
     String path, {
-    Map<String, dynamic>? payload,
+    dynamic payload,
     Map<String, dynamic>? params,
   }) async {
     final token = rootNavKey.currentContext!.read<AuthBloc>().state.token;
@@ -87,7 +84,10 @@ class ApiService {
       if (token != null) {
         dio.options.headers['authorization'] = 'Bearer ${token.encode()}';
       }
+
+      print(dio.options.headers);
       log(path);
+      print(payload);
       final response = await dio.put<dynamic>(
         '$baseUrl/$path',
         data: payload,
@@ -96,6 +96,7 @@ class ApiService {
       log('$baseUrl/$path - statusCode: ${response.statusCode} - message: ${response.statusMessage}');
       return DataSuccess(response);
     } on DioException catch (e) {
+      print('put request exception: $e');
       return DataFailed(DataError(e.response?.statusCode, e.response?.data));
     } catch (e) {
       return DataFailed(DataError(null, e));

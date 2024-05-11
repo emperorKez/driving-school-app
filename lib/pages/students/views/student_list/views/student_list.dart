@@ -13,6 +13,7 @@ import 'package:korbil_mobile/pages/students/views/student_list/views/approve_us
 import 'package:korbil_mobile/pages/students/views/student_list/views/invited_student_list.dart';
 import 'package:korbil_mobile/pages/students/views/student_list/views/my_student_list.dart';
 import 'package:korbil_mobile/repository/student/models/student.dart';
+import 'package:korbil_mobile/repository/student/models/student_package.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstStudentListView extends StatefulWidget {
@@ -28,7 +29,8 @@ class _InstStudentListViewState extends State<InstStudentListView> {
 
   String _selectedType = 'All';
 
-  Future<void> _showApproveUserAlert(Student student) {
+  Future<void> _showApproveUserAlert(
+      {required Student student, required StudentPackage studentPackage}) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -36,6 +38,7 @@ class _InstStudentListViewState extends State<InstStudentListView> {
           // title: Text('Dialog Title'),
           content: ApproveUserAlertContent(
             student: student,
+            studentPackage: studentPackage,
           ),
         );
       },
@@ -46,9 +49,13 @@ class _InstStudentListViewState extends State<InstStudentListView> {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return const AlertDialog(
+        return AlertDialog(
+          backgroundColor: Colors.white,
           // title: Text('Dialog Title'),
-          content: AddNewUserlertContent(),
+          contentPadding: const EdgeInsets.all(10),
+          content: const AddNewUserlertContent(),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         );
       },
     );
@@ -132,7 +139,7 @@ class _InstStudentListViewState extends State<InstStudentListView> {
                             context.read<SearchBloc>().add(
                                   KeywordChanged(
                                     keyword: value,
-                                    students: state.studentList!,
+                                    students: state.allStudent!,
                                   ),
                                 );
                           },
@@ -288,34 +295,38 @@ class _InstStudentListViewState extends State<InstStudentListView> {
         if (state is SearchLoading) {
           return kLoadingWidget(context);
         } else if (state is SearchLoaded) {
-          return Container(
-            margin: const EdgeInsets.symmetric(vertical: 20),
-            child: state.searchResult!.isEmpty
-                ? const Center(
-                    child: Text('No Student Found!'),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: state.searchResult!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        leading: Image.network(
-                          state.searchResult![index].student.profile.avatar,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                                'assets/imgs/ins/lessons/avatar3.png');
-                          },
-                        ),
-                        title: Text(
-                          '${state.searchResult![index].student.profile.firstName} ${state.searchResult![index].student.profile.lastName}',
-                        ),
-                        subtitle: Text(
-                          state.searchResult![index].student.profile.email,
-                        ),
-                      );
-                    },
-                  ),
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: state.searchResult!.pendingApproval.isEmpty
+                    ? const SizedBox()
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                            state.searchResult!.pendingApproval.length,
+                            (index) => ListTile(
+                                  leading: Image.network(
+                                    state.searchResult!.pendingApproval[index]
+                                        .avatar,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.asset(
+                                        'assets/imgs/ins/lessons/avatar3.png',
+                                      );
+                                    },
+                                  ),
+                                  title: Text(
+                                    '${state.searchResult!.pendingApproval[index].firstName} ${state.searchResult!.pendingApproval[index].lastName}',
+                                  ),
+                                  subtitle: Text(
+                                    state.searchResult!.pendingApproval[index]
+                                        .packageName,
+                                  ),
+                                )),
+                      ),
+              ),
+            ],
           );
         } else {
           return const SizedBox();

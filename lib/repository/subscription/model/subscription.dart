@@ -16,7 +16,7 @@ class Subscription {
         price: json['price'] as int,
         subscriptionLevelItems: List<SubscriptionLevelItem>.from(
             json['subscriptionLevelItems'].map(SubscriptionLevelItem.fromJson)
-                as Iterable,),
+                as Iterable),
       );
 
   int id;
@@ -37,25 +37,25 @@ class Subscription {
 
 class SubscriptionLevelItem {
   SubscriptionLevelItem({
-    required this.levelId,
-    required this.itemId,
+    required this.subscriptionLevel,
+    required this.subscriptionItem,
     required this.itemValue,
   });
 
   factory SubscriptionLevelItem.fromJson(Map<String, dynamic> json) =>
       SubscriptionLevelItem(
-        levelId: json['levelId'] as int,
-        itemId: json['itemId'] as int,
+        subscriptionLevel: json['subscriptionLevel'] as int,
+        subscriptionItem: json['subscriptionItem'] as int,
         itemValue: json['itemValue'] as String,
       );
 
-  int levelId;
-  int itemId;
+  int subscriptionLevel;
+  int subscriptionItem;
   String itemValue;
 
   Map<String, dynamic> toJson() => {
-        'levelId': levelId,
-        'itemId': itemId,
+        'subscriptionLevel': subscriptionLevel,
+        'subscriptionItem': subscriptionItem,
         'itemValue': itemValue,
       };
 }

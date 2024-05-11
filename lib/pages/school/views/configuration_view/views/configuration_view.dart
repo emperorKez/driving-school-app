@@ -20,15 +20,12 @@ class ConfigurationView extends StatefulWidget {
 }
 
 class _ConfigurationViewState extends State<ConfigurationView> {
-  final List<int> selectedLanguageIds = [];
-  int selectedInstructorType = 0;
-  int selectedScheduleFlow = 0;
+  List<int> selectedLanguages = [1];
+  int selectedInstructorType = 1;
+  int selectedScheduleFlow = 1;
 
   @override
   void initState() {
-    selectedLanguageIds.addAll(
-      context.read<SchoolBloc>().state.schoolInfo!.languages,
-    );
     super.initState();
   }
 
@@ -60,14 +57,20 @@ class _ConfigurationViewState extends State<ConfigurationView> {
             errorSnackbar(context, error: state.error);
           }
         },
-        child: _renderMobileBody(context),
+        child: BlocBuilder<MetadataCubit, MetadataState>(
+          builder: (context, state) {
+            return state is! MetadataLoaded
+                ? kLoadingWidget(context)
+                : _renderMobileBody(context, state);
+          },
+        ),
       ),
     );
   }
 
-  Widget _renderMobileBody(BuildContext context) {
-    final availableLanguages =
-        context.read<MetadataCubit>().state.languages ?? [];
+  Widget _renderMobileBody(BuildContext context, MetadataState state) {
+    // final availableLanguages =
+    //     context.read<MetadataCubit>().state.languages ?? [];
 
     return ListView(
       shrinkWrap: true,
@@ -89,7 +92,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
           height: 10,
         ),
         _selectScheduleflow(
-          context.read<MetadataCubit>().state.scheduleFlows ?? [],
+          state.scheduleFlows!,
         ),
         const SizedBox(
           height: 15,
@@ -107,7 +110,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
           height: 10,
         ),
         _instructorSelection(
-          context.read<MetadataCubit>().state.instructorTypes ?? [],
+          state.instructorTypes!,
         ),
         const SizedBox(
           height: 15,
@@ -124,14 +127,14 @@ class _ConfigurationViewState extends State<ConfigurationView> {
         const SizedBox(
           height: 10,
         ),
-        _languageSelection(availableLanguages),
+        _languageSelection(state.languages!),
         const SizedBox(
           height: 10,
         ),
-        for (final element in selectedLanguageIds)
+        for (final element in selectedLanguages)
           _selectedLangCard(
-            language: availableLanguages[
-                availableLanguages.indexWhere((e) => e.id == element)],
+            language: state.languages![
+                state.languages!.indexWhere((e) => e.id == element)],
           ),
         const SizedBox(
           height: 60,
@@ -179,7 +182,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
                               'scheduleFlowId': selectedScheduleFlow,
                               'instructorSelectionId': selectedInstructorType,
                               'languageIds': [
-                                for (final element in selectedLanguageIds)
+                                for (final element in selectedLanguages)
                                   element,
                               ],
                             };
@@ -226,6 +229,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
       child: DropdownButton<dynamic>(
         isExpanded: true,
         underline: Container(),
+        value: selectedScheduleFlow,
         iconSize: 25,
         hint: Text(
           'Select the Schedule flow',
@@ -267,6 +271,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
       child: DropdownButton<dynamic>(
         isExpanded: true,
         underline: Container(),
+        value: selectedLanguages.last,
         iconSize: 25,
         hint: Text(
           'Add languages',
@@ -287,7 +292,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
         }).toList(),
         onChanged: (val) {
           setState(() {
-            selectedLanguageIds.add(val as int);
+            selectedLanguages.add(val as int);
           });
         },
       ),
@@ -308,6 +313,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
       child: DropdownButton<dynamic>(
         isExpanded: true,
         underline: Container(),
+        value: selectedInstructorType,
         iconSize: 25,
         hint: Text(
           'Select the Instructor selection',
@@ -358,7 +364,7 @@ class _ConfigurationViewState extends State<ConfigurationView> {
           GestureDetector(
             onTap: () {
               setState(() {
-                selectedLanguageIds.remove(language.id);
+                selectedLanguages.remove(language.id);
               });
             },
             child: Image.asset(

@@ -57,7 +57,7 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
         builder: (context, state) {
           if (state is SchoolLocationInitial) {
             context.read<SchoolLocationBloc>().add(GetLocations(
-                schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+                schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,),);
           }
           return _renderAddNewLocationMobileBody();
         },
@@ -288,7 +288,7 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
                   children: List.generate(
                       state.schoolLocations!.length,
                       (index) => _buildPredefinedLocation(
-                          state.schoolLocations![index])),
+                          state.schoolLocations![index],),),
                 );
               }
             },
@@ -386,10 +386,10 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
             val!
                 ? context.read<SchoolLocationBloc>().add(
                     UpdateLocationStatusActive(
-                        locationId: location.id, schoolId: schoolId))
+                        locationId: location.id, schoolId: schoolId,),)
                 : context.read<SchoolLocationBloc>().add(
                     UpdateLocationStatusInactive(
-                        locationId: location.id, schoolId: schoolId));
+                        locationId: location.id, schoolId: schoolId,),);
           },
           activeColor: KorbilTheme.of(context).primaryColor,
           checkColor: Colors.white,
@@ -401,16 +401,16 @@ class _ManagePickupLocationViewState extends State<ManagePickupLocationView> {
               fontSize: 12,
               fontWeight: FontWeight.w400,
               color: AppColors.black,
-              overflow: TextOverflow.ellipsis),
+              overflow: TextOverflow.ellipsis,),
         ),
         const Spacer(),
         IconButton(
             onPressed: () => context.read<SchoolLocationBloc>().add(
-                DeleteLocation(locationId: location.id, schoolId: schoolId)),
+                DeleteLocation(locationId: location.id, schoolId: schoolId),),
             icon: const Icon(
               Icons.delete_outlined,
               color: AppColors.black,
-            )),
+            ),),
       ],
     );
   }

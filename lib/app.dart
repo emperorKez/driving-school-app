@@ -102,8 +102,7 @@ class _AppState extends State<App> {
           create: (context) => StudentBloc(),
         ),
         BlocProvider(
-          create: (context) => PaymentBloc()..add(GetDeposithandlers()),
-          lazy: false,
+          create: (context) => PaymentBloc()
         ),
         BlocProvider(
           create: (context) => LessonBloc(),
@@ -112,11 +111,11 @@ class _AppState extends State<App> {
         BlocProvider(create: (context) => SearchBloc()),
         BlocProvider(
           create: (context) =>
-              SubscriptionBloc()
+              SubscriptionBloc(),
           //     ..add(GetAllSubscriptionLevels()),
           // lazy: false,
         ),
-        BlocProvider(create: (context) => AvailabiltyBloc())
+        BlocProvider(create: (context) => AvailabiltyBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -134,7 +133,8 @@ class _AppState extends State<App> {
         theme: ThemeData(brightness: Brightness.light),
         themeMode: _themeMode,
         navigatorKey: rootNavKey,
-        initialRoute: AppRouter.getStarted,
+        initialRoute: AppRouter.appInit,
+        // initialRoute: AppRouter.getStarted,
         // home: const ManageSchoolView(),
         onGenerateRoute: AppRouter.onGenerateRoute,
       ),

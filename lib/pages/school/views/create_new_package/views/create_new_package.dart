@@ -368,7 +368,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
                                   'title': titleController.text,
                                   'description': descriptionController.text,
                                   'details': [
-                                    {'name': detailController.text}
+                                    {'name': detailController.text},
                                   ],
                                   'timeDuration':
                                       int.parse(durationController.text),

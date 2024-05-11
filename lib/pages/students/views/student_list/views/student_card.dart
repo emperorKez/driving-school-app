@@ -4,33 +4,37 @@ import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
-import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/pages/students/views/student_profile_approved/views/student_profile_approved.dart';
 import 'package:korbil_mobile/pages/students/views/student_profile_unapproved/views/student_profile_unapproved.dart';
 
-import 'package:korbil_mobile/repository/student/models/custom_student.dart';
+import 'package:korbil_mobile/repository/student/models/school_student.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class StudentCard extends StatelessWidget {
   const StudentCard({
-    required this.student,
+    this.currentStudent,
+    this.pendingStudents,
+    // required this.student,
+    // required this.isApproved,
     super.key,
   });
-  final CustomStudent student;
+  // final SchoolStudent student;
+  final PendingApproval? pendingStudents;
+  final CurrentStudent? currentStudent;
+  // final bool isApproved;
 
   @override
   Widget build(BuildContext context) {
-    final isApproved = student.student.profile.userStatus ==
-        1; //todo check is status 1 means approved
     return GestureDetector(
       onTap: () {
-        if (isApproved) {
+        if (currentStudent != null) {
           Navigator.push(
             context,
             MaterialPageRoute<dynamic>(
               builder: (cxt) => StudentProfileApproved(
-                student: student,
+                student: currentStudent!,
               ),
             ),
           );
@@ -39,7 +43,7 @@ class StudentCard extends StatelessWidget {
             context,
             MaterialPageRoute<dynamic>(
               builder: (cxt) => StudentProfileUnApproved(
-                student: student.student,
+                student: pendingStudents!,
               ),
             ),
           );
@@ -76,7 +80,7 @@ class StudentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${student.student.profile.firstName} ${student.student.profile.firstName}',
+                    '${pendingStudents?.firstName ?? currentStudent!.firstName} ${pendingStudents?.lastName ?? currentStudent!.lastName}',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: KorbilTheme.of(context).secondaryColor,
@@ -99,6 +103,9 @@ class StudentCard extends StatelessWidget {
                       ),
                       BlocBuilder<PackageBloc, PackageState>(
                         builder: (context, state) {
+                          final studentPackageId =
+                              pendingStudents?.studentPackageId ??
+                                  currentStudent!.packageIds[0];
                           return state is! PackageLoaded
                               ? kLoadingWidget(context)
                               : Text(
@@ -106,8 +113,7 @@ class StudentCard extends StatelessWidget {
                                       .packages![state.packages!.indexWhere(
                                           (e) =>
                                               e.schoolPackage.id ==
-                                              student.studentPackage
-                                                  .schoolPackageId,)]
+                                              studentPackageId)]
                                       .schoolPackage
                                       .title,
                                   style: TextStyle(
@@ -115,7 +121,7 @@ class StudentCard extends StatelessWidget {
                                     color:
                                         KorbilTheme.of(context).secondaryColor,
                                     fontSize: 12,
-                                    fontWeight: isApproved
+                                    fontWeight: currentStudent != null
                                         ? FontWeight.w400
                                         : FontWeight.w600,
                                   ),
@@ -127,7 +133,7 @@ class StudentCard extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
-                  if (!isApproved)
+                  if (pendingStudents != null)
                     const SizedBox()
                   else
                     Row(
@@ -152,32 +158,35 @@ class StudentCard extends StatelessWidget {
                         const SizedBox(
                           width: 3,
                         ),
-                        if (student.studentPackage.pastLessons.isEmpty)
-                          Text(
-                            'None',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: KorbilTheme.of(context).secondaryColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          )
-                        else
-                          Text(
-                            '${student.studentPackage.pastLessons.length}',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: KorbilTheme.of(context).secondaryColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        // if (student.studentPackage == null ||
+                        //     student.studentPackage!.pastLessons.isEmpty)
+                        Text(
+                          'None',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: KorbilTheme.of(context).secondaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
                           ),
+                        )
+                        // else
+                        //   Text(
+                        //     student.studentPackage == null
+                        //         ? ''
+                        //         : '${student.studentPackage!.pastLessons.length}',
+                        //     style: TextStyle(
+                        //       fontFamily: 'Poppins',
+                        //       color: KorbilTheme.of(context).secondaryColor,
+                        //       fontSize: 12,
+                        //       fontWeight: FontWeight.w600,
+                        //     ),
+                        //   ),
                       ],
                     ),
                 ],
               ),
             ),
-            if (isApproved)
+            if (currentStudent != null)
               Text(
                 'Approved',
                 style: TextStyle(
@@ -197,14 +206,14 @@ class StudentCard extends StatelessWidget {
                 phm: 12,
                 pvm: 10,
                 ontap: () {
-                  context.read<StudentBloc>().add(ApproveStudent(
-                      schoolId: context
-                          .read<StaffBloc>()
-                          .state
-                          .staff!
-                          .staffData
-                          .schoolId,
-                      studentId: student.student.profile.id,),);
+                  context.read<StudentBloc>().add(
+                        ApproveStudent(
+                          schoolId:
+                              context.read<SchoolBloc>().state.schoolInfo!.id,
+                          studentId: pendingStudents!.id,
+                          packageId: pendingStudents!.studentPackageId,
+                        ),
+                      );
                 },
               ),
           ],

@@ -31,8 +31,6 @@ class Profile {
     required this.avatar,
     required this.userStatus,
     required this.userType,
-    this.createdAt,
-    this.updatedAt,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
@@ -44,12 +42,6 @@ class Profile {
         avatar: json['avatar'] as String,
         userStatus: json['userStatus'] as int,
         userType: json['userType'] as int,
-        createdAt: json['createdAt'] == null
-            ? null
-            : DateTime.parse(json['createdAt'] as String),
-        updatedAt: json['updatedAt'] == null
-            ? null
-            : DateTime.parse(json['updatedAt'] as String),
       );
 
   int id;
@@ -60,8 +52,6 @@ class Profile {
   String avatar;
   int userStatus;
   int userType;
-  DateTime? createdAt;
-  DateTime? updatedAt;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -72,8 +62,6 @@ class Profile {
         'avatar': avatar,
         'userStatus': userStatus,
         'userType': userType,
-        'createdAt': createdAt?.toIso8601String(),
-        'updatedAt': updatedAt?.toIso8601String(),
       };
 }
 
@@ -81,7 +69,6 @@ class StudentData {
   StudentData({
     required this.city,
     required this.postcode,
-    required this.schoolRefs,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -89,55 +76,51 @@ class StudentData {
   factory StudentData.fromJson(Map<String, dynamic> json) => StudentData(
         city: json['city'] as String,
         postcode: json['postcode'] as String,
-        schoolRefs: List<SchoolRef>.from(
-            json['schoolRefs'].map(SchoolRef.fromJson) as Iterable,),
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
   String city;
   String postcode;
-  List<SchoolRef> schoolRefs;
   DateTime createdAt;
   DateTime updatedAt;
 
   Map<String, dynamic> toJson() => {
         'city': city,
         'postcode': postcode,
-        'schoolRefs': List<dynamic>.from(schoolRefs.map((x) => x.toJson())),
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
       };
 }
 
-class SchoolRef {
-  SchoolRef({
-    required this.studentId,
-    required this.schoolId,
-    required this.totalHrs,
-    required this.totalKms,
-    required this.updatedAt,
-  });
+// class SchoolRef {
+//   SchoolRef({
+//     required this.studentId,
+//     required this.schoolId,
+//     required this.totalHrs,
+//     required this.totalKms,
+//     required this.updatedAt,
+//   });
 
-  factory SchoolRef.fromJson(Map<String, dynamic> json) => SchoolRef(
-        studentId: json['studentId'] as int,
-        schoolId: json['schoolId'] as int,
-        totalHrs: json['totalHrs'] as int,
-        totalKms: json['totalKms'] as int,
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
-      );
+//   factory SchoolRef.fromJson(Map<String, dynamic> json) => SchoolRef(
+//         studentId: json['studentId'] as int,
+//         schoolId: json['schoolId'] as int,
+//         totalHrs: json['totalHrs'] as int,
+//         totalKms: json['totalKms'] as int,
+//         updatedAt: DateTime.parse(json['updatedAt'] as String),
+//       );
 
-  int studentId;
-  int schoolId;
-  int totalHrs;
-  int totalKms;
-  DateTime updatedAt;
+//   int studentId;
+//   int schoolId;
+//   int totalHrs;
+//   int totalKms;
+//   DateTime updatedAt;
 
-  Map<String, dynamic> toJson() => {
-        'studentId': studentId,
-        'schoolId': schoolId,
-        'totalHrs': totalHrs,
-        'totalKms': totalKms,
-        'updatedAt': updatedAt.toIso8601String(),
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         'studentId': studentId,
+//         'schoolId': schoolId,
+//         'totalHrs': totalHrs,
+//         'totalKms': totalKms,
+//         'updatedAt': updatedAt.toIso8601String(),
+//       };
+// }

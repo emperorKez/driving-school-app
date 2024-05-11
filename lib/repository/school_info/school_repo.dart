@@ -6,6 +6,7 @@ import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
 import 'package:korbil_mobile/repository/api_service/models/res_state.dart';
 import 'package:korbil_mobile/repository/school_info/models/driving_school.dart'
     as driving;
+import 'package:korbil_mobile/repository/school_info/models/invited_student.dart';
 import 'package:korbil_mobile/repository/school_info/models/school_info.dart';
 
 class SchoolRepo {
@@ -111,7 +112,7 @@ class SchoolRepo {
   ) async {
     final response =
         await apiService.postReq(ApiPaths.createNewSchool, payload: payload);
-        print('this is school creation response: ${response.data}');
+    print('this is school creation response: ${response.data}');
     if (response.data != null) {
       try {
         final school = SchoolInfo.fromJson(
@@ -157,14 +158,20 @@ class SchoolRepo {
     }
   }
 
-  Future<ResponseState<dynamic>> getInvitedStudents({
+  Future<ResponseState<List<InvitedStudent>>> getInvitedStudents({
     required int schoolId,
   }) async {
     try {
-      final response = await apiService
-          .getReq(ApiPaths.getInvitedStudents(schoolId));
+      final response =
+          await apiService.getReq(ApiPaths.getInvitedStudents(schoolId));
+          print('get invited students response: ${response.data}');
       if (response.data != null) {
-        return ResponseSuccess(response.data!.data['response']);
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final students = List<InvitedStudent>.from(
+          data.map(InvitedStudent.fromJson),
+        );
+        return ResponseSuccess(students);
       }
       return ResponseFailed(response.error!);
     } catch (e) {
@@ -172,20 +179,40 @@ class SchoolRepo {
       return ResponseFailed(DataError(null, e));
     }
   }
-  
+
   Future<ResponseState<dynamic>> inviteStudent({
     required int schoolId,
     required String email,
   }) async {
     final params = {'email': email};
     try {
-      final response = await apiService
-          .putReq(ApiPaths.inviteStudent(schoolId), params: params);
+      final response = await apiService.putReq(ApiPaths.inviteStudent(schoolId),
+          params: params,);
+          print('invite student response: ${response.data}');
       if (response.data != null) {
         return ResponseSuccess(response.data!.data['response']);
       }
       return ResponseFailed(response.error!);
     } catch (e) {
+      print('invite student error: $e');
+      return ResponseFailed(DataError(null, e));
+    }
+  }
+  Future<ResponseState<dynamic>> removeInvitedStudent({
+    required int schoolId,
+    required String email,
+  }) async {
+    final params = {'email': email};
+    try {
+      final response = await apiService.putReq(ApiPaths.removeInvitedStudent(schoolId),
+          params: params,);
+          print('invite student response: ${response.data}');
+      if (response.data != null) {
+        return ResponseSuccess(response.data!.data['response']);
+      }
+      return ResponseFailed(response.error!);
+    } catch (e) {
+      print('invite student error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }
@@ -224,14 +251,14 @@ class SchoolRepo {
     }
   }
 
-
   Future<ResponseState<SchoolInfo>> publishSchool({
-    required int schoolId, 
+    required int schoolId,
   }) async {
     try {
       final response = await apiService.putReq(
         ApiPaths.publishSchool(schoolId),
       );
+      print('publish school data: ${response.data}');
       if (response.data != null) {
         final schoolInfo = SchoolInfo.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
@@ -240,6 +267,7 @@ class SchoolRepo {
       }
       return ResponseFailed(response.error!);
     } catch (e) {
+      print('pubish school error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }

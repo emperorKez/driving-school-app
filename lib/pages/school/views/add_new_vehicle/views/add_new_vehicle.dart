@@ -60,7 +60,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
         builder: (context, state) {
           if (state is VehicleInitial) {
             context.read<VehicleBloc>().add(GetVehicles(
-                schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+                schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,),);
           }
           if (state is! VehicleLoaded) {
             return kLoadingWidget(context);
@@ -113,7 +113,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                     height: 10,
                   ),
                   _entryField(
-                      hintText: 'Vehicle Name', controller: nameController),
+                      hintText: 'Vehicle Name', controller: nameController,),
                   const SizedBox(
                     height: 15,
                   ),
@@ -184,7 +184,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                     controller: descriptionController,
                   ),
                 ],
-              )),
+              ),),
           const SizedBox(
             height: 15,
           ),
@@ -262,7 +262,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                               if (_formKey.currentState!.validate()) {
                                 if (imageFiles.isEmpty) {
                                   errorSnackbar(context,
-                                      error: 'Add vehicle Images');
+                                      error: 'Add vehicle Images',);
                                 } else {
                                   context.read<VehicleBloc>().add(
                                         AddVehicle(
@@ -636,7 +636,7 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                 fit: BoxFit.cover,
                                 onError: (exception, stackTrace) {
                                   const AssetImage(
-                                      'assets/imgs/ins/school/car.png');
+                                      'assets/imgs/ins/school/car.png',);
                                 },
                               ),
                             ),

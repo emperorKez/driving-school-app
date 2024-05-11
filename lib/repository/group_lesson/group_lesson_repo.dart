@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:korbil_mobile/repository/api_service/api_service.dart';
 import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
@@ -13,6 +15,7 @@ class GroupLessonRepo {
     try {
       final response =
           await apiService.getReq(ApiPaths.getGroupLessons, params: params);
+          print('get group lessons response: ${response.data}');
       if (response.data != null) {
         final jsonList = response.data!.data['response'];
         final data = (jsonList as List).cast<Map<String, dynamic>>();
@@ -23,6 +26,7 @@ class GroupLessonRepo {
       }
       return ResponseFailed(response.error!);
     } catch (e) {
+      print('get group lessons error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }
@@ -33,6 +37,7 @@ class GroupLessonRepo {
     try {
       final response =
           await apiService.postReq(ApiPaths.addGroupLesson, payload: payload);
+          print('add group lessons response: ${response.data}');
       if (response.data != null) {
         final data = response.data!.data['response'];
         final groupLesson = data.map(GroupLesson.fromJson) as GroupLesson;
@@ -40,6 +45,7 @@ class GroupLessonRepo {
       }
       return ResponseFailed(response.error!);
     } catch (e) {
+      print('add group lessons error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }
@@ -88,11 +94,13 @@ class GroupLessonRepo {
         ApiPaths.addStudentToGroupLesson(groupLessonId),
         params: params,
       );
+      print('add student to group lessons response: ${response.data}');
       if (response.data != null) {
         return ResponseSuccess(response.data!.data['response']);
       }
       return ResponseFailed(response.error!);
     } catch (e) {
+      print('add student to group lessons error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }

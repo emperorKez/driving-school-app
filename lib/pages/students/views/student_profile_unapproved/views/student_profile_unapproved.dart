@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/profile_cubit/profile_cubit.dart';
 import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/pages/students/views/profile_package_history/views/profile_package_history.dart';
-import 'package:korbil_mobile/repository/student/models/student.dart';
+import 'package:korbil_mobile/repository/student/models/school_student.dart';
 
 class StudentProfileUnApproved extends StatefulWidget {
   const StudentProfileUnApproved({required this.student, super.key});
-  final Student student;
+  final PendingApproval student;
 
   @override
   State<StudentProfileUnApproved> createState() =>
@@ -39,7 +41,9 @@ class _StudentProfileUnApprovedState extends State<StudentProfileUnApproved> {
       builder: (BuildContext context) {
         return AlertDialog(
           // title: Text('Dialog Title'),
-          content: _ApproveUserAlertContent(widget.student),
+          content: _ApproveUserAlertContent(
+            widget.student,
+          ),
         );
       },
     );
@@ -76,8 +80,8 @@ class _StudentProfileUnApprovedState extends State<StudentProfileUnApproved> {
           const SizedBox(
             height: 30,
           ),
-           _ProfileDetails(widget.student),
-           _PaymentDetailsCard(widget.student),
+          _ProfileDetails(widget.student.id),
+          _PaymentDetailsCard(widget.student),
           const SizedBox(
             height: 20,
           ),
@@ -118,8 +122,10 @@ class _StudentProfileUnApprovedState extends State<StudentProfileUnApproved> {
 }
 
 class _ApproveUserAlertContent extends StatelessWidget {
-  const _ApproveUserAlertContent(this.student);
-  final Student student;
+  const _ApproveUserAlertContent(
+    this.student,
+  );
+  final PendingApproval student;
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +166,7 @@ class _ApproveUserAlertContent extends StatelessWidget {
             height: 8,
           ),
           Text(
-            '“${student.profile.firstName} ${student.profile.lastName}',
+            '“${student.firstName} ${student.lastName}',
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontFamily: 'Poppins',
@@ -195,8 +201,13 @@ class _ApproveUserAlertContent extends StatelessWidget {
                 child: PrimaryBtn(
                   text: 'Yes, Approve',
                   ontap: () {
-                    context.read<StudentBloc>().add(ApproveStudent(
-                        schoolId: schoolId, studentId: student.profile.id,),);
+                    context.read<StudentBloc>().add(
+                          ApproveStudent(
+                            schoolId: schoolId,
+                            studentId: student.id,
+                            packageId: student.studentPackageId,
+                          ),
+                        );
                     Navigator.pop(context);
                     // Navigator.push(
                     //   context,
@@ -341,7 +352,7 @@ class _DeclineAlertContent extends StatelessWidget {
 
 class _PaymentDetailsCard extends StatelessWidget {
   const _PaymentDetailsCard(this.student);
-  final Student student;
+  final PendingApproval student;
 
   @override
   Widget build(BuildContext context) {
@@ -351,192 +362,216 @@ class _PaymentDetailsCard extends StatelessWidget {
     //     .packages![context.read<PackageBloc>().state.packages!.indexWhere((e) =>
     //         student.studentData. .schoolPackageRefs!
     //             .contains(e.schoolPackage.id))].schoolPackage;
-    final package = context
-        .read<PackageBloc>()
-        .state
-        .packages![0].schoolPackage;
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 30),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.green),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 15,
-              horizontal: 12,
+
+    // final package =
+    //     context.read<PackageBloc>().state.packages![0].schoolPackage;
+    return BlocBuilder<PackageBloc, PackageState>(
+      builder: (context, state) {
+        if (state is! PackageLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          final package = state
+              .packages![state.packages!.indexWhere(
+                  (e) => e.schoolPackage.id == student.studentPackageId)]
+              .schoolPackage;
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 30),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.green),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Column(
               children: [
-                 Text(
-                  package.title,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 12,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        package.title,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: Text(
+                          '€ ${package.price}',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: AppColors.green,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Payment Date: ',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: AppColors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            DateFormat.yMMMMd().format(DateTime.now()),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              color: AppColors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Completed? : ',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: AppColors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            '${package.isActive}',
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              color: AppColors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 7,
+                          ),
+                          Image.asset(
+                            'assets/imgs/ins/profile/verified_tick.png',
+                            width: 18,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
-                  child:  Text(
-                    '€ ${package.price}',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: AppColors.green,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                  margin: const EdgeInsets.only(top: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: const BoxDecoration(
+                    color: AppColors.green,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(6),
+                      bottomRight: Radius.circular(6),
                     ),
                   ),
-                ),
-                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                   const Text(
-                       'Payment Date: ',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: AppColors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/imgs/ins/profile/download_reciept.png',
+                        width: 24,
                       ),
-                    ),
-                    Text(DateFormat.yMMMMd().format(package.createdAt),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: AppColors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                      const SizedBox(
+                        width: 5,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Completed? : ',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: AppColors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                      const Text(
+                        'Payment details',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: AppColors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                     Text(
-                      '${package.isActive}',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: AppColors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 7,
-                    ),
-                    Image.asset(
-                      'assets/imgs/ins/profile/verified_tick.png',
-                      width: 18,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 15),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: const BoxDecoration(
-              color: AppColors.green,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(6),
-                bottomRight: Radius.circular(6),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/imgs/ins/profile/download_reciept.png',
-                  width: 24,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                const Text(
-                  'Payment details',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: AppColors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        }
+      },
     );
   }
 }
 
 class _ProfileDetails extends StatelessWidget {
-  const _ProfileDetails(this.student);
-  final Student student;
+  const _ProfileDetails(this.studentId);
+  final int studentId;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 15),
-            width: 120,
-            height: 120,
-            decoration:  BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(student.profile.avatar),
-                onError: (exception, stackTrace) => AssetImage('assets/imgs/ins/lessons/avatar2.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-           Text(
-            '${student.profile.firstName} ${student.profile.lastName}',
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              color: AppColors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-           Text(
-            student.profile.phoneNumber,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              color: AppColors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-           Text(
-           student.profile.email,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              color: AppColors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+    return BlocProvider(
+      create: (context) => ProfileCubit(),
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          context.read<ProfileCubit>().getProfile(studentId);
+          return state is! ProfileLoaded
+              ? kLoadingWidget(context)
+              : Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 15),
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(state.student!.profile.avatar),
+                            onError: (exception, stackTrace) =>
+                                const AssetImage(
+                                    'assets/imgs/ins/lessons/avatar2.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '${state.student!.profile.firstName} ${state.student!.profile.lastName}',
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: AppColors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        state.student!.profile.phoneNumber,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        state.student!.profile.email,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+        },
       ),
     );
   }

@@ -189,7 +189,7 @@ class InstLessonCard extends StatelessWidget {
                         course.courseCategory.icon!,
                         errorBuilder: (context, error, stackTrace) {
                           return Image.asset(
-                              'assets/imgs/ins/school/sample_logo.png');
+                              'assets/imgs/ins/school/sample_logo.png',);
                         },
                       )
                     else

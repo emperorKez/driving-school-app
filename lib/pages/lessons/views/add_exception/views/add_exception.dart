@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
@@ -133,12 +132,12 @@ class _AddExceptionViewState extends State<AddExceptionView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${timeOffDay[index].startTime.hour}:${timeOffDay[index].startTime.minute} - ${timeOffDay[index].endTime.hour}:${timeOffDay[index].endTime.minute}',
+                            '${timeOffDay[index].startTime} - ${timeOffDay[index].endTime}',
                           ),
                           GestureDetector(
                             onTap: () => context.read<AvailabiltyBloc>().add(
                                 DeleteTimeOffDays(timeOffDay[index].schoolId,
-                                    timeOffDay[index].id)),
+                                    timeOffDay[index].id,),),
                             child: Image.asset(
                               'assets/imgs/ins/lessons/bin.png',
                               width: 24,
@@ -156,7 +155,7 @@ class _AddExceptionViewState extends State<AddExceptionView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${timeOffs[index].startTime.hour}:${timeOffs[index].startTime.minute} - ${timeOffs[index].endTime.hour}:${timeOffs[index].endTime.minute}',
+                            '${timeOffs[index].startTime} - ${timeOffs[index].endTime}',
                           ),
                           GestureDetector(
                             onTap: () => setState(() {
@@ -185,25 +184,15 @@ class _AddExceptionViewState extends State<AddExceptionView> {
                           {
                             'date': item.date.toIso8601String(),
                             'name': item.name,
-                            'startTime': {
-                              'hour': item.startTime.hour,
-                              'minute': item.startTime.minute,
-                              'second': 0,
-                              'nano': 0
-                            },
-                            'endTime': {
-                              'hour': item.endTime.hour,
-                              'minute': item.endTime.minute,
-                              'second': 0,
-                              'nano': 0
-                            }
-                          }
+                            'startTime': item.startTime,
+                            'endTime': item.endTime,
+                          },
                       ];
                       final schoolId =
                           context.read<SchoolBloc>().state.schoolInfo!.id;
                       context.read<AvailabiltyBloc>().add(
                             AddMultipleTimeOffDays(
-                                schoolId: schoolId, payload: payload),
+                                schoolId: schoolId, payload: payload,),
                           );
                     },
                     text: 'Save',
@@ -339,16 +328,14 @@ class _AddExceptionViewState extends State<AddExceptionView> {
             GestureDetector(
               onTap: () => setState(() {
                 if (_formKey.currentState!.validate()) {
-                  final startTime =
-                      DateFormat.Hm().parse(startTimeController.text);
-                  final endTime = DateFormat.Hm().parse(endTimeController.text);
+                  final startTime = '${startTimeController.text}:00';
+                  final endTime = '${endTimeController.text}:00';
                   timeOffs.add(
                     TimeOff(
                       date: date,
                       name: 'Time off',
-                      startTime:
-                          Time(hour: startTime.hour, minute: startTime.minute),
-                      endTime: Time(hour: endTime.hour, minute: endTime.minute),
+                      startTime: startTime,
+                      endTime: endTime,
                     ),
                   );
                   startTimeController.clear();
@@ -621,20 +608,6 @@ class TimeOff {
 
   DateTime date;
   String name;
-  Time startTime;
-  Time endTime;
-}
-
-class Time {
-  Time({
-    required this.hour,
-    required this.minute,
-    this.second = 0,
-    this.nano = 0,
-  });
-
-  int hour;
-  int minute;
-  int? nano;
-  int? second;
+  String startTime;
+  String endTime;
 }

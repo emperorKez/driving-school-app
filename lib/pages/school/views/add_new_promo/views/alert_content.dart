@@ -66,7 +66,7 @@ class AlertDialogContent extends StatelessWidget {
               ),
             ),
             Text(
-              '€ 259.00',
+              r'$25.00',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins',

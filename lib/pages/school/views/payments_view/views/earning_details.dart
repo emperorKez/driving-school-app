@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/payment/payment_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/payments_view/views/green_dot.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -20,6 +21,10 @@ class EarningDetails extends StatelessWidget {
        }
       },
       builder: (context, state) {
+        if (state is PaymentInitial){
+          context.read<PaymentBloc>().add(GetPaymentHistory(schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+        }
+        print(state);
         return state is! PaymentLoaded? kLoadingWidget(context) : Row(
           children: [
             Expanded(

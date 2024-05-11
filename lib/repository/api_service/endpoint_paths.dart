@@ -94,12 +94,16 @@ class ApiPaths {
   static String deleteSchool(int schoolId) => 'school/$schoolId';
   static String updateSchoolConfig(int schoolId) =>
       'school/$schoolId/configurations';
+  static String getAllStudent(int schoolId) =>
+      'school/$schoolId/students';
   static String getInvitedStudents(int schoolId) =>
       'school/$schoolId/invited-students';
   static String inviteStaffToSchool(int schoolId) =>
       'school/$schoolId/invite-staff';
   static String inviteStudent(int schoolId) =>
       'school/$schoolId/invite-student';
+  static String removeInvitedStudent(int schoolId) =>
+      'school/$schoolId/remove-invited-student';
   static String removeInvitedStaff(int schoolId) => 'school/$schoolId/remove-invited-staff';
   static String publishSchool(int schoolId) => 'school/$schoolId/publish';
 
@@ -201,23 +205,27 @@ class ApiPaths {
   static String getAvailableDatesForSchool(int schoolId) =>
       'school/$schoolId/availableDates';
 
+
+
   //group lesson
   static String getGroupLesson(int groupLessonId) =>
-      'lesson/group/$groupLessonId';
+      'group-lesson/$groupLessonId';
   static String updateGroupLesson(
     int groupLessonId,
   ) =>
-      'lesson/group/$groupLessonId';
+      'group-lesson/$groupLessonId';
   static String deleteGroupLesson(
     int groupLessonId,
   ) =>
-      'lesson/group/$groupLessonId';
-  static const addGroupLesson = 'lesson/group';
-  static const getGroupLessons = 'lesson/group/list';
+      'group-lesson/$groupLessonId';
+  static const addGroupLesson = 'group-lesson';
+  static const getGroupLessons = 'group-lesson/list';
+  static const getGroupLessonReview = 'group-lesson/review';
+  static const addGroupLessonReview = 'group-lesson/review';
   static String addStudentToGroupLesson(
     int groupLessonId,
   ) =>
-      'lesson/group/$groupLessonId/add-student';
+      'group-lesson/$groupLessonId/add-student';
 
   //course
   static String updateCourse(int courseId) => 'course/$courseId';
@@ -298,6 +306,9 @@ class ApiPaths {
   static String createStaff = 'staff';
   static String getStaffSchoolInvite = 'staff/pending-school-invite';
   static String getStaffBySchool = 'staff/by-school';
+  static String getStaffStats(int staffId) => 'staff/$staffId/stats';
+  static String getTopStudents(int staffId) => 'staff/$staffId/top-students';
+  static String getStaffStudents(int staffId) => 'staff/$staffId/all-students';
 
   //metadata
   static const getAllStaffRoles = 'metadata/staff-roles';

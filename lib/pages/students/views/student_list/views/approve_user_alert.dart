@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
-import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/repository/student/models/student.dart';
+import 'package:korbil_mobile/repository/student/models/student_package.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ApproveUserAlertContent extends StatelessWidget {
   const ApproveUserAlertContent({
-    required this.student,
+    required this.student, required this.studentPackage,
     super.key,
   });
   final Student student;
+  final StudentPackage studentPackage;
 
   @override
   Widget build(BuildContext context) {
@@ -89,12 +91,9 @@ class ApproveUserAlertContent extends StatelessWidget {
                   ontap: () {
                     context.read<StudentBloc>().add(ApproveStudent(
                         schoolId: context
-                            .read<StaffBloc>()
-                            .state
-                            .staff!
-                            .staffData
-                            .schoolId,
-                        studentId: student.profile.id,),);
+                            .read<SchoolBloc>()
+                            .state.schoolInfo!.id,
+                        studentId: student.profile.id, packageId: studentPackage.studentPackageId,),);
                     Navigator.pop(context);
                     // Navigator.push(
                     //   context,

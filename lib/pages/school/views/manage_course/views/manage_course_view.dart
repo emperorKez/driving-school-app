@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
-import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/profile_section.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/student_card.dart';
 import 'package:korbil_mobile/pages/school/views/manage_course/views/total_lessons.dart';
@@ -38,17 +38,8 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                 _AppBarMenu(),
               ],
             ),
-      body: BlocBuilder<CourseBloc, CourseState>(
+      body: BlocBuilder<StaffBloc, StaffState>(
         builder: (context, state) {
-          var totalDuration = 0;
-          var totalActive = 0;
-          var totalFutureAssigned = 0;
-
-          for (final element in state.courses!) {
-            totalDuration += element.course.timeDuration;
-            if (element.course.isActive) totalActive++;
-            if (element.courseCategory.id == 1) totalFutureAssigned++;
-          }
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: ListView(
@@ -65,12 +56,12 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                   children: [
                     TotalLessons(
                       text: 'Total lessons',
-                      val: state.courses!.length.toString(),
+                      val: state.stat!.totalCompletedLessons.toString(),
                       icon: 'assets/imgs/ins/school/lesson_vid.png',
                     ),
                     TotalLessons(
                       text: 'Working hours',
-                      val: totalDuration.toString(),
+                      val: state.stat!.totalWorkingHrs.toString(),
                       icon: 'assets/imgs/ins/school/clock.png',
                     ),
                   ],
@@ -80,15 +71,15 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                   children: [
                     TotalLessons(
                       text: 'Ongoing lessons',
-                      val: totalActive.toString(),
+                      val: state.stat!.assignedLessons.toString(),
                     ),
                     TotalLessons(
                       text: 'Future assigned',
-                      val: totalFutureAssigned.toString(),
+                      val: state.stat!.scheduledLessons.toString(),
                     ),
-                    const TotalLessons(
+                    TotalLessons(
                       text: 'Total KMs',
-                      val: '22',
+                      val: state.stat!.totalDistanceKms.toString(),
                     ),
                   ],
                 ),
@@ -96,7 +87,7 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                   height: 15,
                 ),
                 const Text(
-                  'Top 3 Students',
+                  'Top Students',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -108,11 +99,14 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                 const SizedBox(
                   height: 10,
                 ),
-                const StudentCard(),
-                const StudentCard(),
-                const StudentCard(),
-                const StudentCard(),
-                const StudentCard(),
+                if (state.topStudents != null && state.topStudents!.isNotEmpty)
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                        state.topStudents!.length,
+                        (index) =>
+                            StudentCard(student: state.topStudents![index])),
+                  ),
                 const SizedBox(
                   height: 50,
                 ),
@@ -135,9 +129,9 @@ class _AppBarMenu extends StatelessWidget {
       onSelected: (value) {
         switch (value) {
           case 'Change user type':
-            // context.read<ProfileBloc>().add(ChangeUserType());
+          // context.read<ProfileBloc>().add(ChangeUserType());
           case 'Deactivate user':
-            // context.read<ProfileBloc>().add(DeactivateUser());
+          // context.read<ProfileBloc>().add(DeactivateUser());
           default:
         }
       },

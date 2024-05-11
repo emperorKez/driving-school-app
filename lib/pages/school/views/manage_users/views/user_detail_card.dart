@@ -3,7 +3,8 @@ import 'package:korbil_mobile/repository/school_info/models/school_info.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstUserDetailsCard extends StatelessWidget {
-  const InstUserDetailsCard({ required this.user,
+  const InstUserDetailsCard({
+    required this.user,
     super.key,
   });
 
@@ -15,16 +16,17 @@ class InstUserDetailsCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: KorbilTheme.of(context).white,
-          boxShadow: [
-            BoxShadow(
-              color: KorbilTheme.of(context).alternate2,
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: const Offset(1, 1),
-            ),
-          ],),
+        borderRadius: BorderRadius.circular(8),
+        color: KorbilTheme.of(context).white,
+        boxShadow: [
+          BoxShadow(
+            color: KorbilTheme.of(context).alternate2,
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: const Offset(1, 1),
+          ),
+        ],
+      ),
       child: Row(
         children: [
           Container(
@@ -56,29 +58,32 @@ class InstUserDetailsCard extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-                Row(
-                  children: [
-                    Text(
-                      user.profile.email,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: KorbilTheme.of(context).primaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      user.profile.phoneNumber,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: KorbilTheme.of(context).secondaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
+                Text(
+                  user.profile.email,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: KorbilTheme.of(context).primaryColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
+                Text(
+                  user.profile.phoneNumber,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: KorbilTheme.of(context).secondaryColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+
+                // Row(
+                //   children: [
+
+                //     const Spacer(),
+
+                //   ],
+                // ),
               ],
             ),
           ),

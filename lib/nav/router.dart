@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/pages/app_home/app_home.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
+import 'package:korbil_mobile/pages/auth/view/app_init/app_init.dart';
 import 'package:korbil_mobile/pages/lessons/lessons.dart';
 import 'package:korbil_mobile/pages/notifications/notifications.dart';
 import 'package:korbil_mobile/pages/school/school.dart';
@@ -9,10 +10,9 @@ import 'package:korbil_mobile/pages/students/views/manage_student_lesson/views/m
 import 'package:korbil_mobile/pages/students/views/profile_package_history/views/profile_package_history.dart';
 import 'package:korbil_mobile/pages/students/views/student_list/views/student_list.dart';
 import 'package:korbil_mobile/pages/students/views/student_profile_approved/views/student_profile_approved.dart';
-import 'package:korbil_mobile/pages/students/views/student_profile_unapproved/views/student_profile_unapproved.dart' ;
+import 'package:korbil_mobile/pages/students/views/student_profile_unapproved/views/student_profile_unapproved.dart';
 import 'package:korbil_mobile/repository/lesson/model/calender.dart';
-import 'package:korbil_mobile/repository/student/models/custom_student.dart';
-import 'package:korbil_mobile/repository/student/models/student.dart' as student;
+import 'package:korbil_mobile/repository/student/models/school_student.dart';
 import 'package:korbil_mobile/repository/student/models/student_package.dart';
 // import 'package:korbil_mobile/pages/students/students.dart';
 // import 'package:korbil_mobile/repository/student/models/student.dart';
@@ -31,6 +31,7 @@ final schoolNavKey = GlobalKey<NavigatorState>();
 class AppRouter {
   // auth routes
   static const splash = '/';
+  static const appInit = 'appInit';
   static const getStarted = 'getStarted';
   static const createAcc = 'createAcc';
   static const login = 'login';
@@ -91,6 +92,8 @@ class AppRouter {
     switch (settings.name) {
       case splash:
         return MaterialPageRoute(builder: (_) => const GetStartedView());
+      case appInit:
+        return MaterialPageRoute(builder: (_) => const AppInit());
       case getStarted:
         return MaterialPageRoute(builder: (_) => const GetStartedView());
       case createAcc:
@@ -125,21 +128,29 @@ class AppRouter {
       case completedLessons:
         return MaterialPageRoute(builder: (_) => const InstCompletedLessons());
       case lessonDetails:
-        return MaterialPageRoute(builder: (_) => InstLessonDetails(calender: settings.arguments! as Calender,));
+        return MaterialPageRoute(
+            builder: (_) => InstLessonDetails(
+                  calender: settings.arguments! as Calender,
+                ));
       case lessonDetailAddReview:
         return MaterialPageRoute(
           builder: (_) => const InstLessonDetailAddReviewView(),
         );
       case lessonDetailMapView:
         return MaterialPageRoute(
-          builder: (_) => InstLessonDetailMapView(lessonId: settings.arguments! as int,),
+          builder: (_) => InstLessonDetailMapView(
+            lessonId: settings.arguments! as int,
+          ),
         );
       case addException:
         return MaterialPageRoute(builder: (_) => const AddExceptionView());
       case editTimeSchedule:
         return MaterialPageRoute(builder: (_) => const EditTimeSchedule());
       case finishLesson:
-        return MaterialPageRoute(builder: (_) => InstFinishLessonView(lessonId: settings.arguments! as int,));
+        return MaterialPageRoute(
+            builder: (_) => InstFinishLessonView(
+                  lessonId: settings.arguments! as int,
+                ));
 
       // students screens
       case manageLessonAddLessonView:
@@ -148,19 +159,22 @@ class AppRouter {
         );
       case manageStudentLesson:
         return MaterialPageRoute(
-            builder: (_) => ManageStudentLesson(
-                studentPackage: settings.arguments! as StudentPackage,),);
+          builder: (_) => ManageStudentLesson(
+            studentPackage: settings.arguments! as StudentPackage,
+          ),
+        );
       case studentProfileApproved:
         return MaterialPageRoute(
           builder: (_) => StudentProfileApproved(
-              student: settings.arguments! as CustomStudent,),
+            student: settings.arguments! as CurrentStudent,
+          ),
         );
       case profilePackageHistory:
         return MaterialPageRoute(builder: (_) => const ProfilePackageHistory());
       case studentProfileUnapproved:
         return MaterialPageRoute(
           builder: (_) => StudentProfileUnApproved(
-            student: settings.arguments! as student.Student,
+            student: settings.arguments! as PendingApproval,
           ),
         );
 

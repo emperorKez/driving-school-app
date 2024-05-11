@@ -2,25 +2,28 @@
 part of 'school_bloc.dart';
 
 // @immutable
-// sealed 
+// sealed
 class SchoolState {
-  const SchoolState({this.schoolInfo, this.schoolList, 
-  this.schoolStaffs,
-  });
+  const SchoolState(
+      {this.schoolInfo,
+      this.schoolList,
+      this.schoolStaffs,
+      this.invitedStudents});
   final SchoolInfo? schoolInfo;
   final List<Staff>? schoolStaffs;
   final List<SchoolInfo>? schoolList;
+  final List<InvitedStudent>? invitedStudents;
 
-  SchoolState copyWith({
-    SchoolInfo? schoolInfo,
-    List<Staff>? schoolStaffs,
-    List<SchoolInfo>? schoolList,
-  }) {
+  SchoolState copyWith(
+      {SchoolInfo? schoolInfo,
+      List<Staff>? schoolStaffs,
+      List<SchoolInfo>? schoolList,
+      List<InvitedStudent>? invitedStudents}) {
     return SchoolState(
-      schoolInfo: schoolInfo ?? this.schoolInfo,
-      schoolStaffs: schoolStaffs ?? this.schoolStaffs,
-      schoolList: schoolList ?? this.schoolList,
-    );
+        schoolInfo: schoolInfo ?? this.schoolInfo,
+        schoolStaffs: schoolStaffs ?? this.schoolStaffs,
+        schoolList: schoolList ?? this.schoolList,
+        invitedStudents: invitedStudents ?? this.invitedStudents);
   }
 }
 
@@ -29,7 +32,11 @@ final class SchoolInitial extends SchoolState {}
 final class SchoolLoading extends SchoolState {}
 
 final class SchoolLoaded extends SchoolState {
-  const SchoolLoaded({required super.schoolInfo, super.schoolStaffs, super.schoolList});
+  const SchoolLoaded(
+      {required super.schoolInfo,
+      super.schoolStaffs,
+      super.schoolList,
+      super.invitedStudents});
 }
 
 final class SchoolError extends SchoolState {

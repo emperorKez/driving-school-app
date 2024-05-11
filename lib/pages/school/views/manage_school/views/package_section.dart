@@ -19,7 +19,7 @@ class PackageSection extends StatelessWidget {
       builder: (context, state) {
         if (state is PackageInitial) {
           context.read<PackageBloc>().add(GetPackages(
-              schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+              schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,),);
         }
         if (state is! PackageLoaded) {
           return kLoadingWidget(context);

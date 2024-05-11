@@ -24,7 +24,7 @@ class AvailabiltyBloc extends Bloc<AvailabiltyEvent, AvailabiltyState> {
   final AvailabilityRepo _availabilityRepo;
 
   Future<void> onGetAvailableDates(
-      GetAvailableDates event, Emitter<AvailabiltyState> emit) async {
+      GetAvailableDates event, Emitter<AvailabiltyState> emit,) async {
     emit(AvailabiltyLoading());
     try {
       final availableDay = await _availabilityRepo.getAvailableDates(event.schoolId);
@@ -36,12 +36,12 @@ class AvailabiltyBloc extends Bloc<AvailabiltyEvent, AvailabiltyState> {
   }
 
   Future<void> onAddAvailableDates(
-      AddAvailableDates event, Emitter<AvailabiltyState> emit) async {
+      AddAvailableDates event, Emitter<AvailabiltyState> emit,) async {
     final timeOff = state.timeOffDays;
     emit(AvailabiltyLoading());
     try {
       await _availabilityRepo.addAvailableDates(
-          schoolId: event.schoolId, payload: event.payload);
+          schoolId: event.schoolId, payload: event.payload,);
       final res = await _availabilityRepo.getAvailableDates(event.schoolId);
       emit(AvailabiltyLoaded(availableDates: res.data, timeOffDays: timeOff));
     } catch (e) {
@@ -51,61 +51,61 @@ class AvailabiltyBloc extends Bloc<AvailabiltyEvent, AvailabiltyState> {
 
 
   Future<void> onAddTimeOffDays(
-      AddTimeOffDays event, Emitter<AvailabiltyState> emit) async {
+      AddTimeOffDays event, Emitter<AvailabiltyState> emit,) async {
     final availableDate = state.availableDates;
     emit(AvailabiltyLoading());
     try {
       await _availabilityRepo.addTimeOffDays(
-          schoolId: event.schoolId, payload: event.payload);
+          schoolId: event.schoolId, payload: event.payload,);
       final res = await _availabilityRepo.getTimeOffDays(event.schoolId);
       emit(AvailabiltyLoaded(
-          availableDates: availableDate, timeOffDays: res.data));
+          availableDates: availableDate, timeOffDays: res.data,),);
     } catch (e) {
       emit(AvailabiltyError(error: e.toString()));
     }
   }
 
   Future<void> onAddMultipleTimeOffDays(
-      AddMultipleTimeOffDays event, Emitter<AvailabiltyState> emit) async {
+      AddMultipleTimeOffDays event, Emitter<AvailabiltyState> emit,) async {
     final availableDate = state.availableDates;
     emit(AvailabiltyLoading());
     try {
      final res = await _availabilityRepo.addMultipleTimeOffDays(
-          schoolId: event.schoolId, payload: event.payload);
+          schoolId: event.schoolId, payload: event.payload,);
       emit(AvailabiltyLoaded(
-          availableDates: availableDate, timeOffDays: res.data));
+          availableDates: availableDate, timeOffDays: res.data,),);
     } catch (e) {
       emit(AvailabiltyError(error: e.toString()));
     }
   }
 
   Future<void> onUpdateTimeOffDays(
-      UpdateTimeOffDays event, Emitter<AvailabiltyState> emit) async {
+      UpdateTimeOffDays event, Emitter<AvailabiltyState> emit,) async {
     final availableDate = state.availableDates;
     emit(AvailabiltyLoading());
     try {
       await _availabilityRepo.updateTimeOffDays(
           schoolId: event.schoolId,
           payload: event.payload,
-          offDayId: event.offDayId);
+          offDayId: event.offDayId,);
       final res = await _availabilityRepo.getTimeOffDays(event.schoolId);
       emit(AvailabiltyLoaded(
-          availableDates: availableDate, timeOffDays: res.data));
+          availableDates: availableDate, timeOffDays: res.data,),);
     } catch (e) {
       emit(AvailabiltyError(error: e.toString()));
     }
   }
 
   Future<void> onDeleteTimeOffDays(
-      DeleteTimeOffDays event, Emitter<AvailabiltyState> emit) async {
+      DeleteTimeOffDays event, Emitter<AvailabiltyState> emit,) async {
     final availableDate = state.availableDates;
     emit(AvailabiltyLoading());
     try {
       await _availabilityRepo.deleteTimeOffDays(
-          schoolId: event.schoolId, offDayId: event.offDayId);
+          schoolId: event.schoolId, offDayId: event.offDayId,);
       final res = await _availabilityRepo.getTimeOffDays(event.schoolId);
       emit(AvailabiltyLoaded(
-          availableDates: availableDate, timeOffDays: res.data));
+          availableDates: availableDate, timeOffDays: res.data,),);
     } catch (e) {
       emit(AvailabiltyError(error: e.toString()));
     }

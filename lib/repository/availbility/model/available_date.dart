@@ -33,20 +33,28 @@ class AvailableHour {
     required this.endTime,
   });
 
-  factory AvailableHour.fromJson(Map<String, dynamic> json) => AvailableHour(
+  factory AvailableHour.fromJson(dynamic json) => AvailableHour(
         id: json['id'] as int,
-        startTime: Time.fromJson(json['startTime'] as Map<String, dynamic>),
-        endTime: Time.fromJson(json['endTime'] as Map<String, dynamic>),
+        startTime: json['startTime'] as String,
+        endTime: json['endTime'] as String,
+        // startTime: Time.fromJson(DateFormat.Hms().parse (json['startTime'] as String) as dynamic),
+        // endTime: Time.fromJson(DateFormat.Hms().parse (json['endTime'] as String) as Map<String, dynamic>),
+        // endTime: Time.fromJson(json['endTime'] as Map<String, dynamic>),
+        // endTime: Time.fromJson(json['endTime'] as Map<String, dynamic>),
       );
 
   int id;
-  Time startTime;
-  Time endTime;
+  String startTime;
+  String endTime;
+  // Time startTime;
+  // Time endTime;
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'startTime': startTime.toJson(),
-        'endTime': endTime.toJson(),
+        'startTime': startTime,
+        'endTime': endTime,
+        // 'startTime': startTime.toJson(),
+        // 'endTime': endTime.toJson(),
       };
 }
 

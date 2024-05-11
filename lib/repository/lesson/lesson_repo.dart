@@ -223,6 +223,7 @@ class LessonRepo {
       {required List<int> staffIds,}) async {
     final response =
         await apiService.postReq(ApiPaths.getCalender, payload: staffIds);
+print('get calender response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -243,6 +244,7 @@ class LessonRepo {
       {required List<int> staffIds,}) async {
     final response = await apiService.postReq(ApiPaths.getCompletedCalender,
         payload: staffIds,);
+        print('get completed calender response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];

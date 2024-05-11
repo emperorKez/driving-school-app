@@ -16,7 +16,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         super(PaymentInitial()) {
     on<MakePackagePayment>(onMakePackagePayment);
     on<MakeGroupLessonPayment>(onMakeGroupLessonPayment);
-    on<GetDeposithandlers>(onGetDeposithandlers);
+    // on<GetDeposithandlers>(onGetDeposithandlers);
     on<GetPaymentHistory>(onGetPaymentHistory);
   }
   final PaymentRepo _paymentRepo;
@@ -31,28 +31,28 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     await _paymentRepo.makeGroupLessonPayment(event.payload);
   }
 
-  Future<void> onGetDeposithandlers(
-      GetDeposithandlers event, Emitter<PaymentState> emit,) async {
-    emit(PaymentLoading());
-    try {
-      final response = await _paymentRepo.getDeposithandlers();
-      emit(state.copyWith(depositHandlers: response.data));
-    } catch (e) {
-      emit(PaymentError(error: e.toString()));
-    }
-  }
+  // Future<void> onGetDeposithandlers(
+  //     GetDeposithandlers event, Emitter<PaymentState> emit,) async {
+  //   emit(PaymentLoading());
+  //   try {
+  //     final response = await _paymentRepo.getDeposithandlers();
+  //     emit(state.copyWith(depositHandlers: response.data));
+  //   } catch (e) {
+  //     emit(PaymentError(error: e.toString()));
+  //   }
+  // }
 
   Future<void> onGetPaymentHistory(
       GetPaymentHistory event, Emitter<PaymentState> emit,) async {
-    final depositHandlers = state.depositHandlers;
     emit(PaymentLoading());
     try {
+      final handlerRes = await _paymentRepo.getDeposithandlers();
       final earningRes = await _paymentRepo.getSchoolEarnings(event.schoolId);
       final historyRes = await _paymentRepo.getPaymentHistory(event.schoolId);
       emit(PaymentLoaded(
           paymentHistory: historyRes.data,
           earnings: earningRes.data,
-          depositHandlers: depositHandlers,),);
+          depositHandlers: handlerRes.data,),);
     } catch (e) {
       emit(PaymentError(error: e.toString()));
     }
