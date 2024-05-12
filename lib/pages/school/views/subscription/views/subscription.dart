@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
-import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/subscription/subscription_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/subscription/views/package_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -44,12 +43,15 @@ class _SubscriptionViewState extends State<SubscriptionView> {
   Widget _renderMobileBody(Size s) {
     return BlocBuilder<SubscriptionBloc, SubscriptionState>(
       builder: (context, state) {
-        return ListView(
+        if (state is SubscriptionInitial){
+          context.read<SubscriptionBloc>().add(GetAllSubscriptionLevels());
+        }
+        return state is! SubscriptionLoaded ? kLoadingWidget(context) : ListView(
+          shrinkWrap: true,          
           children: [
             const SizedBox(
               height: 30,
             ),
-            if (state is SchoolLoaded)
               CarouselSlider(
                 items: List.generate(
                   state.subscriptionLevels!.length,
@@ -66,9 +68,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   enlargeStrategy: CenterPageEnlargeStrategy.zoom,
                   clipBehavior: Clip.antiAlias,
                 ),
-              )
-            else
-              kLoadingWidget(context),
+              ),
             const SizedBox(
               height: 50,
             ),

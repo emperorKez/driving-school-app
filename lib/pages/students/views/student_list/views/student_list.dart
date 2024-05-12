@@ -30,7 +30,7 @@ class _InstStudentListViewState extends State<InstStudentListView> {
   String _selectedType = 'All';
 
   Future<void> _showApproveUserAlert(
-      {required Student student, required StudentPackage studentPackage}) {
+      {required Student student, required StudentPackage studentPackage,}) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -323,7 +323,7 @@ class _InstStudentListViewState extends State<InstStudentListView> {
                                     state.searchResult!.pendingApproval[index]
                                         .packageName,
                                   ),
-                                )),
+                                ),),
                       ),
               ),
             ],

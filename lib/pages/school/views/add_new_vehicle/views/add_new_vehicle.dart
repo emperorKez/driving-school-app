@@ -59,8 +59,11 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
         },
         builder: (context, state) {
           if (state is VehicleInitial) {
-            context.read<VehicleBloc>().add(GetVehicles(
-                schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,),);
+            context.read<VehicleBloc>().add(
+                  GetVehicles(
+                    schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,
+                  ),
+                );
           }
           if (state is! VehicleLoaded) {
             return kLoadingWidget(context);
@@ -95,96 +98,99 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
             height: 15,
           ),
           Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Vehicle Name',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: KorbilTheme.of(context).secondaryColor,
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Vehicle Name',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: KorbilTheme.of(context).secondaryColor,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _entryField(
+                  hintText: 'Vehicle Name',
+                  controller: nameController,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Transmission',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: KorbilTheme.of(context).secondaryColor,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          _selectTransmissionType(),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _entryField(
-                      hintText: 'Vehicle Name', controller: nameController,),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Transmission',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: KorbilTheme.of(context).secondaryColor,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            _selectTransmissionType(),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Year',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: KorbilTheme.of(context).secondaryColor,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            _selectYear(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    'Description',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: KorbilTheme.of(context).secondaryColor,
+                    const SizedBox(
+                      width: 8,
                     ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Year',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: KorbilTheme.of(context).secondaryColor,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          _selectYear(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Description',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: KorbilTheme.of(context).secondaryColor,
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _entryField(
-                    hintText: 'Description',
-                    controller: descriptionController,
-                  ),
-                ],
-              ),),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _entryField(
+                  hintText: 'Description',
+                  controller: descriptionController,
+                ),
+              ],
+            ),
+          ),
           const SizedBox(
             height: 15,
           ),
@@ -261,8 +267,10 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                             ontap: () async {
                               if (_formKey.currentState!.validate()) {
                                 if (imageFiles.isEmpty) {
-                                  errorSnackbar(context,
-                                      error: 'Add vehicle Images',);
+                                  errorSnackbar(
+                                    context,
+                                    error: 'Add vehicle Images',
+                                  );
                                 } else {
                                   context.read<VehicleBloc>().add(
                                         AddVehicle(
@@ -411,50 +419,55 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
   // }
 
   Widget _selectTransmissionType() {
-    final transmissionTypes =
-        context.read<MetadataCubit>().state.transmisionTypes ?? [];
+    
+    return BlocBuilder<MetadataCubit, MetadataState>(
+      builder: (context, state) {
+        if(state is! MetadataLoaded ){return kLoadingWidget(context);} else{
+final transmissionTypes = state.transmisionTypes ?? [];
     final items = List.generate(
       transmissionTypes.length,
       (index) =>
           {'key': transmissionTypes[index], 'value': transmissionTypes[index]},
     );
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: KorbilTheme.of(context).alternate1),
-      ),
-      child: DropdownButton<String>(
-        isExpanded: true,
-        underline: Container(),
-        value: selectedTransmissionType,
-        iconSize: 25,
-        hint: Text(
-          'Select Transmission',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: KorbilTheme.of(context).alternate1,
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
           ),
-        ),
-        iconDisabledColor: KorbilTheme.of(context).secondaryColor,
-        iconEnabledColor: KorbilTheme.of(context).secondaryColor,
-        items: items.map<DropdownMenuItem<String>>((e) {
-          return DropdownMenuItem<String>(
-            value: e['value'],
-            child: Text(e['key']!),
-          );
-        }).toList(),
-        onChanged: (val) {
-          setState(() {
-            selectedTransmissionType = val!;
-          });
-        },
-      ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: KorbilTheme.of(context).alternate1),
+          ),
+          child: DropdownButton<String>(
+            isExpanded: true,
+            underline: Container(),
+            value: selectedTransmissionType,
+            iconSize: 25,
+            hint: Text(
+              'Select Transmission',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: KorbilTheme.of(context).alternate1,
+              ),
+            ),
+            iconDisabledColor: KorbilTheme.of(context).secondaryColor,
+            iconEnabledColor: KorbilTheme.of(context).secondaryColor,
+            items: items.map<DropdownMenuItem<String>>((e) {
+              return DropdownMenuItem<String>(
+                value: e['value'],
+                child: Text(e['key']!),
+              );
+            }).toList(),
+            onChanged: (val) {
+              setState(() {
+                selectedTransmissionType = val!;
+              });
+            },
+          ),
+        );}
+      },
     );
   }
 
@@ -636,7 +649,8 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
                                 fit: BoxFit.cover,
                                 onError: (exception, stackTrace) {
                                   const AssetImage(
-                                      'assets/imgs/ins/school/car.png',);
+                                    'assets/imgs/ins/school/car.png',
+                                  );
                                 },
                               ),
                             ),

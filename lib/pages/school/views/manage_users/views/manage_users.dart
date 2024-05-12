@@ -76,7 +76,7 @@ class _InstManageUsersState extends State<InstManageUsers> {
                 if (_selectedType == 'Approved Users')
                   _buildUsersList(users)
                 else
-                  _buildPendingUsersList(pendingUsers),
+                  _buildPendingUsersList(pendingUsers), 
                 const SizedBox(
                   height: 50,
                 ),

@@ -23,32 +23,32 @@ class StatsView extends StatelessWidget {
   }
 
   Widget _buildLandscape() {
-    return const Row(
-      children: [
+    return  Row(
+      children: [ 
         Expanded(
           child: _StatCard(
             icon: 'assets/imgs/ins/profile/pie.png',
-            title: 'Total Hours',
-            val: '25',
+            title: 'Pending Hours',
+            val: '${stats.hrsPending}',
             metrics: 'Hrs',
-            other: '5 hours Remaining',
+            other: '${stats.hrsRemaining} hours Remaining',
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: _StatCard(
             icon: 'assets/imgs/ins/profile/pie.png',
-            title: 'Total Hours',
-            val: '25',
+            title: 'Scheduled Hours',
+            val: '${stats.hrsScheduled}',
             metrics: 'Hrs',
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: _StatCard(
             icon: 'assets/imgs/ins/profile/pie.png',
-            title: 'Total Hours',
-            val: '25',
+            title: 'Completed Hours',
+            val: '${stats.hrsCompleted}',
             metrics: 'Hrs',
           ),
         ),
@@ -57,32 +57,32 @@ class StatsView extends StatelessWidget {
   }
 
   Row _buildPortrait() {
-    return const Row(
-      children: [
+    return  Row(
+      children: [ 
         Expanded(
           child: _StatCard(
             icon: 'assets/imgs/ins/profile/pie.png',
-            title: 'Total Hours',
-            val: '25',
+            title: 'Pending Hours',
+            val: '${stats.hrsPending}',
             metrics: 'Hrs',
-            other: '5 hours Remaining',
+            other: '${stats.hrsRemaining} hours Remaining',
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: _StatCard(
             icon: 'assets/imgs/ins/profile/pie.png',
-            title: 'Total Hours',
-            val: '25',
+            title: 'Scheduled Hours',
+            val: '${stats.hrsScheduled}',
             metrics: 'Hrs',
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: _StatCard(
             icon: 'assets/imgs/ins/profile/pie.png',
-            title: 'Total Hours',
-            val: '25',
+            title: 'Completed Hours',
+            val: '${stats.hrsCompleted}',
             metrics: 'Hrs',
           ),
         ),

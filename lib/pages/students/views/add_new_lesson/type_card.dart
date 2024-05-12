@@ -12,7 +12,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
   });
 
   final int lessonCount;
-  final int hoursCount;
+  final double hoursCount;
   final int type;
   final bool selected;
   final Function ontap;

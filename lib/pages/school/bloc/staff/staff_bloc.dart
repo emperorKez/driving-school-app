@@ -41,7 +41,7 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
       }
       // final schoolInvite = await _staffRepo.getStaffSchoolInvite(event.email);
       emit(StaffLoaded(
-        staff: staffRes.data, stat: stat, topStudents: topStudents, students: students
+        staff: staffRes.data, stat: stat, topStudents: topStudents, students: students,
       ),);
     } catch (e) {
       emit(StaffError(error: e.toString()));

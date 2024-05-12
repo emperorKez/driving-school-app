@@ -31,22 +31,22 @@ class MyStudentsList extends StatelessWidget {
                         final currentStudent = studentState
                                     .allStudent!.currentStudents
                                     .indexWhere((e) =>
-                                        e.id == state.students![index].id) >=
+                                        e.id == state.students![index].id,) >=
                                 0
                             ? studentState.allStudent!.currentStudents[
                                 studentState.allStudent!.currentStudents
                                     .indexWhere((e) =>
-                                        e.id == state.students![index].id)]
+                                        e.id == state.students![index].id,)]
                             : null;
                         final pendingStudent = studentState
                                     .allStudent!.pendingApproval
                                     .indexWhere((e) =>
-                                        e.id == state.students![index].id) >=
+                                        e.id == state.students![index].id,) >=
                                 0
                             ? studentState.allStudent!.pendingApproval[
                                 studentState.allStudent!.currentStudents
                                     .indexWhere((e) =>
-                                        e.id == state.students![index].id)]
+                                        e.id == state.students![index].id,)]
                             : null;
 
                         return StudentCard(

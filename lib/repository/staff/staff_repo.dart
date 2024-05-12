@@ -116,10 +116,10 @@ class StaffRepo {
   }
 
   Future<ResponseState<List<TopStudent>>> getTopStudents(
-      int staffId, int limit) async {
+      int staffId, int limit,) async {
     final params = {'limit': limit};
     final response = await apiService.getReq(ApiPaths.getTopStudents(staffId),
-        params: params);
+        params: params,);
     print('get top student data: ${response.data}');
     try {
       if (response.data != null) {

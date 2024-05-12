@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/manage_course/views/manage_course.dart';
 import 'package:korbil_mobile/pages/school/views/feedback_view/views/feedback_view.dart';
 import 'package:korbil_mobile/pages/school/views/get_help/views/get_help_view.dart';
-import 'package:korbil_mobile/pages/school/views/manage_course/views/manage_course_view.dart';
+import 'package:korbil_mobile/pages/school/views/manage_profile/views/manage_profile_view.dart';
 import 'package:korbil_mobile/pages/school/views/manage_promotions/views/manage_promotions.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/manage_school.dart';
 import 'package:korbil_mobile/pages/school/views/manage_users/views/manage_users.dart';
@@ -24,11 +25,12 @@ class SelectedTab extends StatelessWidget {
       builder: (context, state) {
         switch (state) {
           case TabMenuState.personalInfo:
-            return const InstManageCourseView();
+            return const InstManageProfileView();
           case TabMenuState.manageSchool:
             return const ManageSchoolView();
           case TabMenuState.manageCourse:
-            return const InstManageCourseView();
+            // return const InstManageCourseView();
+            return const InstManageCourse();
           // case TabMenuState.manageCourse:
           //   return const GroupLessonInfo();
           case TabMenuState.manageUsers:
@@ -51,7 +53,7 @@ class SelectedTab extends StatelessWidget {
             return const InstPrivacyView();
           // ignore: no_default_cases
           default:
-            return const InstManageCourseView();
+            return const InstManageProfileView();
         }
       },
     );

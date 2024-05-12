@@ -372,7 +372,8 @@ class _PaymentDetailsCard extends StatelessWidget {
         } else {
           final package = state
               .packages![state.packages!.indexWhere(
-                  (e) => e.schoolPackage.id == student.studentPackageId)]
+            (e) => e.schoolPackage.id == student.studentPackageId,
+          )]
               .schoolPackage;
           return Container(
             margin: const EdgeInsets.symmetric(vertical: 30),
@@ -520,7 +521,9 @@ class _ProfileDetails extends StatelessWidget {
       create: (context) => ProfileCubit(),
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
-          context.read<ProfileCubit>().getProfile(studentId);
+          if (state is ProfileInitial) {
+            context.read<ProfileCubit>().getProfile(studentId);
+          }
           return state is! ProfileLoaded
               ? kLoadingWidget(context)
               : Center(
@@ -536,7 +539,8 @@ class _ProfileDetails extends StatelessWidget {
                             image: NetworkImage(state.student!.profile.avatar),
                             onError: (exception, stackTrace) =>
                                 const AssetImage(
-                                    'assets/imgs/ins/lessons/avatar2.png'),
+                              'assets/imgs/ins/lessons/avatar2.png',
+                            ),
                             fit: BoxFit.cover,
                           ),
                         ),

@@ -6,7 +6,7 @@ import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/add_course/views/add_course.dart';
+import 'package:korbil_mobile/pages/school/views/manage_course/views/manage_course.dart';
 import 'package:korbil_mobile/pages/school/views/create_new_package/views/price_breakdown_summary.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -274,7 +274,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
               Navigator.push(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (cxt) => const InstAddCourse(),
+                  builder: (cxt) => const InstManageCourse(),
                 ),
               );
             },

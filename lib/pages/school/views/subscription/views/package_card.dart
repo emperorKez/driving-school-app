@@ -57,7 +57,8 @@ class PackageCard extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              'Tier 1',
+              subscriptionLevel.name,
+              // 'Tier 1',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -66,7 +67,7 @@ class PackageCard extends StatelessWidget {
               ),
             ),
             Text(
-              subscriptionLevel.name,
+              subscriptionLevel.details,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
@@ -130,7 +131,7 @@ class PackageCard extends StatelessWidget {
               fontSize: 14,
               pvm: 10,
               ontap: () {
-                //todo more package info
+                //todo nothing more to do
               },
             ),
             const Spacer(),

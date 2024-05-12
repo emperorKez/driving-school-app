@@ -16,21 +16,18 @@ class ProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProfileCubit(),
-      child: BlocBuilder<ProfileCubit, ProfileState>(
-        builder: (context, state) {
-          context.read<ProfileCubit>().getProfile(studentId);
-          return state is! ProfileLoaded
-              ? kLoadingWidget(context)
-              : CustomScreenPadding(
-                  child: getPreferedOrientation(context) ==
-                          PreferedOrientation.landscape
-                      ? _buildLandscape(context, state: state)
-                      : _buildPortrait(context, state: state),
-                );
-        },
-      ),
+    context.read<ProfileCubit>().getProfile(studentId);
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {        
+        return state is! ProfileLoaded
+            ? kLoadingWidget(context)
+            : CustomScreenPadding(
+                child: getPreferedOrientation(context) ==
+                        PreferedOrientation.landscape
+                    ? _buildLandscape(context, state: state)
+                    : _buildPortrait(context, state: state),
+              );
+      },
     );
   }
 
@@ -66,7 +63,7 @@ class ProfileSection extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -75,7 +72,7 @@ class ProfileSection extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: KorbilTheme.of(context).secondaryColor,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -134,7 +131,7 @@ class ProfileSection extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -143,7 +140,7 @@ class ProfileSection extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
               ),

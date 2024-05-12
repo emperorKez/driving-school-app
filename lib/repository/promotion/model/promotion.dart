@@ -15,9 +15,9 @@ class Promotion {
         id: json['id'] as int,
         schoolPackageId: json['schoolPackageId'] as int,
         schoolId: json['schoolId'] as int,
-        offer: json['offer'] as int,
-        startDate: DateTime.parse(json['startDate'] as String),
-        endDate: DateTime.parse(json['endDate'] as String),
+        offer: json['offer'] as double,
+        startDate: json['startDate'] as String,
+        endDate: json['endDate'] as String,
         details: json['details'] as String,
         promoteInHome: json['promoteInHome'] as bool,
         isActive: json['isActive'] as bool,
@@ -26,9 +26,9 @@ class Promotion {
   int id;
   int schoolPackageId;
   int schoolId;
-  int offer;
-  DateTime startDate;
-  DateTime endDate;
+  double offer;
+  String startDate;
+  String endDate;
   String details;
   bool promoteInHome;
   bool isActive;
@@ -38,8 +38,8 @@ class Promotion {
         'schoolPackageId': schoolPackageId,
         'schoolId': schoolId,
         'offer': offer,
-        'startDate': startDate..toIso8601String(),
-        'endDate': endDate..toIso8601String(),
+        'startDate': startDate,
+        'endDate': endDate,
         'details': details,
         'promoteInHome': promoteInHome,
         'isActive': isActive,

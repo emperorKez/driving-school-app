@@ -66,7 +66,7 @@ class AppRouter {
 
   // school
   static const schoolSettings = 'schoolSettings';
-  static const addCourse = 'addCourse';
+  static const manageCourse = 'manageCourse';
   static const addNewCourse = 'addNewCourse';
   static const addNewPromo = 'addNewPromo';
   static const addNewVehicle = 'addNewVehicle';
@@ -76,7 +76,7 @@ class AppRouter {
   static const feedback = 'feedback';
   static const getHelp = 'getHelp';
   static const payments = 'payments';
-  static const manageCourse = 'manageCourse';
+  static const manageProfile = 'manageProfile';
   static const managePickupLocation = 'managePickupLocation';
   static const managePromotions = 'managePromotions';
   static const manageSchool = 'manageSchool';
@@ -131,7 +131,7 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => InstLessonDetails(
                   calender: settings.arguments! as Calender,
-                ));
+                ),);
       case lessonDetailAddReview:
         return MaterialPageRoute(
           builder: (_) => const InstLessonDetailAddReviewView(),
@@ -150,7 +150,7 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => InstFinishLessonView(
                   lessonId: settings.arguments! as int,
-                ));
+                ),);
 
       // students screens
       case manageLessonAddLessonView:
@@ -179,8 +179,8 @@ class AppRouter {
         );
 
       //school screens
-      case addCourse:
-        return MaterialPageRoute(builder: (_) => const InstAddCourse());
+      case manageCourse:
+        return MaterialPageRoute(builder: (_) => const InstManageCourse());
       case addNewCourse:
         return MaterialPageRoute(builder: (_) => const InstAddNewCourse());
       case addNewPromo:
@@ -203,8 +203,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const GetHelpView());
       case payments:
         return MaterialPageRoute(builder: (_) => const InstPaymentsView());
-      case manageCourse:
-        return MaterialPageRoute(builder: (_) => const InstManageCourseView());
+      case manageProfile:
+        return MaterialPageRoute(builder: (_) => const InstManageProfileView());
       case managePickupLocation:
         return MaterialPageRoute(
           builder: (_) => const ManagePickupLocationView(),

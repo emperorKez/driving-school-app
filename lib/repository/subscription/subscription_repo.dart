@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:korbil_mobile/repository/api_service/api_service.dart';
 import 'package:korbil_mobile/repository/api_service/endpoint_paths.dart';
 import 'package:korbil_mobile/repository/api_service/models/data_state.dart';
@@ -10,6 +12,7 @@ class SubscriptionRepo {
      
   Future<ResponseState<List<Subscription>>> getAllSubscriptionLevels() async {
     final response = await apiService.getReq(ApiPaths.getAllSubscriptionLevels);
+    print('get susbscription data: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -19,6 +22,7 @@ class SubscriptionRepo {
         );
         return ResponseSuccess(levels);
       } catch (e) {
+        print('get subscription error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }

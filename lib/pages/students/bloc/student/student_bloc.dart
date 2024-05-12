@@ -49,7 +49,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       // }
 
       emit(StudentLoaded(
-          allStudent: studentRes.data, invitedStudents: invitedStudentRes.data));
+          allStudent: studentRes.data, invitedStudents: invitedStudentRes.data,),);
     } catch (e) {
       emit(StudentError(error: e.toString()));
     }

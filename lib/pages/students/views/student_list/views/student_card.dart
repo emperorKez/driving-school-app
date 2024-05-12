@@ -103,29 +103,35 @@ class StudentCard extends StatelessWidget {
                       ),
                       BlocBuilder<PackageBloc, PackageState>(
                         builder: (context, state) {
-                          final studentPackageId =
-                              pendingStudents?.studentPackageId ??
-                                  currentStudent!.packageIds[0];
-                          return state is! PackageLoaded
-                              ? kLoadingWidget(context)
-                              : Text(
-                                  state
-                                      .packages![state.packages!.indexWhere(
-                                          (e) =>
-                                              e.schoolPackage.id ==
-                                              studentPackageId)]
-                                      .schoolPackage
-                                      .title,
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color:
-                                        KorbilTheme.of(context).secondaryColor,
-                                    fontSize: 12,
-                                    fontWeight: currentStudent != null
-                                        ? FontWeight.w400
-                                        : FontWeight.w600,
-                                  ),
-                                );
+                          if (state is! PackageLoaded) {
+                            return kLoadingWidget(context);
+                          } else {
+                            if (pendingStudents != null) {
+                              return Text(pendingStudents!.packageName);
+                            } else {
+                              return currentStudent!.packageIds.isEmpty
+                                  ? const Text('')
+                                  : Text(
+                                      state
+                                          .packages![state.packages!.indexWhere(
+                                        (e) =>
+                                            e.schoolPackage.id ==
+                                            currentStudent!.packageIds.first,
+                                      )]
+                                          .schoolPackage
+                                          .title,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: KorbilTheme.of(context)
+                                            .secondaryColor,
+                                        fontSize: 12,
+                                        fontWeight: currentStudent != null
+                                            ? FontWeight.w400
+                                            : FontWeight.w600,
+                                      ),
+                                    );
+                            }
+                          }
                         },
                       ),
                     ],
@@ -147,7 +153,7 @@ class StudentCard extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          'Completed Lessons',
+                          '${currentStudent!.totalLessons} Lessons',
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             color: KorbilTheme.of(context).secondaryColor,
@@ -158,17 +164,6 @@ class StudentCard extends StatelessWidget {
                         const SizedBox(
                           width: 3,
                         ),
-                        // if (student.studentPackage == null ||
-                        //     student.studentPackage!.pastLessons.isEmpty)
-                        Text(
-                          'None',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: KorbilTheme.of(context).secondaryColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )
                         // else
                         //   Text(
                         //     student.studentPackage == null

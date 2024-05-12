@@ -1,4 +1,4 @@
-export 'views/add_course/views/add_course.dart';
+export 'views/manage_course/views/manage_course.dart';
 export 'views/add_new_course/views/add_new_course.dart';
 export 'views/add_new_promo/views/add_new_promo.dart';
 export 'views/add_new_vehicle/views/add_new_vehicle.dart';
@@ -7,7 +7,7 @@ export 'views/create_new_package/views/create_new_package.dart';
 export 'views/edit_package/views/edit_package.dart';
 export 'views/feedback_view/views/feedback_view.dart';
 export 'views/get_help/views/get_help_view.dart';
-export 'views/manage_course/views/manage_course_view.dart';
+export 'views/manage_profile/views/manage_profile_view.dart';
 export 'views/manage_pickup_location/views/manage_pickup_location.dart';
 export 'views/manage_promotions/views/manage_promotions.dart';
 export 'views/manage_school/views/manage_school.dart';

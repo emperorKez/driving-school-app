@@ -18,7 +18,7 @@ class AppInit extends StatefulWidget {
 }
 
 class _AppInitState extends State<AppInit> {
-   bool isFirstRun = false;
+  bool isFirstRun = false;
   SharedPreferences? prefs;
 
   Future<void> checkFirstRun() async {
@@ -36,45 +36,53 @@ class _AppInitState extends State<AppInit> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: !isFirstRun ? appInitBody(): const GetStartedView(),
+      body: !isFirstRun ? appInitBody() : const GetStartedView(),
     );
   }
-  
- Widget appInitBody() {
-  return MultiBlocListener(
-          listeners: [
-            BlocListener<AuthBloc, AuthState>(listener: (context, state) async {
-              if (state is AuthLoaded && state.status == AuthStatus.authenticated) {
-                final prefs = await SharedPreferences.getInstance();
-                if (!context.mounted) return;
-                context
-                    .read<StaffBloc>()
-                    .add(GetStaffByEmail(email: prefs.getString('email')!));
-              } 
-              if (state is AuthLoaded && state.status == AuthStatus.unauthenticated){
-                 await lc<NavigationService>()
-                            .navigateTo(rootNavKey, AppRouter.login);
-              }
-              // else{
-              //    await lc<NavigationService>()
-              //               .navigateTo(rootNavKey, AppRouter.login);
-              // }
-            },),
-            BlocListener<StaffBloc, StaffState>(listener: (context, state) {
-              if (state is StaffLoaded) {    
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => const AppHomePage(),
-                  ),
-                );
-              }
-            },),
-          ],
-          child: Center(child: kLoadingWidget(context),),);
- }
+
+  Widget appInitBody() {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) async {
+            if (state is AuthLoaded &&
+                state.status == AuthStatus.authenticated) {
+              final prefs = await SharedPreferences.getInstance();
+              if (!context.mounted) return;
+              context
+                  .read<StaffBloc>()
+                  .add(GetStaffByEmail(email: prefs.getString('email')!));
+            }
+            if (state is AuthLoaded &&
+                state.status == AuthStatus.unauthenticated) {
+              await lc<NavigationService>()
+                  .navigateTo(rootNavKey, AppRouter.login);
+            }
+            // else{
+            //    await lc<NavigationService>()
+            //               .navigateTo(rootNavKey, AppRouter.login);
+            // }
+          },
+        ),
+        BlocListener<StaffBloc, StaffState>(
+          listener: (context, state) {
+            if (state is StaffLoaded) {
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (_) => const AppHomePage(),
+                ),
+              );
+            }
+          },
+        ),
+      ],
+      child: Center(
+        child: kLoadingWidget(context),
+      ),
+    );
+  }
 }

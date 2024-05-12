@@ -3,19 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/manage_course/views/profile_section.dart';
-import 'package:korbil_mobile/pages/school/views/manage_course/views/student_card.dart';
-import 'package:korbil_mobile/pages/school/views/manage_course/views/total_lessons.dart';
+import 'package:korbil_mobile/pages/school/views/manage_profile/views/profile_section.dart';
+import 'package:korbil_mobile/pages/school/views/manage_profile/views/student_card.dart';
+import 'package:korbil_mobile/pages/school/views/manage_profile/views/total_lessons.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
-class InstManageCourseView extends StatefulWidget {
-  const InstManageCourseView({super.key});
+class InstManageProfileView extends StatefulWidget {
+  const InstManageProfileView({super.key});
 
   @override
-  State<InstManageCourseView> createState() => _InstManageCourseViewState();
+  State<InstManageProfileView> createState() => _InstManageProfileViewState();
 }
 
-class _InstManageCourseViewState extends State<InstManageCourseView> {
+class _InstManageProfileViewState extends State<InstManageProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +25,7 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
               backgroundColor: Colors.white,
               elevation: 0,
               title: const Text(
-                'Users',
+                'Manage user',
                 style: TextStyle(
                   fontFamily: 'Lato',
                   color: AppColors.black,
@@ -105,7 +105,7 @@ class _InstManageCourseViewState extends State<InstManageCourseView> {
                     children: List.generate(
                         state.topStudents!.length,
                         (index) =>
-                            StudentCard(student: state.topStudents![index])),
+                            StudentCard(student: state.topStudents![index]),),
                   ),
                 const SizedBox(
                   height: 50,

@@ -5,7 +5,8 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
-import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstAddNewCourse extends StatefulWidget {
@@ -21,8 +22,8 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
   TextEditingController detailController = TextEditingController();
   TextEditingController durationController = TextEditingController();
 
-  int _selectedCourseCategory = 0;
-  int _selectedCourseType = 1;
+  int _selectedCourseCategory = 1;
+  int _selectedCourseType = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Package Title',
+                'Course Title',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -110,7 +111,7 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                 height: 15,
               ),
               Text(
-                'Time Duration (minutes)',
+                'Time Duration (Minutes)',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -143,101 +144,102 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedCourseCategory =
-                        0; //todo know categoryId for group and individual course
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  decoration: BoxDecoration(
-                    color: _selectedCourseCategory == 0
-                        ? KorbilTheme.of(context).primaryColor
-                        : KorbilTheme.of(context).white,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                    ),
-                    border: Border.all(
-                      color: KorbilTheme.of(context).alternate1,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/imgs/ins/school/group_black.png',
-                        height: 15,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Group',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: KorbilTheme.of(context).secondaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedCourseCategory = 1;
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  decoration: BoxDecoration(
-                    color: _selectedCourseCategory == 1
-                        ? KorbilTheme.of(context).primaryColor
-                        : KorbilTheme.of(context).white,
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    ),
-                    border: Border.all(
-                      color: KorbilTheme.of(context).alternate1,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/imgs/ins/school/individual_black.png',
-                        height: 15,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Individual',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: KorbilTheme.of(context).secondaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        _selectCourseCategory(),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           setState(() {
+        //             _selectedCourseCategory =
+        //                 0; //todo know categoryId for group and individual course
+        //           });
+        //         },
+        //         child: Container(
+        //           padding: const EdgeInsets.symmetric(vertical: 15),
+        //           decoration: BoxDecoration(
+        //             color: _selectedCourseCategory == 0
+        //                 ? KorbilTheme.of(context).primaryColor
+        //                 : KorbilTheme.of(context).white,
+        //             borderRadius: const BorderRadius.only(
+        //               topLeft: Radius.circular(8),
+        //               bottomLeft: Radius.circular(8),
+        //             ),
+        //             border: Border.all(
+        //               color: KorbilTheme.of(context).alternate1,
+        //             ),
+        //           ),
+        //           child: Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             children: [
+        //               Image.asset(
+        //                 'assets/imgs/ins/school/group_black.png',
+        //                 height: 15,
+        //               ),
+        //               const SizedBox(
+        //                 width: 10,
+        //               ),
+        //               Text(
+        //                 'Group',
+        //                 style: TextStyle(
+        //                   fontFamily: 'Poppins',
+        //                   color: KorbilTheme.of(context).secondaryColor,
+        //                   fontSize: 14,
+        //                   fontWeight: FontWeight.w500,
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //     Expanded(
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           setState(() {
+        //             _selectedCourseCategory = 1;
+        //           });
+        //         },
+        //         child: Container(
+        //           padding: const EdgeInsets.symmetric(vertical: 15),
+        //           decoration: BoxDecoration(
+        //             color: _selectedCourseCategory == 1
+        //                 ? KorbilTheme.of(context).primaryColor
+        //                 : KorbilTheme.of(context).white,
+        //             borderRadius: const BorderRadius.only(
+        //               topRight: Radius.circular(8),
+        //               bottomRight: Radius.circular(8),
+        //             ),
+        //             border: Border.all(
+        //               color: KorbilTheme.of(context).alternate1,
+        //             ),
+        //           ),
+        //           child: Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             children: [
+        //               Image.asset(
+        //                 'assets/imgs/ins/school/individual_black.png',
+        //                 height: 15,
+        //               ),
+        //               const SizedBox(
+        //                 width: 10,
+        //               ),
+        //               Text(
+        //                 'Individual',
+        //                 style: TextStyle(
+        //                   fontFamily: 'Poppins',
+        //                   color: KorbilTheme.of(context).secondaryColor,
+        //                   fontSize: 14,
+        //                   fontWeight: FontWeight.w500,
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
         const SizedBox(
           height: 25,
         ),
@@ -259,13 +261,13 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    _selectedCourseType = 0; //todo courseTypeId = 0 for theory
+                    _selectedCourseType = 1; //todo courseTypeId = 1 for theory
                   });
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   decoration: BoxDecoration(
-                    color: _selectedCourseType == 0
+                    color: _selectedCourseType == 1
                         ? KorbilTheme.of(context).primaryColor
                         : KorbilTheme.of(context).white,
                     borderRadius: const BorderRadius.only(
@@ -305,13 +307,13 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                 onTap: () {
                   setState(() {
                     _selectedCourseType =
-                        1; //todo courseTypeId = 1 for practical
+                        2; //todo courseTypeId = 2 for practical
                   });
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   decoration: BoxDecoration(
-                    color: _selectedCourseType == 1
+                    color: _selectedCourseType == 2
                         ? KorbilTheme.of(context).primaryColor
                         : KorbilTheme.of(context).white,
                     borderRadius: const BorderRadius.only(
@@ -386,16 +388,12 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
             Expanded(
               child: BlocBuilder<CourseBloc, CourseState>(
                 builder: (context, state) {
-                  return state is! CourseLoaded
+                  return state is CourseLoading
                       ? kLoadingWidget(context)
                       : PrimaryBtn(
                           ontap: () {
-                            final schoolId = context
-                                .read<StaffBloc>()
-                                .state
-                                .staff!
-                                .staffData
-                                .schoolId;
+                            final schoolId =
+                                context.read<SchoolBloc>().state.schoolInfo!.id;
                             if (_formKey.currentState!.validate()) {
                               final payload = {
                                 'title': titleController.text,
@@ -408,8 +406,12 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
                               };
                               context.read<CourseBloc>().add(
                                     AddCourse(
-                                        payload: payload, schoolId: schoolId,),
+                                      payload: payload,
+                                      schoolId: schoolId,
+                                    ),
                                   );
+                              _formKey.currentState!
+                                  .reset(); //todo check if this works
                             }
                           },
                           text: 'Add',
@@ -423,9 +425,58 @@ class _InstAddNewCourseState extends State<InstAddNewCourse> {
           ],
         ),
         const SizedBox(
-          height: 40,
+          height: 70,
         ),
       ],
+    );
+  }
+
+  Widget _selectCourseCategory() {
+    return BlocBuilder<MetadataCubit, MetadataState>(
+      builder: (context, state) {
+        if (state is! MetadataLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: KorbilTheme.of(context).alternate1),
+            ),
+            child: DropdownButton<int>(
+              isExpanded: true,
+              underline: Container(),
+              value: _selectedCourseCategory,
+              iconSize: 25,
+              hint: Text(
+                'Select Course Category',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: KorbilTheme.of(context).alternate1,
+                ),
+              ),
+              iconDisabledColor: KorbilTheme.of(context).secondaryColor,
+              iconEnabledColor: KorbilTheme.of(context).secondaryColor,
+              items: state.courseCategories!.map<DropdownMenuItem<int>>((e) {
+                return DropdownMenuItem<int>(
+                  value: e.id,
+                  child: Text(e.name),
+                );
+              }).toList(),
+              onChanged: (val) {
+                setState(() {
+                  _selectedCourseCategory = val!;
+                });
+              },
+            ),
+          );
+        }
+      },
     );
   }
 

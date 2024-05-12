@@ -9,7 +9,9 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/students/bloc/package_cubit/package_cubit.dart';
+import 'package:korbil_mobile/pages/students/bloc/profile_cubit/profile_cubit.dart';
 import 'package:korbil_mobile/pages/students/views/manage_student_lesson/views/manage_student_lesson.dart';
 import 'package:korbil_mobile/pages/students/views/profile_package_history/views/profile_package_history.dart';
 import 'package:korbil_mobile/repository/student/models/school_student.dart';
@@ -31,38 +33,49 @@ class StudentProfileApproved extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Text(
-            'Profile',
-            style: TextStyle(
-              fontFamily: 'Lato',
-              color: KorbilTheme.of(context).secondaryColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Profile',
+          style: TextStyle(
+            fontFamily: 'Lato',
+            color: KorbilTheme.of(context).secondaryColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
           ),
-          leading: const InstAppBarBackBtn(),
-          actions: const [_AppBarAction()],
         ),
-        body: BlocProvider(
-            create: (context) => PackageCubit(),
-            child: BlocConsumer<PackageCubit, PackageState>(
-              listener: (context, state) {
-                if (state is PackageError) {
-                  errorSnackbar(context, error: 'Something went wrong');
-                }
-              },
-              builder: (context, state) {
-                context.read<PackageCubit>().getStudentPackage(student.id);
-                return getPreferedOrientation(context) ==
+        leading: const InstAppBarBackBtn(),
+        actions: const [_AppBarAction()],
+      ),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => PackageCubit()),
+          BlocProvider(create: (context) => ProfileCubit())
+        ],
+        child: BlocConsumer<PackageCubit, PackageState>(
+          listener: (context, state) {
+            if (state is PackageError) {
+              errorSnackbar(context, error: 'Something went wrong');
+            }
+          },
+          builder: (context, state) {
+            if (state is PackageInitial) {
+              context.read<PackageCubit>().getStudentPackage(student.id);
+            }
+            return state is! PackageLoaded
+                ? kLoadingWidget(context)
+                : getPreferedOrientation(context) ==
                         PreferedOrientation.landscape
                     ? Row(
                         children: [
                           Expanded(
-                              child: _buildLandscapeLeft(context, s,
-                                  state: state)),
+                            child: _buildLandscapeLeft(
+                              context,
+                              s,
+                              state: state,
+                            ),
+                          ),
                           const SizedBox(width: 20),
                           Expanded(
                             child: _buildLandscapeRight(context, state: state),
@@ -78,8 +91,10 @@ class StudentProfileApproved extends StatelessWidget {
                           const SizedBox(height: 50),
                         ],
                       );
-              },
-            )));
+          },
+        ),
+      ),
+    );
   }
 
   Widget _buildLandscapeRight(
@@ -169,8 +184,11 @@ class StudentProfileApproved extends StatelessWidget {
     );
   }
 
-  Widget _buildLandscapeLeft(BuildContext context, Size s,
-      {required PackageState state}) {
+  Widget _buildLandscapeLeft(
+    BuildContext context,
+    Size s, {
+    required PackageState state,
+  }) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -225,26 +243,34 @@ class StudentProfileApproved extends StatelessWidget {
         const SizedBox(height: 10),
         BlocBuilder<CourseBloc, CourseState>(
           builder: (context, courseState) {
-            return state is! CourseLoaded
+            if (courseState is CourseInitial) {
+              context.read<CourseBloc>().add(GetCourses(
+                  schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+            }
+            return courseState is! CourseLoaded
                 ? kLoadingWidget(context)
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(
-                      state.studentPackage!.upcomingLessons.length,
-                      (index) => StatProgressItem(
-                        s: s,
-                        title: courseState
-                            .courses![courseState.courses!.indexWhere((e) =>
-                                e.course.id ==
-                                state.studentPackage!.upcomingLessons[index]
-                                    .courseId)]
-                            .course
-                            .title,
-                        progress: state
-                            .studentPackage!.upcomingLessons[index].progress,
-                      ),
-                    ),
-                  );
+                // : state.studentPackage!.upcomingLessons.isEmpty
+                //     ? Text('No upcoming Lessono')
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                          state.studentPackage!.upcomingLessons.length,
+                          (index) => StatProgressItem(
+                            s: s,
+                            title: courseState
+                                .courses![courseState.courses!.indexWhere(
+                              (e) =>
+                                  e.course.id ==
+                                  state.studentPackage!.upcomingLessons[index]
+                                      .courseId,
+                            )]
+                                .course
+                                .title,
+                            progress: state.studentPackage!
+                                .upcomingLessons[index].progress,
+                          ),
+                        ),
+                      );
           },
         ),
         const SizedBox(height: 25),

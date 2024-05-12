@@ -297,11 +297,12 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                     if (await _showConfirmFinishLessonAlert() ??
                                         true) {
                                       if (!context.mounted) return;
-                                      context.read<PromotionBloc>().add(
-                                            AddPromotion(
-                                                payload: payloadData,
-                                                schoolId: schoolId),
-                                          );
+                                      print(payloadData);
+                                      // context.read<PromotionBloc>().add(
+                                      //       AddPromotion(
+                                      //           payload: payloadData,
+                                      //           schoolId: schoolId,),
+                                      //     );
                                       Navigator.pop(context);
                                     }
                                   }
@@ -450,13 +451,16 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
       onTap: () async {
         FocusScope.of(context).requestFocus(FocusNode());
         // DateTime date = DateTime.now();
+        final dateFormat = DateFormat('yyyy-MM-dd');
         final pickedDate = await showDatePicker(
-            context: context,
-            firstDate: DateTime.now(),
-            lastDate: DateTime(2026));
+          context: context,
+          firstDate: DateTime.now(),
+          lastDate: DateTime(2026),
+        );
         if (pickedDate != null) {
           setState(() {
-            controller.text = DateFormat.yMd().format(pickedDate);
+            controller.text = dateFormat.format(pickedDate);
+            // controller.text = DateFormat. yMd().format(pickedDate);
           });
         }
       },

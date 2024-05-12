@@ -33,7 +33,7 @@ class StudentRepo {
       print('get all student response: ${res.data}');
       if (res.data != null) {
         final json = res.data!.data['response'];
-        final students = json.map(SchoolStudent.fromJson) as SchoolStudent;
+        final students = SchoolStudent.fromJson(json as Map<String, dynamic>); 
         return ResponseSuccess(students);
       }
       return ResponseFailed(res.error!);
@@ -52,7 +52,7 @@ class StudentRepo {
 
       if (res.data != null) {
         final data = res.data!.data['response'];
-        final student = data.map(Student.fromJson) as Student;
+        final student = Student.fromJson(data as Map<String, dynamic>);
         return ResponseSuccess(student);
       }
       return ResponseFailed(res.error!);
@@ -73,7 +73,7 @@ class StudentRepo {
 
       if (response.data != null) {
         final data = response.data!.data['response'];
-        final student = data.map(Student.fromJson) as Student;
+        final student = Student.fromJson(data as Map<String, dynamic>);
         return ResponseSuccess(student);
       }
       return ResponseFailed(response.error!);
@@ -143,7 +143,7 @@ class StudentRepo {
     try {
       final response = await apiService.putReq(
           ApiPaths.approveStudent(studentId: studentId, schoolId: studentId),
-          params: params);
+          params: params,);
       print('approve student response: ${response.data}');
 
       if (response.data != null) {
@@ -201,8 +201,8 @@ class StudentRepo {
       print('get student current package data: ${res.data}');
       if (res.data != null) {
         final data = res.data!.data['response'];
-        final studentPackage = data.map(StudentPackage.fromJson);
-        return ResponseSuccess(studentPackage as StudentPackage);
+        final studentPackage = StudentPackage.fromJson(data as Map<String, dynamic>);
+        return ResponseSuccess(studentPackage);
       }
       return const ResponseSuccess(null);
       // else {return null;}

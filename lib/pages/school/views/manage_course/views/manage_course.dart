@@ -9,14 +9,14 @@ import 'package:korbil_mobile/pages/school/views/add_new_course/views/add_new_co
 import 'package:korbil_mobile/repository/course/model/course.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
-class InstAddCourse extends StatefulWidget {
-  const InstAddCourse({super.key});
+class InstManageCourse extends StatefulWidget {
+  const InstManageCourse({super.key});
 
   @override
-  State<InstAddCourse> createState() => _AddCourseState();
+  State<InstManageCourse> createState() => _ManageCourseState();
 }
 
-class _AddCourseState extends State<InstAddCourse> {
+class _ManageCourseState extends State<InstManageCourse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,15 +51,25 @@ class _AddCourseState extends State<InstAddCourse> {
                     const SizedBox(
                       height: 15,
                     ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(
-                        state.courses!.length,
-                        (index) => InstLessonCard(
-                          course: state.courses![index],
+                    if (state.courses == null || state.courses!.isEmpty)
+                      const Center(
+                        child: SizedBox(
+                          height: 100,
+                          child: Center(
+                            child: Text('You do not have any Course'),
+                          ),
+                        ),
+                      )
+                    else
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                          state.courses!.length,
+                          (index) => InstLessonCard(
+                            course: state.courses![index],
+                          ),
                         ),
                       ),
-                    ),
                     const SizedBox(
                       height: 50,
                     ),
@@ -157,11 +167,12 @@ class InstLessonCard extends StatelessWidget {
             margin: const EdgeInsets.only(right: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: KorbilTheme.of(context).primaryColor,
+              border: Border.all(color: KorbilTheme.of(context).primaryColor)
+              // color: KorbilTheme.of(context).primaryColor,
             ),
             child: Center(
               child: Image.asset(
-                'assets/imgs/ins/lessons/traffic_lights.png',
+                getCategoryIcon(course.courseCategory.id),
                 width: 24,
               ),
             ),
@@ -184,21 +195,9 @@ class InstLessonCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    if (course.courseCategory.icon != null)
-                      Image.network(
-                        course.courseCategory.icon!,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                              'assets/imgs/ins/school/sample_logo.png',);
-                        },
-                      )
-                    else
-                      Image.asset(
-                        'assets/imgs/ins/school/group.png',
-                        width: 24,
-                      ),
                     Text(
                       course.courseCategory.name,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).primaryColor,
@@ -224,6 +223,23 @@ class InstLessonCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getCategoryIcon(int categoryId) {
+    var categoryIcon = 'assets/imgs/ins/lessons/eco_friendly_green.png';
+    switch (categoryId) {
+      case 1:
+        categoryIcon = 'assets/imgs/ins/lessons/eco_friendly_green.png';
+      case 2:
+        categoryIcon = 'assets/imgs/ins/lessons/maneuvering_green.png';
+      case 3:
+        categoryIcon = 'assets/imgs/ins/lessons/car.png';
+      case 4:
+        categoryIcon = 'assets/imgs/ins/lessons/road_rules_green.png';
+      default:
+        categoryIcon = 'assets/imgs/ins/lessons/eco_friendly_green.png';
+    }
+    return categoryIcon;
   }
 }
 

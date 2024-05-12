@@ -55,7 +55,6 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
   Future<void> onCreateAccount(
       CreateAccount event, Emitter<CreateAccountState> emit,) async {
     final staffData = event.payload;
-    print(staffData);
     emit(CreateAccountSuccess(staffData: staffData));
   }
 }

@@ -235,7 +235,7 @@ class _GetHelpViewState extends State<GetHelpView> {
                       ],
                     ),
                     const SizedBox(
-                      height: 40,
+                      height: 70,
                     ),
                   ],
                 ),

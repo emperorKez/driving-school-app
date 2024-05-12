@@ -5,7 +5,7 @@ part of 'staff_bloc.dart';
 // sealed
 class StaffState {
   const StaffState(
-      {this.staff, this.schoolInvite, this.stat, this.topStudents, this.students});
+      {this.staff, this.schoolInvite, this.stat, this.topStudents, this.students,});
 
   final Staff? staff;
   final SchoolInfo? schoolInvite;
@@ -39,7 +39,7 @@ final class StaffLoaded extends StaffState {
       {required super.staff,
       super.schoolInvite,
       super.stat,
-      super.topStudents, super.students});
+      super.topStudents, super.students,});
 }
 
 final class StaffError extends StaffState {

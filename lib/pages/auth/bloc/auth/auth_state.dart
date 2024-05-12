@@ -4,8 +4,11 @@ enum AuthStatus { authenticated, unauthenticated }
 
 @immutable
 sealed class AuthState {
-  const AuthState(
-      {this.status = AuthStatus.unauthenticated, this.user, required this.token,});
+  const AuthState({
+    required this.token,
+    this.status = AuthStatus.unauthenticated,
+    this.user,
+  });
 
   final AuthStatus status;
   final AuthUser? user;
@@ -13,11 +16,11 @@ sealed class AuthState {
 }
 
 class AuthInitial extends AuthState {
-  AuthInitial(): super(token: null);
+  const AuthInitial() : super(token: null);
 }
 
 class AuthLoading extends AuthState {
-  AuthLoading(): super(token: null);
+  const AuthLoading() : super(token: null);
 }
 
 class AuthLoaded extends AuthState {
@@ -25,8 +28,11 @@ class AuthLoaded extends AuthState {
 }
 
 class AuthError extends AuthState {
-  const AuthError(
-      {required this.error, super.status = AuthStatus.unauthenticated, super.token = null,});
+  const AuthError({
+    required this.error,
+    super.status = AuthStatus.unauthenticated,
+    super.token,
+  });
 
   final String error;
 }
@@ -40,7 +46,8 @@ class AuthError extends AuthState {
 //   const AuthState.authenticated(AuthUser user)
 //       : this._(status: AuthStatus.authenticated, user: user);
 
-//   const AuthState.unauthenticated() : this._(status: AuthStatus.unauthenticated);
+//   const AuthState.unauthenticated() : 
+//this._(status: AuthStatus.unauthenticated);
 //   const AuthState.none() : this._(status: AuthStatus.none);
 
 //   final AuthStatus status;
@@ -49,4 +56,3 @@ class AuthError extends AuthState {
 //   @override
 //   List<Object> get props => [status, user!];
 // }
-

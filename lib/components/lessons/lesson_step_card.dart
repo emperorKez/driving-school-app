@@ -4,7 +4,10 @@ import 'package:korbil_mobile/global/constants/colors.dart';
 
 class LessonStepCard extends StatelessWidget {
   const LessonStepCard({
-    required this.reached, required this.isNextCompleted, required this.step, super.key,
+    required this.reached,
+    required this.isNextCompleted,
+    required this.step,
+    super.key,
     this.isLast = false,
     this.isFirst = false,
   });
@@ -17,13 +20,14 @@ class LessonStepCard extends StatelessWidget {
 
   Widget _renderTrailingLine() {
     if (isLast) {
-      return Expanded(flex: 2, child: Container()); 
+      return Expanded(flex: 2, child: Container());
     } else if (!isNextCompleted) {
       return Expanded(
         flex: 2,
         child: CustomPaint(
-            size: const Size(2, double.infinity),
-            painter: DottedVerticalLinePainter(),),
+          size: const Size(2, double.infinity),
+          painter: DottedVerticalLinePainter(),
+        ),
       );
     } else if (reached) {
       return const Expanded(

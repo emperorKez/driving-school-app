@@ -102,7 +102,7 @@ class _AppState extends State<App> {
           create: (context) => StudentBloc(),
         ),
         BlocProvider(
-          create: (context) => PaymentBloc()
+          create: (context) => PaymentBloc(),
         ),
         BlocProvider(
           create: (context) => LessonBloc(),

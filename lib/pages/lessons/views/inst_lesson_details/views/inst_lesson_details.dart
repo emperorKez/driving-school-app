@@ -60,7 +60,7 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
                           children: [
                             Expanded(
                                 child: ClassAssignmentDetailsCard(
-                                    calender: widget.calender)),
+                                    calender: widget.calender,),),
                             const SizedBox(width: 15),
                             Expanded(child: _buildOtherSections()),
                           ],
@@ -200,7 +200,7 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
                             : state.studentPackage!.pastLessons.length,
                         (index) => InstHIstoryItemCard(
                               lesson: state.studentPackage!.pastLessons[index],
-                            )),
+                            ),),
                   );
                 }
               },

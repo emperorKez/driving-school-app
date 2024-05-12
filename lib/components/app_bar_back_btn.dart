@@ -15,7 +15,7 @@ class InstAppBarBackBtn extends StatelessWidget {
         if (ontap == null) {
           Navigator.pop(context);
         } else {
-          ontap!();
+          ontap!;
         }
       },
       child: Container(

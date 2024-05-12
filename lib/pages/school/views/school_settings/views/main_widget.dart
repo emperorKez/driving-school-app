@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/pages/school/views/manage_course/views/manage_course.dart';
 import 'package:korbil_mobile/pages/school/views/feedback_view/views/feedback_view.dart';
 import 'package:korbil_mobile/pages/school/views/get_help/views/get_help_view.dart';
-import 'package:korbil_mobile/pages/school/views/manage_course/views/manage_course_view.dart';
+import 'package:korbil_mobile/pages/school/views/manage_profile/views/manage_profile_view.dart';
 import 'package:korbil_mobile/pages/school/views/manage_promotions/views/manage_promotions.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/manage_school.dart';
 import 'package:korbil_mobile/pages/school/views/manage_users/views/manage_users.dart';
@@ -46,7 +47,7 @@ class _MainWidgetState extends State<MainWidget> {
             Navigator.push(
               context,
               MaterialPageRoute<dynamic>(
-                builder: (cxt) => const InstManageCourseView(),
+                builder: (cxt) => const InstManageProfileView(),
               ),
             );
           },
@@ -69,34 +70,40 @@ class _MainWidgetState extends State<MainWidget> {
               ),
             );
           },
-        ),            
-                _buildMenuItem(
-                    'assets/imgs/ins/school/menu3.png',
-                    'Manage Course',
-                    () {
-                      if (getPreferedOrientation(context) ==
-                          PreferedOrientation.landscape) {
-                        context.read<TabMenuBloc>().add(
-                              ChangeMenuItem(TabMenuState.manageCourse),
-                            );
-                        return;
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (cxt) => const InstManageCourseView(),
-                        ),
-                      );
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute<dynamic>(
-                      //     builder: (cxt) => GroupLessonInfo(
-                      //       lesson: state.groupLessons![0].lessons[0],
-                      //     ),
-                      //   ),
-                      // );
-                    },
-                  ),
+        ),
+        _buildMenuItem(
+          'assets/imgs/ins/school/menu3.png',
+          'Manage Course',
+          () {
+            if (getPreferedOrientation(context) ==
+                PreferedOrientation.landscape) {
+              context.read<TabMenuBloc>().add(
+                    ChangeMenuItem(TabMenuState.manageCourse),
+                  );
+              return;
+            }
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute<dynamic>(
+            //     builder: (cxt) => const InstManageCourseView(),
+            //   ),
+            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (cxt) => const InstManageCourse(),
+              ),
+            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute<dynamic>(
+            //     builder: (cxt) => GroupLessonInfo(
+            //       lesson: state.groupLessons![0].lessons[0],
+            //     ),
+            //   ),
+            // );
+          },
+        ),
         _buildMenuItem(
           'assets/imgs/ins/school/menu4.png',
           'Manage Users',

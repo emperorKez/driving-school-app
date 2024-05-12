@@ -11,7 +11,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({AuthRepo? authRepo})
       : _authRepo = authRepo ?? AuthRepo(),
-        super(AuthInitial()) {
+        super(const AuthInitial()) {
     on<SignUp>(onSignUp);
     on<SignIn>(onSignIn);
     on<SignOut>(onSignOut);
@@ -21,7 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepo _authRepo;
 
   Future<void> onSignUp(SignUp event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
     try {
       await _authRepo.signUp(
         email: event.email,
@@ -48,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> onSignIn(SignIn event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
     try {
       final isSignedin =
           await _authRepo.signIn(email: event.email, password: event.password);
@@ -67,7 +67,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> onSignOut(SignOut event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
     try {
       await _authRepo.signOut();
       emit(const AuthLoaded(status: AuthStatus.unauthenticated, token: null));
@@ -91,7 +91,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> onCacheSignin(CacheSignin event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
     try {
       final cred = await _authRepo.getSavedLoginData();
       if (cred != null) {
@@ -99,7 +99,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await _authRepo.signIn(email: cred.email, password: cred.password);
         if (isSignedin) {
           final token = await _authRepo.fetchCognitoAuthSession();
-          print('token : $token');
           emit(AuthLoaded(status: AuthStatus.authenticated, token: token));
         } else {
           emit(
@@ -110,7 +109,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const AuthLoaded(status: AuthStatus.unauthenticated, token: null));
       }
     } catch (e) {
-      print(e);
       emit(AuthError(error: e.toString()));
     }
   }

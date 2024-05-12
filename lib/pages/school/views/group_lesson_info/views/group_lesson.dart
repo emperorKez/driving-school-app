@@ -28,7 +28,7 @@ class GroupLessonView extends StatelessWidget {
       builder: (context, state) {
         if (state is GroupLessonInitial) {
           context.read<GroupLessonBloc>().add(GetAllGroupLesson(
-              schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+              schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,),);
         }
         if (state is! GroupLessonLoaded) {
           return kLoadingWidget(context);
@@ -45,14 +45,14 @@ class GroupLessonView extends StatelessWidget {
                               builder: (_) => GroupLessonInfo(
                                     lesson:
                                         state.groupLessons![index].lessons[0],
-                                  ))),
+                                  ),),),
                       title: Text(state.groupLessons![index].template.title),
                       subtitle:
                           Text(state.groupLessons![index].template.description),
                       trailing:
                           Text('${state.groupLessons![index].template.price}'),
                     );
-                  });
+                  },);
         }
       },
     );

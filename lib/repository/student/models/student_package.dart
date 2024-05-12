@@ -52,7 +52,7 @@ class Lesson {
     required this.progressStatus,
   });
 
-  factory Lesson.fromJson(Map<String, dynamic> json) => Lesson(
+  factory Lesson.fromJson( dynamic json) => Lesson(
         id: json['id'] as int,
         courseId: json['courseId'] as int,
         schoolPackageId: json['schoolPackageId'] as int,
@@ -142,19 +142,19 @@ class Stats {
   factory Stats.fromJson(Map<String, dynamic> json) => Stats(
         lessonsScheduled: json['lessonsScheduled'] as int,
         pendingLessons: json['pendingLessons'] as int,
-        hrsRemaining: json['hrsRemaining'] as int,
-        hrsCompleted: json['hrsCompleted'] as int,
-        hrsScheduled: json['hrsScheduled'] as int,
-        hrsPending: json['hrsPending'] as int,
+        hrsRemaining: json['hrsRemaining'] as double,
+        hrsCompleted: json['hrsCompleted'] as double,
+        hrsScheduled: json['hrsScheduled'] as double,
+        hrsPending: json['hrsPending'] as double,
         completedLessons: json['completedLessons'] as int,
       );
 
   int lessonsScheduled;
   int pendingLessons;
-  int hrsRemaining;
-  int hrsCompleted;
-  int hrsScheduled;
-  int hrsPending;
+  double hrsRemaining;
+  double hrsCompleted;
+  double hrsScheduled;
+  double hrsPending;
   int completedLessons;
 
   Map<String, dynamic> toJson() => {

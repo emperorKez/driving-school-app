@@ -11,15 +11,16 @@ class StudentState {
 
   final List<InvitedStudents>? invitedStudents;
 
-  StudentState copyWith({
-    SchoolStudent? allStudent,
-    List<InvitedStudents>? invitedStudents,
-  }) {
-    return StudentState(
-      allStudent: allStudent ?? this.allStudent,
-      invitedStudents: invitedStudents ?? this.invitedStudents,
-    );
-  }
+//   StudentState copyWith({
+//     SchoolStudent? allStudent,
+//     List<InvitedStudents>? invitedStudents,
+//   }) {
+//     return StudentState(
+//       allStudent: allStudent ?? this.allStudent,
+//       invitedStudents: invitedStudents ?? this.invitedStudents,
+//     );
+//   }
+
 }
 
 final class StudentInitial extends StudentState {}
@@ -28,7 +29,7 @@ final class StudentLoading extends StudentState {}
 
 final class StudentLoaded extends StudentState {
   const StudentLoaded(
-      {required super.allStudent, required super.invitedStudents});
+      {required super.allStudent, required super.invitedStudents,});
 }
 
 final class StudentError extends StudentState {

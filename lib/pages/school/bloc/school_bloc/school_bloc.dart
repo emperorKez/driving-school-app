@@ -74,7 +74,7 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
       emit(SchoolLoaded(
           schoolInfo: schoolRes.data,
           schoolStaffs: staffs.data,
-          invitedStudents: invitedStudentsRes.data));
+          invitedStudents: invitedStudentsRes.data,),);
     } catch (e) {
       emit(SchoolError(error: e.toString()));
     }
@@ -159,11 +159,11 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
   }
 
   Future<void> onRemoveInvitedStudent(
-      RemoveInvitedStudent event, Emitter<SchoolState> emit) async {
+      RemoveInvitedStudent event, Emitter<SchoolState> emit,) async {
         final schoolData = state.schoolInfo;
         try {
     await _schoolRepo.removeInvitedStudent(
-        schoolId: event.schoolId, email: event.email);
+        schoolId: event.schoolId, email: event.email,);
     final res = await _schoolRepo.getInvitedStudents(schoolId: event.schoolId);
     emit(SchoolLoaded(schoolInfo: schoolData, invitedStudents: res.data));
     } catch (e) {

@@ -8,7 +8,7 @@ class SchoolState {
       {this.schoolInfo,
       this.schoolList,
       this.schoolStaffs,
-      this.invitedStudents});
+      this.invitedStudents,});
   final SchoolInfo? schoolInfo;
   final List<Staff>? schoolStaffs;
   final List<SchoolInfo>? schoolList;
@@ -18,12 +18,12 @@ class SchoolState {
       {SchoolInfo? schoolInfo,
       List<Staff>? schoolStaffs,
       List<SchoolInfo>? schoolList,
-      List<InvitedStudent>? invitedStudents}) {
+      List<InvitedStudent>? invitedStudents,}) {
     return SchoolState(
         schoolInfo: schoolInfo ?? this.schoolInfo,
         schoolStaffs: schoolStaffs ?? this.schoolStaffs,
         schoolList: schoolList ?? this.schoolList,
-        invitedStudents: invitedStudents ?? this.invitedStudents);
+        invitedStudents: invitedStudents ?? this.invitedStudents,);
   }
 }
 
@@ -36,7 +36,7 @@ final class SchoolLoaded extends SchoolState {
       {required super.schoolInfo,
       super.schoolStaffs,
       super.schoolList,
-      super.invitedStudents});
+      super.invitedStudents,});
 }
 
 final class SchoolError extends SchoolState {

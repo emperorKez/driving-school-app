@@ -31,8 +31,6 @@ class CourseClass {
     required this.timeDuration,
     required this.schoolId,
     required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory CourseClass.fromJson(Map<String, dynamic> json) => CourseClass(
@@ -42,8 +40,6 @@ class CourseClass {
         timeDuration: json['timeDuration'] as int,
         schoolId: json['schoolId'] as int,
         isActive: json['isActive'] as bool,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
   int id;
@@ -52,8 +48,6 @@ class CourseClass {
   int timeDuration;
   int schoolId;
   bool isActive;
-  DateTime createdAt;
-  DateTime updatedAt;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -62,8 +56,6 @@ class CourseClass {
         'timeDuration': timeDuration,
         'schoolId': schoolId,
         'isActive': isActive,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
       };
 }
 

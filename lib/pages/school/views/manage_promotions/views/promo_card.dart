@@ -15,7 +15,7 @@ class PromoCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: AspectRatio(
-        aspectRatio: 334 / 94,
+        aspectRatio: 332 / 100,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           decoration: const BoxDecoration(
@@ -26,8 +26,10 @@ class PromoCard extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text( promo.details,
+              Text(
+                promo.details,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: KorbilTheme.of(context).secondaryColor,
@@ -56,9 +58,10 @@ class PromoCard extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Start date: ${promo.startDate}',
+                              'Start: ${promo.startDate}',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: KorbilTheme.of(context).secondaryColor,
@@ -70,7 +73,7 @@ class PromoCard extends StatelessWidget {
                               height: 7,
                             ),
                             Text(
-                              'End date: ${promo.endDate}',
+                              'End: ${promo.endDate}',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: KorbilTheme.of(context).secondaryColor,

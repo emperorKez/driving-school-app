@@ -34,7 +34,7 @@ class CurrentStudent {
     required this.totalLessons,
   });
 
-  factory CurrentStudent.fromJson(Map<String, dynamic> json) => CurrentStudent(
+  factory CurrentStudent.fromJson(dynamic json) => CurrentStudent(
         id: json['id'] as int,
         firstName: json['firstName'] as String,
         lastName: json['lastName'] as String,
@@ -71,7 +71,7 @@ class PendingApproval {
     required this.packageName,
   });
 
-  factory PendingApproval.fromJson(Map<String, dynamic> json) =>
+  factory PendingApproval.fromJson(dynamic json) =>
       PendingApproval(
         id: json['id'] as int,
         firstName: json['firstName'] as String,

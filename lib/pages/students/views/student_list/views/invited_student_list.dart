@@ -65,7 +65,7 @@ class InvitedStudentList extends StatelessWidget {
           IconButton(
             onPressed: () {
               context.read<SchoolBloc>().add(RemoveInvitedStudent(
-                  schoolId: int.parse(student.schoolId), email: student.email));
+                  schoolId: int.parse(student.schoolId), email: student.email,),);
             },
             icon: Image.asset(
               'assets/imgs/ins/school/delete_bin_red.png',

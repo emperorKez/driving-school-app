@@ -1,1 +1,1 @@
-export 'views/manage_course_view.dart';
+export 'views/manage_course.dart';
