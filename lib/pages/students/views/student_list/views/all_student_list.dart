@@ -36,7 +36,7 @@ class AllStudentsList extends StatelessWidget {
                       state.allStudent!.pendingApproval.length,
                       (index) => StudentCard(
                           pendingStudents:
-                              state.allStudent!.pendingApproval[index]),
+                              state.allStudent!.pendingApproval[index],),
                     ),
                   ),
                   Column(
@@ -46,7 +46,7 @@ class AllStudentsList extends StatelessWidget {
                       state.allStudent!.currentStudents.length,
                       (index) => StudentCard(
                           currentStudent:
-                              state.allStudent!.currentStudents[index]),
+                              state.allStudent!.currentStudents[index],),
                     ),
                   ),
                 ],

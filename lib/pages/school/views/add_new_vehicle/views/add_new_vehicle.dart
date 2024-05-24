@@ -419,54 +419,58 @@ class _AddNewVehicleViewState extends State<AddNewVehicleView> {
   // }
 
   Widget _selectTransmissionType() {
-    
     return BlocBuilder<MetadataCubit, MetadataState>(
       builder: (context, state) {
-        if(state is! MetadataLoaded ){return kLoadingWidget(context);} else{
-final transmissionTypes = state.transmisionTypes ?? [];
-    final items = List.generate(
-      transmissionTypes.length,
-      (index) =>
-          {'key': transmissionTypes[index], 'value': transmissionTypes[index]},
-    );
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: KorbilTheme.of(context).alternate1),
-          ),
-          child: DropdownButton<String>(
-            isExpanded: true,
-            underline: Container(),
-            value: selectedTransmissionType,
-            iconSize: 25,
-            hint: Text(
-              'Select Transmission',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: KorbilTheme.of(context).alternate1,
-              ),
-            ),
-            iconDisabledColor: KorbilTheme.of(context).secondaryColor,
-            iconEnabledColor: KorbilTheme.of(context).secondaryColor,
-            items: items.map<DropdownMenuItem<String>>((e) {
-              return DropdownMenuItem<String>(
-                value: e['value'],
-                child: Text(e['key']!),
-              );
-            }).toList(),
-            onChanged: (val) {
-              setState(() {
-                selectedTransmissionType = val!;
-              });
+        if (state is! MetadataLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          final transmissionTypes = state.transmisionTypes ?? [];
+          final items = List.generate(
+            transmissionTypes.length,
+            (index) => {
+              'key': transmissionTypes[index],
+              'value': transmissionTypes[index],
             },
-          ),
-        );}
+          );
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: KorbilTheme.of(context).alternate1),
+            ),
+            child: DropdownButton<String>(
+              isExpanded: true,
+              underline: Container(),
+              value: selectedTransmissionType,
+              iconSize: 25,
+              hint: Text(
+                'Select Transmission',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: KorbilTheme.of(context).alternate1,
+                ),
+              ),
+              iconDisabledColor: KorbilTheme.of(context).secondaryColor,
+              iconEnabledColor: KorbilTheme.of(context).secondaryColor,
+              items: items.map<DropdownMenuItem<String>>((e) {
+                return DropdownMenuItem<String>(
+                  value: e['value'],
+                  child: Text(e['key']!),
+                );
+              }).toList(),
+              onChanged: (val) {
+                setState(() {
+                  selectedTransmissionType = val!;
+                });
+              },
+            ),
+          );
+        }
       },
     );
   }

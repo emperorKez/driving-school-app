@@ -1,13 +1,23 @@
+// ignore_for_file: avoid_positional_boolean_parameters
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/assessment/assessment_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/views/lesson_detail_add_review/views/bottom_sheet_details.dart';
 import 'package:korbil_mobile/pages/lessons/views/lesson_detail_add_review/views/type_category_card.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstLessonDetailAddReviewView extends StatefulWidget {
-  const InstLessonDetailAddReviewView({super.key});
+  const InstLessonDetailAddReviewView({
+    required this.lessonId,
+    required this.duration,
+    super.key,
+  });
+  final int lessonId;
+  final dynamic duration;
 
   @override
   State<InstLessonDetailAddReviewView> createState() =>
@@ -18,7 +28,7 @@ class _InstLessonDetailAddReviewViewState
     extends State<InstLessonDetailAddReviewView> {
   final List<AssesmentCategoryDetails> _types = const [
     AssesmentCategoryDetails(
-      id: '001',
+      id: 'maneuvering',
       type: 'Maneuvering',
       status: 0,
       img: 'assets/imgs/ins/lessons/maneuvering_green.png',
@@ -50,7 +60,7 @@ class _InstLessonDetailAddReviewViewState
       ],
     ),
     AssesmentCategoryDetails(
-      id: '002',
+      id: 'eco',
       type: 'Eco-friendly driving',
       status: 0,
       img: 'assets/imgs/ins/lessons/eco_friendly_green.png',
@@ -82,7 +92,7 @@ class _InstLessonDetailAddReviewViewState
       ],
     ),
     AssesmentCategoryDetails(
-      id: '003',
+      id: 'rules',
       type: 'Rules of the road',
       status: 0,
       img: 'assets/imgs/ins/lessons/road_rules_green.png',
@@ -114,7 +124,7 @@ class _InstLessonDetailAddReviewViewState
       ],
     ),
     AssesmentCategoryDetails(
-      id: '004',
+      id: 'vehicle',
       type: 'Vehicle knowledge',
       status: 0,
       img: 'assets/imgs/ins/lessons/shield_green.png',
@@ -146,7 +156,7 @@ class _InstLessonDetailAddReviewViewState
       ],
     ),
     AssesmentCategoryDetails(
-      id: '005',
+      id: 'safety',
       type: 'Road safety and behavior',
       status: 0,
       img: 'assets/imgs/ins/lessons/road_safety_green.png',
@@ -225,7 +235,11 @@ class _InstLessonDetailAddReviewViewState
           width: MediaQuery.sizeOf(context).width * 0.5,
           child: ListView(
             children: [
-              BottomSheetDetails(s: s, lessonId: 0,), //todo change the id
+              BottomSheetDetails(
+                s: s,
+                lessonId: widget.lessonId,
+                duration: widget.duration,
+              ),
               const SizedBox(height: 35),
               _buildReviewSection(),
             ],
@@ -240,7 +254,11 @@ class _InstLessonDetailAddReviewViewState
       children: [
         _buildReviewSection(),
         const SizedBox(height: 35),
-        BottomSheetDetails(s: s, lessonId: 0 ), //todo change the id
+        BottomSheetDetails(
+          s: s,
+          lessonId: widget.lessonId,
+          duration: widget.duration,
+        ),
       ],
     );
   }
@@ -288,7 +306,8 @@ class _InstLessonDetailAddReviewViewState
                               horizontal: 15,
                               vertical: 5,
                             ),
-                            backgroundColor: KorbilTheme.of(context).primaryBg,
+                            backgroundColor:
+                                KorbilTheme.of(context).primaryColor,
                             foregroundColor: Colors.white,
                             icon: Icons.thumb_up,
                             spacing: 8,
@@ -357,7 +376,13 @@ class _InstLessonDetailAddReviewViewState
                                 motion: const ScrollMotion(),
                                 children: [
                                   SlidableAction(
-                                    onPressed: null,
+                                    onPressed: (context) {
+                                      addAssessment(
+                                        type.id,
+                                        type.subTypes[index].type,
+                                        true,
+                                      );
+                                    },
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 15,
                                       // vertical: 0,
@@ -380,7 +405,13 @@ class _InstLessonDetailAddReviewViewState
                                 motion: const ScrollMotion(),
                                 children: [
                                   SlidableAction(
-                                    onPressed: null,
+                                    onPressed: (context) {
+                                      addAssessment(
+                                        type.id,
+                                        type.subTypes[index].type,
+                                        false,
+                                      );
+                                    },
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 15,
                                       // vertical: 5,
@@ -401,9 +432,9 @@ class _InstLessonDetailAddReviewViewState
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: _SubTypeCard(
-                                      subType: sub,
-                                    ),
+                                    child: 
+                                    subTypeCard(
+                                        subType: sub, type: type.type),
                                   ),
                                 ],
                               ),
@@ -422,17 +453,41 @@ class _InstLessonDetailAddReviewViewState
       ),
     );
   }
-}
 
-class _SubTypeCard extends StatelessWidget {
-  const _SubTypeCard({
-    required this.subType,
-  });
+  void addAssessment(String categoryId, String review, bool good) {
+    switch (categoryId) {
+      case 'maneuvering':
+        context
+            .read<AssessmentBloc>()
+            .add(AddManeuvering(review: review, goodAt: good));
+      case 'eco':
+        context
+            .read<AssessmentBloc>()
+            .add(AddEcoFriendly(review: review, goodAt: good));
+      case 'rules':
+        context
+            .read<AssessmentBloc>()
+            .add(AddRoadRules(review: review, goodAt: good));
+      case 'vehicle':
+        context.read<AssessmentBloc>().add(
+              AddVehicleKnowledge(review: review, goodAt: good),
+            );
+      case 'safety':
+        context
+            .read<AssessmentBloc>()
+            .add(AddRoadSafety(review: review, goodAt: good));
+    }
+  }
 
-  final AssesmentSubCategoryDetails subType;
+  Widget subTypeCard(
+      {required AssesmentSubCategoryDetails subType, required String type}) {
+    final theme = KorbilTheme.of(context);
+    var defaultColor = theme.alternate2;
+  if (checkIsGoodAt(subCat: type, review: subType.type) == true)
+  {setState(()=> defaultColor = theme.primaryColor);}
+  if (checkIsGoodAt(subCat: type, review: subType.type) == false)
+  {setState(()=> defaultColor = Colors.redAccent);}
 
-  @override
-  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
@@ -440,17 +495,74 @@ class _SubTypeCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: KorbilTheme.of(context).alternate2,
+        color: defaultColor
+        //  checkIsGoodAt(subCat: type, review: subType.type) == true
+        //     ? theme.primaryColor
+        //     : checkIsGoodAt(subCat: type, review: subType.type) == false
+        //         ? Colors.redAccent
+        //         : theme.alternate2,
       ),
       child: Text(
         subType.type,
         style: TextStyle(
           fontFamily: 'Poppins',
-          color: KorbilTheme.of(context).secondaryColor,
+          color: theme.secondaryColor,
           fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
       ),
     );
+  }
+
+  bool? checkIsGoodAt({required String subCat, required String review}) {
+    bool? isGoodAt;
+    final state = context.read<AssessmentBloc>().state;
+    switch (subCat) {
+      case 'maneuvering':
+      setState(() {        
+        isGoodAt = state.goodAtManeuvering.contains(review)
+            ? true
+            : state.badAtManeuvering.contains(review)
+                ? false
+                : null;
+      });
+
+      case 'eco':
+      setState(() {        
+        isGoodAt = state.goodAtEcoFriendly.contains(review)
+            ? true
+            : state.badAtEcoFriendly.contains(review)
+                ? false
+                : null;
+      });
+
+      case 'rules':
+      setState(() {        
+        isGoodAt = state.goodAtRoadRules.contains(review)
+            ? true
+            : state.badAtRoadRules.contains(review)
+                ? false
+                : null;
+      });
+
+      case 'vehicle':
+      setState(() {        
+        isGoodAt = state.goodAtVehicleKnowledge.contains(review)
+            ? true
+            : state.badAtVehicleKnowledge.contains(review)
+                ? false
+                : null;
+      });
+
+      case 'safety':
+      setState(() {        
+        isGoodAt = state.goodAtRoadSafety.contains(review)
+            ? true
+            : state.badAtRoadSafety.contains(review)
+                ? false
+                : null;
+      });
+    }
+    return isGoodAt;
   }
 }

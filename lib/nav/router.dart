@@ -129,17 +129,21 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const InstCompletedLessons());
       case lessonDetails:
         return MaterialPageRoute(
-            builder: (_) => InstLessonDetails(
-                  calender: settings.arguments! as Calender,
-                ),);
+          builder: (_) => InstLessonDetails(
+            calender: settings.arguments! as Calender,
+          ),
+        );
       case lessonDetailAddReview:
         return MaterialPageRoute(
-          builder: (_) => const InstLessonDetailAddReviewView(),
+          builder: (_) => InstLessonDetailAddReviewView(
+            lessonId: settings.arguments! as int, duration: settings.arguments! as dynamic,
+          ),
         );
       case lessonDetailMapView:
         return MaterialPageRoute(
           builder: (_) => InstLessonDetailMapView(
             lessonId: settings.arguments! as int,
+            duration: settings.arguments! as dynamic,
           ),
         );
       case addException:
@@ -148,19 +152,24 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const EditTimeSchedule());
       case finishLesson:
         return MaterialPageRoute(
-            builder: (_) => InstFinishLessonView(
-                  lessonId: settings.arguments! as int,
-                ),);
+          builder: (_) => InstFinishLessonView(
+            lessonId: settings.arguments! as int,
+          ),
+        );
 
       // students screens
       case manageLessonAddLessonView:
         return MaterialPageRoute(
-          builder: (_) => const ManageLessonAddLessonView(),
+          builder: (_) => ManageLessonAddLessonView(
+            studentId: settings.arguments! as int,
+            packageId: settings.arguments! as int,
+          ),
         );
       case manageStudentLesson:
         return MaterialPageRoute(
           builder: (_) => ManageStudentLesson(
             studentPackage: settings.arguments! as StudentPackage,
+            studentId: settings.arguments! as int,
           ),
         );
       case studentProfileApproved:

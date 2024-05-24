@@ -15,6 +15,7 @@ import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc
 import 'package:korbil_mobile/pages/auth/bloc/create_school/create_school_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 enum UploadType { logo, registration }
@@ -159,12 +160,14 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                     },
                                     onEditingComplete: () {
                                       context.read<CreateSchoolBloc>().add(
-                                          ValidateName(nameController.text),);
+                                            ValidateName(nameController.text),
+                                          );
                                     },
                                     onFocusChange: (hasFocus) {
                                       if (!hasFocus) {
                                         context.read<CreateSchoolBloc>().add(
-                                            ValidateName(nameController.text),);
+                                              ValidateName(nameController.text),
+                                            );
                                       }
                                     },
                                     icon: 'assets/imgs/ins/auth/school.png',
@@ -245,23 +248,20 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             ),
                           ],
                         ),
-                        _renderFormField(
-                              hint: 'About Us',
-                              ctrl: nameController,
-                              isMultiline: true,
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Enter About Us';
-                                } else if (val.characters.length < 50) {
-                                  return 'Enter At least 20 words about your school';
-                                }
-                                return null;
-                              },
-                              icon: 'assets/imgs/ins/auth/school.png',
-                            ),
-
-
-                      
+                      _renderFormField(
+                        hint: 'About Us',
+                        ctrl: descriptionController,
+                        isMultiline: true,
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Enter About Us';
+                          } else if (val.characters.length < 25) {
+                            return 'Enter At least 10 words about your school';
+                          }
+                          return null;
+                        },
+                        // icon: 'assets/imgs/ins/auth/school.png',
+                      ),
                       if (getPreferedOrientation(context) ==
                           PreferedOrientation.landscape)
                         Row(
@@ -558,6 +558,11 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
             BlocConsumer<SchoolBloc, SchoolState>(
               listener: (context, state) {
                 if (state is SchoolLoaded) {
+                  context.read<StaffBloc>().add(GetStaffByEmail(
+                      email: context
+                          .read<CreateAccountBloc>()
+                          .state
+                          .staffData!['profile']['email'] as String,),);
                   lc<NavigationService>()
                       .navigateTo(rootNavKey, AppRouter.appHome);
                 }
@@ -574,10 +579,6 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                   return PrimaryBtn(
                     text: 'Create',
                     ontap: () {
-                      print(createSchoolState.logo?.key);
-                      print(createSchoolState.companyRegistration?.file.key);
-
-
                       final staff =
                           context.read<CreateAccountBloc>().state.staffData;
                       if (_formKey.currentState!.validate() && staff != null) {
@@ -595,16 +596,25 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             'address': addressController.text,
                             'city': cityController.text,
                             'phoneNo': phoneController.text,
+                            'description': descriptionController.text,
                             'languageId': 1,
                             'logoKey': createSchoolState.logo!.key,
                             'registrationDocumentKey':
                                 createSchoolState.companyRegistration!.file.key,
                             'staff': staff,
                           };
+                          print(payload);
+                          print(context
+                              .read<CreateAccountBloc>()
+                              .state
+                              .staffData!['profile']['email'],);
                           context
                               .read<SchoolBloc>()
                               .add(CreateSchool(payload: payload));
                         }
+                      } else {
+                        errorSnackbar(context,
+                            error: 'Correct the errors to proceed',);
                       }
                     },
                     hm: 23,
@@ -623,47 +633,49 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
 
   Widget suggestedAddress() {
     return BlocBuilder<CreateSchoolBloc, CreateSchoolState>(
-        builder: (context, state) {
-      if (state.suggestedLocations == null ||
-          state.suggestedLocations!.isEmpty) {
-        return const SizedBox();
-      } else if (!suggestingAddress) {
-        return const SizedBox();
-      } else {
-        return Container(
-          constraints: const BoxConstraints(maxHeight: 200),
-          child: ListView.builder(
+      builder: (context, state) {
+        if (state.suggestedLocations == null ||
+            state.suggestedLocations!.isEmpty) {
+          return const SizedBox();
+        } else if (!suggestingAddress) {
+          return const SizedBox();
+        } else {
+          return Container(
+            constraints: const BoxConstraints(maxHeight: 200),
+            child: ListView.builder(
               shrinkWrap: true,
               physics: const AlwaysScrollableScrollPhysics(),
               itemCount: state.suggestedLocations!.length > 5
                   ? 5
                   : state.suggestedLocations!.length,
               itemBuilder: (context, index) => ListTile(
-                    title: Text(
-                      state.suggestedLocations![index].street,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(state.suggestedLocations![index].locality),
-                    trailing: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('Postcode'),
-                        Text(state.suggestedLocations![index].postcode),
-                      ],
-                    ),
-                    onTap: () {
-                      setState(() {
-                        addressController.text =
-                            state.suggestedLocations![index].street;
-                        cityController.text =
-                            state.suggestedLocations![index].locality;
-                        suggestingAddress = false;
-                      });
-                    },
-                  ),),
-        );
-      }
-    },);
+                title: Text(
+                  state.suggestedLocations![index].street,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(state.suggestedLocations![index].locality),
+                trailing: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Postcode'),
+                    Text(state.suggestedLocations![index].postcode),
+                  ],
+                ),
+                onTap: () {
+                  setState(() {
+                    addressController.text =
+                        state.suggestedLocations![index].street;
+                    cityController.text =
+                        state.suggestedLocations![index].locality;
+                    suggestingAddress = false;
+                  });
+                },
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   Container _renderUploadBtn() {
@@ -704,18 +716,19 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
     );
   }
 
-  Container _renderFormField(
-      {required String hint,
-      required TextEditingController ctrl,
-      required ValidatorFunctionType validator,
-      required String icon,
-      double iconSize = 24,
-      TextInputType inputType = TextInputType.text,
-      Widget? suffixIcon,
-      bool isMultiline = false,
-      void Function(String)? onChanged,
-      void Function()? onEditingComplete,
-      void Function(bool)? onFocusChange,}) {
+  Container _renderFormField({
+    required String hint,
+    required TextEditingController ctrl,
+    required ValidatorFunctionType validator,
+    String? icon,
+    double iconSize = 24,
+    TextInputType inputType = TextInputType.text,
+    Widget? suffixIcon,
+    bool isMultiline = false,
+    void Function(String)? onChanged,
+    void Function()? onEditingComplete,
+    void Function(bool)? onFocusChange,
+  }) {
     return Container(
       margin: const EdgeInsets.all(8),
       child: Focus(
@@ -727,6 +740,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
           onEditingComplete: onEditingComplete,
           keyboardType: inputType,
           minLines: isMultiline ? 4 : 1,
+          maxLines: isMultiline ? 8 : 1,
           style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
@@ -764,16 +778,18 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
               color: AppColors.grey1,
             ),
             suffixIcon: suffixIcon,
-            prefixIcon: SizedBox(
-              width: 50,
-              child: Center(
-                child: Image.asset(
-                  icon,
-                  width: iconSize,
-                  height: iconSize,
-                ),
-              ),
-            ),
+            prefixIcon: icon == null
+                ? const SizedBox()
+                : SizedBox(
+                    width: 50,
+                    child: Center(
+                      child: Image.asset(
+                        icon,
+                        width: iconSize,
+                        height: iconSize,
+                      ),
+                    ),
+                  ),
           ),
         ),
       ),

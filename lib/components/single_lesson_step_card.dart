@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/lessons/lesson_step_card.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/inst_lesson_details.dart';
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 
 class SingleLessonStepCard extends StatelessWidget {
   const SingleLessonStepCard({
-    required this.step, super.key,
+    required this.step, required this.calender, super.key,
   });
 
   final StepDetails step;
+  final Calender calender;
+  
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute<dynamic>(
-        //     builder: (cxt) => const InstLessonDetails(calender: null,),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (cxt) => InstLessonDetails(calender: calender,),
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(15),

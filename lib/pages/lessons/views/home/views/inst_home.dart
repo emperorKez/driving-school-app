@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/views/home/views/inst_home_mainbody.dart';
@@ -22,39 +23,49 @@ class _InstHomeState extends State<LessonsHomeView> {
   @override
   Widget build(BuildContext context) {
     final s = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-          body: BlocConsumer<CalenderCubit, CalenderState>(
-        listener: (context, state) {
-          if (state is CalenderError) {
-            errorSnackbar(context, error: state.error);
-          }
-        },
-        builder: (context, state) {
-          final staff = context.read<StaffBloc>().state.staff;
-          final staffs = context.read<SchoolBloc>().state.schoolStaffs!;
-          final staffIds = <int>[];
-          if (staff!.staffData.staffRole != 1){
-            for (final e in staffs){
-              staffIds.add(e.profile.id);
-            }
-
-          } else{
-            staffIds.add(staff.profile.id);
-          }
-          if (state is CalenderInitial){
-            context.read<CalenderCubit>().getCalender(staffIds: staffIds);
-          }
-          // if (state is! CalenderLoaded) {
-          //   return kLoadingWidget(context);
-          // } else {
-          return getPreferedOrientation(context) ==
-                  PreferedOrientation.landscape
-              ? _buildLandscape(s: s, state: state)
-              : _buildPortrait(s: s, state: state);
-          // }
-        },
-      ),),
+    return BlocBuilder<SchoolBloc, SchoolState>(
+      builder: (context, schoolState) {
+        return schoolState is! SchoolLoaded
+            ? Material(
+                child: kLoadingWidget(context),
+              )
+            : SafeArea(
+                child: Scaffold(
+                  body: BlocConsumer<CalenderCubit, CalenderState>(
+                    listener: (context, state) {
+                      if (state is CalenderError) {
+                        errorSnackbar(context, error: state.error);
+                      }
+                    },
+                    builder: (context, state) {
+                      final staff = context.read<StaffBloc>().state.staff;
+                      final staffs = schoolState.schoolStaffs!;
+                      final staffIds = <int>[];
+                      if (staff!.staffData.staffRole != 1) {
+                        for (final e in staffs) {
+                          staffIds.add(e.profile.id);
+                        }
+                      } else {
+                        staffIds.add(staff.profile.id);
+                      }
+                      if (state is CalenderInitial) {
+                        context
+                            .read<CalenderCubit>()
+                            .getCalender(staffIds: staffIds);
+                      }
+                      // if (state is! CalenderLoaded) {
+                      //   return kLoadingWidget(context);
+                      // } else {
+                      return getPreferedOrientation(context) ==
+                              PreferedOrientation.landscape
+                          ? _buildLandscape(s: s, state: state)
+                          : _buildPortrait(s: s, state: state);
+                      // }
+                    },
+                  ),
+                ),
+              );
+      },
     );
   }
 
@@ -64,13 +75,18 @@ class _InstHomeState extends State<LessonsHomeView> {
         InstHomeMainBody(
           showMainCal: _showMainCalendar,
         ),
+        const SizedBox(
+          height: 50,
+        ),
         const HomeSlideUpPanel(),
       ],
     );
   }
 
-  SlidingUpPanel _buildPortrait(
-      {required Size s, required CalenderState state,}) {
+  SlidingUpPanel _buildPortrait({
+    required Size s,
+    required CalenderState state,
+  }) {
     return SlidingUpPanel(
       onPanelOpened: () {
         setState(() {

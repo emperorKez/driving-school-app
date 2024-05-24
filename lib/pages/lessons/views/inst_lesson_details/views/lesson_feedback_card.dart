@@ -62,9 +62,9 @@ class InstLessonFeedbackCard extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              SizedBox(
-                child: Text(
-                  state.lessonDetail.feedback[0].comment,
+              for (final item in state.lessonDetail.feedback)
+              Text(
+                  item.comment,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: KorbilTheme.of(context).secondaryColor,
@@ -72,7 +72,9 @@ class InstLessonFeedbackCard extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-              ),
+              // SizedBox(
+                
+              // ),
             ],
           ),
         );

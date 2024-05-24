@@ -15,12 +15,13 @@ class SelectedBadAssementDetailCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: KorbilTheme.of(context).primaryBg,
-        ),
-        child: category(context),);
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: KorbilTheme.of(context).primaryBg,
+      ),
+      child: category(context),
+    );
   }
 
   Widget vehicleKnowledge(BuildContext context) {
@@ -46,12 +47,13 @@ class SelectedBadAssementDetailCard extends StatelessWidget {
               child: Row(
                 children: [
                   PrimarySelectedSwitch(
-                    selected:
-                        state.vehicleKnowledge.contains('Pulling up on the right') ||
-                            false,
-                    onTap: () => context
-                        .read<AssessmentBloc>()
-                        .add(VehicleKnowledge(item: 'Pulling up on the right')),
+                    selected: state.badAtVehicleKnowledge
+                            .contains('Pulling up on the right') ||
+                        false,
+                    onTap: () {},
+                    // => context
+                    //     .read<AssessmentBloc>()
+                    //     .add(VehicleKnowledge(item: 'Pulling up on the right')),
                   ),
                   Text(
                     'Pulling up on the right',
@@ -75,12 +77,12 @@ class SelectedBadAssementDetailCard extends StatelessWidget {
               child: Row(
                 children: [
                   PrimarySelectedSwitch(
-                    selected:
-                        state.vehicleKnowledge.contains('Reverse parking into a bay') ||
-                            false,
-                    onTap: () => context
-                        .read<AssessmentBloc>()
-                        .add(VehicleKnowledge(item: 'Reverse parking into a bay')),
+                    selected: state.badAtVehicleKnowledge
+                            .contains('Reverse parking into a bay') ||
+                        false,
+                    onTap: () {},
+                    //  => context.read<AssessmentBloc>().add(
+                    //     VehicleKnowledge(item: 'Reverse parking into a bay'),),
                   ),
                   Text(
                     'Reverse parking into a bay',
@@ -110,9 +112,7 @@ class SelectedBadAssementDetailCard extends StatelessWidget {
       case 'Vehicle knowledge':
         return vehicleKnowledge(context);
       default:
-        return const Center(
-          child: Text('subcategories not available'),
-        );
+        return const SizedBox();
     }
   }
 }

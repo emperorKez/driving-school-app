@@ -15,12 +15,13 @@ class SelectedGoodAssementDetailCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: KorbilTheme.of(context).primaryBg,
-        ),
-        child: category(context),);
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: KorbilTheme.of(context).primaryBg,
+      ),
+      child: category(context),
+    );
   }
 
   Widget maneuvering(BuildContext context) {
@@ -46,12 +47,13 @@ class SelectedGoodAssementDetailCard extends StatelessWidget {
               child: Row(
                 children: [
                   PrimarySelectedSwitch(
-                    selected:
-                        state.maneuvering.contains('Pulling up on the right') ||
-                            false,
-                    onTap: () => context
-                        .read<AssessmentBloc>()
-                        .add(Maneuvering(item: 'Pulling up on the right')),
+                    selected: 
+                    state.goodAtManeuvering.contains('Pulling up on the right') ||
+                        false,
+                    onTap: () {},
+                    // => context
+                    //     .read<AssessmentBloc>()
+                    //     .add(Maneuvering(item: 'Pulling up on the right')),
                   ),
                   Text(
                     'Pulling up on the right',
@@ -75,12 +77,12 @@ class SelectedGoodAssementDetailCard extends StatelessWidget {
               child: Row(
                 children: [
                   PrimarySelectedSwitch(
-                    selected: state.maneuvering
-                            .contains('Forward parking into a bay') ||
+                    selected: state.goodAtManeuvering.contains('Forward parking into a bay') ||
                         false,
-                    onTap: () => context
-                        .read<AssessmentBloc>()
-                        .add(Maneuvering(item: 'Forward parking into a bay')),
+                    onTap: () {},
+                    // => context
+                    //     .read<AssessmentBloc>()
+                    //     .add(Maneuvering(item: 'Forward parking into a bay')),
                   ),
                   Text(
                     'Forward parking into a bay',
@@ -99,12 +101,12 @@ class SelectedGoodAssementDetailCard extends StatelessWidget {
               child: Row(
                 children: [
                   PrimarySelectedSwitch(
-                    selected: state.maneuvering
-                            .contains('Reverse parking into a bay') ||
+                    selected: state.goodAtManeuvering.contains('Reverse parking into a bay') ||
                         false,
-                    onTap: () => context
-                        .read<AssessmentBloc>()
-                        .add(Maneuvering(item: 'Reverse parking into a bay')),
+                    onTap: () {},
+                    // => context
+                    //     .read<AssessmentBloc>()
+                    //     .add(Maneuvering(item: 'Reverse parking into a bay')),
                   ),
                   Text(
                     'Reverse parking into a bay',
@@ -128,12 +130,12 @@ class SelectedGoodAssementDetailCard extends StatelessWidget {
               child: Row(
                 children: [
                   PrimarySelectedSwitch(
-                    selected: state.maneuvering
-                            .contains('Entering and leaving traffic') ||
+                    selected: state.goodAtManeuvering.contains('Entering and leaving traffic') ||
                         false,
-                    onTap: () => context
-                        .read<AssessmentBloc>()
-                        .add(Maneuvering(item: 'Entering and leaving traffic')),
+                    onTap: () {},
+                    // => context
+                    //     .read<AssessmentBloc>()
+                    //     .add(Maneuvering(item: 'Entering and leaving traffic')),
                   ),
                   Text(
                     'Entering and leaving traffic',

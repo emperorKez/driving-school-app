@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
-import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
 import 'package:korbil_mobile/locator.dart';
 import 'package:korbil_mobile/nav/nav_service.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/app_home/views/app_home.dart';
 import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
-import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,12 +45,6 @@ class _SplashState extends State<GetStartedView> {
         backgroundColor: AppColors.white,
         body: MultiBlocListener(
           listeners: [
-            BlocListener<MetadataCubit, MetadataState>(
-                listener: (context, state) {
-              if (state is MetadataError) {
-                errorSnackbar(context, error: state.error);
-              }
-            },),
             BlocListener<AuthBloc, AuthState>(listener: (context, state) async {
               if (state.status == AuthStatus.authenticated) {
                 final prefs = await SharedPreferences.getInstance();

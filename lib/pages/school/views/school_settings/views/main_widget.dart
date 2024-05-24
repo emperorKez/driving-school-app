@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:korbil_mobile/pages/school/views/manage_course/views/manage_course.dart';
 import 'package:korbil_mobile/pages/school/views/feedback_view/views/feedback_view.dart';
 import 'package:korbil_mobile/pages/school/views/get_help/views/get_help_view.dart';
+import 'package:korbil_mobile/pages/school/views/manage_course/views/manage_course.dart';
 import 'package:korbil_mobile/pages/school/views/manage_profile/views/manage_profile_view.dart';
 import 'package:korbil_mobile/pages/school/views/manage_promotions/views/manage_promotions.dart';
 import 'package:korbil_mobile/pages/school/views/manage_school/views/manage_school.dart';

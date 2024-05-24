@@ -9,7 +9,6 @@ import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/hist
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/lesson_feedback_card.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/profile_details.dart';
 import 'package:korbil_mobile/pages/students/bloc/package_cubit/package_cubit.dart';
-import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
@@ -27,7 +26,6 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<LessonDetailCubit>().getDetail(widget.calender.id);
     return SafeArea(
       child: Scaffold(
         backgroundColor: KorbilTheme.of(context).white,
@@ -59,8 +57,10 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                                child: ClassAssignmentDetailsCard(
-                                    calender: widget.calender,),),
+                              child: ClassAssignmentDetailsCard(
+                                calender: widget.calender,
+                              ),
+                            ),
                             const SizedBox(width: 15),
                             Expanded(child: _buildOtherSections()),
                           ],
@@ -84,131 +84,135 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
   }
 
   Widget _buildOtherSections() {
+    context.read<PackageCubit>().getStudentPackage(widget.calender.student.id);
     return SizedBox(
       height: getPreferedOrientation(context) == PreferedOrientation.landscape
           ? MediaQuery.sizeOf(context).height * 0.8
           : null,
-      child: ListView(
-        shrinkWrap: true,
-        physics:
-            getPreferedOrientation(context) == PreferedOrientation.landscape
-                ? null
-                : const NeverScrollableScrollPhysics(),
-        children: [
-          Text(
-            'Previous Lesson',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: KorbilTheme.of(context).secondaryColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: AssestmentTypeIcon(
-                    type: 'Maneuvering',
-                    selected: _selectedLessonReviewSection == 'Maneuvering',
-                    ontap: (String val) {
-                      setState(() {
-                        _selectedLessonReviewSection = val;
-                      });
-                    },
+      child: BlocBuilder<PackageCubit, PackageState>(
+        builder: (context, state) {
+          if (state is! PackageLoaded) {
+            return kLoadingWidget(context);
+          } else {
+            if (state.studentPackage!.pastLessons.isEmpty) {
+              return const SizedBox();
+            } else {
+              context
+                  .read<LessonDetailCubit>()
+                  .getDetail(state.studentPackage!.pastLessons.last.id);
+              return ListView(
+                shrinkWrap: true,
+                physics: getPreferedOrientation(context) ==
+                        PreferedOrientation.landscape
+                    ? null
+                    : const NeverScrollableScrollPhysics(),
+                children: [
+                  Text(
+                    'Previous Lesson',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: AssestmentTypeIcon(
-                    type: 'Eco-friendly driving',
-                    selected:
-                        _selectedLessonReviewSection == 'Eco-friendly driving',
-                    ontap: (String val) {
-                      setState(() {
-                        _selectedLessonReviewSection = val;
-                      });
-                    },
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: AssestmentTypeIcon(
+                            type: 'Maneuvering',
+                            selected:
+                                _selectedLessonReviewSection == 'Maneuvering',
+                            ontap: (String val) {
+                              setState(() {
+                                _selectedLessonReviewSection = val;
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: AssestmentTypeIcon(
+                            type: 'Eco-friendly driving',
+                            selected: _selectedLessonReviewSection ==
+                                'Eco-friendly driving',
+                            ontap: (String val) {
+                              setState(() {
+                                _selectedLessonReviewSection = val;
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: AssestmentTypeIcon(
+                            type: 'Rules of the road',
+                            selected: _selectedLessonReviewSection ==
+                                'Rules of the road',
+                            ontap: (String val) {
+                              setState(() {
+                                _selectedLessonReviewSection = val;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: AssestmentTypeIcon(
-                    type: 'Rules of the road',
-                    selected:
-                        _selectedLessonReviewSection == 'Rules of the road',
-                    ontap: (String val) {
-                      setState(() {
-                        _selectedLessonReviewSection = val;
-                      });
-                    },
+                  const SizedBox(height: 15),
+                  // assessment details
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: category(context),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 15),
-          // assessment details
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: category(context),
-          ),
-          const SizedBox(height: 35),
-          Text(
-            'Instructor Feedback',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: KorbilTheme.of(context).secondaryColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 20),
-          const InstLessonFeedbackCard(),
-          const SizedBox(height: 30),
-          Text(
-            'History',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: KorbilTheme.of(context).secondaryColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          BlocProvider(
-            create: (context) => PackageCubit(),
-            child: BlocBuilder<PackageCubit, PackageState>(
-              builder: (context, state) {
-                context
-                    .read<PackageCubit>()
-                    .getStudentPackage(widget.calender.student.id);
-                if (state is! StudentLoaded) {
-                  return kLoadingWidget(context);
-                } else {
-                  return Column(
+                  const SizedBox(height: 35),
+                  Text(
+                    'Instructor Feedback',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const InstLessonFeedbackCard(),
+                  const SizedBox(height: 30),
+                  Text(
+                    'History',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: KorbilTheme.of(context).secondaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Column(
                     mainAxisSize: MainAxisSize.min,
                     children: List.generate(
-                        state.studentPackage!.pastLessons.length > 5
-                            ? 5
-                            : state.studentPackage!.pastLessons.length,
-                        (index) => InstHIstoryItemCard(
-                              lesson: state.studentPackage!.pastLessons[index],
-                            ),),
-                  );
-                }
-              },
-            ),
-          ),
+                      state.studentPackage!.pastLessons.length > 5
+                          ? 5
+                          : state.studentPackage!.pastLessons.length,
+                      (index) => InstHIstoryItemCard(
+                        lesson: state.studentPackage!.pastLessons[index],
+                      ),
+                    ),
+                  ),
 
-          const SizedBox(height: 80),
-        ],
+                  const SizedBox(height: 80),
+                ],
+              );
+            }
+          }
+        },
       ),
     );
   }

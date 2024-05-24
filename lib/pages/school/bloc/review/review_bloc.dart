@@ -9,7 +9,9 @@ part 'review_event.dart';
 part 'review_state.dart';
 
 class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
-  ReviewBloc({ReviewRepo? reviewRepo}) : _reviewRepo = reviewRepo ?? ReviewRepo(), super(ReviewInitial()) {
+  ReviewBloc({ReviewRepo? reviewRepo})
+      : _reviewRepo = reviewRepo ?? ReviewRepo(),
+        super(ReviewInitial()) {
     on<GetReviews>(onGetReviews);
     on<AddReview>(onAddReview);
     on<ApproveReview>(onApproveReview);
@@ -25,19 +27,17 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       emit(ReviewLoaded(reviews: response.data));
     } catch (e) {
       emit(ReviewError(error: e.toString()));
-      
     }
   }
 
-  Future<void> onAddReview(AddReview event, Emitter<ReviewState> emit) async {
-  }
+  Future<void> onAddReview(AddReview event, Emitter<ReviewState> emit) async {}
 
-  Future<void> onApproveReview(ApproveReview event, Emitter<ReviewState> emit) async {
-  }
+  Future<void> onApproveReview(
+      ApproveReview event, Emitter<ReviewState> emit,) async {}
 
-  Future<void> onDisApproveReview(DisApproveReview event, Emitter<ReviewState> emit)async  {
-  }
+  Future<void> onDisApproveReview(
+      DisApproveReview event, Emitter<ReviewState> emit,) async {}
 
-  Future<void> onUpdateReviewList(UpdateReviewList event, Emitter<ReviewState> emit) async {
-  }
+  Future<void> onUpdateReviewList(
+      UpdateReviewList event, Emitter<ReviewState> emit,) async {}
 }

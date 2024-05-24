@@ -183,6 +183,7 @@ class LessonRepo {
     final params = {'packageId': packageId, 'studentId': studentId};
     final response =
         await apiService.getReq(ApiPaths.getUpcomingLesson, params: params);
+        print('upcoming lesson response: ${response.data}');
     if (response.data != null) {
       try {
         final jsonList = response.data!.data['response'];
@@ -192,6 +193,7 @@ class LessonRepo {
         );
         return ResponseSuccess(upcomingLessons);
       } catch (e) {
+        print('upcoming lesson error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }
@@ -219,7 +221,7 @@ class LessonRepo {
     return ResponseFailed(response.error!);
   }
 
-  Future<ResponseState<List<Calender>>> getCalender(
+  Future<ResponseState<List<Calender>>> getCalender( 
       {required List<int> staffIds,}) async {
     final response =
         await apiService.postReq(ApiPaths.getCalender, payload: staffIds);

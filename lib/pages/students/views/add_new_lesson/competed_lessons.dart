@@ -1,31 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/past_lesson_cubit/past_lesson_cubit.dart';
+import 'package:korbil_mobile/repository/lesson/model/past_lesson.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class CompletedLessonsListWidget extends StatelessWidget {
   const CompletedLessonsListWidget({
+    required this.packageId,
+    required this.studentId,
     super.key,
   });
+  final int packageId;
+  final int studentId;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: 2,
-      itemBuilder: (cxt, index) => const _CompletedLessonTypeCard(),
+    return BlocBuilder<PastLessonCubit, PastLessonState>(
+      builder: (context, state) {
+        if (state is PastLessonInitial) {
+          context
+              .read<PastLessonCubit>()
+              .getPastLessons(studentId: studentId, packageId: packageId);
+        }
+        if (state is! LoadedState) {
+          return kLoadingWidget(context);
+        } else {
+          return state.lessons == null || state.lessons!.isEmpty
+              ? const SizedBox()
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.lessons!.length,
+                  itemBuilder: (cxt, index) => _CompletedLessonTypeCard(
+                    lesson: state.lessons![index],
+                  ),
+                );
+        }
+      },
     );
   }
 }
 
-class _CompletedLessonTypeCard extends StatefulWidget {
-  const _CompletedLessonTypeCard();
+class _CompletedLessonTypeCard extends StatelessWidget {
+  const _CompletedLessonTypeCard({required this.lesson});
+  final PastLesson lesson;
 
-  @override
-  State<_CompletedLessonTypeCard> createState() =>
-      _UpcomingLessonTypeCardState();
-}
-
-class _UpcomingLessonTypeCardState extends State<_CompletedLessonTypeCard> {
   // bool _bookingEnabled = false;
   @override
   Widget build(BuildContext context) {
@@ -82,18 +103,31 @@ class _UpcomingLessonTypeCardState extends State<_CompletedLessonTypeCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '90 Min Traffic Light Drive',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: KorbilTheme.of(context).secondaryColor,
-                          ),
+                        BlocBuilder<CourseBloc, CourseState>(
+                          builder: (context, state) {
+                            return state is! CourseLoaded
+                                ? kLoadingWidget(context)
+                                : Text(
+                                    state
+                                        .courses![state.courses!.indexWhere(
+                                            (e) =>
+                                                e.course.id ==
+                                                lesson.lesson.courseId,)]
+                                        .course
+                                        .title,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      color: KorbilTheme.of(context)
+                                          .secondaryColor,
+                                    ),
+                                  );
+                          },
                         ),
                         Text(
-                          'Start Date 2022/06/26',
+                          'Start Date: ${lesson.lesson.scheduledDate}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -103,7 +137,7 @@ class _UpcomingLessonTypeCardState extends State<_CompletedLessonTypeCard> {
                           ),
                         ),
                         Text(
-                          'Duration : 90min',
+                          'Duration : ${lesson.lesson.duration}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -135,7 +169,7 @@ class _UpcomingLessonTypeCardState extends State<_CompletedLessonTypeCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Pick up location',
+                          'Pick up location:',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -145,7 +179,7 @@ class _UpcomingLessonTypeCardState extends State<_CompletedLessonTypeCard> {
                           ),
                         ),
                         Text(
-                          'Bergmansgatan 20, 431 30 Mölndal',
+                          lesson.location.name,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',

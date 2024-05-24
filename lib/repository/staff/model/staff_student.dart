@@ -13,8 +13,8 @@ class StaffStudent {
         id: json['id'] as int,
         firstName: json['firstName'] as String,
         lastName: json['lastName'] as String,
-        packageIds:
-            List<int>.from(json['packageIds'].map((dynamic x) => x) as Iterable),
+        packageIds: List<int>.from(
+            json['packageIds'].map((dynamic x) => x) as Iterable,),
         totalLessons: json['totalLessons'] as int,
       );
 

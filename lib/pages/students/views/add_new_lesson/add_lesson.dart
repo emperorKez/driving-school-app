@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
+import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/upcoming_lesson/upcoming_lesson_bloc.dart';
+import 'package:korbil_mobile/repository/course/model/course.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ManageLessonAddLessonView extends StatefulWidget {
-  const ManageLessonAddLessonView({super.key});
+  const ManageLessonAddLessonView(
+      {required this.studentId, required this.packageId, super.key,});
+  final int studentId;
+  final int packageId;
 
   @override
   State<ManageLessonAddLessonView> createState() =>
@@ -12,8 +24,12 @@ class ManageLessonAddLessonView extends StatefulWidget {
 }
 
 class _ManageLessonAddLessonViewState extends State<ManageLessonAddLessonView> {
+  final addedLesson = <Course>{};
+
   @override
   Widget build(BuildContext context) {
+    final schoolId = context.read<SchoolBloc>().state.schoolInfo!.id;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -30,35 +46,125 @@ class _ManageLessonAddLessonViewState extends State<ManageLessonAddLessonView> {
         leading: const InstAppBarBackBtn(),
       ),
       body: CustomScreenPadding(
-        child: ListView(
-          children: const [
-            SizedBox(
-              height: 10,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            BlocBuilder<CourseBloc, CourseState>(
+              builder: (context, state) {
+                if (state is CourseInitial) {
+                  context
+                      .read<CourseBloc>()
+                      .add(GetCourses(schoolId: schoolId));
+                }
+                if (state is! CourseLoaded) {
+                  return kLoadingWidget(context);
+                } else {
+                  return state.courses == null || state.courses!.isEmpty
+                      ? const Center(
+                          child: Text('No course Available'),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.courses!.length,
+                          itemBuilder: (context, index) =>
+                              lessonDataCard(state.courses![index]),
+                        );
+                }
+              },
             ),
-            _LessonDataCard(),
-            _LessonDataCard(),
-            _LessonDataCard(),
-            _LessonDataCard(),
-            _LessonDataCard(),
-            _LessonDataCard(),
+            const SizedBox(height: 50,),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 13),
+                      decoration: BoxDecoration(
+                        color: KorbilTheme.of(context).white,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: KorbilTheme.of(context).secondaryColor,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Close',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: KorbilTheme.of(context).secondaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: BlocConsumer<UpcomingLessonBloc, UpcomingLessonState>(
+                    listener: (context, state) {
+                      if (state is UpcomingLessonLoaded) {
+                        Navigator.pop(context);
+                      }
+                      if (state is UpcomingLessonError) {
+                        errorSnackbar(context, error: state.error);
+                      }
+                    },
+                    builder: (context, state) {
+                      return state is UpcomingLessonLoading
+                          ? kLoadingWidget(context)
+                          : PrimaryBtn(
+                              ontap: () {
+                                final staffId = context
+                                    .read<StaffBloc>()
+                                    .state
+                                    .staff!
+                                    .profile
+                                    .id;
+                                final schoolId = context
+                                    .read<SchoolBloc>()
+                                    .state
+                                    .schoolInfo!
+                                    .id;
+                                if (addedLesson.isNotEmpty) {
+                                  final payload = {
+                                    'schoolPackageId': widget.packageId,
+                                    'studentId': widget.studentId,
+                                    'staffId': staffId,
+                                    'schoolId': schoolId,
+                                    'courseIdList': [
+                                      for (final item in addedLesson)
+                                        item.course.id,
+                                    ],
+                                  };
+                                  context.read<UpcomingLessonBloc>().add(
+                                      AddLesson(
+                                          payload: payload,
+                                          studentId: widget.studentId,
+                                          packageId: widget.packageId,),);
+                                }
+                              },
+                              text: 'Add',
+                              vm: 0,
+                              hm: 0,
+                              fontSize: 14,
+                            );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
-}
 
-class _LessonDataCard extends StatefulWidget {
-  const _LessonDataCard();
-
-  @override
-  State<_LessonDataCard> createState() => _LessonDataCardState();
-}
-
-class _LessonDataCardState extends State<_LessonDataCard> {
-  int _number = 1;
-  @override
-  Widget build(BuildContext context) {
+  Widget lessonDataCard(Course course) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
@@ -67,6 +173,7 @@ class _LessonDataCardState extends State<_LessonDataCard> {
         border: Border.all(color: KorbilTheme.of(context).alternate1),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
@@ -89,10 +196,11 @@ class _LessonDataCardState extends State<_LessonDataCard> {
               ),
               Expanded(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Traffic Light Drive',
+                      course.course.title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -102,7 +210,7 @@ class _LessonDataCardState extends State<_LessonDataCard> {
                       ),
                     ),
                     Text(
-                      'Duration : 60 min',
+                      'Duration : ${course.course.timeDuration} min',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -122,7 +230,8 @@ class _LessonDataCardState extends State<_LessonDataCard> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          _number += 1;
+                          addedLesson.add(course);
+                          // _number += 1;
                         });
                       },
                       child: Text(
@@ -143,11 +252,12 @@ class _LessonDataCardState extends State<_LessonDataCard> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(
-                            color: KorbilTheme.of(context).secondaryColor,),
+                          color: KorbilTheme.of(context).secondaryColor,
+                        ),
                       ),
                       child: Center(
                         child: Text(
-                          _number.toString(),
+                          addedLesson.contains(course) ? '1' : '0',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -160,11 +270,9 @@ class _LessonDataCardState extends State<_LessonDataCard> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (_number != 0) {
-                          setState(() {
-                            _number -= 1;
-                          });
-                        }
+                        setState(() {
+                          addedLesson.remove(course);
+                        });
                       },
                       child: Text(
                         '-',

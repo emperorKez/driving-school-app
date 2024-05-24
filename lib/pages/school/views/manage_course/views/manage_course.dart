@@ -167,7 +167,7 @@ class InstLessonCard extends StatelessWidget {
             margin: const EdgeInsets.only(right: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: KorbilTheme.of(context).primaryColor)
+              border: Border.all(color: KorbilTheme.of(context).primaryColor),
               // color: KorbilTheme.of(context).primaryColor,
             ),
             child: Center(

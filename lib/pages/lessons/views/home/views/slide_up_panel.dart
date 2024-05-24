@@ -138,14 +138,15 @@ Widget bookedCalender(List<Calender> bookedCalender) {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: bookedCalender.length,
-          itemBuilder: (cxt, index) {
+          itemBuilder: (context, index) {
             final item = bookedCalender[index];
             final step = StepDetails(
-                title: item.title,
-                time: '${item.scheduledTime.hour}-${item.scheduledTime.minute}',
-                duration: item.duration.toString(),
-                name: '${item.student.firstName} ${item.student.lastName}',
-                location: item.location.address,);
+              title: item.title,
+              time: item.scheduledTime,
+              duration: item.duration.toString(),
+              name: '${item.student.firstName} ${item.student.lastName}',
+              location: item.location.address,
+            );
             // final step = _steps.elementAt(index);
             var isNextCompleted = false;
             try {
@@ -153,12 +154,13 @@ Widget bookedCalender(List<Calender> bookedCalender) {
             } catch (e) {
               print(e);
             }
-            return LessonStepCard(
-              reached: step.isCompleted,
-              step: step,
-              isFirst: index == 0,
-              isLast: index == (bookedCalender.length - 1),
-              isNextCompleted: isNextCompleted,
+            return  LessonStepCard(
+              calender: bookedCalender[index],
+                reached: step.isCompleted,
+                step: step,
+                isFirst: index == 0,
+                isLast: index == (bookedCalender.length - 1),
+                isNextCompleted: isNextCompleted, 
             );
           },
         );
@@ -172,15 +174,18 @@ Widget completedCalender(List<Calender> completedCalender) {
           itemBuilder: (context, index) {
             final item = completedCalender[index];
             return SingleLessonStepCard(
-                step: StepDetails(
-                    title: item.title,
-                    time:
-                        '${item.scheduledTime.hour}-${item.scheduledTime.minute}',
-                    duration: item.duration.toString(),
-                    name: '${item.student.firstName} ${item.student.lastName}',
-                    location: item.location.address,
-                    isCompleted: true,),);
-          },);
+              calender: completedCalender[index],
+              step: StepDetails(
+                title: item.title,
+                time: item.scheduledTime,
+                duration: item.duration.toString(),
+                name: '${item.student.firstName} ${item.student.lastName}',
+                location: item.location.address,
+                isCompleted: true,
+              ),
+            );
+          },
+        );
 }
 
 class LessonCategoryTab extends StatelessWidget {

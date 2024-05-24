@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/single_lesson_step_card.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 
 class LessonStepCard extends StatelessWidget {
   const LessonStepCard({
     required this.reached,
     required this.isNextCompleted,
     required this.step,
+    required this.calender,
     super.key,
     this.isLast = false,
     this.isFirst = false,
@@ -17,6 +19,7 @@ class LessonStepCard extends StatelessWidget {
   final StepDetails step;
   final bool isLast;
   final bool isFirst;
+  final Calender calender;
 
   Widget _renderTrailingLine() {
     if (isLast) {
@@ -102,7 +105,7 @@ class LessonStepCard extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(child: SingleLessonStepCard(step: step)),
+          Expanded(child: SingleLessonStepCard(step: step, calender: calender,)),
         ],
       ),
     );

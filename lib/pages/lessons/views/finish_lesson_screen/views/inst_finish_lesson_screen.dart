@@ -33,140 +33,139 @@ class _InstFinishLessonViewState extends State<InstFinishLessonView> {
         backgroundColor: KorbilTheme.of(context).primaryBg,
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: BlocProvider(
-            create: (context) => AssessmentBloc(),
-            child: ListView(
-              children: [
-                SizedBox(
-                  height: s.height * 0.35,
-                  child: ClipRRect(
-                    child: Image.asset(
-                      'assets/imgs/ins/lessons/sample_map.png',
-                      fit: BoxFit.cover,
-                      width: s.width,
-                    ),
+          child: ListView(
+            children: [
+              SizedBox(
+                height: s.height * 0.35,
+                child: ClipRRect(
+                  child: Image.asset(
+                    'assets/imgs/ins/lessons/sample_map.png',
+                    fit: BoxFit.cover,
+                    width: s.width,
                   ),
                 ),
-                const SizedBox(height: 25),
-                if (getPreferedOrientation(context) ==
-                    PreferedOrientation.landscape)
-                  _buildStatsLandscape()
-                else
-                  _buildStatsPortrait(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Reviews',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: KorbilTheme.of(context).secondaryColor,
+              ),
+              const SizedBox(height: 25),
+              if (getPreferedOrientation(context) ==
+                  PreferedOrientation.landscape)
+                _buildStatsLandscape()
+              else
+                _buildStatsPortrait(),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Reviews',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: KorbilTheme.of(context).secondaryColor,
+                      ),
+                    ),
+                  ),
+                  const Expanded(
+                    child: PrimaryBtn(
+                      text: 'Add More',
+                      pvm: 8,
+                      vm: 0,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+              Text(
+                'Feedback',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: KorbilTheme.of(context).secondaryColor,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: feedbackController,
+                    validator: (val) {
+                      if (val == null) {
+                        return 'Add a review';
+                      } else if (val.characters.length < 10) {
+                        return 'Enter at least 10 characters';
+                      } else {
+                        return null;
+                      }
+                    },
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: KorbilTheme.of(context).secondaryColor,
+                    ),
+                    keyboardType: TextInputType.multiline,
+                    minLines: 9,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 15,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: KorbilTheme.of(context).alternate2,
                         ),
                       ),
-                    ),
-                    const Expanded(
-                      child: PrimaryBtn(
-                        text: 'Add More',
-                        pvm: 8,
-                        vm: 0,
-                        fontSize: 14,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: KorbilTheme.of(context).primaryColor,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-                Text(
-                  'Feedback',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: KorbilTheme.of(context).secondaryColor,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: Form(
-                    key: _formKey,
-                    child: TextFormField(
-                      controller: feedbackController,
-                      validator: (val) {
-                        if (val == null) {
-                          return 'Add a review';
-                        } else if (val.characters.length < 50) {
-                          return 'Enter at least 50 characters';
-                        } else {
-                          return null;
-                        }
-                      },
-                      style: TextStyle(
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: KorbilTheme.of(context).warningColor,
+                        ),
+                      ),
+                      hintText: 'Add a Review',
+                      hintStyle: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
-                        color: KorbilTheme.of(context).secondaryColor,
-                      ),
-                      keyboardType: TextInputType.multiline,
-                      minLines: 9,
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 15,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            color: KorbilTheme.of(context).alternate2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            color: KorbilTheme.of(context).primaryColor,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            color: KorbilTheme.of(context).warningColor,
-                          ),
-                        ),
-                        hintText: 'Add a Review',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: KorbilTheme.of(context).alternate1,
-                        ),
+                        color: KorbilTheme.of(context).alternate1,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                PrimaryBtn(
-                  text: 'Finish Lesson',
-                  hm: 0,
-                  ontap: () {
-                    if (_formKey.currentState!.validate()) {
-                      context
-                          .read<AssessmentBloc>()
-                          .add(AddFeedback(feedback: feedbackController.text));
+              ),
+              const SizedBox(height: 20),
+              PrimaryBtn(
+                text: 'Finish Lesson',
+                hm: 0,
+                ontap: () {
+                  if (_formKey.currentState!.validate()) {
+                    context
+                        .read<AssessmentBloc>()
+                        .add(AddFeedback(feedback: feedbackController.text));
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (cxt) => const InstFinishLessonWithMapView(),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (cxt) => InstFinishLessonWithMapView(
+                          lessonId: widget.lessonId,
                         ),
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(height: 30),
-              ],
-            ),
+                      ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: 30),
+            ],
           ),
         ),
       ),
@@ -261,6 +260,7 @@ class _InstFinishLessonViewState extends State<InstFinishLessonView> {
                   },
                 ),
               ),
+              //todo add road safety andvehicleKnowledg assessment sections
             ],
           ),
         ),

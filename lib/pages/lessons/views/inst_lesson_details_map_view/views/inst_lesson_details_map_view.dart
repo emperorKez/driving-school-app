@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/assessment/assessment_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/views/lesson_detail_add_review/views/inst_lesson_details_add_review.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstLessonDetailMapView extends StatefulWidget {
-  const InstLessonDetailMapView({required this.lessonId, super.key});
+  const InstLessonDetailMapView(
+      {required this.lessonId, required this.duration, super.key,});
   final int lessonId;
+  final dynamic duration;
 
   @override
   State<InstLessonDetailMapView> createState() =>
@@ -44,7 +48,11 @@ class _InstLessonDetailMapViewState extends State<InstLessonDetailMapView> {
               height: 400,
               child: Column(
                 children: [
-                  _BottomSheetDetails(s: s, lessonId: widget.lessonId,),
+                  _BottomSheetDetails(
+                    s: s,
+                    lessonId: widget.lessonId,
+                    duration: widget.duration,
+                  ),
                 ],
               ),
             ),
@@ -75,7 +83,10 @@ class _InstLessonDetailMapViewState extends State<InstLessonDetailMapView> {
               child: Column(
                 children: [
                   const Spacer(),
-                  _BottomSheetDetails(s: s, lessonId: widget.lessonId,),
+                  _BottomSheetDetails(
+                      s: s,
+                      lessonId: widget.lessonId,
+                      duration: widget.duration,),
                 ],
               ),
             ),
@@ -87,10 +98,10 @@ class _InstLessonDetailMapViewState extends State<InstLessonDetailMapView> {
 }
 
 class _BottomSheetDetails extends StatelessWidget {
-  const _BottomSheetDetails({
-    required this.s, required this.lessonId,
-  });
+  const _BottomSheetDetails(
+      {required this.s, required this.lessonId, required this.duration,});
   final int lessonId;
+  final dynamic duration;
 
   final Size s;
 
@@ -175,7 +186,7 @@ class _BottomSheetDetails extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      '25 mins ',
+                      '$duration mins ',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,
@@ -194,10 +205,14 @@ class _BottomSheetDetails extends StatelessWidget {
             pvm: 12,
             fontSize: 14,
             ontap: () {
+              context.read<AssessmentBloc>().add(Reset());
               Navigator.push(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (cxt) => const InstLessonDetailAddReviewView(),
+                  builder: (cxt) => InstLessonDetailAddReviewView(
+                    lessonId: lessonId,
+                    duration: duration,
+                  ),
                 ),
               );
             },

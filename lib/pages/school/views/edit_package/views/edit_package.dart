@@ -393,7 +393,7 @@ class _InstEditNewPackageViewState extends State<InstEditNewPackageView> {
                   child: GestureDetector(
                     onTap: () {},
                     child: Container(
-                      // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    // margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                       padding: const EdgeInsets.symmetric(vertical: 13),
                       decoration: BoxDecoration(
                         color: KorbilTheme.of(context).white,

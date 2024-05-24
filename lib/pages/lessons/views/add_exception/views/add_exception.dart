@@ -136,8 +136,11 @@ class _AddExceptionViewState extends State<AddExceptionView> {
                           ),
                           GestureDetector(
                             onTap: () => context.read<AvailabiltyBloc>().add(
-                                DeleteTimeOffDays(timeOffDay[index].schoolId,
-                                    timeOffDay[index].id,),),
+                                  DeleteTimeOffDays(
+                                    timeOffDay[index].schoolId,
+                                    timeOffDay[index].id,
+                                  ),
+                                ),
                             child: Image.asset(
                               'assets/imgs/ins/lessons/bin.png',
                               width: 24,
@@ -192,7 +195,9 @@ class _AddExceptionViewState extends State<AddExceptionView> {
                           context.read<SchoolBloc>().state.schoolInfo!.id;
                       context.read<AvailabiltyBloc>().add(
                             AddMultipleTimeOffDays(
-                                schoolId: schoolId, payload: payload,),
+                              schoolId: schoolId,
+                              payload: payload,
+                            ),
                           );
                     },
                     text: 'Save',

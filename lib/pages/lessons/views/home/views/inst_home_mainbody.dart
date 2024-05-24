@@ -262,8 +262,10 @@ class _InstHomeMainBodyState extends State<InstHomeMainBody> {
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/imgs/ins/lessons/avatar1.png',),),
+                                    image: AssetImage(
+                                      'assets/imgs/ins/lessons/avatar1.png',
+                                    ),
+                                  ),
                                 ),
                               ),
                               const SizedBox(

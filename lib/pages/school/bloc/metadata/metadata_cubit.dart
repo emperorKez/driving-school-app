@@ -32,7 +32,8 @@ class MetadataCubit extends Cubit<MetadataState> {
       final staffRoleRes = await _metadataRepo.getAllStaffRoles();
       final transmissionTypeRes =
           await _metadataRepo.getVehicleTransmissionTypes();
-      emit(MetadataLoaded(
+      emit(
+        MetadataLoaded(
           transmisionTypes: transmissionTypeRes.data,
           languages: languageRes.data,
           scheduleFlows: scheduleFlowRes.data,
@@ -43,7 +44,9 @@ class MetadataCubit extends Cubit<MetadataState> {
           feedbackCategories: const [],
           documentTypes: documentTypeRes.data,
           staffRoles: staffRoleRes.data,
-          locationTypes: locationTypeRes.data,),);
+          locationTypes: locationTypeRes.data,
+        ),
+      );
     } catch (e) {
       emit(MetadataError(error: e.toString()));
     }

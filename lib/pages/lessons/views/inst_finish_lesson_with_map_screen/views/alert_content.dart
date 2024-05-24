@@ -58,13 +58,8 @@ class AlertContent extends StatelessWidget {
           PrimaryBtn(
             text: 'Confirm',
             ontap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (cxt) => const InstCompletedLessonDetails(lessonId: 1,), // TODOchange the value
-                ),
-              );
+              Navigator.pop(context, true);
+              
             },
             vm: 10,
             hm: 0,
@@ -72,7 +67,7 @@ class AlertContent extends StatelessWidget {
           SecondaryBtn(
             text: 'Discard',
             ontap: () {
-              Navigator.pop(context);
+              Navigator.pop(context, false);
             },
             vm: 5,
             hm: 0,

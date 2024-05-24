@@ -2,7 +2,7 @@
 part of 'availabilty_bloc.dart';
 
 // @immutable
-// sealed 
+// sealed
 class AvailabiltyState {
   AvailabiltyState({this.availableDates, this.timeOffDays});
 
@@ -21,10 +21,14 @@ class AvailabiltyState {
 }
 
 final class AvailabiltyInitial extends AvailabiltyState {}
+
 final class AvailabiltyLoading extends AvailabiltyState {}
+
 final class AvailabiltyLoaded extends AvailabiltyState {
-  AvailabiltyLoaded({required super.availableDates, required super.timeOffDays});
+  AvailabiltyLoaded(
+      {required super.availableDates, required super.timeOffDays,});
 }
+
 final class AvailabiltyError extends AvailabiltyState {
   AvailabiltyError({this.error = 'Something went erong'});
   final String error;

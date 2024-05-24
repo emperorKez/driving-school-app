@@ -4,8 +4,13 @@ part of 'staff_bloc.dart';
 // @immutable
 // sealed
 class StaffState {
-  const StaffState(
-      {this.staff, this.schoolInvite, this.stat, this.topStudents, this.students,});
+  const StaffState({
+    this.staff,
+    this.schoolInvite,
+    this.stat,
+    this.topStudents,
+    this.students,
+  });
 
   final Staff? staff;
   final SchoolInfo? schoolInvite;
@@ -35,11 +40,13 @@ final class StaffInitial extends StaffState {}
 final class StaffLoading extends StaffState {}
 
 final class StaffLoaded extends StaffState {
-  const StaffLoaded(
-      {required super.staff,
-      super.schoolInvite,
-      super.stat,
-      super.topStudents, super.students,});
+  const StaffLoaded({
+    required super.staff,
+    super.schoolInvite,
+    super.stat,
+    super.topStudents,
+    super.students,
+  });
 }
 
 final class StaffError extends StaffState {

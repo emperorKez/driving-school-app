@@ -15,7 +15,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
   final double hoursCount;
   final int type;
   final bool selected;
-  final Function ontap;
+  final void Function() ontap;
 
   Widget _generateIcon() {
     var path = 'assets/imgs/ins/profile/upcoming_lessons_icon_white.png';
@@ -41,11 +41,13 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        ontap(type);
-      },
+      onTap: ontap,
+      // () {
+      // ontap;
+      // ontap(type);
+      // },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           color: selected
               ? KorbilTheme.of(context).primaryColor
@@ -63,7 +65,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              width: 10,
+              width: 8,
             ),
             Expanded(
               flex: 4,
@@ -78,7 +80,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
                           color: selected
                               ? KorbilTheme.of(context).white
                               : KorbilTheme.of(context).secondaryColor,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -92,7 +94,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
                           color: selected
                               ? KorbilTheme.of(context).white
                               : KorbilTheme.of(context).secondaryColor,
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -107,7 +109,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
                           color: selected
                               ? KorbilTheme.of(context).white
                               : KorbilTheme.of(context).secondaryColor,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -121,7 +123,7 @@ class ManageStudentLessonTypeCard extends StatelessWidget {
                           color: selected
                               ? KorbilTheme.of(context).white
                               : KorbilTheme.of(context).secondaryColor,
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

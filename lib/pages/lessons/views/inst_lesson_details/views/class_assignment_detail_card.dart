@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details_map_view/views/inst_lesson_details_map_view.dart';
@@ -8,7 +7,8 @@ import 'package:korbil_mobile/theme/theme.dart';
 
 class ClassAssignmentDetailsCard extends StatelessWidget {
   const ClassAssignmentDetailsCard({
-    required this.calender, super.key,
+    required this.calender,
+    super.key,
   });
   final Calender calender;
 
@@ -53,7 +53,8 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text( DateFormat.yMd().format(calender.scheduledDate),
+                      Text(
+                        calender.scheduledDate,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -88,7 +89,8 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text('${calender.scheduledTime.hour}:${calender.scheduledTime.minute}',
+                      Text(
+                        calender.scheduledTime,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -123,7 +125,8 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text('${calender.duration}',
+                      Text(
+                        '${calender.duration}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,
@@ -147,7 +150,8 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          Text('${calender.location.address}, ${calender.location.city}',
+          Text(
+            '${calender.location.address}, ${calender.location.city}',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,
@@ -166,7 +170,10 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (cxt) =>  InstLessonDetailMapView(lessonId: calender.id,),
+                  builder: (cxt) => InstLessonDetailMapView(
+                    lessonId: calender.id,
+                    duration: calender.duration,
+                  ),
                 ),
               );
             },

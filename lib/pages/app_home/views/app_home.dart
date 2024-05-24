@@ -17,7 +17,7 @@ class AppHomePage extends StatelessWidget {
   const AppHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Material(
       child: BlocBuilder<StaffBloc, StaffState>(
         builder: (context, state) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class AddNewUserlertContent extends StatefulWidget {
@@ -121,14 +122,16 @@ class _AddNewUserlertContentState extends State<AddNewUserlertContent> {
           text: 'Submit',
           ontap: () {
             if (_formKey.currentState!.validate()) {
+              final schoolId = context.read<SchoolBloc>().state.schoolInfo!.id;
               context.read<SchoolBloc>().add(
                     InviteStudent(
-                      schoolId: context
-                          .read<SchoolBloc>()
-                          .state.schoolInfo!.id,
+                      schoolId: schoolId,
                       email: emailController.text,
                     ),
                   );
+              context
+                  .read<StudentBloc>()
+                  .add(GetAllStudent(schoolId: schoolId));
               Navigator.pop(context);
             }
             // Navigator.push(

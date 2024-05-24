@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/lesson/lesson_bloc.dart';
+import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/inst_completed_lesson_details.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_finish_lesson_with_map_screen/views/alert_content.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
 class InstFinishLessonWithMapView extends StatefulWidget {
-  const InstFinishLessonWithMapView({super.key});
+  const InstFinishLessonWithMapView({required this.lessonId, super.key});
+  final int lessonId;
 
   @override
   State<InstFinishLessonWithMapView> createState() =>
@@ -14,8 +18,8 @@ class InstFinishLessonWithMapView extends StatefulWidget {
 
 class _InstFinishLessonWithMapViewState
     extends State<InstFinishLessonWithMapView> {
-  Future<void> _showConfirmFinishLessonAlert() {
-    return showDialog<void>(
+  Future<bool?> _showConfirmFinishLessonAlert() {
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
         return const AlertDialog(
@@ -56,9 +60,9 @@ class _InstFinishLessonWithMapViewState
                     Container()
                   else
                     const Spacer(),
-                  _BottomSheetDetails(
-                    s: s,
-                    onFinishLessonTap: _showConfirmFinishLessonAlert,
+                  bottomSheetDetails(
+                     s,
+                    // onFinishLessonTap: _showConfirmFinishLessonAlert,
                   ),
                 ],
               ),
@@ -68,19 +72,8 @@ class _InstFinishLessonWithMapViewState
       ),
     );
   }
-}
 
-class _BottomSheetDetails extends StatelessWidget {
-  const _BottomSheetDetails({
-    required this.s,
-    required this.onFinishLessonTap,
-  });
-
-  final Size s;
-  final Function onFinishLessonTap;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget bottomSheetDetails(Size s) {
     return Container(
       padding: const EdgeInsets.only(
         top: 12,
@@ -168,28 +161,79 @@ class _BottomSheetDetails extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 30),
-          PrimaryBtn(
-            text: 'Add Common Review',
-            pvm: 12,
-            vm: 5,
-            fontSize: 14,
-            ontap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute<dynamic>(
-              //     builder: (cxt) => const InstLessonDetailAddReviewView(),
-              //   ),
-              // );
-            },
-          ),
+          // PrimaryBtn(
+          //   text: 'Add Common Review',
+          //   pvm: 12,
+          //   vm: 5,
+          //   fontSize: 14,
+          //   ontap: () {
+          //     // Navigator.push(
+          //     //   context,
+          //     //   MaterialPageRoute<dynamic>(
+          //     //     builder: (cxt) => const InstLessonDetailAddReviewView(),
+          //     //   ),
+          //     // );
+          //   },
+          // ),
           PrimaryBtn(
             text: 'Finish Lesson',
             pvm: 12,
             fontSize: 14,
-            ontap: onFinishLessonTap,
+            ontap: () async {
+            bool? confirmation = await  _showConfirmFinishLessonAlert();
+            // bool confirmation =  onFinishLessonTap;
+            if (confirmation != null && confirmation == true){
+print(getPayload());
+if(!context.mounted) return;
+// context.read<LessonBloc>().add(FinishLesson(lessonId: widget.lessonId, payload: getPayload()));
+await Navigator.pushReplacement(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (cxt) => InstCompletedLessonDetails(lessonId: widget.lessonId,), 
+                ),
+              );
+            }
+            },
           ),
         ],
       ),
     );
+  }
+  Map<String, dynamic> getPayload(){
+    return {
+  'postLessonNote': 'string',
+  'distance': 0,
+  'additionalFeedback': [
+    {
+      'skillCategoryId': 0,
+      'subSkillCategoryId': 0,
+      'category': {
+        'id': 0,
+        'name': 'string',
+        'code': 'string',
+        'icon': 'string',
+        'description': 'string',
+        'subCategories': [
+          {
+            'id': 0,
+            'name': 'string',
+            'code': 'string',
+            'description': 'string'
+          }
+        ]
+      },
+      'subCategory': {
+        'id': 0,
+        'name': 'string',
+        'code': 'string',
+        'description': 'string'
+      },
+      'longitude': 0,
+      'latitude': 0,
+      'grade': 0,
+      'comment': 'string'
+    }
+  ]
+};
   }
 }

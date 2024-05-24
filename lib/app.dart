@@ -6,8 +6,10 @@ import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_school/create_school_bloc.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/assessment/assessment_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/lesson/lesson_bloc.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/lesson_detail/lesson_detail_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/availability/availabilty_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/group_lesson/group_lesson_bloc.dart';
@@ -22,8 +24,12 @@ import 'package:korbil_mobile/pages/school/bloc/school_location/school_location_
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/subscription/subscription_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/vehicle/vehicle_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/package_cubit/package_cubit.dart';
+import 'package:korbil_mobile/pages/students/bloc/past_lesson_cubit/past_lesson_cubit.dart';
+import 'package:korbil_mobile/pages/students/bloc/profile_cubit/profile_cubit.dart';
 import 'package:korbil_mobile/pages/students/bloc/search/search_bloc.dart';
 import 'package:korbil_mobile/pages/students/bloc/student/student_bloc.dart';
+import 'package:korbil_mobile/pages/students/bloc/upcoming_lesson/upcoming_lesson_bloc.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -35,8 +41,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   final ThemeMode _themeMode = ThemeMode.system;
   final Locale? _locale = AppLocalizations.getStoredLocale();
-
-
 
   // Future<void> initAmplify() async {
   //   WidgetsFlutterBinding.ensureInitialized();
@@ -54,8 +58,7 @@ class _AppState extends State<App> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc()
-          ..add(CacheSignin()),
+          create: (context) => AuthBloc()..add(CacheSignin()),
           // lazy: false,
         ),
         BlocProvider<SchoolBloc>(
@@ -110,12 +113,17 @@ class _AppState extends State<App> {
         BlocProvider(create: (context) => CalenderCubit()),
         BlocProvider(create: (context) => SearchBloc()),
         BlocProvider(
-          create: (context) =>
-              SubscriptionBloc(),
+          create: (context) => SubscriptionBloc(),
           //     ..add(GetAllSubscriptionLevels()),
           // lazy: false,
         ),
         BlocProvider(create: (context) => AvailabiltyBloc()),
+        BlocProvider(create: (context) => PastLessonCubit()),
+        BlocProvider(create: (context) => UpcomingLessonBloc()),
+        BlocProvider(create: (context) => LessonDetailCubit()),
+        BlocProvider(create: (context) => PackageCubit(),),
+        BlocProvider(create: (context) => ProfileCubit()),
+        BlocProvider(create: (context) => AssessmentBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

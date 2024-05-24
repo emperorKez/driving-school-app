@@ -1,17 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:korbil_mobile/components/schedule_status_types/type1.dart';
-import 'package:korbil_mobile/components/schedule_status_types/type2.dart';
-import 'package:korbil_mobile/components/schedule_status_types/type3.dart';
-import 'package:korbil_mobile/components/schedule_status_types/type4.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 
 class InstWeeklyCalendar extends StatefulWidget {
-  const InstWeeklyCalendar({this.category = 'all',
-    super.key,});
+  const InstWeeklyCalendar({
+    this.category = 'all',
+    super.key,
+  });
   final String category;
 
   @override
@@ -20,6 +20,7 @@ class InstWeeklyCalendar extends StatefulWidget {
 
 class _InstWeeklyCalendarState extends State<InstWeeklyCalendar> {
   DateTime calenderDate = DateTime.now();
+  final dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +55,7 @@ class _InstWeeklyCalendarState extends State<InstWeeklyCalendar> {
               ),
               const Spacer(),
               GestureDetector(
-                onTap: () {
-                  setState(() {
-                    calenderDate.add(const Duration(days: 7));
-                  });
-                },
+                onTap: () {},
                 child: const Icon(
                   Icons.arrow_back_ios,
                   size: 15,
@@ -85,88 +82,89 @@ class _InstWeeklyCalendarState extends State<InstWeeklyCalendar> {
               color: AppColors.grey1,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _DayWidget(
-                date: 'S',
-                dateWidget: ScheduleStatusType2Widget(
-                  cellDetails: DateRangePickerCellDetails(
-                    date: DateTime.now(),
-                    bounds: Rect.zero,
-                    visibleDates: [],
-                  ),
-                  cts: _dateBoxConstraints(),
-                ),
-              ),
-              _DayWidget(
-                date: 'M',
-                dateWidget: ScheduleStatusType2Widget(
-                  cellDetails: DateRangePickerCellDetails(
-                    date: DateTime.now(),
-                    bounds: Rect.zero,
-                    visibleDates: [],
-                  ),
-                  cts: _dateBoxConstraints(),
-                ),
-              ),
-              _DayWidget(
-                date: 'T',
-                dateWidget: ScheduleStatusType2Widget(
-                  cellDetails: DateRangePickerCellDetails(
-                    date: DateTime.now(),
-                    bounds: Rect.zero,
-                    visibleDates: [],
-                  ),
-                  cts: _dateBoxConstraints(),
-                ),
-              ),
-              _DayWidget(
-                date: 'W',
-                dateWidget: ScheduleStatusType4Widget(
-                  cellDetails: DateRangePickerCellDetails(
-                    date: DateTime.now(),
-                    bounds: Rect.zero,
-                    visibleDates: [],
-                  ),
-                  cts: _dateBoxConstraints(),
-                ),
-              ),
-              _DayWidget(
-                date: 'T',
-                dateWidget: ScheduleStatusType3Widget(
-                  cellDetails: DateRangePickerCellDetails(
-                    date: DateTime.now(),
-                    bounds: Rect.zero,
-                    visibleDates: [],
-                  ),
-                  cts: _dateBoxConstraints(),
-                ),
-              ),
-              _DayWidget(
-                date: 'F',
-                dateWidget: ScheduleStatusType2Widget(
-                  cellDetails: DateRangePickerCellDetails(
-                    date: DateTime.now(),
-                    bounds: Rect.zero,
-                    visibleDates: [],
-                  ),
-                  cts: _dateBoxConstraints(),
-                ),
-              ),
-              _DayWidget(
-                date: 'S',
-                dateWidget: ScheduleStatusType1Widget(
-                  cellDetails: DateRangePickerCellDetails(
-                    date: DateTime.now(),
-                    bounds: Rect.zero,
-                    visibleDates: [],
-                  ),
-                  cts: _dateBoxConstraints(),
-                ),
-              ),
-            ],
-          ),
+          WeeklyCal(date: DateTime.now()),
+          //   Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       _DayWidget(
+          //         date: 'S',
+          //         dateWidget: ScheduleStatusType2Widget(
+          //           cellDetails: DateRangePickerCellDetails(
+          //             date: DateTime.now(),
+          //             bounds: Rect.zero,
+          //             visibleDates: [],
+          //           ),
+          //           cts: _dateBoxConstraints(),
+          //         ),
+          //       ),
+          //       _DayWidget(
+          //         date: 'M',
+          //         dateWidget: ScheduleStatusType2Widget(
+          //           cellDetails: DateRangePickerCellDetails(
+          //             date: DateTime.now(),
+          //             bounds: Rect.zero,
+          //             visibleDates: [],
+          //           ),
+          //           cts: _dateBoxConstraints(),
+          //         ),
+          //       ),
+          //       _DayWidget(
+          //         date: 'T',
+          //         dateWidget: ScheduleStatusType2Widget(
+          //           cellDetails: DateRangePickerCellDetails(
+          //             date: DateTime.now(),
+          //             bounds: Rect.zero,
+          //             visibleDates: [],
+          //           ),
+          //           cts: _dateBoxConstraints(),
+          //         ),
+          //       ),
+          //       _DayWidget(
+          //         date: 'W',
+          //         dateWidget: ScheduleStatusType4Widget(
+          //           cellDetails: DateRangePickerCellDetails(
+          //             date: DateTime.now(),
+          //             bounds: Rect.zero,
+          //             visibleDates: [],
+          //           ),
+          //           cts: _dateBoxConstraints(),
+          //         ),
+          //       ),
+          //       _DayWidget(
+          //         date: 'T',
+          //         dateWidget: ScheduleStatusType3Widget(
+          //           cellDetails: DateRangePickerCellDetails(
+          //             date: DateTime.now(),
+          //             bounds: Rect.zero,
+          //             visibleDates: [],
+          //           ),
+          //           cts: _dateBoxConstraints(),
+          //         ),
+          //       ),
+          //       _DayWidget(
+          //         date: 'F',
+          //         dateWidget: ScheduleStatusType2Widget(
+          //           cellDetails: DateRangePickerCellDetails(
+          //             date: DateTime.now(),
+          //             bounds: Rect.zero,
+          //             visibleDates: [],
+          //           ),
+          //           cts: _dateBoxConstraints(),
+          //         ),
+          //       ),
+          //       _DayWidget(
+          //         date: 'S',
+          //         dateWidget: ScheduleStatusType1Widget(
+          //           cellDetails: DateRangePickerCellDetails(
+          //             date: DateTime.now(),
+          //             bounds: Rect.zero,
+          //             visibleDates: [],
+          //           ),
+          //           cts: _dateBoxConstraints(),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
         ],
       ),
     );
@@ -204,5 +202,112 @@ class _DayWidget extends StatelessWidget {
         dateWidget,
       ],
     );
+  }
+}
+
+class WeeklyCal extends StatelessWidget {
+  const WeeklyCal({required this.date, super.key});
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    final labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    final days = getDates();
+    return BlocBuilder<CalenderCubit, CalenderState>(
+      builder: (context, state) {
+        if (state is! CalenderLoaded) {
+          return kLoadingWidget(context);
+        } else {
+          
+return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children:
+            List.generate(7, (index) => weekDay(state: state, label:labels[index],day: days[index])),
+      );}},);
+  }
+
+  Widget weekDay({required CalenderLoaded state, required String label, required int day}) {
+    final dateFormat = DateFormat('yyyy-MM-dd');
+    final currentDate = dateFormat.parse('${date.year}-${date.month}-$day');
+    var isScheduled = false;        
+          for (final item in state.calender) {
+            if (dateFormat.parse(item.scheduledDate) == currentDate) {
+              isScheduled = true;
+            }
+          }
+
+          return Column(
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  color: AppColors.black,
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              GestureDetector(
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  padding: const EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      // color: AppColors.green,
+                      border: Border.all(color: AppColors.green),
+                      color: isScheduled
+                          ? AppColors.green
+                          : currentDate.day == DateTime.now().day
+                              ? AppColors.grey1
+                              : Colors.white,),
+                  child: Center(
+                    child: Text(
+                      '$day',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: currentDate.day == DateTime.now().day
+                            ? Colors.white
+                            : isScheduled
+                                ? Colors.white
+                                : AppColors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+
+  List<int> getDates() {
+    var days = <int>[];
+    final day = DateTime.now().day;
+    switch (DateTime.now().weekday) {
+      case 1:
+        days = [day, day + 1, day + 2, day + 3, day + 4, day + 5, day + 6];
+      case 2:
+        days = [day - 1, day, day + 1, day + 2, day + 3, day + 4, day + 5];
+      case 3:
+        days = [day - 2, day - 1, day, day + 1, day + 2, day + 3, day + 4];
+      case 4:
+        days = [day - 3, day - 2, day - 1, day, day + 1, day + 2, day + 3];
+      case 5:
+        days = [day - 4, day - 3, day - 2, day - 1, day, day + 1, day + 2];
+      case 6:
+        days = [day - 5, day - 4, day - 3, day - 2, day - 1, day, day + 1];
+      case 7:
+        days = [day - 6, day - 5, day - 4, day - 3, day - 2, day - 1, day];
+
+      default:
+        days = [];
+    }
+    return days;
   }
 }

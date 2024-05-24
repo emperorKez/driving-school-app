@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -34,10 +33,9 @@ class _InstBookedLessonsState extends State<InstBookedLessons> {
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(DateFormat.Md()
-                                  .format(state.calender[index].scheduledDate),),
+                              Text(state.calender[index].scheduledDate,),
                               Text(
-                                  '${state.calender[index].scheduledTime.hour}:${state.calender[index].scheduledTime.minute}',),
+                                  state.calender[index].scheduledTime,),
                             ],
                           ),
                         ),);

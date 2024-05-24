@@ -4,6 +4,7 @@ import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
+import 'package:korbil_mobile/pages/app_home/views/app_home.dart';
 import 'package:korbil_mobile/pages/lessons/views/edit_time_schedule/views/edit_time_schedule.dart';
 import 'package:korbil_mobile/pages/school/bloc/availability/availabilty_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
@@ -53,7 +54,7 @@ class _ManageSchoolViewState extends State<_ManageSchool> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              leading: const InstAppBarBackBtn(), 
+              leading: const InstAppBarBackBtn(),
             ),
       body: BlocBuilder<SchoolBloc, SchoolState>(
         builder: (context, state) {
@@ -191,8 +192,9 @@ class _ManageSchoolViewState extends State<_ManageSchool> {
   Widget publishSchool() {
     return BlocConsumer<SchoolBloc, SchoolState>(
       listener: (context, state) {
-        if (state is SchoolLoaded) {
-          Navigator.pop(context);
+        if (state is SchoolLoaded && state.schoolInfo!.schoolStatus == 2) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute<dynamic>(builder: (context) => const AppHomePage()),);
         }
         if (state is SchoolError) {
           errorSnackbar(context, error: state.error);
@@ -202,49 +204,53 @@ class _ManageSchoolViewState extends State<_ManageSchool> {
         if (state is! SchoolLoaded) {
           return kLoadingWidget(context);
         } else {
-          return state.schoolInfo!.schoolStatus == 5
-              ? const SizedBox()
-              : Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: PrimaryBtn(
-                    ontap: () {
-                      final schoolLocation = context
-                          .read<SchoolLocationBloc>()
-                          .state
-                          .schoolLocations;
-                      final vehicles =
-                          context.read<VehicleBloc>().state.vehicles;
-                      final availableTime =
-                          context.read<AvailabiltyBloc>().state.availableDates;
+          return state.schoolInfo!.schoolStatus == 2
+              ? const Text('Awaiting Korbil Admin Approval')
+              : state.schoolInfo!.schoolStatus == 5
+                  ? const SizedBox()
+                  : Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: PrimaryBtn(
+                        ontap: () {
+                          final schoolLocation = context
+                              .read<SchoolLocationBloc>()
+                              .state
+                              .schoolLocations;
+                          final vehicles =
+                              context.read<VehicleBloc>().state.vehicles;
+                          final availableTime = context
+                              .read<AvailabiltyBloc>()
+                              .state
+                              .availableDates;
 
-                      if (schoolLocation == null || schoolLocation.isEmpty) {
-                        errorSnackbar(
-                          context,
-                          error: 'Configure School Pickup Locations',
-                        );
-                      } else if (vehicles == null || vehicles.isEmpty) {
-                        errorSnackbar(
-                          context,
-                          error: 'Configure School Vehicles',
-                        );
-                      } else if (availableTime == null ||
-                          availableTime.isEmpty) {
-                        errorSnackbar(
-                          context,
-                          error: 'Configure School Available Dates',
-                        );
-                      } else {
-                        context
-                            .read<SchoolBloc>()
-                            .add(PublishSchool(schoolId: state.schoolInfo!.id));
-                      }
-                    },
-                    text: 'Publish School',
-                    vm: 0,
-                    hm: 0,
-                    fontSize: 14,
-                  ),
-                );
+                          if (schoolLocation == null ||
+                              schoolLocation.isEmpty) {
+                            errorSnackbar(
+                              context,
+                              error: 'Configure School Pickup Locations',
+                            );
+                          } else if (vehicles == null || vehicles.isEmpty) {
+                            errorSnackbar(
+                              context,
+                              error: 'Configure School Vehicles',
+                            );
+                          } else if (availableTime == null ||
+                              availableTime.isEmpty) {
+                            errorSnackbar(
+                              context,
+                              error: 'Configure School Available Dates',
+                            );
+                          } else {
+                            context.read<SchoolBloc>().add(
+                                PublishSchool(schoolId: state.schoolInfo!.id),);
+                          }
+                        },
+                        text: 'Publish School',
+                        vm: 0,
+                        hm: 0,
+                        fontSize: 14,
+                      ),
+                    );
         }
       },
     );

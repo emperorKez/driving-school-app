@@ -77,6 +77,12 @@ class _AppInitState extends State<AppInit> {
                 ),
               );
             }
+             if (state is StaffError) {
+                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                    MaterialPageRoute<dynamic>(
+                        builder: (context) => const CreateAccountView(),),
+                    (route) => false,);
+              }
           },
         ),
       ],

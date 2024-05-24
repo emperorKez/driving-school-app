@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/repository/student/models/student_package.dart';
@@ -68,7 +67,8 @@ class InstHIstoryItemCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Completed Date:${DateFormat.yMMMd().format(lesson.scheduledDate)}',
+                      'Completed Date:${lesson.scheduledDate}',
+                      // 'Completed Date:${DateFormat.yMMMd().format(lesson.scheduledDate)}',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: KorbilTheme.of(context).secondaryColor,

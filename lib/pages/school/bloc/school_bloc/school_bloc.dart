@@ -71,10 +71,13 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
       final staffs = await _staffRepo.getStaffBySchool(schoolRes.data!.id);
       final invitedStudentsRes =
           await _schoolRepo.getInvitedStudents(schoolId: schoolRes.data!.id);
-      emit(SchoolLoaded(
+      emit(
+        SchoolLoaded(
           schoolInfo: schoolRes.data,
           schoolStaffs: staffs.data,
-          invitedStudents: invitedStudentsRes.data,),);
+          invitedStudents: invitedStudentsRes.data,
+        ),
+      );
     } catch (e) {
       emit(SchoolError(error: e.toString()));
     }
@@ -146,46 +149,61 @@ class SchoolBloc extends Bloc<SchoolEvent, SchoolState> {
     Emitter<SchoolState> emit,
   ) async {
     final schoolData = state.schoolInfo;
-        try {
-    await _schoolRepo.inviteStudent(
-      schoolId: event.schoolId,
-      email: event.email,
-    );
-    final res = await _schoolRepo.getInvitedStudents(schoolId: event.schoolId);
+    final schooStaff = state.schoolStaffs;
+    try {
+      await _schoolRepo.inviteStudent(
+        schoolId: event.schoolId,
+        email: event.email,
+      );
+      final res =
+          await _schoolRepo.getInvitedStudents(schoolId: event.schoolId);
+      emit(SchoolLoaded(
+          schoolInfo: schoolData,
+          invitedStudents: res.data,
+          schoolStaffs: schooStaff,),);
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+      emit(SchoolLoaded(schoolInfo: schoolData, schoolStaffs: schooStaff));
+    }
+  }
+
+  Future<void> onRemoveInvitedStudent(
+    RemoveInvitedStudent event,
+    Emitter<SchoolState> emit,
+  ) async {
+    final schoolData = state.schoolInfo;
+    try {
+      await _schoolRepo.removeInvitedStudent(
+        schoolId: event.schoolId,
+        email: event.email,
+      );
+      final res =
+          await _schoolRepo.getInvitedStudents(schoolId: event.schoolId);
       emit(SchoolLoaded(schoolInfo: schoolData, invitedStudents: res.data));
     } catch (e) {
       emit(SchoolError(error: e.toString()));
     }
   }
 
-  Future<void> onRemoveInvitedStudent(
-      RemoveInvitedStudent event, Emitter<SchoolState> emit,) async {
-        final schoolData = state.schoolInfo;
-        try {
-    await _schoolRepo.removeInvitedStudent(
-        schoolId: event.schoolId, email: event.email,);
-    final res = await _schoolRepo.getInvitedStudents(schoolId: event.schoolId);
-    emit(SchoolLoaded(schoolInfo: schoolData, invitedStudents: res.data));
-    } catch (e) {
-          emit(SchoolError(error: e.toString()));
-        }
-  }
-
   Future<void> onInviteStaff(
     InviteStaff event,
     Emitter<SchoolState> emit,
   ) async {
-    // emit(SchoolLoading());
-    // try {
-    await _schoolRepo.inviteStaffToSchool(
-      schoolId: event.schoolId,
-      email: event.email,
-    );
-    //   final response = await _schoolRepo.getSchool(schoolId: event.schoolId);
-    //   emit(SchoolLoaded(schoolInfo: response.data));
-    // } catch (e) {
-    //   emit(SchoolError(error: e.toString()));
-    // }
+    final schoolData = state.schoolInfo!;
+    final schooStaff = state.schoolStaffs;
+    emit(SchoolLoading());
+    try {
+      await _schoolRepo.inviteStaffToSchool(
+        schoolId: event.schoolId,
+        email: event.email,
+      );
+      await _schoolRepo.inviteStaffToSchool(
+          email: event.email, schoolId: event.schoolId,);
+      emit(SchoolLoaded(schoolInfo: schoolData, schoolStaffs: schooStaff));
+    } catch (e) {
+      emit(SchoolError(error: e.toString()));
+      emit(SchoolLoaded(schoolInfo: schoolData, schoolStaffs: schooStaff));
+    }
   }
 
   Future<void> onPublishSchool(

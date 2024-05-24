@@ -517,66 +517,64 @@ class _ProfileDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProfileCubit(),
-      child: BlocBuilder<ProfileCubit, ProfileState>(
-        builder: (context, state) {
-          if (state is ProfileInitial) {
-            context.read<ProfileCubit>().getProfile(studentId);
-          }
-          return state is! ProfileLoaded
-              ? kLoadingWidget(context)
-              : Center(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 15),
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(state.student!.profile.avatar),
-                            onError: (exception, stackTrace) =>
-                                const AssetImage(
-                              'assets/imgs/ins/lessons/avatar2.png',
-                            ),
-                            fit: BoxFit.cover,
+    context.read<ProfileCubit>().getProfile(studentId);
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        // if (state is ProfileInitial) {
+        //   context.read<ProfileCubit>().getProfile(studentId);
+        // }
+        return state is! ProfileLoaded
+            ? kLoadingWidget(context)
+            : Center(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 15),
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(state.student!.profile.avatar),
+                          onError: (exception, stackTrace) =>
+                              const AssetImage(
+                            'assets/imgs/ins/lessons/avatar2.png',
                           ),
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      Text(
-                        '${state.student!.profile.firstName} ${state.student!.profile.lastName}',
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          color: AppColors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    ),
+                    Text(
+                      '${state.student!.profile.firstName} ${state.student!.profile.lastName}',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: AppColors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
-                      Text(
-                        state.student!.profile.phoneNumber,
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          color: AppColors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    ),
+                    Text(
+                      state.student!.profile.phoneNumber,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
-                      Text(
-                        state.student!.profile.email,
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          color: AppColors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    ),
+                    Text(
+                      state.student!.profile.email,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
-                    ],
-                  ),
-                );
-        },
-      ),
+                    ),
+                  ],
+                ),
+              );
+      },
     );
   }
 }

@@ -29,11 +29,12 @@ class StudentRepo {
   Future<ResponseState<SchoolStudent>> getAllStudent(int schoolId) async {
     final params = {'id': schoolId};
     try {
-      final res = await apiService.getReq(ApiPaths.getAllStudent(schoolId), params: params);
+      final res = await apiService.getReq(ApiPaths.getAllStudent(schoolId),
+          params: params,);
       print('get all student response: ${res.data}');
       if (res.data != null) {
         final json = res.data!.data['response'];
-        final students = SchoolStudent.fromJson(json as Map<String, dynamic>); 
+        final students = SchoolStudent.fromJson(json as Map<String, dynamic>);
         return ResponseSuccess(students);
       }
       return ResponseFailed(res.error!);
@@ -142,8 +143,9 @@ class StudentRepo {
     final params = {'studentPackageId': packageId};
     try {
       final response = await apiService.putReq(
-          ApiPaths.approveStudent(studentId: studentId, schoolId: studentId),
-          params: params,);
+        ApiPaths.approveStudent(studentId: studentId, schoolId: studentId),
+        params: params,
+      );
       print('approve student response: ${response.data}');
 
       if (response.data != null) {
@@ -201,7 +203,8 @@ class StudentRepo {
       print('get student current package data: ${res.data}');
       if (res.data != null) {
         final data = res.data!.data['response'];
-        final studentPackage = StudentPackage.fromJson(data as Map<String, dynamic>);
+        final studentPackage =
+            StudentPackage.fromJson(data as Map<String, dynamic>);
         return ResponseSuccess(studentPackage);
       }
       return const ResponseSuccess(null);

@@ -4,7 +4,7 @@ part of 'help_topic_bloc.dart';
 @immutable
 sealed class HelpTopicEvent {}
 
-class GetAllHelpTopic extends HelpTopicEvent{}
+class GetAllHelpTopic extends HelpTopicEvent {}
 
 class ContactUs extends HelpTopicEvent {
   ContactUs({
@@ -13,8 +13,7 @@ class ContactUs extends HelpTopicEvent {
   final Map<String, dynamic> payload;
 }
 
-class AddFeedback extends HelpTopicEvent{
+class AddFeedback extends HelpTopicEvent {
   AddFeedback({required this.payload});
   final Map<String, dynamic> payload;
 }
-

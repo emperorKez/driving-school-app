@@ -37,12 +37,12 @@ class AddMultipleTimeOffDays extends AvailabiltyEvent {
 }
 
 class UpdateTimeOffDays extends AvailabiltyEvent {
-  UpdateTimeOffDays({required this.schoolId, required this.payload, required this.offDayId});
+  UpdateTimeOffDays(
+      {required this.schoolId, required this.payload, required this.offDayId,});
 
   final int schoolId;
   final int offDayId;
   final Map<String, dynamic> payload;
-
 }
 
 class DeleteTimeOffDays extends AvailabiltyEvent {

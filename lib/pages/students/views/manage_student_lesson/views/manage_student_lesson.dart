@@ -6,8 +6,10 @@ import 'package:korbil_mobile/repository/student/models/student_package.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class ManageStudentLesson extends StatefulWidget {
-  const ManageStudentLesson({required this.studentPackage, super.key});
+  const ManageStudentLesson( 
+      {required this.studentPackage, required this.studentId, super.key,});
   final StudentPackage studentPackage;
+  final int studentId;
 
   @override
   State<ManageStudentLesson> createState() => _ManageStudentLessonState();
@@ -38,7 +40,10 @@ class _ManageStudentLessonState extends State<ManageStudentLesson> {
               Navigator.push(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (_) => const ManageLessonAddLessonView(),
+                  builder: (_) => ManageLessonAddLessonView(
+                    studentId: widget.studentId,
+                    packageId: widget.studentPackage.schoolPackageId,
+                  ),
                 ),
               );
             },
@@ -63,9 +68,14 @@ class _ManageStudentLessonState extends State<ManageStudentLesson> {
           height: 15,
         ),
         if (_selectedType == 1)
-          const UpcomingLessonsListWidget()
+          UpcomingLessonsListWidget(
+            packageId: widget.studentPackage.schoolPackageId,
+            studentId: widget.studentId,
+          )
         else
-          const CompletedLessonsListWidget(),
+          CompletedLessonsListWidget(
+              packageId: widget.studentPackage.schoolPackageId,
+              studentId: widget.studentId,),
       ],
     );
   }
@@ -79,9 +89,9 @@ class _ManageStudentLessonState extends State<ManageStudentLesson> {
             hoursCount: widget.studentPackage.stats.hrsRemaining,
             selected: _selectedType == 1,
             type: 1,
-            ontap: (int val) {
+            ontap: () {
               setState(() {
-                _selectedType = val;
+                _selectedType = 1;
               });
             },
           ),
@@ -95,9 +105,9 @@ class _ManageStudentLessonState extends State<ManageStudentLesson> {
             hoursCount: widget.studentPackage.stats.hrsCompleted,
             selected: _selectedType == 2,
             type: 2,
-            ontap: (int val) {
+            ontap: () {
               setState(() {
-                _selectedType = val;
+                _selectedType = 2;
               });
             },
           ),
@@ -112,12 +122,12 @@ class _AppBarAction extends StatelessWidget {
     required this.ontap,
   });
 
-  final Function ontap;
+  final void Function() ontap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => ontap,
+      onTap: ontap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),

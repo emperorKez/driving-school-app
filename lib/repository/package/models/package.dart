@@ -14,13 +14,13 @@ class Package {
         ),
         offer: json['offer'] as double,
         endDate: DateTime.parse(json['endDate'] as String),
-        discountedPrice: json['discountedPrice'] as double,
+        discountedPrice: json['discountedPrice'] as int,
       );
 
   SchoolPackage schoolPackage;
   double offer;
   DateTime endDate;
-  double discountedPrice;
+  int discountedPrice;
 
   Map<String, dynamic> toJson() => {
         'schoolPackage': schoolPackage.toJson(),
