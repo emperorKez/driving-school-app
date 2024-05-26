@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/secondary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
-import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/inst_completed_lesson_details.dart';
 
 class AlertContent extends StatelessWidget {
   const AlertContent({

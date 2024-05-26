@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:korbil_mobile/repository/metadata/models/skill_category.dart';
 
 part 'assessment_event.dart';
 part 'assessment_state.dart';
@@ -14,7 +15,7 @@ class AssessmentBloc extends Bloc<AssessmentEvent, AssessmentState> {
     on<AddRoadRules>(onAddRoadRules);
     on<AddRoadSafety>(onAddRoadSafety);
     on<AddFeedback>(onAddFeedback);
-    on<FinishAssessment>(onFinishAssessment);
+    // on<FinishAssessment>(onFinishAssessment);
     on<Reset>(onReset);
   }
 
@@ -23,55 +24,65 @@ class AssessmentBloc extends Bloc<AssessmentEvent, AssessmentState> {
     Emitter<AssessmentState> emit,
   ) async {
     if (event.goodAt) {
-      state.goodAtManeuvering.add(event.review);
+      state.goodAtManeuvering.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(goodAtManeuvering: state.goodAtManeuvering));
     } else {
-      state.badAtManeuvering.add(event.review);
+      state.badAtManeuvering.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(badAtManeuvering: state.badAtManeuvering));
     }
   }
 
   Future<void> onAddVehicleKnowledge(
-      AddVehicleKnowledge event, Emitter<AssessmentState> emit) async {
+      AddVehicleKnowledge event, Emitter<AssessmentState> emit,) async {
     if (event.goodAt) {
-      state.goodAtVehicleKnowledge.add(event.review);
+      state.goodAtVehicleKnowledge.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(
-          state.copyWith(goodAtVehicleKnowledge: state.goodAtVehicleKnowledge));
+          state.copyWith(goodAtVehicleKnowledge: state.goodAtVehicleKnowledge),);
     } else {
-      state.badAtVehicleKnowledge.add(event.review);
+      state.badAtVehicleKnowledge.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(badAtVehicleKnowledge: state.badAtVehicleKnowledge));
     }
   }
 
   Future<void> onAddEcoFriendly(
-      AddEcoFriendly event, Emitter<AssessmentState> emit) async {
+      AddEcoFriendly event, Emitter<AssessmentState> emit,) async {
     if (event.goodAt) {
-      state.goodAtEcoFriendly.add(event.review);
+      state.goodAtEcoFriendly.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(goodAtEcoFriendly: state.goodAtEcoFriendly));
     } else {
-      state.badAtEcoFriendly.add(event.review);
+      state.badAtEcoFriendly.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(badAtEcoFriendly: state.badAtEcoFriendly));
     }
   }
 
   Future<void> onAddRoadRules(
-      AddRoadRules event, Emitter<AssessmentState> emit) async {
+      AddRoadRules event, Emitter<AssessmentState> emit,) async {
     if (event.goodAt) {
-      state.goodAtRoadRules.add(event.review);
+      state.goodAtRoadRules.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(goodAtRoadRules: state.goodAtRoadRules));
     } else {
-      state.badAtRoadRules.add(event.review);
+      state.badAtRoadRules.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(badAtRoadRules: state.badAtRoadRules));
     }
   }
 
   Future<void> onAddRoadSafety(
-      AddRoadSafety event, Emitter<AssessmentState> emit) async {
+      AddRoadSafety event, Emitter<AssessmentState> emit,) async {
     if (event.goodAt) {
-      state.goodAtRoadSafety.add(event.review);
+      state.goodAtRoadSafety.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(goodAtRoadSafety: state.goodAtRoadSafety));
     } else {
-      state.badAtRoadSafety.add(event.review);
+      state.badAtRoadSafety.add(Assessment(
+          subCategory: event.subCategory, categoryId: event.categoryId,),);
       emit(state.copyWith(badAtRoadSafety: state.badAtRoadSafety));
     }
   }
@@ -83,21 +94,21 @@ class AssessmentBloc extends Bloc<AssessmentEvent, AssessmentState> {
     emit(state.copyWith(feedback: event.feedback));
   }
 
-  Future<void> onFinishAssessment(
-      FinishAssessment event, Emitter<AssessmentState> emit) async {
-    emit(AssessmentFinished(
-        goodAtManeuvering: state.goodAtManeuvering,
-        badAtManeuvering: state.badAtManeuvering,
-        goodAtVehicleKnowledge: state.goodAtVehicleKnowledge,
-        badAtVehicleKnowledge: state.badAtVehicleKnowledge,
-        goodAtEcoFriendly: state.goodAtEcoFriendly,
-        badAtEcoFriendly: state.badAtEcoFriendly,
-        goodAtRoadRules: state.goodAtRoadRules,
-        badAtRoadRules: state.badAtRoadRules,
-        badAtRoadSafety: state.badAtRoadSafety,
-        goodAtRoadSafety: state.goodAtRoadSafety,
-        feedback: state.feedback));
-  }
+  // Future<void> onFinishAssessment(
+  //     FinishAssessment event, Emitter<AssessmentState> emit) async {
+  //   emit(AssessmentFinished(
+  //       goodAtManeuvering: state.goodAtManeuvering,
+  //       badAtManeuvering: state.badAtManeuvering,
+  //       goodAtVehicleKnowledge: state.goodAtVehicleKnowledge,
+  //       badAtVehicleKnowledge: state.badAtVehicleKnowledge,
+  //       goodAtEcoFriendly: state.goodAtEcoFriendly,
+  //       badAtEcoFriendly: state.badAtEcoFriendly,
+  //       goodAtRoadRules: state.goodAtRoadRules,
+  //       badAtRoadRules: state.badAtRoadRules,
+  //       badAtRoadSafety: state.badAtRoadSafety,
+  //       goodAtRoadSafety: state.goodAtRoadSafety,
+  //       feedback: state.feedback));
+  // }
 
   Future<void> onReset(Reset event, Emitter<AssessmentState> emit) async {
     emit(AssessmentInitial());

@@ -66,6 +66,7 @@ class LessonRepo {
     int lessonId,
   ) async {
     final response = await apiService.getReq(ApiPaths.getLesson(lessonId));
+    print('lesson detail response: ${response.data}');
     if (response.data != null) {
       try {
         final lesson = LessonDetail.fromJson(
@@ -73,6 +74,7 @@ class LessonRepo {
         );
         return ResponseSuccess(lesson);
       } catch (e) {
+        print('lesson detail error: $e');
         return ResponseFailed(DataError(null, e));
       }
     }

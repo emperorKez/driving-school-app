@@ -40,37 +40,37 @@ class SelectedGoodAssementDetailCard extends StatelessWidget {
                     const SizedBox(
                       height: 12,
                     ),
-                    for (final element in state
-                        .lessonDetail
-                        .feedback[state.lessonDetail.feedback.indexWhere(
-                            (e) => e.category.name == selectedGoodAssesment,)]
-                        .category
-                        .subCategories)
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 3),
-                        child: Row(
-                          children: [
-                            PrimarySelectedSwitch(
-                              selected: true,
-                              onTap: () {},
-                            ),
-                            Text(
-                              element.name,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: KorbilTheme.of(context).secondaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            const Spacer(),
-                            Image.asset(
-                              'assets/imgs/ins/lessons/tasks.png',
-                              width: 20,
-                            ),
-                          ],
-                        ),
-                      ),
+                    // for (final element in state
+                    //     .lessonDetail
+                    //     .feedback[state.lessonDetail.feedback.indexWhere(
+                    //         (e) => e.category.name == selectedGoodAssesment,)]
+                    //     .category
+                    //     .subCategories)
+                    //   Container(
+                    //     padding: const EdgeInsets.symmetric(vertical: 3),
+                    //     child: Row(
+                    //       children: [
+                    //         PrimarySelectedSwitch(
+                    //           selected: true,
+                    //           onTap: () {},
+                    //         ),
+                    //         Text(
+                    //           element.name,
+                    //           style: TextStyle(
+                    //             fontFamily: 'Poppins',
+                    //             color: KorbilTheme.of(context).secondaryColor,
+                    //             fontSize: 14,
+                    //             fontWeight: FontWeight.w400,
+                    //           ),
+                    //         ),
+                    //         const Spacer(),
+                    //         Image.asset(
+                    //           'assets/imgs/ins/lessons/tasks.png',
+                    //           width: 20,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
                   ],
                 );
         },

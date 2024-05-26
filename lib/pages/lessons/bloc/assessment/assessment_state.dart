@@ -15,31 +15,31 @@ class AssessmentState {
       required this.badAtRoadRules,
       required this.badAtRoadSafety,
       required this.goodAtRoadSafety,
-      required this.feedback});
+      required this.feedback,});
 
-  final Set<String> goodAtManeuvering;
-  final Set<String> badAtManeuvering;
-  final Set<String> goodAtVehicleKnowledge;
-  final Set<String> badAtVehicleKnowledge;
-  final Set<String> goodAtEcoFriendly;
-  final Set<String> badAtEcoFriendly;
-  final Set<String> goodAtRoadRules;
-  final Set<String> badAtRoadRules;
-  final Set<String> badAtRoadSafety;
-  final Set<String> goodAtRoadSafety;
+  final Set<Assessment> goodAtManeuvering;
+  final Set<Assessment> badAtManeuvering;
+  final Set<Assessment> goodAtVehicleKnowledge;
+  final Set<Assessment> badAtVehicleKnowledge;
+  final Set<Assessment> goodAtEcoFriendly;
+  final Set<Assessment> badAtEcoFriendly;
+  final Set<Assessment> goodAtRoadRules;
+  final Set<Assessment> badAtRoadRules;
+  final Set<Assessment> badAtRoadSafety;
+  final Set<Assessment> goodAtRoadSafety;
   final String? feedback;
 
   AssessmentState copyWith({
-    Set<String>? goodAtManeuvering,
-    Set<String>? badAtManeuvering,
-    Set<String>? goodAtVehicleKnowledge,
-    Set<String>? badAtVehicleKnowledge,
-    Set<String>? goodAtEcoFriendly,
-    Set<String>? badAtEcoFriendly,
-    Set<String>? badAtRoadRules,
-    Set<String>? goodAtRoadRules,
-    Set<String>? goodAtRoadSafety,
-    Set<String>? badAtRoadSafety,
+    Set<Assessment>? goodAtManeuvering,
+    Set<Assessment>? badAtManeuvering,
+    Set<Assessment>? goodAtVehicleKnowledge,
+    Set<Assessment>? badAtVehicleKnowledge,
+    Set<Assessment>? goodAtEcoFriendly,
+    Set<Assessment>? badAtEcoFriendly,
+    Set<Assessment>? badAtRoadRules,
+    Set<Assessment>? goodAtRoadRules,
+    Set<Assessment>? goodAtRoadSafety,
+    Set<Assessment>? badAtRoadSafety,
     String? feedback,
   }) {
     return AssessmentState(
@@ -73,27 +73,27 @@ final class AssessmentInitial extends AssessmentState {
             badAtRoadRules: {},
             goodAtRoadSafety: {},
             badAtRoadSafety: {},
-            feedback: '');
+            feedback: '',);
 }
 
-class AssessmentFinished extends AssessmentState {
-  AssessmentFinished(
-      {required super.goodAtManeuvering,
-      required super.badAtManeuvering,
-      required super.goodAtVehicleKnowledge,
-      required super.badAtVehicleKnowledge,
-      required super.goodAtEcoFriendly,
-      required super.badAtEcoFriendly,
-      required super.goodAtRoadRules,
-      required super.badAtRoadRules,
-      required super.badAtRoadSafety,
-      required super.goodAtRoadSafety,
-      required super.feedback});
-}
+// class AssessmentFinished extends AssessmentState {
+//   AssessmentFinished(
+//       {required super.goodAtManeuvering,
+//       required super.badAtManeuvering,
+//       required super.goodAtVehicleKnowledge,
+//       required super.badAtVehicleKnowledge,
+//       required super.goodAtEcoFriendly,
+//       required super.badAtEcoFriendly,
+//       required super.goodAtRoadRules,
+//       required super.badAtRoadRules,
+//       required super.badAtRoadSafety,
+//       required super.goodAtRoadSafety,
+//       required super.feedback});
+// }
 
 class Assessment {
-  Assessment({required this.review, required this.good});
+  Assessment({required this.subCategory, required this.categoryId});
 
-  final String review;
-  final bool good;
+  final SubCategory subCategory;
+  final int categoryId;
 }

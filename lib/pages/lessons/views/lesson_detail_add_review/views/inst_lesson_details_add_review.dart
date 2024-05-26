@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/assessment/assessment_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/views/lesson_detail_add_review/views/bottom_sheet_details.dart';
-import 'package:korbil_mobile/pages/lessons/views/lesson_detail_add_review/views/type_category_card.dart';
+import 'package:korbil_mobile/pages/lessons/views/lesson_detail_add_review/views/category_card.dart';
+import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
+import 'package:korbil_mobile/repository/metadata/models/skill_category.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -26,168 +29,168 @@ class InstLessonDetailAddReviewView extends StatefulWidget {
 
 class _InstLessonDetailAddReviewViewState
     extends State<InstLessonDetailAddReviewView> {
-  final List<AssesmentCategoryDetails> _types = const [
-    AssesmentCategoryDetails(
-      id: 'maneuvering',
-      type: 'Maneuvering',
-      status: 0,
-      img: 'assets/imgs/ins/lessons/maneuvering_green.png',
-      subTypes: [
-        AssesmentSubCategoryDetails(
-          type: 'Pulling up on the right',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Forward parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Reverse parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Entering and leaving traffic',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Lorem ipsum dolor sit amet consectetur',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Sit tempor adipiscing sed at',
-          status: 0,
-        ),
-      ],
-    ),
-    AssesmentCategoryDetails(
-      id: 'eco',
-      type: 'Eco-friendly driving',
-      status: 0,
-      img: 'assets/imgs/ins/lessons/eco_friendly_green.png',
-      subTypes: [
-        AssesmentSubCategoryDetails(
-          type: 'Pulling up on the right',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Forward parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Reverse parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Entering and leaving traffic',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Lorem ipsum dolor sit amet consectetur',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Sit tempor adipiscing sed at',
-          status: 0,
-        ),
-      ],
-    ),
-    AssesmentCategoryDetails(
-      id: 'rules',
-      type: 'Rules of the road',
-      status: 0,
-      img: 'assets/imgs/ins/lessons/road_rules_green.png',
-      subTypes: [
-        AssesmentSubCategoryDetails(
-          type: 'Pulling up on the right',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Forward parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Reverse parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Entering and leaving traffic',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Lorem ipsum dolor sit amet consectetur',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Sit tempor adipiscing sed at',
-          status: 0,
-        ),
-      ],
-    ),
-    AssesmentCategoryDetails(
-      id: 'vehicle',
-      type: 'Vehicle knowledge',
-      status: 0,
-      img: 'assets/imgs/ins/lessons/shield_green.png',
-      subTypes: [
-        AssesmentSubCategoryDetails(
-          type: 'Pulling up on the right',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Forward parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Reverse parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Entering and leaving traffic',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Lorem ipsum dolor sit amet consectetur',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Sit tempor adipiscing sed at',
-          status: 0,
-        ),
-      ],
-    ),
-    AssesmentCategoryDetails(
-      id: 'safety',
-      type: 'Road safety and behavior',
-      status: 0,
-      img: 'assets/imgs/ins/lessons/road_safety_green.png',
-      subTypes: [
-        AssesmentSubCategoryDetails(
-          type: 'Pulling up on the right',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Forward parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Reverse parking into a bay',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Entering and leaving traffic',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Lorem ipsum dolor sit amet consectetur',
-          status: 0,
-        ),
-        AssesmentSubCategoryDetails(
-          type: 'Sit tempor adipiscing sed at',
-          status: 0,
-        ),
-      ],
-    ),
-  ];
+  // final List<AssesmentCategoryDetails> _types = const [
+  //   AssesmentCategoryDetails(
+  //     id: 'maneuvering',
+  //     type: 'Maneuvering',
+  //     status: 0,
+  //     img: 'assets/imgs/ins/lessons/maneuvering_green.png',
+  //     subTypes: [
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Pulling up on the right',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Forward parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Reverse parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Entering and leaving traffic',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Lorem ipsum dolor sit amet consectetur',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Sit tempor adipiscing sed at',
+  //         status: 0,
+  //       ),
+  //     ],
+  //   ),
+  //   AssesmentCategoryDetails(
+  //     id: 'eco',
+  //     type: 'Eco-friendly driving',
+  //     status: 0,
+  //     img: 'assets/imgs/ins/lessons/eco_friendly_green.png',
+  //     subTypes: [
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Pulling up on the right',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Forward parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Reverse parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Entering and leaving traffic',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Lorem ipsum dolor sit amet consectetur',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Sit tempor adipiscing sed at',
+  //         status: 0,
+  //       ),
+  //     ],
+  //   ),
+  //   AssesmentCategoryDetails(
+  //     id: 'rules',
+  //     type: 'Rules of the road',
+  //     status: 0,
+  //     img: 'assets/imgs/ins/lessons/road_rules_green.png',
+  //     subTypes: [
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Pulling up on the right',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Forward parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Reverse parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Entering and leaving traffic',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Lorem ipsum dolor sit amet consectetur',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Sit tempor adipiscing sed at',
+  //         status: 0,
+  //       ),
+  //     ],
+  //   ),
+  //   AssesmentCategoryDetails(
+  //     id: 'vehicle',
+  //     type: 'Vehicle knowledge',
+  //     status: 0,
+  //     img: 'assets/imgs/ins/lessons/shield_green.png',
+  //     subTypes: [
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Pulling up on the right',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Forward parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Reverse parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Entering and leaving traffic',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Lorem ipsum dolor sit amet consectetur',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Sit tempor adipiscing sed at',
+  //         status: 0,
+  //       ),
+  //     ],
+  //   ),
+  //   AssesmentCategoryDetails(
+  //     id: 'safety',
+  //     type: 'Road safety and behavior',
+  //     status: 0,
+  //     img: 'assets/imgs/ins/lessons/road_safety_green.png',
+  //     subTypes: [
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Pulling up on the right',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Forward parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Reverse parking into a bay',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Entering and leaving traffic',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Lorem ipsum dolor sit amet consectetur',
+  //         status: 0,
+  //       ),
+  //       AssesmentSubCategoryDetails(
+  //         type: 'Sit tempor adipiscing sed at',
+  //         status: 0,
+  //       ),
+  //     ],
+  //   ),
+  // ];
 
   String _exapnded = '';
 
@@ -285,167 +288,184 @@ class _InstLessonDetailAddReviewViewState
               horizontal: 12,
               // vertical: 2,
             ),
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: _types.length,
-              itemBuilder: (cxt, index) {
-                final type = _types[index];
-                return Column(
-                  children: [
-                    Slidable(
-                      key: const ValueKey(0),
-                      startActionPane: ActionPane(
-                        dragDismissible: false,
-                        motion: const ScrollMotion(),
-                        children: [
-                          // A SlidableAction can have an icon and/or a label.
-                          SlidableAction(
-                            onPressed: null,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 5,
-                            ),
-                            backgroundColor:
-                                KorbilTheme.of(context).primaryColor,
-                            foregroundColor: Colors.white,
-                            icon: Icons.thumb_up,
-                            spacing: 8,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              bottomLeft: Radius.circular(12),
-                            ),
-                            label: 'Good At',
-                          ),
-                        ],
-                      ),
-                      endActionPane: ActionPane(
-                        dragDismissible: false,
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: null,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 5,
-                            ),
-                            backgroundColor:
-                                KorbilTheme.of(context).secondaryColor,
-                            foregroundColor: Colors.white,
-                            icon: Icons.thumb_down,
-                            spacing: 8,
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(12),
-                              bottomRight: Radius.circular(12),
-                            ),
-                            label: 'Bad At',
-                          ),
-                        ],
-                      ),
-                      child: TypeCategoryCard(
-                        type: type,
-                        ontap: (String val) {
-                          if (_exapnded == val) {
-                            setState(() {
-                              _exapnded = '';
-                            });
-                          } else {
-                            setState(() {
-                              _exapnded = val;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    if (_exapnded == type.type)
-                      ListView.builder(
+            child: BlocBuilder<MetadataCubit, MetadataState>(
+              builder: (context, state) {
+                if (state is MetadataInitial) {
+                  context.read<MetadataCubit>().getMetadata();
+                }
+                return state is! MetadataLoaded
+                    ? kLoadingWidget(context)
+                    : ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: type.subTypes.length,
+                        itemCount: state.skillCategories?.length ?? 0,
                         itemBuilder: (cxt, index) {
-                          final sub = type.subTypes[index];
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 3,
-                            ),
-                            child: Slidable(
-                              key: const ValueKey(0),
-                              startActionPane: ActionPane(
-                                dragDismissible: false,
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      addAssessment(
-                                        type.id,
-                                        type.subTypes[index].type,
-                                        true,
-                                      );
-                                    },
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 15,
-                                      // vertical: 0,
+                          final category = state.skillCategories![index];
+                          return Column(
+                            children: [
+                              Slidable(
+                                key: const ValueKey(0),
+                                startActionPane: ActionPane(
+                                  dragDismissible: false,
+                                  motion: const ScrollMotion(),
+                                  children: [
+                                    // A SlidableAction can have an icon and/or a label.
+                                    SlidableAction(
+                                      onPressed: null,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 5,
+                                      ),
+                                      backgroundColor:
+                                          KorbilTheme.of(context).primaryColor,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.thumb_up,
+                                      spacing: 8,
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(12),
+                                        bottomLeft: Radius.circular(12),
+                                      ),
+                                      label: 'Good At',
                                     ),
-                                    backgroundColor:
-                                        KorbilTheme.of(context).primaryColor,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.thumb_up,
-                                    spacing: 8,
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
+                                  ],
+                                ),
+                                endActionPane: ActionPane(
+                                  dragDismissible: false,
+                                  motion: const ScrollMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: null,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 5,
+                                      ),
+                                      backgroundColor: KorbilTheme.of(context)
+                                          .secondaryColor,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.thumb_down,
+                                      spacing: 8,
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(12),
+                                        bottomRight: Radius.circular(12),
+                                      ),
+                                      label: 'Bad At',
                                     ),
-                                    label: 'Good At',
-                                  ),
-                                ],
+                                  ],
+                                ),
+                                child: CategoryCard(
+                                  category: category,
+                                  ontap: (String val) {
+                                    if (_exapnded == val) {
+                                      setState(() {
+                                        _exapnded = '';
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _exapnded = val;
+                                      });
+                                    }
+                                  },
+                                ),
                               ),
-                              endActionPane: ActionPane(
-                                dragDismissible: false,
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      addAssessment(
-                                        type.id,
-                                        type.subTypes[index].type,
-                                        false,
-                                      );
-                                    },
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 15,
-                                      // vertical: 5,
-                                    ),
-                                    backgroundColor:
-                                        KorbilTheme.of(context).secondaryColor,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.thumb_down,
-                                    spacing: 8,
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(12),
-                                      bottomRight: Radius.circular(12),
-                                    ),
-                                    label: 'Bad At',
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: 
-                                    subTypeCard(
-                                        subType: sub, type: type.type),
-                                  ),
-                                ],
-                              ),
-                            ),
+                              if (_exapnded == category.code)
+                                ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: category.subCategories.length,
+                                  itemBuilder: (cxt, index) {
+                                    final subCategory =
+                                        category.subCategories[index];
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 3,
+                                      ),
+                                      child: Slidable(
+                                        key: const ValueKey(0),
+                                        startActionPane: ActionPane(
+                                          dragDismissible: false,
+                                          motion: const ScrollMotion(),
+                                          children: [
+                                            SlidableAction(
+                                              onPressed: (context) {
+                                                addAssessment(
+                                                  category: category,
+                                                  subCat: subCategory,
+                                                  good: true,
+                                                );
+                                              },
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 15,
+                                                // vertical: 0,
+                                              ),
+                                              backgroundColor:
+                                                  KorbilTheme.of(context)
+                                                      .primaryColor,
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.thumb_up,
+                                              spacing: 8,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(12),
+                                                bottomLeft: Radius.circular(12),
+                                              ),
+                                              label: 'Good At',
+                                            ),
+                                          ],
+                                        ),
+                                        endActionPane: ActionPane(
+                                          dragDismissible: false,
+                                          motion: const ScrollMotion(),
+                                          children: [
+                                            SlidableAction(
+                                              onPressed: (context) {
+                                                addAssessment(
+                                                  category: category,
+                                                  subCat: subCategory,
+                                                  good: false,
+                                                );
+                                              },
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 15,
+                                                // vertical: 5,
+                                              ),
+                                              backgroundColor:
+                                                  KorbilTheme.of(context)
+                                                      .secondaryColor,
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.thumb_down,
+                                              spacing: 8,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topRight: Radius.circular(12),
+                                                bottomRight:
+                                                    Radius.circular(12),
+                                              ),
+                                              label: 'Bad At',
+                                            ),
+                                          ],
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: subCategoryCard(
+                                                subCategory: subCategory,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              else
+                                Container(),
+                            ],
                           );
                         },
-                      )
-                    else
-                      Container(),
-                  ],
-                );
+                      );
               },
             ),
           ),
@@ -454,39 +474,41 @@ class _InstLessonDetailAddReviewViewState
     );
   }
 
-  void addAssessment(String categoryId, String review, bool good) {
-    switch (categoryId) {
-      case 'maneuvering':
-        context
-            .read<AssessmentBloc>()
-            .add(AddManeuvering(review: review, goodAt: good));
-      case 'eco':
-        context
-            .read<AssessmentBloc>()
-            .add(AddEcoFriendly(review: review, goodAt: good));
-      case 'rules':
-        context
-            .read<AssessmentBloc>()
-            .add(AddRoadRules(review: review, goodAt: good));
-      case 'vehicle':
+  void addAssessment({
+    required SkillCategory category,
+    required SubCategory subCat,
+    required bool good,
+  }) {
+    switch (category.code) {
+      case 'MANEUVERING':
+        context.read<AssessmentBloc>().add(AddManeuvering(
+            subCategory: subCat, goodAt: good, categoryId: category.id));
+      case 'ECO_FRIENDLY':
+        context.read<AssessmentBloc>().add(AddEcoFriendly(
+            subCategory: subCat, goodAt: good, categoryId: category.id));
+      case 'ROAD_RULES':
+        context.read<AssessmentBloc>().add(AddRoadRules(
+            subCategory: subCat, goodAt: good, categoryId: category.id));
+      case 'VEHICLE_KNOWLEDGE':
         context.read<AssessmentBloc>().add(
-              AddVehicleKnowledge(review: review, goodAt: good),
+              AddVehicleKnowledge(
+                  subCategory: subCat, goodAt: good, categoryId: category.id),
             );
-      case 'safety':
-        context
-            .read<AssessmentBloc>()
-            .add(AddRoadSafety(review: review, goodAt: good));
+      case 'ROAD_SAFETY':
+        context.read<AssessmentBloc>().add(AddRoadSafety(
+            subCategory: subCat, goodAt: good, categoryId: category.id));
     }
   }
 
-  Widget subTypeCard(
-      {required AssesmentSubCategoryDetails subType, required String type}) {
+  Widget subCategoryCard({required SubCategory subCategory}) {
     final theme = KorbilTheme.of(context);
-    var defaultColor = theme.alternate2;
-  if (checkIsGoodAt(subCat: type, review: subType.type) == true)
-  {setState(()=> defaultColor = theme.primaryColor);}
-  if (checkIsGoodAt(subCat: type, review: subType.type) == false)
-  {setState(()=> defaultColor = Colors.redAccent);}
+    final defaultColor = theme.alternate2;
+    // if (checkIsGoodAt(subCat: type, review: subType.type) == true) {
+    //   setState(() => defaultColor = theme.primaryColor);
+    // }
+    // if (checkIsGoodAt(subCat: type, review: subType.type) == false) {
+    //   setState(() => defaultColor = Colors.redAccent);
+    // }
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -494,8 +516,7 @@ class _InstLessonDetailAddReviewViewState
         vertical: 12,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: defaultColor
+        borderRadius: BorderRadius.circular(8), color: defaultColor,
         //  checkIsGoodAt(subCat: type, review: subType.type) == true
         //     ? theme.primaryColor
         //     : checkIsGoodAt(subCat: type, review: subType.type) == false
@@ -503,7 +524,7 @@ class _InstLessonDetailAddReviewViewState
         //         : theme.alternate2,
       ),
       child: Text(
-        subType.type,
+        subCategory.name,
         style: TextStyle(
           fontFamily: 'Poppins',
           color: theme.secondaryColor,
@@ -519,49 +540,49 @@ class _InstLessonDetailAddReviewViewState
     final state = context.read<AssessmentBloc>().state;
     switch (subCat) {
       case 'maneuvering':
-      setState(() {        
-        isGoodAt = state.goodAtManeuvering.contains(review)
-            ? true
-            : state.badAtManeuvering.contains(review)
-                ? false
-                : null;
-      });
+        setState(() {
+          isGoodAt = state.goodAtManeuvering.contains(review)
+              ? true
+              : state.badAtManeuvering.contains(review)
+                  ? false
+                  : null;
+        });
 
       case 'eco':
-      setState(() {        
-        isGoodAt = state.goodAtEcoFriendly.contains(review)
-            ? true
-            : state.badAtEcoFriendly.contains(review)
-                ? false
-                : null;
-      });
+        setState(() {
+          isGoodAt = state.goodAtEcoFriendly.contains(review)
+              ? true
+              : state.badAtEcoFriendly.contains(review)
+                  ? false
+                  : null;
+        });
 
       case 'rules':
-      setState(() {        
-        isGoodAt = state.goodAtRoadRules.contains(review)
-            ? true
-            : state.badAtRoadRules.contains(review)
-                ? false
-                : null;
-      });
+        setState(() {
+          isGoodAt = state.goodAtRoadRules.contains(review)
+              ? true
+              : state.badAtRoadRules.contains(review)
+                  ? false
+                  : null;
+        });
 
       case 'vehicle':
-      setState(() {        
-        isGoodAt = state.goodAtVehicleKnowledge.contains(review)
-            ? true
-            : state.badAtVehicleKnowledge.contains(review)
-                ? false
-                : null;
-      });
+        setState(() {
+          isGoodAt = state.goodAtVehicleKnowledge.contains(review)
+              ? true
+              : state.badAtVehicleKnowledge.contains(review)
+                  ? false
+                  : null;
+        });
 
       case 'safety':
-      setState(() {        
-        isGoodAt = state.goodAtRoadSafety.contains(review)
-            ? true
-            : state.badAtRoadSafety.contains(review)
-                ? false
-                : null;
-      });
+        setState(() {
+          isGoodAt = state.goodAtRoadSafety.contains(review)
+              ? true
+              : state.badAtRoadSafety.contains(review)
+                  ? false
+                  : null;
+        });
     }
     return isGoodAt;
   }

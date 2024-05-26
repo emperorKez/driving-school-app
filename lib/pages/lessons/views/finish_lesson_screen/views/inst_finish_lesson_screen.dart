@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/assessment/assessment_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/assesment_type_icon.dart';
@@ -7,6 +8,7 @@ import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/bad
 import 'package:korbil_mobile/pages/lessons/views/finish_lesson_screen/views/good_assessment_card.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_finish_lesson_with_map_screen/views/inst_finish_lesson_with_map_screen.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details/views/inst_lesson_details.dart';
+import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
 
@@ -21,9 +23,9 @@ class InstFinishLessonView extends StatefulWidget {
 class _InstFinishLessonViewState extends State<InstFinishLessonView> {
   final _formKey = GlobalKey<FormState>();
   final feedbackController = TextEditingController();
-  String _selectedGoodAssesment = 'Maneuvering';
+  String _selectedGoodAssesment = 'MANEUVERING';
 
-  String _needToPracticeAssesment = 'Vehicle knowledge';
+  String _needToPracticeAssesment = 'VEHICLE_KNOWLEDGE';
 
   @override
   Widget build(BuildContext context) {
@@ -199,144 +201,185 @@ class _InstFinishLessonViewState extends State<InstFinishLessonView> {
   }
 
   Widget goodAtSection() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          children: [
-            Text(
-              'Good At',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                color: KorbilTheme.of(context).secondaryColor,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Icon(
-              Icons.thumb_up,
-              color: KorbilTheme.of(context).primaryColor,
-              size: 18,
-            ),
-          ],
-        ),
-        const SizedBox(height: 25),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: AssestmentTypeIcon(
-                  type: 'Maneuvering',
-                  selected: _selectedGoodAssesment == 'Maneuvering',
-                  ontap: (String val) {
-                    setState(() {
-                      _selectedGoodAssesment = val;
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                child: AssestmentTypeIcon(
-                  type: 'Eco-friendly driving',
-                  selected: _selectedGoodAssesment == 'Eco-friendly driving',
-                  ontap: (String val) {
-                    setState(() {
-                      _selectedGoodAssesment = val;
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                child: AssestmentTypeIcon(
-                  type: 'Rules of the road',
-                  selected: _selectedGoodAssesment == 'Rules of the road',
-                  ontap: (String val) {
-                    setState(() {
-                      _selectedGoodAssesment = val;
-                    });
-                  },
-                ),
-              ),
-              //todo add road safety andvehicleKnowledg assessment sections
-            ],
-          ),
-        ),
-        const SizedBox(height: 15),
-        // assessment details
-        SelectedGoodAssementDetailCard(
-          selectedGoodAssesment: _selectedGoodAssesment,
-        ),
-      ],
+    return BlocBuilder<MetadataCubit, MetadataState>(
+      builder: (context, state) {
+        return state is! MetadataLoaded
+            ? kLoadingWidget(context)
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Good At',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: KorbilTheme.of(context).secondaryColor,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Icon(
+                        Icons.thumb_up,
+                        color: KorbilTheme.of(context).primaryColor,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(
+                            state.skillCategories?.length ?? 0,
+                            (index) => Expanded(
+                                  child: AssestmentTypeIcon(
+                                    type: state.skillCategories![index].code,
+                                    selected: _selectedGoodAssesment ==
+                                        state.skillCategories![index].code,
+                                    ontap: (String val) {
+                                      setState(() {
+                                        _selectedGoodAssesment = val;
+                                      });
+                                    },
+                                  ),
+                                ))
+                        // [
+                        //   Expanded(
+                        //     child: AssestmentTypeIcon(
+                        //       type: 'Maneuvering',
+                        //       selected: _selectedGoodAssesment == 'Maneuvering',
+                        //       ontap: (String val) {
+                        //         setState(() {
+                        //           _selectedGoodAssesment = val;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ),
+                        //   Expanded(
+                        //     child: AssestmentTypeIcon(
+                        //       type: 'Eco-friendly driving',
+                        //       selected: _selectedGoodAssesment == 'Eco-friendly driving',
+                        //       ontap: (String val) {
+                        //         setState(() {
+                        //           _selectedGoodAssesment = val;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ),
+                        //   Expanded(
+                        //     child: AssestmentTypeIcon(
+                        //       type: 'Rules of the road',
+                        //       selected: _selectedGoodAssesment == 'Rules of the road',
+                        //       ontap: (String val) {
+                        //         setState(() {
+                        //           _selectedGoodAssesment = val;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ),
+                        //   //todo add road safety andvehicleKnowledg assessment sections
+                        // ],
+
+                        ),
+                  ),
+                  const SizedBox(height: 15),
+                  // assessment details
+                  SelectedGoodAssementDetailCard(
+                    selectedGoodAssesment: _selectedGoodAssesment,
+                  ),
+                ],
+              );
+      },
     );
   }
 
   Widget badAtSection() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          children: [
-            Text(
-              'Bad At',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                color: KorbilTheme.of(context).secondaryColor,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Icon(
-              Icons.thumb_down,
-              color: KorbilTheme.of(context).secondaryColor,
-              size: 18,
-            ),
-          ],
-        ),
-        const SizedBox(height: 25),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: BadAssestmentTypeIcon(
-                  type: 'Vehicle knowledge',
-                  selected: _needToPracticeAssesment == 'Vehicle knowledge',
-                  ontap: (String val) {
-                    setState(() {
-                      _needToPracticeAssesment = val;
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                child: BadAssestmentTypeIcon(
-                  type: 'Road safety and behavior',
-                  selected:
-                      _needToPracticeAssesment == 'Road safety and behavior',
-                  ontap: (String val) {
-                    setState(() {
-                      _needToPracticeAssesment = val;
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 15),
-        // assessment details
-        SelectedBadAssementDetailCard(
-          selectedAssesment: _needToPracticeAssesment,
-        ),
-      ],
+    return BlocBuilder<MetadataCubit, MetadataState>(
+      builder: (context, state) {
+        return state is! MetadataLoaded
+            ? kLoadingWidget(context)
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Bad At',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: KorbilTheme.of(context).secondaryColor,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Icon(
+                        Icons.thumb_down,
+                        color: KorbilTheme.of(context).secondaryColor,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(
+                            state.skillCategories?.length ?? 0,
+                            (index) => Expanded(
+                                  child: BadAssestmentTypeIcon(
+                                    type: state.skillCategories![index].code,
+                                    selected: _needToPracticeAssesment ==
+                                        state.skillCategories![index].code,
+                                    ontap: (String val) {
+                                      setState(() {
+                                        _needToPracticeAssesment = val;
+                                      });
+                                    },
+                                  ),
+                                ))
+                        //  [
+                        //   Expanded(
+                        //     child: BadAssestmentTypeIcon(
+                        //       type: 'Vehicle knowledge',
+                        //       selected: _needToPracticeAssesment == 'Vehicle knowledge',
+                        //       ontap: (String val) {
+                        //         setState(() {
+                        //           _needToPracticeAssesment = val;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ),
+                        //   Expanded(
+                        //     child: BadAssestmentTypeIcon(
+                        //       type: 'Road safety and behavior',
+                        //       selected: _needToPracticeAssesment ==
+                        //           'Road safety and behavior',
+                        //       ontap: (String val) {
+                        //         setState(() {
+                        //           _needToPracticeAssesment = val;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ),
+                        //   Expanded(
+                        //     child: Container(),
+                        //   ),
+                        // ],
+                        ),
+                  ),
+                  const SizedBox(height: 15),
+                  // assessment details
+                  SelectedBadAssementDetailCard(
+                    selectedAssesment: _needToPracticeAssesment,
+                  ),
+                ],
+              );
+      },
     );
   }
 }

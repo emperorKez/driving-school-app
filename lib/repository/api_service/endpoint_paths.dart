@@ -319,7 +319,8 @@ class ApiPaths {
   static const getAllinstructorSelectionType = 'metadata/instructor-selection';
   static const getAllCourseCategories = 'metadata/course-categories';
   static const getAllHelpTopics = 'metadata/help-topics';
-  static const getAllLanguages = 'metadata/language';
+  static const getAllLanguages = 'metadata/language';                
+  static const getSkillCategories = 'metadata/skill-categories';                
   static const getAllAppFeedbackCategories = 'metadata/feedback-categories';
 
   //location

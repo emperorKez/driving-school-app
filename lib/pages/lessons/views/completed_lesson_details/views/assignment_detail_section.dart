@@ -198,8 +198,7 @@ class AssignementDetailSection extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text(
-                        DateFormat.yMd().format(detail.lesson.scheduledDate),
+                      Text(detail.lesson.scheduledDate,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: KorbilTheme.of(context).secondaryColor,

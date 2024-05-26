@@ -94,7 +94,8 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
           if (state is! PackageLoaded) {
             return kLoadingWidget(context);
           } else {
-            if (state.studentPackage!.pastLessons.isEmpty) {
+            if (state.studentPackage?.pastLessons == null ||
+                state.studentPackage!.pastLessons.isEmpty) {
               return const SizedBox();
             } else {
               context
@@ -250,33 +251,33 @@ class _InstLessonDetailsState extends State<InstLessonDetails> {
                   const SizedBox(
                     height: 12,
                   ),
-                  for (final element in state
-                      .lessonDetail
-                      .feedback[state.lessonDetail.feedback.indexWhere(
-                    (e) => e.category.name == _selectedLessonReviewSection,
-                  )]
-                      .category
-                      .subCategories)
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 3),
-                      child: Row(
-                        children: [
-                          PrimarySelectedSwitch(
-                            selected: true,
-                            onTap: () {},
-                          ),
-                          Text(
-                            element.name,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: KorbilTheme.of(context).secondaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  // for (final element in state
+                  //     .lessonDetail
+                  //     .feedback[state.lessonDetail.feedback.indexWhere(
+                  //   (e) => e.category.name == _selectedLessonReviewSection,
+                  // )]
+                  //     .category
+                  //     .subCategories)
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(vertical: 3),
+                    //   child: Row(
+                    //     children: [
+                    //       PrimarySelectedSwitch(
+                    //         selected: true,
+                    //         onTap: () {},
+                    //       ),
+                    //       Text(
+                    //         element.name,
+                    //         style: TextStyle(
+                    //           fontFamily: 'Poppins',
+                    //           color: KorbilTheme.of(context).secondaryColor,
+                    //           fontSize: 14,
+                    //           fontWeight: FontWeight.w400,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                 ],
               );
       },
@@ -297,23 +298,35 @@ class AssestmentTypeIcon extends StatelessWidget {
 
   String _getAssesmentTypeImg(String type) {
     switch (type) {
-      case 'Maneuvering':
+      case 'MANEUVERING':
         if (selected) {
           return 'assets/imgs/ins/lessons/maneuvering_white.png';
         } else {
           return 'assets/imgs/ins/lessons/maneuvering_green.png';
         }
-      case 'Eco-friendly driving':
+      case 'ECO_FRIENDLY':
         if (selected) {
           return 'assets/imgs/ins/lessons/eco_friendly_white.png';
         } else {
           return 'assets/imgs/ins/lessons/eco_friendly_green.png';
         }
-      case 'Rules of the road':
+      case 'ROAD_RULES':
         if (selected) {
           return 'assets/imgs/ins/lessons/road_rules_white.png';
         } else {
           return 'assets/imgs/ins/lessons/road_rules_green.png';
+        }
+      case 'ROAD_SAFETY':
+        if (selected) {
+          return 'assets/imgs/ins/lessons/road_safety_green.png';
+        } else {
+          return 'assets/imgs/ins/lessons/road_safety_green.png';
+        }
+      case 'VEHICLE_KNOWLEDGE':
+        if (selected) {
+          return 'assets/imgs/ins/lessons/shield_green.png';
+        } else {
+          return 'assets/imgs/ins/lessons/shield_green.png';
         }
       default:
         return 'assets/imgs/ins/lessons/road_rules_white.png';
@@ -357,7 +370,7 @@ class AssestmentTypeIcon extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Poppins',
               color: KorbilTheme.of(context).secondaryColor,
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.w400,
             ),
           ),

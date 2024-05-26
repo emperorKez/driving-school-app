@@ -13,6 +13,7 @@ sealed class MetadataState {
     this.documentTypes,
     this.staffRoles,
     this.locationTypes,
+    this.skillCategories
   });
 
   final List<String>? transmisionTypes;
@@ -25,6 +26,7 @@ sealed class MetadataState {
   final List<DocumentType>? documentTypes;
   final List<StaffRole>? staffRoles;
   final List<LocationType>? locationTypes;
+  final List<SkillCategory>? skillCategories;
 }
 
 final class MetadataInitial extends MetadataState {}
@@ -43,6 +45,7 @@ final class MetadataLoaded extends MetadataState {
     required super.documentTypes,
     required super.staffRoles,
     required super.locationTypes,
+    required super.skillCategories
   });
 }
 

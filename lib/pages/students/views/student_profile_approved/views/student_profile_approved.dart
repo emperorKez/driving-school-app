@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/custom_screen_padding.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
@@ -60,8 +59,7 @@ class StudentProfileApproved extends StatelessWidget {
           // }
           return state is! PackageLoaded
               ? kLoadingWidget(context)
-              : getPreferedOrientation(context) ==
-                      PreferedOrientation.landscape
+              : getPreferedOrientation(context) == PreferedOrientation.landscape
                   ? Row(
                       children: [
                         Expanded(
@@ -167,9 +165,8 @@ class StudentProfileApproved extends StatelessWidget {
                               )]
                           .course
                           .title,
-                      subTitle: DateFormat.yMd().format(
-                        state.studentPackage!.pastLessons[index].scheduledDate,
-                      ),
+                      subTitle:
+                          '${state.studentPackage!.pastLessons[index].scheduledDate}',
                     ),
                   ),
                 ),
@@ -239,8 +236,11 @@ class StudentProfileApproved extends StatelessWidget {
         BlocBuilder<CourseBloc, CourseState>(
           builder: (context, courseState) {
             if (courseState is CourseInitial) {
-              context.read<CourseBloc>().add(GetCourses(
-                  schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,),);
+              context.read<CourseBloc>().add(
+                    GetCourses(
+                      schoolId: context.read<SchoolBloc>().state.schoolInfo!.id,
+                    ),
+                  );
             }
             return courseState is! CourseLoaded
                 ? kLoadingWidget(context)

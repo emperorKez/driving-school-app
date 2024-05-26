@@ -154,13 +154,13 @@ Widget bookedCalender(List<Calender> bookedCalender) {
             } catch (e) {
               print(e);
             }
-            return  LessonStepCard(
+            return LessonStepCard(
               calender: bookedCalender[index],
-                reached: step.isCompleted,
-                step: step,
-                isFirst: index == 0,
-                isLast: index == (bookedCalender.length - 1),
-                isNextCompleted: isNextCompleted, 
+              reached: step.isCompleted,
+              step: step,
+              isFirst: index == 0,
+              isLast: index == (bookedCalender.length - 1),
+              isNextCompleted: isNextCompleted,
             );
           },
         );
@@ -171,6 +171,7 @@ Widget completedCalender(List<Calender> completedCalender) {
       ? const SizedBox()
       : ListView.builder(
           itemCount: completedCalender.length,
+          shrinkWrap: true,
           itemBuilder: (context, index) {
             final item = completedCalender[index];
             return SingleLessonStepCard(

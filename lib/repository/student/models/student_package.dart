@@ -47,9 +47,10 @@ class Lesson {
     required this.endTime,
     required this.distance,
     required this.duration,
-    required this.enabledForBooking,
+    required this.enabledBooking,
     required this.progress,
     required this.progressStatus,
+    required this.instructorNote,
   });
 
   factory Lesson.fromJson( dynamic json) => Lesson(
@@ -57,76 +58,51 @@ class Lesson {
         courseId: json['courseId'] as int,
         schoolPackageId: json['schoolPackageId'] as int,
         studentId: json['studentId'] as int,
-        scheduledDate: DateTime.parse(json['scheduledDate'] as String),
-        scheduledTime:
-            Time.fromJson(json['scheduledTime'] as Map<String, dynamic>),
-        startTime: Time.fromJson(json['startTime'] as Map<String, dynamic>),
-        endTime: Time.fromJson(json['endTime'] as Map<String, dynamic>),
-        distance: json['distance'] as int,
-        duration: json['duration'] as int,
-        enabledForBooking: json['enabledForBooking'] as bool,
+        scheduledDate: json['scheduledDate'] as dynamic,
+        scheduledTime: json['scheduledTime'] as dynamic,
+        startTime: json['startTime'] as dynamic,
+        endTime: json['endTime'] as dynamic,
+        distance: json['distance'] as dynamic,
+        duration: json['duration'] as double,
+        enabledBooking: json['enabledBooking'] as bool,
         progress: json['progress'] as int,
         progressStatus: json['progressStatus'] as String,
+        instructorNote: json['instructorNote'] as dynamic,
       );
 
   int id;
   int courseId;
   int schoolPackageId;
   int studentId;
-  DateTime scheduledDate;
-  Time scheduledTime;
-  Time startTime;
-  Time endTime;
-  int distance;
-  int duration;
-  bool enabledForBooking;
+  dynamic scheduledDate;
+  dynamic scheduledTime;
+  dynamic startTime;
+  dynamic endTime;
+  dynamic distance;
+  double duration;
+  bool enabledBooking;
   int progress;
   String progressStatus;
+  dynamic instructorNote;
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'courseId': courseId,
         'schoolPackageId': schoolPackageId,
         'studentId': studentId,
-        'scheduledDate': scheduledDate.toIso8601String(),
-        'scheduledTime': scheduledTime.toJson(),
-        'startTime': startTime.toJson(),
-        'endTime': endTime.toJson(),
+        'scheduledDate': scheduledDate,
+        'scheduledTime': scheduledTime,
+        'startTime': startTime,
+        'endTime': endTime,
         'distance': distance,
         'duration': duration,
-        'enabledForBooking': enabledForBooking,
+        'enabledForBooking': enabledBooking,
         'progress': progress,
         'progressStatus': progressStatus,
+        'instructorNote': instructorNote,
       };
 }
 
-class Time {
-  Time({
-    required this.hour,
-    required this.minute,
-    required this.second,
-    required this.nano,
-  });
-
-  factory Time.fromJson(Map<String, dynamic> json) => Time(
-        hour: json['hour'] as int,
-        minute: json['minute'] as int,
-        second: json['second'] as int,
-        nano: json['nano'] as int,
-      );
-
-  int hour;
-  int minute;
-  int second;
-  int nano;
-
-  Map<String, dynamic> toJson() => {
-        'hour': hour,
-        'minute': minute,
-        'second': second,
-        'nano': nano,
-      };
-}
 
 class Stats {
   Stats({

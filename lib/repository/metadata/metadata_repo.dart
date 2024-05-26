@@ -11,12 +11,13 @@ import 'package:korbil_mobile/repository/metadata/models/instructor_type.dart';
 import 'package:korbil_mobile/repository/metadata/models/language.dart';
 import 'package:korbil_mobile/repository/metadata/models/location_type.dart';
 import 'package:korbil_mobile/repository/metadata/models/schedule_flow.dart';
+import 'package:korbil_mobile/repository/metadata/models/skill_category.dart';
 import 'package:korbil_mobile/repository/metadata/models/staff_role.dart';
 
 class MetadataRepo {
   final ApiService apiService = ApiService();
 
-  Future<ResponseState<List<Language>>> getAllLanguages() async {
+  Future<ResponseState<List<Language>>> getAllLanguages() async { 
     final response = await apiService.getReq(ApiPaths.getAllLanguages);
     if (response.data != null) {
       try {
@@ -27,6 +28,25 @@ class MetadataRepo {
         );
         return ResponseSuccess(languages);
       } catch (e) {
+        return ResponseFailed(DataError(null, e));
+      }
+    }
+    return ResponseFailed(response.error!);
+  }
+
+  Future<ResponseState<List<SkillCategory>>> getSkillCategories() async { 
+    final response = await apiService.getReq(ApiPaths.getSkillCategories);
+    if (response.data != null) {
+      print('get SkillCategory res ${response.data}');
+      try {
+        final jsonList = response.data!.data['response'];
+        final data = (jsonList as List).cast<Map<String, dynamic>>();
+        final categories = List<SkillCategory>.from(
+          data.map(SkillCategory.fromJson),
+        );
+        return ResponseSuccess(categories);
+      } catch (e) {
+        print('get skill category error $e');
         return ResponseFailed(DataError(null, e));
       }
     }

@@ -8,6 +8,7 @@ import 'package:korbil_mobile/repository/metadata/models/instructor_type.dart';
 import 'package:korbil_mobile/repository/metadata/models/language.dart';
 import 'package:korbil_mobile/repository/metadata/models/location_type.dart';
 import 'package:korbil_mobile/repository/metadata/models/schedule_flow.dart';
+import 'package:korbil_mobile/repository/metadata/models/skill_category.dart';
 import 'package:korbil_mobile/repository/metadata/models/staff_role.dart';
 
 part 'metadata_state.dart';
@@ -22,7 +23,7 @@ class MetadataCubit extends Cubit<MetadataState> {
     try {
       final languageRes = await _metadataRepo.getAllLanguages();
       final helpTopicsRes = await _metadataRepo.getAllHelpTopics();
-      // final feedbackCatgoriesRes = await _metadataRepo.getFeedbackCategories();
+      final feedbackCatgoriesRes = await _metadataRepo.getFeedbackCategories();
       final locationTypeRes = await _metadataRepo.getLocationType();
       final courseCategoryRes = await _metadataRepo.getAllCourseCategories();
       final documentTypeRes = await _metadataRepo.getDocumentTypes();
@@ -32,6 +33,7 @@ class MetadataCubit extends Cubit<MetadataState> {
       final staffRoleRes = await _metadataRepo.getAllStaffRoles();
       final transmissionTypeRes =
           await _metadataRepo.getVehicleTransmissionTypes();
+      final skillCatgoryRes = await _metadataRepo.getSkillCategories();
       emit(
         MetadataLoaded(
           transmisionTypes: transmissionTypeRes.data,
@@ -40,11 +42,11 @@ class MetadataCubit extends Cubit<MetadataState> {
           courseCategories: courseCategoryRes.data,
           instructorTypes: instructorTypeRes.data,
           helpTopics: helpTopicsRes.data,
-          // feedbackCategories: feedbackCatgoriesRes.data,
-          feedbackCategories: const [],
+          feedbackCategories: feedbackCatgoriesRes.data,
           documentTypes: documentTypeRes.data,
           staffRoles: staffRoleRes.data,
           locationTypes: locationTypeRes.data,
+          skillCategories: skillCatgoryRes.data,
         ),
       );
     } catch (e) {

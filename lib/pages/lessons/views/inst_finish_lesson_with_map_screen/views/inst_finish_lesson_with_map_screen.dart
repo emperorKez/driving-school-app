@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
+import 'package:korbil_mobile/pages/lessons/bloc/assessment/assessment_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/lesson/lesson_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/views/completed_lesson_details/views/inst_completed_lesson_details.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_finish_lesson_with_map_screen/views/alert_content.dart';
@@ -61,7 +63,7 @@ class _InstFinishLessonWithMapViewState
                   else
                     const Spacer(),
                   bottomSheetDetails(
-                     s,
+                    s,
                     // onFinishLessonTap: _showConfirmFinishLessonAlert,
                   ),
                 ],
@@ -175,65 +177,89 @@ class _InstFinishLessonWithMapViewState
           //     // );
           //   },
           // ),
-          PrimaryBtn(
-            text: 'Finish Lesson',
-            pvm: 12,
-            fontSize: 14,
-            ontap: () async {
-            bool? confirmation = await  _showConfirmFinishLessonAlert();
-            // bool confirmation =  onFinishLessonTap;
-            if (confirmation != null && confirmation == true){
-print(getPayload());
-if(!context.mounted) return;
-// context.read<LessonBloc>().add(FinishLesson(lessonId: widget.lessonId, payload: getPayload()));
-await Navigator.pushReplacement(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (cxt) => InstCompletedLessonDetails(lessonId: widget.lessonId,), 
-                ),
-              );
-            }
+          BlocConsumer<LessonBloc, LessonState>(
+            listener: (context, state) {
+              if (state is LessonLoaded) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (cxt) => InstCompletedLessonDetails(
+                      lessonId: widget.lessonId,
+                    ),
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              return state is LessonLoading
+                  ? kLoadingWidget(context)
+                  : PrimaryBtn(
+                      text: 'Finish Lesson',
+                      pvm: 12,
+                      fontSize: 14,
+                      ontap: () async {
+                        final confirmation =
+                            await _showConfirmFinishLessonAlert();
+                        if (confirmation != null && confirmation == true) {
+                          if (!context.mounted) return;
+                          context.read<LessonBloc>().add(
+                                FinishLesson(
+                                  lessonId: widget.lessonId,
+                                  payload: getPayload(),
+                                ),
+                              );
+                        }
+                      },
+                    );
             },
           ),
+          const SizedBox(height: 30),
         ],
       ),
     );
   }
-  Map<String, dynamic> getPayload(){
+
+  Map<String, dynamic> getPayload() {
+    final state = context.read<AssessmentBloc>().state;
+    final goodAssessments = {
+      ...state.goodAtManeuvering,
+      ...state.goodAtEcoFriendly,
+      ...state.goodAtVehicleKnowledge,
+      ...state.goodAtRoadRules,
+      ...state.goodAtRoadSafety,
+    };
+    final badAssessments = {
+      ...state.badAtManeuvering,
+      ...state.badAtEcoFriendly,
+      ...state.badAtVehicleKnowledge,
+      ...state.badAtRoadRules,
+      ...state.badAtRoadSafety,
+    };
     return {
-  'postLessonNote': 'string',
-  'distance': 0,
-  'additionalFeedback': [
-    {
-      'skillCategoryId': 0,
-      'subSkillCategoryId': 0,
-      'category': {
-        'id': 0,
-        'name': 'string',
-        'code': 'string',
-        'icon': 'string',
-        'description': 'string',
-        'subCategories': [
+      'postLessonNote': context.read<AssessmentBloc>().state.feedback,
+      'distance': 10,
+      'additionalFeedback': [
+        for (final element in goodAssessments)
           {
-            'id': 0,
-            'name': 'string',
-            'code': 'string',
-            'description': 'string'
-          }
-        ]
-      },
-      'subCategory': {
-        'id': 0,
-        'name': 'string',
-        'code': 'string',
-        'description': 'string'
-      },
-      'longitude': 0,
-      'latitude': 0,
-      'grade': 0,
-      'comment': 'string'
-    }
-  ]
-};
+            'skillCategoryId': element.categoryId,
+            'subSkillCategoryId': element.subCategory.id,
+            'lessonId': widget.lessonId,
+            'longitude': 4.47621,
+            'latitude': 6.63721,
+            'grade': 2,
+            'comment': 'satisfactory',
+          },
+        for (final element in badAssessments)
+          {
+            'skillCategoryId': element.categoryId,
+            'subCategoryId': element.subCategory.id,
+            'lessonId': widget.lessonId,
+            'longitude': 4.47621,
+            'latitude': 6.63721,
+            'grade': 1,
+            'comment': 'satisfactory',
+          },
+      ],
+    };
   }
 }

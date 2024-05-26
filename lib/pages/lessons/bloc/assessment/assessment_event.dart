@@ -4,29 +4,34 @@ part of 'assessment_bloc.dart';
 sealed class AssessmentEvent {}
 
 class AddManeuvering extends AssessmentEvent {
-  AddManeuvering({ required this.review, required this.goodAt});
-  final String review;
+  AddManeuvering({ required this.subCategory, required this.categoryId, required this.goodAt});
+  final SubCategory subCategory;
+  final int categoryId;
   final bool goodAt;
 }
 class AddVehicleKnowledge extends AssessmentEvent {
-  AddVehicleKnowledge({ required this.review, required this.goodAt});
-  final String review;
+  AddVehicleKnowledge({ required this.subCategory, required this.categoryId, required this.goodAt});
+  final SubCategory subCategory;
   final bool goodAt;
+  final int categoryId;
 }
 class AddEcoFriendly extends AssessmentEvent {
-  AddEcoFriendly({ required this.review, required this.goodAt});
-  final String review;
+  AddEcoFriendly({ required this.subCategory, required this.categoryId, required this.goodAt});
+  final SubCategory subCategory;
   final bool goodAt;
+  final int categoryId;
 }
 class AddRoadRules extends AssessmentEvent {
-  AddRoadRules({ required this.review, required this.goodAt});
-  final String review;
+  AddRoadRules({ required this.subCategory, required this.categoryId, required this.goodAt});
+  final SubCategory subCategory;
   final bool goodAt;
+  final int categoryId;
 }
 class AddRoadSafety extends AssessmentEvent {
-  AddRoadSafety({ required this.review, required this.goodAt});
-  final String review;
+  AddRoadSafety({ required this.subCategory, required this.categoryId, required this.goodAt});
+  final SubCategory subCategory;
   final bool goodAt;
+  final int categoryId;
 }
 class AddFeedback extends AssessmentEvent {
   AddFeedback({ required this.feedback,});

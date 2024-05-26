@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/box_shadow/default_box_shadow.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/pages/lessons/views/inst_lesson_details_map_view/views/inst_lesson_details_map_view.dart';
+import 'package:korbil_mobile/repository/lesson/lesson_repo.dart';
 import 'package:korbil_mobile/repository/lesson/model/calender.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -167,6 +168,7 @@ class ClassAssignmentDetailsCard extends StatelessWidget {
             pvm: 10,
             hm: 0,
             ontap: () {
+              LessonRepo().startLesson(calender.id);
               Navigator.push(
                 context,
                 MaterialPageRoute<dynamic>(

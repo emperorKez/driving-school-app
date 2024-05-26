@@ -16,6 +16,7 @@ class LessonDetailCubit extends Cubit<LessonDetailState> {
       final response = await _lessonRepo.getLesson(lessonId);
       emit(LessonDetailLoaded(lessonDetail: response.data!));
       } catch (e) {
+        print(e);
         emit(LessonDetailError(error: e.toString()));
       }
 

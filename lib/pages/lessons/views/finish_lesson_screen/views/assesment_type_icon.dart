@@ -14,13 +14,13 @@ class BadAssestmentTypeIcon extends StatelessWidget {
 
   String _getAssesmentTypeImg(String type) {
     switch (type) {
-      case 'Vehicle knowledge':
+      case 'VEHICLE_KNOWLEDGE':
         if (selected) {
           return 'assets/imgs/ins/lessons/shield.png';
         } else {
           return 'assets/imgs/ins/lessons/shield_black.png';
         }
-      case 'Road safety and behavior':
+      case 'ROAD_SAFETY':
         if (selected) {
           return 'assets/imgs/ins/lessons/road_safety_white.png';
         } else {
