@@ -38,7 +38,7 @@ jobs:
 
       # Get Pub dependencies
       - run: |
-          flutter pub cache clean -y
+          flutter pub cache clean -f
           flutter clean
           rm ./pubspec.lock
           flutter pub get
