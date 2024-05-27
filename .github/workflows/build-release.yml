@@ -40,7 +40,6 @@ jobs:
       - run: |
           flutter pub cache clean -f
           flutter clean
-          rm ./pubspec.lock
           flutter pub get
           flutter build apk --flavor development -t ./lib/main_development.dart
       #- run: flutter build apk --debug
