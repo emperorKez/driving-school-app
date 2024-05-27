@@ -36,11 +36,14 @@ jobs:
           distribution: zulu
           cache: gradle
 
-
       # Get Pub dependencies
-      - run: flutter pub get
+      - run: |
+          flutter pub cache clean
+          flutter clean
+          rm pubspec.lock
+          flutter pub get
+          flutter build apk --flavor development -t ./lib/main_development.dart
       #- run: flutter build apk --debug
-      - run: flutter build apk --debug --flavor development -t ./lib/main_development.dart
 
       
       - name: Rename build for Android
