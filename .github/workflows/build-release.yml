@@ -36,12 +36,25 @@ jobs:
           distribution: zulu
           cache: gradle
 
+      - name: Delete pubspec.lock
+        if: ${{ hashFiles('**/pubspec.lock') != '' }}
+        run: rm **/pubspec.lock
+
+        #clean cache
+      - name: Clean pub cache
+        run: flutter pub cache clean -f
+
+        #clean build
+      - name: Clean Build
+        run: flutter clean
+
       # Get Pub dependencies
-      - run: |
-          flutter pub cache clean -f
-          flutter clean
-          flutter pub get
-          flutter build apk --flavor development -t ./lib/main_development.dart
+      - name: Get dependencies
+        run: flutter pub get
+
+      # build apk
+      - name: Build Android Apk
+        run: flutter build apk --flavor development -t ./lib/main_development.dart
       #- run: flutter build apk --debug
 
       
