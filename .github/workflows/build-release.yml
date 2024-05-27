@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
     
       # Set up Flutter.
       - name: Setup flutter
@@ -39,7 +39,8 @@ jobs:
 
       # Get Pub dependencies
       - run: flutter pub get
-      - run: flutter build apk --debug
+      #- run: flutter build apk --debug
+      - run: flutter build apk --flavor development
 
       
       - name: Rename build for Android
@@ -48,7 +49,7 @@ jobs:
 
       - name: Draft release with release notes
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
         with:
