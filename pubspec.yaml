@@ -16,8 +16,8 @@ dependencies:
   intl:
   # google_fonts: ^5.1.0
   syncfusion_flutter_core: 
-  syncfusion_flutter_datepicker: 
-  flutter_slidable:
+  syncfusion_flutter_datepicker: ^25.1.39
+  flutter_slidable: ^3.1.0
   carousel_slider:
   dotted_line:
   dotted_border: 
