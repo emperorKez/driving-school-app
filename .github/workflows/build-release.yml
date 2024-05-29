@@ -3,9 +3,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
 
 permissions:
   contents: write
@@ -36,17 +36,19 @@ jobs:
           distribution: zulu
           cache: gradle
 
-      - name: Delete pubspec.lock
-        if: ${{ hashFiles('**/pubspec.lock') != '' }}
-        run: rm **/pubspec.lock
+      # - name: Delete pubspec.lock
+      #   if: ${{ hashFiles('**/pubspec.lock') != '' }}
+      #   run: rm **/pubspec.lock
 
-        #clean cache
-      - name: Clean pub cache
-        run: flutter pub cache clean -f
+      #   #clean cache
+      # - name: Clean pub cache
+      #   run: flutter pub cache clean -f
 
-        #clean build
-      - name: Clean Build
-        run: flutter clean
+      #   #clean build
+      # - name: Clean Build
+      #   run: flutter clean
+
+      
 
       # Get Pub dependencies
       - name: Get dependencies
