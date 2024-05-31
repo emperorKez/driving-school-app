@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'create_school_bloc.dart';
 
-class CreateSchoolState {
-  CreateSchoolState({
+class CreateSchoolState extends Equatable {
+  const CreateSchoolState({
     this.address = '',
     this.suggestedLocations,
     this.logo,
@@ -16,6 +16,15 @@ class CreateSchoolState {
   final bool isNameValid;
   bool get isValidAddress => AddressValidator(address: address).validate();
 
+  @override
+  List<Object?> get props => [
+        address,
+        suggestedLocations,
+        logo,
+        companyRegistration,
+        isNameValid,
+      ];
+
   CreateSchoolState copyWith({
     String? address,
     List<Location>? suggestedLocations,
@@ -24,11 +33,12 @@ class CreateSchoolState {
     bool? isNameValid,
   }) {
     return CreateSchoolState(
-        address: address ?? this.address,
-        suggestedLocations: suggestedLocations ?? this.suggestedLocations,
-        logo: logo ?? this.logo,
-        companyRegistration: companyRegistration ?? this.companyRegistration,
-        isNameValid: isNameValid ?? this.isNameValid,);
+      address: address ?? this.address,
+      suggestedLocations: suggestedLocations ?? this.suggestedLocations,
+      logo: logo ?? this.logo,
+      companyRegistration: companyRegistration ?? this.companyRegistration,
+      isNameValid: isNameValid ?? this.isNameValid,
+    );
   }
 }
 

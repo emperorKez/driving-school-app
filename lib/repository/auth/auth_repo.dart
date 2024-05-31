@@ -111,14 +111,14 @@ class AuthRepo {
     required String password,
     required String firstname,
     required String lastname,
-    required String phoneNumber,
+    // required String phoneNumber,
   }) async {
     try {
       final userAttributes = {
         AuthUserAttributeKey.email: email,
         AuthUserAttributeKey.givenName: firstname,
         AuthUserAttributeKey.familyName: lastname,
-        AuthUserAttributeKey.phoneNumber: phoneNumber,
+        // AuthUserAttributeKey.phoneNumber: phoneNumber,
       };
 
       final result = await Amplify.Auth.signUp(

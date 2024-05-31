@@ -9,13 +9,14 @@ class SignUp extends AuthEvent {
       required this.password,
       required this.firstname,
       required this.lastname,
-      required this.phoneNumber,});
+      // required this.phoneNumber,
+      });
 
   final String email;
   final String password;
   final String firstname;
   final String lastname;
-  final String phoneNumber;
+  // final String phoneNumber;
 }
 
 class SignIn extends AuthEvent {
@@ -32,12 +33,13 @@ class UpdateUser extends AuthEvent {
       {required this.email,
       required this.firstname,
       required this.lastname,
-      required this.phoneNumber,});
+      // required this.phoneNumber,
+      });
 
   final String email;
   final String firstname;
   final String lastname;
-  final String phoneNumber;
+  // final String phoneNumber;
 }
 
  class CacheSignin extends AuthEvent{}

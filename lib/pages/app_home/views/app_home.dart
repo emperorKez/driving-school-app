@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_bottom_bar.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/app_home/cubit/tab_view/tab_view_bloc.dart';
 import 'package:korbil_mobile/pages/app_home/views/tabs/lesson_tab_view.dart';
@@ -19,7 +20,12 @@ class AppHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) { 
     return Material(
-      child: BlocBuilder<StaffBloc, StaffState>(
+      child: BlocConsumer<StaffBloc, StaffState>(
+        listener: (context, state) {
+          if (state is StaffError){
+            errorSnackbar(context, error: state.error);
+          }
+        },
         builder: (context, state) {
           if (state is! StaffLoaded) {
             return kLoadingWidget(context);
@@ -81,7 +87,10 @@ class _AppHomeState extends State<_AppHome> {
             }
             // return Future.value(false);
           },
-          child: BlocBuilder<SchoolBloc, SchoolState>(
+          child: BlocConsumer<SchoolBloc, SchoolState>(
+            listener: (context, state) {
+              if (state is SchoolError){errorSnackbar(context, error: state.error);}
+            },
             builder: (context, state) {
               if (state is! SchoolLoaded) {
                 return kLoadingWidget(context);

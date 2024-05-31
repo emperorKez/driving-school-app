@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -7,9 +9,10 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/global/constants/colors.dart';
-import 'package:korbil_mobile/locator.dart';
-import 'package:korbil_mobile/nav/nav_service.dart';
-import 'package:korbil_mobile/nav/router.dart';
+// import 'package:korbil_mobile/locator.dart';
+// import 'package:korbil_mobile/nav/nav_service.dart';
+// import 'package:korbil_mobile/nav/router.dart';
+import 'package:korbil_mobile/pages/app_home/views/app_home.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_school/create_school_bloc.dart';
@@ -17,6 +20,7 @@ import 'package:korbil_mobile/pages/school/bloc/metadata/metadata_cubit.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/staff/staff_bloc.dart';
 import 'package:korbil_mobile/utils/prefered_orientation.dart';
+import 'package:path/path.dart';
 
 enum UploadType { logo, registration }
 
@@ -32,12 +36,13 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  // TextEditingController descriptionController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
   File? registrationDoc;
   File? logoDoc;
+  String registrationHint = 'Upload Company Registration Document';
 
   bool suggestingAddress = false;
 
@@ -248,20 +253,20 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             ),
                           ],
                         ),
-                      _renderFormField(
-                        hint: 'About Us',
-                        ctrl: descriptionController,
-                        isMultiline: true,
-                        validator: (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Enter About Us';
-                          } else if (val.characters.length < 25) {
-                            return 'Enter At least 10 words about your school';
-                          }
-                          return null;
-                        },
-                        // icon: 'assets/imgs/ins/auth/school.png',
-                      ),
+                      // _renderFormField(
+                      //   hint: 'About Us',
+                      //   ctrl: descriptionController,
+                      //   isMultiline: true,
+                      //   validator: (val) {
+                      //     if (val == null || val.isEmpty) {
+                      //       return 'Enter About Us';
+                      //     } else if (val.characters.length < 25) {
+                      //       return 'Enter At least 10 words about your school';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   // icon: 'assets/imgs/ins/auth/school.png',
+                      // ),
                       if (getPreferedOrientation(context) ==
                           PreferedOrientation.landscape)
                         Row(
@@ -397,7 +402,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            'Upload Company Registration Document',
+                                            registrationHint,
                                             style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w600,
@@ -416,35 +421,29 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                     ),
                                   ),
                                   if (registrationDoc != null)
-                                    SizedBox(
-                                      width: 100,
-                                      height: 100,
-                                      child: Image.file(
-                                        registrationDoc!,
-                                        fit: BoxFit.cover,
-                                      ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final doc2 = await pickFile();
+                                        if (doc2 != null) {
+                                          setState(() {
+                                            registrationDoc = doc2;
+                                            registrationHint =
+                                                basename(registrationDoc!.path);
+                                          });
+                                          if (!context.mounted) return;
+                                          context.read<CreateSchoolBloc>().add(
+                                                UploadRegistration(
+                                                  documentType: context
+                                                      .read<MetadataCubit>()
+                                                      .state
+                                                      .documentTypes![2],
+                                                  file: registrationDoc!.path,
+                                                ),
+                                              );
+                                        }
+                                      },
+                                      child: _renderUploadBtn(),
                                     ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      final doc2 = await pickFile();
-                                      if (doc2 != null) {
-                                        setState(() {
-                                          registrationDoc = doc2;
-                                        });
-                                        if (!context.mounted) return;
-                                        context.read<CreateSchoolBloc>().add(
-                                              UploadRegistration(
-                                                documentType: context
-                                                    .read<MetadataCubit>()
-                                                    .state
-                                                    .documentTypes![2],
-                                                file: registrationDoc!.path,
-                                              ),
-                                            );
-                                      }
-                                    },
-                                    child: _renderUploadBtn(),
-                                  ),
                                 ],
                               ),
                             ),
@@ -480,7 +479,8 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                   ),
                                 GestureDetector(
                                   onTap: () async {
-                                    final doc = await pickFile();
+                                    final doc = await pickFile(
+                                        extensions: ['jpeg', 'png', 'jpg']);
                                     if (doc != null) {
                                       setState(() {
                                         logoDoc = doc;
@@ -497,13 +497,14 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                             ),
                             Column(
                               children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 8, top: 12),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, top: 12),
                                   child: Row(
                                     children: [
                                       Text(
-                                        'Upload Company Registration Document',
-                                        style: TextStyle(
+                                        registrationHint,
+                                        style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14,
@@ -513,21 +514,14 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                                     ],
                                   ),
                                 ),
-                                if (registrationDoc != null)
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Image.file(
-                                      registrationDoc!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
                                 GestureDetector(
                                   onTap: () async {
                                     final doc2 = await pickFile();
                                     if (doc2 != null) {
                                       setState(() {
                                         registrationDoc = doc2;
+                                        registrationHint =
+                                            basename(registrationDoc!.path);
                                       });
                                       if (!context.mounted) return;
                                       context.read<CreateSchoolBloc>().add(
@@ -558,13 +552,26 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
             BlocConsumer<SchoolBloc, SchoolState>(
               listener: (context, state) {
                 if (state is SchoolLoaded) {
-                  context.read<StaffBloc>().add(GetStaffByEmail(
-                      email: context
-                          .read<CreateAccountBloc>()
-                          .state
-                          .staffData!['profile']['email'] as String,),);
-                  lc<NavigationService>()
-                      .navigateTo(rootNavKey, AppRouter.appHome);
+                  final email = context
+                      .read<CreateAccountBloc>()
+                      .state
+                      .staffData!['profile']['email'];
+                  context.read<StaffBloc>().add(
+                        GetStaffByEmail(email: email as String),
+                      );
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute<dynamic>(
+                      builder: (context) => const AppHomePage()),
+                  (route) => false);
+                  //     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                  // MaterialPageRoute<dynamic>(
+                  //     builder: (context) => const AppHomePage()),
+                  // (route) => false);
+
+                  // lc<NavigationService>()
+                      // .navigateTo(rootNavKey, AppRouter.appHome);
+
                 }
                 if (state is SchoolError) {
                   errorSnackbar(context, error: state.error);
@@ -574,50 +581,54 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
                 if (state is SchoolLoading) {
                   return kLoadingWidget(context, color: Colors.red);
                 } else {
-                  final createSchoolState =
-                      context.read<CreateSchoolBloc>().state;
-                  return PrimaryBtn(
-                    text: 'Create',
-                    ontap: () {
-                      final staff =
-                          context.read<CreateAccountBloc>().state.staffData;
-                      if (_formKey.currentState!.validate() && staff != null) {
-                        if (createSchoolState.logo == null) {
-                          errorSnackbar(context, error: 'Upload Company logo');
-                        } else if (createSchoolState.companyRegistration ==
-                            null) {
-                          errorSnackbar(
-                            context,
-                            error: 'Upload Company registration document',
-                          );
-                        } else {
-                          final payload = {
-                            'schoolName': nameController.text,
-                            'address': addressController.text,
-                            'city': cityController.text,
-                            'phoneNo': phoneController.text,
-                            'description': descriptionController.text,
-                            'languageId': 1,
-                            'logoKey': createSchoolState.logo!.key,
-                            'registrationDocumentKey':
-                                createSchoolState.companyRegistration!.file.key,
-                            'staff': staff,
-                          };
-                          print(payload);
-                          print(context
-                              .read<CreateAccountBloc>()
-                              .state
-                              .staffData!['profile']['email'],);
-                          context
-                              .read<SchoolBloc>()
-                              .add(CreateSchool(payload: payload));
-                        }
-                      } else {
-                        errorSnackbar(context,
-                            error: 'Correct the errors to proceed',);
-                      }
+                  // final createSchoolState =
+                  //     context.read<CreateSchoolBloc>().state;
+                  return BlocBuilder<CreateSchoolBloc, CreateSchoolState>(
+                    builder: (context, createSchoolState) {
+                      return PrimaryBtn(
+                        text: 'Create',
+                        ontap: () {
+                          final staff =
+                              context.read<CreateAccountBloc>().state.staffData;
+                          if (_formKey.currentState!.validate() &&
+                              staff != null) {
+                            if (createSchoolState.logo == null) {
+                              errorSnackbar(context,
+                                  error: 'Upload Company logo');
+                            } else if (createSchoolState.companyRegistration ==
+                                null) {
+                              errorSnackbar(
+                                context,
+                                error: 'Upload Company registration document',
+                              );
+                            } else {
+                              final payload = {
+                                'schoolName': nameController.text,
+                                'address': addressController.text,
+                                'city': cityController.text,
+                                'phoneNo': phoneController.text,
+                                // 'description': descriptionController.text,
+                                'languageId': 1,
+                                'logoKey': createSchoolState.logo!.key,
+                                'registrationDocumentKey': createSchoolState
+                                    .companyRegistration!.file.key,
+                                'staff': staff,
+                              };
+                              print(payload);
+                              context
+                                  .read<SchoolBloc>()
+                                  .add(CreateSchool(payload: payload));
+                            }
+                          } else {
+                            errorSnackbar(
+                              context,
+                              error: 'Correct the errors to proceed',
+                            );
+                          }
+                        },
+                        hm: 23,
+                      );
                     },
-                    hm: 23,
                   );
                 }
               },
@@ -796,9 +807,10 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
     );
   }
 
-  Future<File?> pickFile() async {
+  Future<File?> pickFile({List<String>? extensions}) async {
+    final allowedExtension = extensions ?? ['pdf'];
     final result = await FilePicker.platform.pickFiles(
-      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
+      allowedExtensions: allowedExtension,
       type: FileType.custom,
     );
     try {

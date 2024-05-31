@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_school/validator/suggest_address_validator.dart';
 import 'package:korbil_mobile/repository/location/location_repo.dart';

@@ -6,6 +6,7 @@ import 'package:korbil_mobile/nav/router.dart';
 import 'package:korbil_mobile/pages/auth/bloc/auth/auth_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_school/create_school_bloc.dart';
+import 'package:korbil_mobile/pages/auth/bloc/pending_invite/pending_invite_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/assessment/assessment_bloc.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/calender/calender_cubit.dart';
 import 'package:korbil_mobile/pages/lessons/bloc/lesson/lesson_bloc.dart';
@@ -124,6 +125,7 @@ class _AppState extends State<App> {
         BlocProvider(create: (context) => PackageCubit(),),
         BlocProvider(create: (context) => ProfileCubit()),
         BlocProvider(create: (context) => AssessmentBloc()),
+        BlocProvider(create: (context) => PendingInviteCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -143,7 +145,7 @@ class _AppState extends State<App> {
         navigatorKey: rootNavKey,
         initialRoute: AppRouter.appInit,
         // initialRoute: AppRouter.getStarted,
-        // home: const ManageSchoolView(),
+        // home: const CreateDrivingSchoolView(),
         onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );

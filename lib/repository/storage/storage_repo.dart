@@ -15,7 +15,8 @@ class StorageRepo {
         ApiPaths.uploadFile,
         file: file,
       );
-      if (response.data != null && response.data!.data['code'] == 200) {
+      print('upload response: ${response.data}');
+      if (response.data != null) {
         final upload = UploadFile.fromJson(
           response.data!.data['response'] as Map<String, dynamic>,
         );

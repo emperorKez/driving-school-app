@@ -22,3 +22,15 @@ class UploadLicence extends CreateAccountEvent{
   final String file;
   final DocumentType documentType;
 }
+class EmailChanged extends CreateAccountEvent{
+  EmailChanged({required this.email});
+  final String email;
+}
+class PasswordChanged extends CreateAccountEvent{
+  PasswordChanged({required this.password});
+  final String password;
+}
+class PasswordConfirm extends CreateAccountEvent{
+  PasswordConfirm({required this.password});
+  final String password;
+}
