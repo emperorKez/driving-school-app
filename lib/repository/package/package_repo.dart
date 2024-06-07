@@ -56,11 +56,13 @@ class PackageRepo {
         ApiPaths.updatePackage(packageId),
         payload: payload,
       );
+      print('Update package response: ${response.data}');
       if (response.data != null) {
         return ResponseSuccess(response.data!.data['response']);
       }
       return ResponseFailed(response.error!);
     } catch (e) {
+      print('update package error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }

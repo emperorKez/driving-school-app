@@ -158,7 +158,7 @@ class SchoolRepo {
     }
   }
 
-  Future<ResponseState<List<InvitedStudent>>> getInvitedStudents({
+  Future<ResponseState<List<InvitedStudent>?>> getInvitedStudents({
     required int schoolId,
   }) async {
     try {
@@ -176,7 +176,8 @@ class SchoolRepo {
       return ResponseFailed(response.error!);
     } catch (e) {
       print('get invited students error: $e');
-      return ResponseFailed(DataError(null, e));
+      return ResponseSuccess(null);
+      // return ResponseFailed(DataError(null, e));
     }
   }
 

@@ -3,11 +3,16 @@ import 'package:korbil_mobile/global/constants/colors.dart';
 
 class EditPackagePriceBreakdownSummaryCard extends StatelessWidget {
   const EditPackagePriceBreakdownSummaryCard({
+     required this.price,
     super.key,
   });
+  final int price;
 
   @override
   Widget build(BuildContext context) {
+    final fees = (0.01 * price).round(); //1% of price
+    final earnings = (0.99 * price).round(); //99% of price
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
@@ -17,13 +22,13 @@ class EditPackagePriceBreakdownSummaryCard extends StatelessWidget {
         color: AppColors.grey2,
         borderRadius: BorderRadius.circular(3),
       ),
-      child: const Column(
+      child:  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Package price ',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -33,8 +38,8 @@ class EditPackagePriceBreakdownSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                r'100$',
-                style: TextStyle(
+                '$price\$', 
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   color: AppColors.black,
                   fontSize: 14,
@@ -43,13 +48,13 @@ class EditPackagePriceBreakdownSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Platform Fee (1%)',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -59,8 +64,8 @@ class EditPackagePriceBreakdownSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                r'-1$',
-                style: TextStyle(
+                '-$fees\$',
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   color: AppColors.black,
                   fontSize: 14,
@@ -69,13 +74,13 @@ class EditPackagePriceBreakdownSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'My earning/pck',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -85,8 +90,8 @@ class EditPackagePriceBreakdownSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                r'99$',
-                style: TextStyle(
+                '$earnings\$',
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   color: AppColors.black,
                   fontSize: 14,

@@ -1,6 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
+import 'package:korbil_mobile/pages/school/views/edit_package/views/edit_package.dart';
 import 'package:korbil_mobile/repository/package/models/package.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
@@ -195,7 +196,13 @@ class PackageCard extends StatelessWidget {
                   ),
                 ),
 
-                const PrimaryBtn(
+                PrimaryBtn(
+                  ontap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                          builder: (context) => InstEditNewPackageView(
+                                package: package,
+                              ))),
                   text: 'Edit',
                   fontSize: 14,
                   pvm: 8,

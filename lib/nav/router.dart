@@ -12,6 +12,7 @@ import 'package:korbil_mobile/pages/students/views/student_list/views/student_li
 import 'package:korbil_mobile/pages/students/views/student_profile_approved/views/student_profile_approved.dart';
 import 'package:korbil_mobile/pages/students/views/student_profile_unapproved/views/student_profile_unapproved.dart';
 import 'package:korbil_mobile/repository/lesson/model/calender.dart';
+import 'package:korbil_mobile/repository/package/models/package.dart';
 import 'package:korbil_mobile/repository/student/models/school_student.dart';
 import 'package:korbil_mobile/repository/student/models/student_package.dart';
 // import 'package:korbil_mobile/pages/students/students.dart';
@@ -136,7 +137,8 @@ class AppRouter {
       case lessonDetailAddReview:
         return MaterialPageRoute(
           builder: (_) => InstLessonDetailAddReviewView(
-            lessonId: settings.arguments! as int, duration: settings.arguments! as dynamic,
+            lessonId: settings.arguments! as int,
+            duration: settings.arguments! as dynamic,
           ),
         );
       case lessonDetailMapView:
@@ -204,7 +206,9 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ConfigurationView());
       case editPackage:
         return MaterialPageRoute(
-          builder: (_) => const InstEditNewPackageView(),
+          builder: (_) => InstEditNewPackageView(
+            package: settings.arguments! as Package,
+          ),
         );
       case feedback:
         return MaterialPageRoute(builder: (_) => const FeedBackView());

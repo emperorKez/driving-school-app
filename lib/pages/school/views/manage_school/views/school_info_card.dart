@@ -57,16 +57,16 @@ class SchoolInfoCard extends StatelessWidget {
                         style: customStyle(context),
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        'About Us',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: KorbilTheme.of(context).secondaryColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
+                      // Text(
+                      //   'About Us',
+                      //   style: TextStyle(
+                      //     fontFamily: 'Poppins',
+                      //     color: KorbilTheme.of(context).secondaryColor,
+                      //     fontSize: 16,
+                      //     fontWeight: FontWeight.w600,
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 15),
                       Text(
                         state.schoolInfo!.description,
                         style: customStyle(context),

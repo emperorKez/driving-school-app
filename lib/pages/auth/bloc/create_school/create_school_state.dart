@@ -47,7 +47,7 @@ final class CreateSchoolInitial extends CreateSchoolState {}
 final class CreateSchoolLoading extends CreateSchoolState {}
 
 final class CreateSchoolError extends CreateSchoolState {
-  CreateSchoolError({this.error = 'Something went wrong'});
+  const CreateSchoolError({this.error = 'Something went wrong'});
 
   final String error;
-}
+} 

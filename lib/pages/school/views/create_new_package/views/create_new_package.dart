@@ -1,13 +1,15 @@
+// ignore_for_file: use_if_null_to_convert_nulls_to_bools
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:korbil_mobile/components/app_bar_back_btn.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
+import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/package/package_bloc.dart';
 import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/create_new_package/views/price_breakdown_summary.dart';
-import 'package:korbil_mobile/pages/school/views/manage_course/views/manage_course.dart';
 import 'package:korbil_mobile/theme/theme.dart';
 
 class InstCreateNewPackageView extends StatefulWidget {
@@ -34,6 +36,9 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
 
     super.initState();
   }
+
+  final selectedCourses = <int>{};
+  bool showSyllabus = false;
 
   @override
   Widget build(BuildContext context) {
@@ -265,18 +270,23 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
           const SizedBox(
             height: 20,
           ),
-          PriceBreakdownSummaryCard(price: int.parse(priceController.text)),
+          PriceBreakdownSummaryCard(
+              price: int.parse(
+                  priceController.text.isEmpty ? '0' : priceController.text)),
           const SizedBox(
             height: 30,
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (cxt) => const InstManageCourse(),
-                ),
-              );
+              setState(() {
+                showSyllabus = true;
+              });
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute<dynamic>(
+              //     builder: (cxt) => const InstManageCourse(),
+              //   ),
+              // );
             },
             child: Text(
               '+ Link a Syllabus ',
@@ -288,6 +298,7 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
               ),
             ),
           ),
+          if (showSyllabus) syllabus() else const SizedBox(),
           const SizedBox(
             height: 25,
           ),
@@ -402,6 +413,49 @@ class _InstCreateNewPackageViewState extends State<InstCreateNewPackageView> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget syllabus() {
+    final school = context.read<SchoolBloc>().state.schoolInfo!;
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15),
+      child: school.schoolStatus != 5
+          ? const Text('School is not Active')
+          : BlocBuilder<CourseBloc, CourseState>(
+              builder: (context, state) {
+                if (state is CourseInitial) {
+                  context
+                      .read<CourseBloc>()
+                      .add(GetCourses(schoolId: school.id));
+                }
+                if (state is! CourseLoaded) {
+                  return kLoadingWidget(context);
+                } else {
+                  return state.courses!.isEmpty
+                      ? const Text('No Course Found')
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.courses!.length,
+                          itemBuilder: (context, index) {
+                            return CheckboxListTile(
+                              value: selectedCourses
+                                  .contains(state.courses![index].course.id),
+                              onChanged: (bool? isSelected) {
+                                setState(() {
+                                  isSelected == true
+                                      ? selectedCourses
+                                          .add(state.courses![index].course.id)
+                                      : selectedCourses.remove(
+                                          state.courses![index].course.id);
+                                });
+                              },
+                              title: Text(state.courses![index].course.title),
+                            );
+                          });
+                }
+              },
+            ),
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:korbil_mobile/components/loading_widget.dart';
 import 'package:korbil_mobile/components/primary_btn.dart';
 import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
+import 'package:korbil_mobile/pages/school/bloc/school_bloc/school_bloc.dart';
 import 'package:korbil_mobile/pages/school/views/add_new_course/views/add_new_course.dart';
 import 'package:korbil_mobile/repository/course/model/course.dart';
 import 'package:korbil_mobile/theme/theme.dart';
@@ -42,6 +43,10 @@ class _ManageCourseState extends State<InstManageCourse> {
           }
         },
         builder: (context, state) {
+          if (state is CourseInitial) {
+            context.read<CourseBloc>().add(GetCourses(
+                schoolId: context.read<SchoolBloc>().state.schoolInfo!.id));
+          }
           return state is! CourseLoaded
               ? kLoadingWidget(context)
               : ListView(

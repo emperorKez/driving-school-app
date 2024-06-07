@@ -306,7 +306,6 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
                   ),
                   PrimaryBtn(
                     ontap: () {
-                      print(selectedWeekdays);
                       if (_formKey.currentState!.validate()) {
                         final schoolId =
                             context.read<SchoolBloc>().state.schoolInfo!.id;
@@ -316,9 +315,10 @@ class _EditTimeScheduleState extends State<EditTimeSchedule> {
                                 payload: getPayload(),
                               ),
                             );
+                            Navigator.pop(context);
                       }
                     },
-                    text: 'Save',
+                    text: 'Save', 
                     fontSize: 14,
                     hm: 0,
                   ),

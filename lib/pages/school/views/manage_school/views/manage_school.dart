@@ -83,7 +83,7 @@ class _ManageSchoolViewState extends State<_ManageSchool> {
                 const SchoolInfoCard(),
                 const SizedBox(height: 30),
                 const PackageSection(),
-                const SizedBox(height: 30),
+                const SizedBox(height: 30), 
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: _buildItem(
