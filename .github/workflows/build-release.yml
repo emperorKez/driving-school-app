@@ -56,7 +56,8 @@ jobs:
 
       # build apk
       - name: Build Android Apk
-        run: flutter build apk --flavor development -t ./lib/main_development.dart
+        # run: flutter build apk --flavor development -t ./lib/main_development.dart
+        run: flutter build apk --debug --flavor development -t ./lib/main_development.dart
       #- run: flutter build apk --debug
 
       #because we are using flavor and release mode the generate apk name is app-development-release.apk. else it would have been app-debug.apk
