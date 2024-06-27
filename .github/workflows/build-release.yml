@@ -56,14 +56,14 @@ jobs:
 
       # build apk
       - name: Build Android Apk
-        # run: flutter build apk --flavor development -t ./lib/main_development.dart
-        run: flutter build apk --debug --flavor development -t ./lib/main_development.dart
+        run: flutter build apk --flavor development -t ./lib/main_development.dart
+        # run: flutter build apk --debug --flavor development -t ./lib/main_development.dart
       #- run: flutter build apk --debug
 
       #because we are using flavor and release mode the generate apk name is app-development-release.apk. else it would have been app-debug.apk
       - name: Rename build for Android
-        # run: mv app-development-release.apk ${{ github.workspace }}/korbil_android.apk
-        run: mv app-development-debug.apk ${{ github.workspace }}/korbil_android_debug.apk
+        run: mv app-development-release.apk ${{ github.workspace }}/korbil_android.apk
+        # run: mv app-development-debug.apk ${{ github.workspace }}/korbil_android_debug.apk
         working-directory: build/app/outputs/flutter-apk
 
       - name: Draft release with release notes
@@ -77,4 +77,4 @@ jobs:
           prerelease: false
           generate_release_notes: false
           files: |
-            korbil_android_debug.apk
+            korbil_android.apk

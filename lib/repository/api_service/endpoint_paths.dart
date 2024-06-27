@@ -1,5 +1,5 @@
 class ApiPaths {
-  // static const registerUser = 'user/register';
+  // static const registerUser = 'user/register'; 
 
   //schedule flow
   static String getScheduleFlowWithId(int id) => 'scheduleFlow/$id';

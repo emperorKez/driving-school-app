@@ -41,7 +41,7 @@ class SchoolInfo {
         schoolStatus: json['schoolStatus'] as int,
         primaryContact: json['primaryContact'] as int,
         instructorSelection: json['instructorSelection'] as int,
-        logo: json['logo'] as String,
+        logo: json['logo'] as dynamic,
         documents: List<Document>.from(
           json['documents'].map(Document.fromJson) as Iterable,
         ),
@@ -64,7 +64,7 @@ class SchoolInfo {
   int schoolStatus;
   int primaryContact;
   int instructorSelection;
-  String logo;
+  dynamic logo;
   List<Document> documents;
   int subscriptionLevel;
   DateTime createdAt;

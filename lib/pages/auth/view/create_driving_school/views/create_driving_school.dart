@@ -12,6 +12,7 @@ import 'package:korbil_mobile/global/constants/colors.dart';
 // import 'package:korbil_mobile/locator.dart';
 // import 'package:korbil_mobile/nav/nav_service.dart';
 // import 'package:korbil_mobile/nav/router.dart';
+
 import 'package:korbil_mobile/pages/app_home/views/app_home.dart';
 import 'package:korbil_mobile/pages/auth/auth.dart';
 import 'package:korbil_mobile/pages/auth/bloc/create_account/create_account_bloc.dart';
@@ -579,7 +580,7 @@ class _CreateDrivingSchoolViewState extends State<CreateDrivingSchoolView> {
               },
               builder: (context, state) {
                 if (state is SchoolLoading) {
-                  return kLoadingWidget(context, color: Colors.red);
+                  return kLoadingWidget(context);
                 } else {
                   // final createSchoolState =
                   //     context.read<CreateSchoolBloc>().state;

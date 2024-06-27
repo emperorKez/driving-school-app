@@ -148,7 +148,7 @@ class _CreateAccountViewState extends State<LoginView> {
               }
               if (state is StaffLoaded) {
                 if (state.staff != null) {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute<dynamic>(
                       builder: (_) => const AppHomePage(),

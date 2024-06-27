@@ -171,7 +171,7 @@ class _JoinDrivingSchoolViewState extends State<JoinDrivingSchoolView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.network(school.logo, errorBuilder: (context, error, stackTrace) {
+          Image.network(school.logo as String, errorBuilder: (context, error, stackTrace) {
             return Image.asset('assets/imgs/ins/auth/sample_school_logo.png');
           },),
            Text(

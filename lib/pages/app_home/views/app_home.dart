@@ -18,16 +18,21 @@ class AppHomePage extends StatelessWidget {
   const AppHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Material(
       child: BlocConsumer<StaffBloc, StaffState>(
         listener: (context, state) {
-          if (state is StaffError){
+          if (state is StaffError) {
             errorSnackbar(context, error: state.error);
           }
         },
         builder: (context, state) {
-          if (state is! StaffLoaded) {
+          if (context.read<SchoolBloc>().state.schoolInfo != null) {
+            return BlocProvider(
+              create: (context) => TabViewBloc(),
+              child: const _AppHome(),
+            );
+          } else if (state is! StaffLoaded) {
             return kLoadingWidget(context);
           } else {
             context
@@ -89,7 +94,14 @@ class _AppHomeState extends State<_AppHome> {
           },
           child: BlocConsumer<SchoolBloc, SchoolState>(
             listener: (context, state) {
-              if (state is SchoolError){errorSnackbar(context, error: state.error);}
+              if (state is SchoolError) {
+                errorSnackbar(context, error: state.error);
+              }
+              // if (state is SchoolLoaded && state.schoolInfo!.schoolStatus !=5){
+              //   Navigator.of(context).pushReplacement(
+              //     MaterialPageRoute<dynamic>(
+              //         builder: (context) => const AppHomePage()));
+              // }
             },
             builder: (context, state) {
               if (state is! SchoolLoaded) {
