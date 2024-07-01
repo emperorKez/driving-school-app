@@ -38,11 +38,13 @@ class PromotionRepo {
         ApiPaths.addPromotion,
         payload: payload,
       );
+      print('add promotion response: ${response.data}');
       if (response.data != null && response.data!.data['code'] == 200) {
         return ResponseSuccess(response.data!.data['response']);
       }
       return ResponseFailed(DataError(null, 'something went wrong'));
     } catch (e) {
+      print('add promotion error: $e');
       return ResponseFailed(DataError(null, e));
     }
   }

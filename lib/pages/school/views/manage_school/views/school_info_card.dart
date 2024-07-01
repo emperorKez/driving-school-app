@@ -32,7 +32,7 @@ class SchoolInfoCard extends StatelessWidget {
                       Border.all(color: KorbilTheme.of(context).primaryColor),
                 ),
                 child: Center(
-                  child: _buildLogo(state.schoolInfo!.logo as String),
+                  child: _buildLogo(state.schoolInfo!.logo.toString() ),
                 ),
               ),
               Expanded(

@@ -298,11 +298,11 @@ class _InstAddNewPromoViewState extends State<InstAddNewPromoView> {
                                         true) {
                                       if (!context.mounted) return;
                                       print(payloadData);
-                                      // context.read<PromotionBloc>().add(
-                                      //       AddPromotion(
-                                      //           payload: payloadData,
-                                      //           schoolId: schoolId,),
-                                      //     );
+                                      context.read<PromotionBloc>().add(
+                                            AddPromotion(
+                                                payload: payloadData,
+                                                schoolId: schoolId,),
+                                          );
                                       Navigator.pop(context);
                                     }
                                   }

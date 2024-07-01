@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:korbil_mobile/components/loading_widget.dart';
+import 'package:korbil_mobile/components/snackBar/error_snackbar.dart';
 import 'package:korbil_mobile/pages/school/bloc/course/course_bloc.dart';
 import 'package:korbil_mobile/pages/students/bloc/upcoming_lesson/upcoming_lesson_bloc.dart';
 import 'package:korbil_mobile/repository/lesson/model/upcoming_lesson.dart';
@@ -19,7 +20,12 @@ class UpcomingLessonsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UpcomingLessonBloc, UpcomingLessonState>(
+    return BlocConsumer<UpcomingLessonBloc, UpcomingLessonState>(
+      listener: (context, state) {
+        if (state is UpcomingLessonError){
+          errorSnackbar(context, error: state.error);
+        }
+      },
       builder: (context, state) {
         if (state is UpcomingLessonInitial) {
           context
