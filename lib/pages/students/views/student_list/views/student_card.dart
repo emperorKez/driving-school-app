@@ -113,13 +113,13 @@ class StudentCard extends StatelessWidget {
                                   ? const Text('')
                                   : Text(
                                       state
-                                          .packages![state.packages!.indexWhere(
+                                          .packages?[state.packages!.indexWhere(
                                         (e) =>
                                             e.schoolPackage.id ==
                                             currentStudent!.packageIds.first,
                                       )]
                                           .schoolPackage
-                                          .title,
+                                          .title ?? '',
                                       style: TextStyle(
                                         fontFamily: 'Poppins',
                                         color: KorbilTheme.of(context)

@@ -76,7 +76,7 @@ class PackageSection extends StatelessWidget {
     BuildContext context,
     PackageState state,
   ) {
-    if (state.packages!.isEmpty) {
+    if (state.packages == null || state.packages!.isEmpty) {
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 30),
         child: Center(
